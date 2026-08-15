@@ -1,6 +1,7 @@
 import { getArtworks } from "@/domains/artworks";
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
+import CollectionGallery from "./CollectionGallery";
 
 import CollectionArtwork from "./CollectionArtwork";
 
@@ -15,11 +16,34 @@ export default function Collection() {
     <section className="relative overflow-hidden bg-surface-deep text-white">
       <Container
         size="wide"
-        className="py-24 md:py-32 lg:py-14"
+        className="
+          py-24
+          md:py-32
+          lg:py-14
+          [@media(orientation:landscape)_and_(max-height:600px)]:!py-16
+        "
       >
-        <div className="grid gap-16 lg:grid-cols-[38%_62%] lg:items-stretch lg:gap-12">
+        <div
+          className="
+            grid
+            gap-16
+            lg:grid-cols-[38%_62%]
+            lg:items-stretch
+            lg:gap-12
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-[34%_66%]
+            [@media(orientation:landscape)_and_(max-height:600px)]:!items-start
+            [@media(orientation:landscape)_and_(max-height:600px)]:!gap-8
+          "
+        >
           {/* Editorial introduction */}
-          <div className="lg:flex lg:flex-col lg:justify-between">
+          <div
+            className="
+              lg:flex
+              lg:flex-col
+              lg:justify-between
+            "
+          >
             {/* Section Label */}
             <p
               className="
@@ -91,14 +115,7 @@ export default function Collection() {
           </div>
 
           {/* Artwork collection */}
-          <div className="grid grid-cols-2 items-start justify-items-center gap-x-6 gap-y-14 md:grid-cols-4 md:gap-x-5 xl:gap-x-8">
-            {artworks.map((artwork) => (
-              <CollectionArtwork
-                key={artwork.id}
-                artwork={artwork}
-              />
-            ))}
-          </div>
+          <CollectionGallery artworks={artworks} />
         </div>
       </Container>
     </section>

@@ -31,7 +31,14 @@ export default function Footer() {
         "
       />
 
-      <Container className="py-20 md:py-24 lg:py-28">
+      <Container
+        className="
+          py-20
+          md:py-24
+          lg:py-28
+          [@media(orientation:landscape)_and_(max-height:600px)]:!py-16
+        "
+      >
         {/* Main Footer */}
         <div
           className="
@@ -42,6 +49,10 @@ export default function Footer() {
             md:items-start
             md:justify-between
             md:gap-12
+            [@media(orientation:landscape)_and_(max-height:600px)]:!grid
+            [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-2
+            [@media(orientation:landscape)_and_(max-height:600px)]:!items-start
+            [@media(orientation:landscape)_and_(max-height:600px)]:!gap-10
           "
         >
           {/* Left — Identity & Navigation */}
@@ -104,6 +115,9 @@ export default function Footer() {
               md:min-w-[220px]
               md:items-end
               md:text-right
+              [@media(orientation:landscape)_and_(max-height:600px)]:!min-w-0
+              [@media(orientation:landscape)_and_(max-height:600px)]:!items-start
+              [@media(orientation:landscape)_and_(max-height:600px)]:!text-left
             "
           >
             {/* Artist */}
@@ -139,7 +153,15 @@ export default function Footer() {
               aria-label="Social media"
               className="mt-10"
             >
-              <ul className="flex items-center gap-5 md:justify-end">
+              <ul
+                className="
+                  flex
+                  items-center
+                  gap-5
+                  md:justify-end
+                  [@media(orientation:landscape)_and_(max-height:600px)]:!justify-start
+                "
+              >
                 {/* Instagram */}
                 <li>
                   <a
@@ -215,6 +237,7 @@ export default function Footer() {
                 duration-300
                 hover:text-brand-gold
                 md:self-end
+                [@media(orientation:landscape)_and_(max-height:600px)]:!self-start
               "
             >
               {DEFAULT_LANGUAGE}

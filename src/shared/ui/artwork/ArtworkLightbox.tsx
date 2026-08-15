@@ -1,0 +1,470 @@
+"use client";
+
+import {
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+
+import type { Artwork } from "@/domains/artworks/model";
+
+interface ArtworkLightboxProps {
+    artworks: Artwork[];
+    initialIndex: number;
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+const SWIPE_THRESHOLD = 55;
+
+export default function ArtworkLightbox({
+    artworks,
+    initialIndex,
+    isOpen,
+    onClose,
+}: ArtworkLightboxProps) {
+    const [currentIndex, setCurrentIndex] =
+        useState(initialIndex);
+
+    const pointerStartRef = useRef<number | null>(
+        null,
+    );
+
+    const closeButtonRef =
+        useRef<HTMLButtonElement | null>(null);
+
+    const artwork =
+        artworks[currentIndex];
+
+    const total = artworks.length;
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        setCurrentIndex(initialIndex);
+    }, [initialIndex, isOpen]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        const originalOverflow =
+            document.body.style.overflow;
+
+        document.body.style.overflow = "hidden";
+
+        closeButtonRef.current?.focus();
+
+        const handleKeyDown = (
+            event: KeyboardEvent,
+        ) => {
+            if (event.key === "Escape") {
+                onClose();
+            }
+
+            if (event.key === "ArrowRight") {
+                setCurrentIndex((index) =>
+                    (index + 1) % total,
+                );
+            }
+
+            if (event.key === "ArrowLeft") {
+                setCurrentIndex((index) =>
+                    (index - 1 + total) % total,
+                );
+            }
+        };
+
+        window.addEventListener(
+            "keydown",
+            handleKeyDown,
+        );
+
+        return () => {
+            document.body.style.overflow =
+                originalOverflow;
+
+            window.removeEventListener(
+                "keydown",
+                handleKeyDown,
+            );
+        };
+    }, [
+        isOpen,
+        onClose,
+        total,
+    ]);
+
+    if (
+        !isOpen ||
+        !artwork
+    ) {
+        return null;
+    }
+
+    const goNext = () => {
+        setCurrentIndex((index) =>
+            (index + 1) % total,
+        );
+    };
+
+    const goPrevious = () => {
+        setCurrentIndex((index) =>
+            (index - 1 + total) % total,
+        );
+    };
+
+    const handlePointerDown = (
+        event: React.PointerEvent<HTMLDivElement>,
+    ) => {
+        if (
+            event.pointerType !== "touch" &&
+            event.pointerType !== "pen"
+        ) {
+            return;
+        }
+
+        pointerStartRef.current =
+            event.clientX;
+
+        event.currentTarget.setPointerCapture(
+            event.pointerId,
+        );
+    };
+
+    const handlePointerUp = (
+        event: React.PointerEvent<HTMLDivElement>,
+    ) => {
+        if (
+            pointerStartRef.current === null
+        ) {
+            return;
+        }
+
+        const distance =
+            event.clientX -
+            pointerStartRef.current;
+
+        pointerStartRef.current = null;
+
+        try {
+            event.currentTarget.releasePointerCapture(
+                event.pointerId,
+            );
+        } catch {
+            // Pointer may already have been released.
+        }
+
+        if (
+            Math.abs(distance) <
+            SWIPE_THRESHOLD
+        ) {
+            return;
+        }
+
+        if (distance < 0) {
+            goNext();
+        } else {
+            goPrevious();
+        }
+    };
+
+    return (
+        <div
+            className="
+        fixed
+        inset-0
+        z-[100]
+        bg-[#050505]/98
+        text-white
+      "
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Artwork viewer — ${artwork.title}`}
+        >
+            {/* Close */}
+            <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={onClose}
+                aria-label="Close artwork viewer"
+                className="
+          absolute
+          right-4
+          top-4
+          z-30
+          flex
+          h-11
+          w-11
+          items-center
+          justify-center
+          font-sans
+          text-[32px]
+          font-light
+          leading-none
+          text-white/80
+          transition-colors
+          duration-300
+          hover:text-brand-gold
+          focus-visible:text-brand-gold
+          focus-visible:outline-none
+
+          md:right-8
+          md:top-6
+        "
+            >
+                ×
+            </button>
+
+            {/* Counter */}
+            <div
+                className="
+          absolute
+          left-5
+          top-6
+          z-20
+          font-sans
+          text-[10px]
+          uppercase
+          tracking-[0.22em]
+          text-white/35
+
+          md:left-8
+          md:top-8
+        "
+            >
+                {String(currentIndex + 1).padStart(
+                    2,
+                    "0",
+                )}
+                {" / "}
+                {String(total).padStart(
+                    2,
+                    "0",
+                )}
+            </div>
+
+            {/* Viewer */}
+            <div
+                className="
+          flex
+          h-full
+          w-full
+          touch-none
+          flex-col
+          items-center
+          justify-center
+          px-5
+          pb-8
+          pt-16
+
+          md:px-16
+          md:pb-10
+          md:pt-12
+        "
+                onPointerDown={handlePointerDown}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={() => {
+                    pointerStartRef.current = null;
+                }}
+            >
+                {/* Artwork */}
+                <div
+                    className="
+            relative
+            flex
+            min-h-0
+            w-full
+            flex-1
+            items-center
+            justify-center
+          "
+                >
+                    <img
+                        key={artwork.id}
+                        src={artwork.image.src}
+                        alt={artwork.image.alt}
+                        draggable={false}
+                        className="
+              max-h-[68svh]
+              max-w-full
+              select-none
+              object-contain
+              shadow-[0_30px_100px_rgba(0,0,0,0.65)]
+
+              md:max-h-[72vh]
+
+              [@media(orientation:landscape)_and_(max-height:600px)]:max-h-[62svh]
+            "
+                    />
+
+                    {/* Desktop previous */}
+                    {total > 1 && (
+                        <button
+                            type="button"
+                            onClick={goPrevious}
+                            aria-label="Previous artwork"
+                            className="
+                absolute
+                left-0
+                hidden
+                h-14
+                w-14
+                items-center
+                justify-center
+                font-display
+                text-4xl
+                font-light
+                text-white/35
+                transition-colors
+                duration-300
+                hover:text-brand-gold
+
+                md:flex
+              "
+                        >
+                            ‹
+                        </button>
+                    )}
+
+                    {/* Desktop next */}
+                    {total > 1 && (
+                        <button
+                            type="button"
+                            onClick={goNext}
+                            aria-label="Next artwork"
+                            className="
+                absolute
+                right-0
+                hidden
+                h-14
+                w-14
+                items-center
+                justify-center
+                font-display
+                text-4xl
+                font-light
+                text-white/35
+                transition-colors
+                duration-300
+                hover:text-brand-gold
+
+                md:flex
+              "
+                        >
+                            ›
+                        </button>
+                    )}
+                </div>
+
+                {/* Information */}
+                <div
+                    className="
+            mt-6
+            w-full
+            max-w-2xl
+            text-center
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:mt-3
+          "
+                >
+                    <p
+                        className="
+              font-sans
+              text-[9px]
+              uppercase
+              tracking-[0.28em]
+              text-brand-gold
+            "
+                    >
+                        {artwork.year}
+                    </p>
+
+                    <h2
+                        className="
+              mt-2
+              font-display
+              text-3xl
+              font-light
+              leading-[1.05]
+              tracking-[0.01em]
+
+              md:text-4xl
+
+              [@media(orientation:landscape)_and_(max-height:600px)]:text-2xl
+            "
+                    >
+                        {artwork.title}
+                    </h2>
+
+                    <div
+                        className="
+              mt-3
+              font-sans
+              text-[10px]
+              uppercase
+              tracking-[0.18em]
+              text-white/45
+            "
+                    >
+                        <span>
+                            {artwork.technique}
+                        </span>
+
+                        <span className="mx-3 text-brand-gold/40">
+                            ·
+                        </span>
+
+                        <span>
+                            {artwork.dimensions.width} ×{" "}
+                            {artwork.dimensions.height}{" "}
+                            {artwork.dimensions.unit}
+                        </span>
+                    </div>
+
+                    {artwork.description && (
+                        <p
+                            className="
+                mx-auto
+                mt-4
+                max-w-lg
+                font-sans
+                text-sm
+                font-light
+                leading-6
+                text-white/45
+
+                [@media(orientation:landscape)_and_(max-height:600px)]:hidden
+              "
+                        >
+                            {artwork.description}
+                        </p>
+                    )}
+
+                    {/* Mobile gesture hint */}
+                    {total > 1 && (
+                        <p
+                            className="
+                mt-5
+                font-sans
+                text-[9px]
+                uppercase
+                tracking-[0.24em]
+                text-white/25
+
+                md:hidden
+
+                [@media(orientation:landscape)_and_(max-height:600px)]:mt-2
+              "
+                        >
+                            Swipe to explore
+                        </p>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}

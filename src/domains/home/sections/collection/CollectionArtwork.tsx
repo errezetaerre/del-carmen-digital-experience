@@ -7,10 +7,12 @@ import CollectionArtworkFrame from "./CollectionArtworkFrame";
 
 interface CollectionArtworkProps {
   artwork: Artwork;
+  onOpen?: () => void;
 }
 
 export default function CollectionArtwork({
   artwork,
+  onOpen,
 }: CollectionArtworkProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const initialRef = useRef<HTMLDivElement>(null);
@@ -167,6 +169,7 @@ export default function CollectionArtwork({
     >
       <button
         type="button"
+        onClick={onOpen}
         className="block w-full text-left"
         aria-label={`View ${artwork.title}`}
       >

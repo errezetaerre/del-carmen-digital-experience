@@ -54,7 +54,14 @@ export default function JournalPreview() {
     >
       <Container>
         {/* Section heading */}
-        <div className="mb-20 max-w-2xl md:mb-28">
+        <div
+          className="
+            mb-20
+            max-w-2xl
+            md:mb-28
+            [@media(orientation:landscape)_and_(max-height:600px)]:!mb-14
+          "
+        >
           <p
             className="
               mb-5
@@ -79,6 +86,8 @@ export default function JournalPreview() {
               text-white
               md:text-5xl
               lg:text-6xl
+              [@media(orientation:landscape)_and_(max-height:600px)]:!text-4xl
+
             "
           >
             Thoughts, stories
@@ -88,7 +97,14 @@ export default function JournalPreview() {
         </div>
 
         {/* Editorial entries */}
-        <div className="space-y-24 md:space-y-32 lg:space-y-40">
+        <div
+          className="
+            space-y-24
+            md:space-y-32
+            lg:space-y-40
+            [@media(orientation:landscape)_and_(max-height:600px)]:!space-y-20
+          "
+        >
           {JOURNAL_ENTRIES.map((entry, index) => (
             <article
               key={entry.title}

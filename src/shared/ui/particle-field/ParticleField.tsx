@@ -3,8 +3,15 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 
+type PointerPosition = {
+  x: number;
+  y: number;
+  active: boolean;
+};
+
 type ParticleFieldProps = {
   targetRef?: RefObject<HTMLElement | null>;
+  pointerRef?: RefObject<PointerPosition>;
   active?: boolean;
   particleCount?: number;
 };
@@ -34,11 +41,6 @@ type Particle = {
 };
 
 const PARTICLE_COLORS = [
-  // "rgba(166, 104, 255, 0.95)", // Violet
-  // "rgba(255, 82, 190, 0.95)",  // Fuchsia
-  // "rgba(70, 225, 255, 0.95)",  // Cyan
-  // "rgba(218, 178, 92, 0.95)",  // Gold
-  // "rgba(235, 235, 230, 0.90)", // Platinum
   "rgba(218, 178, 92, 0.95)",
   "rgba(235, 235, 230, 0.92)",
   "rgba(201, 164, 92, 0.90)",
@@ -47,16 +49,21 @@ const PARTICLE_COLORS = [
 
 export default function ParticleField({
   targetRef,
+  pointerRef,
   active = false,
   particleCount = 85,
 }: ParticleFieldProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef =
+    useRef<HTMLCanvasElement | null>(null);
 
-  const animationRef = useRef<number | null>(null);
+  const animationRef =
+    useRef<number | null>(null);
 
-  const particlesRef = useRef<Particle[]>([]);
+  const particlesRef =
+    useRef<Particle[]>([]);
 
-  const activeRef = useRef(active);
+  const activeRef =
+    useRef(active);
 
   const targetRefInternal = useRef({
     x: 0,
@@ -72,11 +79,16 @@ export default function ParticleField({
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    if (!canvas) return;
+    if (!canvas) {
+      return;
+    }
 
-    const context = canvas.getContext("2d");
+    const context =
+      canvas.getContext("2d");
 
-    if (!context) return;
+    if (!context) {
+      return;
+    }
 
     const resize = () => {
       const dpr = Math.min(
@@ -109,7 +121,9 @@ export default function ParticleField({
     const createParticles = () => {
       particlesRef.current =
         Array.from(
-          { length: particleCount },
+          {
+            length: particleCount,
+          },
           (_, index) => {
             const x =
               Math.random() *
@@ -130,14 +144,17 @@ export default function ParticleField({
               targetY: y,
 
               size:
-                Math.random() * 2.2 + 0.8,
+                Math.random() * 2.2 +
+                0.8,
 
               alpha:
-                Math.random() * 0.35 + 0.55,
+                Math.random() * 0.35 +
+                0.55,
 
               color:
                 PARTICLE_COLORS[
-                  index % PARTICLE_COLORS.length
+                index %
+                PARTICLE_COLORS.length
                 ],
 
               phase:
@@ -147,22 +164,22 @@ export default function ParticleField({
 
               speed:
                 Math.random() *
-                  0.0007 +
+                0.0007 +
                 0.00035,
 
               attraction:
                 Math.random() *
-                  0.035 +
+                0.035 +
                 0.025,
 
               twinkleSpeed:
                 Math.random() *
-                  0.004 +
+                0.004 +
                 0.0015,
 
               twinkleAmount:
                 Math.random() *
-                  0.45 +
+                0.45 +
                 0.25,
             };
           },
@@ -210,39 +227,42 @@ export default function ParticleField({
       }
 
       /*
-       * Each particle receives a stable
-       * position along the perimeter.
-       *
-       * The index is deterministic, so
-       * particles do not randomly jump
-       * to different places every frame.
+       * Stable golden-ratio distribution
+       * around the selected navigation item.
        */
-
       const normalized =
-        ((index * 0.61803398875) % 1 + 1) %
+        ((index * 0.61803398875) %
+          1 +
+          1) %
         1;
 
       const position =
         normalized * perimeter;
 
-      if (position < target.width) {
+      if (
+        position <
+        target.width
+      ) {
         return {
           x:
             target.x +
             position,
-          y: target.y,
+
+          y:
+            target.y,
         };
       }
 
       if (
         position <
         target.width +
-          target.height
+        target.height
       ) {
         return {
           x:
             target.x +
             target.width,
+
           y:
             target.y +
             (position -
@@ -253,7 +273,7 @@ export default function ParticleField({
       if (
         position <
         target.width * 2 +
-          target.height
+        target.height
       ) {
         return {
           x:
@@ -264,6 +284,7 @@ export default function ParticleField({
               target.width -
               target.height
             ),
+
           y:
             target.y +
             target.height,
@@ -271,7 +292,9 @@ export default function ParticleField({
       }
 
       return {
-        x: target.x,
+        x:
+          target.x,
+
         y:
           target.y +
           target.height -
@@ -280,6 +303,41 @@ export default function ParticleField({
             target.width * 2 -
             target.height
           ),
+      };
+    };
+
+    const getPointerPoint = (
+      index: number,
+    ) => {
+      const pointer =
+        pointerRef?.current;
+
+      if (!pointer) {
+        return null;
+      }
+
+      /*
+       * Golden-angle distribution creates
+       * a soft particle halo around the finger.
+       */
+      const angle =
+        index *
+        2.399963229728653;
+
+      const ring =
+        22 +
+        (index % 5) * 8;
+
+      return {
+        x:
+          pointer.x +
+          Math.cos(angle) *
+          ring,
+
+        y:
+          pointer.y +
+          Math.sin(angle) *
+          ring,
       };
     };
 
@@ -298,36 +356,38 @@ export default function ParticleField({
       const isActive =
         activeRef.current;
 
+      const isFollowingPointer =
+        Boolean(
+          pointerRef?.current
+            ?.active,
+        );
+
       particlesRef.current.forEach(
         (particle, index) => {
           /*
-           * Natural floating movement.
-           *
-           * This remains alive even while
-           * particles are attracted to the
-           * navigation item.
+           * Ambient floating movement.
            */
           const driftX =
             Math.sin(
               time *
-                particle.speed +
-                particle.phase,
+              particle.speed +
+              particle.phase,
             ) * 10;
 
           const driftY =
             Math.cos(
               time *
-                particle.speed *
-                0.8 +
-                particle.phase,
+              particle.speed *
+              0.8 +
+              particle.phase,
             ) * 10;
 
           /*
-           * When active, the SAME particle
-           * changes its destination.
+           * Priority:
            *
-           * It does not disappear.
-           * It does not get recreated.
+           * 1. Selected navigation item
+           * 2. Finger / pointer
+           * 3. Ambient floating state
            */
           if (isActive) {
             const perimeter =
@@ -341,11 +401,22 @@ export default function ParticleField({
 
             particle.targetY =
               perimeter.y;
+          } else if (
+            isFollowingPointer
+          ) {
+            const pointerPoint =
+              getPointerPoint(
+                index,
+              );
+
+            if (pointerPoint) {
+              particle.targetX =
+                pointerPoint.x;
+
+              particle.targetY =
+                pointerPoint.y;
+            }
           } else {
-            /*
-             * Return to the particle's
-             * original ecosystem.
-             */
             particle.targetX =
               particle.baseX +
               driftX;
@@ -356,12 +427,15 @@ export default function ParticleField({
           }
 
           /*
-           * Smooth physical-style attraction.
+           * Attraction strength changes
+           * according to interaction state.
            */
           const attraction =
             isActive
               ? particle.attraction
-              : 0.008;
+              : isFollowingPointer
+                ? 0.055
+                : 0.008;
 
           particle.x +=
             (
@@ -382,27 +456,30 @@ export default function ParticleField({
             0.72 +
             Math.sin(
               time *
-                particle.twinkleSpeed +
-                particle.phase,
+              particle.twinkleSpeed +
+              particle.phase,
             ) *
-              particle.twinkleAmount;
+            particle.twinkleAmount;
+
           /*
-           * Gentle Shimmer.
+           * Gentle shimmer.
            */
           const shimmer =
             0.9 +
             Math.sin(
               time *
-                particle.twinkleSpeed *
-                0.37 +
-                particle.phase * 1.7,
+              particle.twinkleSpeed *
+              0.37 +
+              particle.phase *
+              1.7,
             ) *
-              0.1;
+            0.1;
 
           const intensity =
             Math.max(
               0.28,
-              twinkle * shimmer,
+              twinkle *
+              shimmer,
             );
 
           /*
@@ -411,7 +488,11 @@ export default function ParticleField({
           context.save();
 
           context.shadowBlur =
-            isActive ? 20 : 14;
+            isActive
+              ? 20
+              : isFollowingPointer
+                ? 17
+                : 14;
 
           context.shadowColor =
             particle.color;
@@ -434,10 +515,19 @@ export default function ParticleField({
 
           context.fill();
 
-          if (particle.size > 1.8) {
+          /*
+           * Small luminous core for
+           * larger particles.
+           */
+          if (
+            particle.size >
+            1.8
+          ) {
             context.save();
 
-            context.shadowBlur = 18;
+            context.shadowBlur =
+              18;
+
             context.shadowColor =
               "rgba(255, 248, 225, 0.9)";
 
@@ -446,7 +536,8 @@ export default function ParticleField({
             context.arc(
               particle.x,
               particle.y,
-              particle.size * 0.32,
+              particle.size *
+              0.32,
               0,
               Math.PI * 2,
             );
@@ -470,7 +561,6 @@ export default function ParticleField({
     };
 
     resize();
-
     createParticles();
 
     window.addEventListener(
@@ -501,6 +591,7 @@ export default function ParticleField({
   }, [
     particleCount,
     targetRef,
+    pointerRef,
   ]);
 
   return (

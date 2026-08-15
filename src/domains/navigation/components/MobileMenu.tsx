@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useEffect,
   useRef,
@@ -24,11 +25,24 @@ export default function MobileMenu({
   isOpen,
   onClose,
 }: MobileMenuProps) {
+  const router = useRouter();
+
   const [activeItem, setActiveItem] =
     useState<string | null>(null);
 
   const activeItemRef =
     useRef<HTMLAnchorElement | null>(null);
+
+  const navigationRef =
+    useRef<HTMLElement | null>(null);
+
+  const touchTrackingRef = useRef(false);
+
+  const pointerRef = useRef({
+    x: 0,
+    y: 0,
+    active: false,
+  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -47,8 +61,139 @@ export default function MobileMenu({
   useEffect(() => {
     if (!isOpen) {
       setActiveItem(null);
+
+      activeItemRef.current = null;
+
+      pointerRef.current.active = false;
+
+      touchTrackingRef.current = false;
     }
   }, [isOpen]);
+
+  const getNavigationItemAtPoint = (
+    x: number,
+    y: number,
+  ) => {
+    const element =
+      document.elementFromPoint(x, y);
+
+    if (!element) {
+      return null;
+    }
+
+    return element.closest(
+      "[data-navigation-item]",
+    ) as HTMLAnchorElement | null;
+  };
+
+  const updateTouchTarget = (
+    x: number,
+    y: number,
+  ) => {
+    pointerRef.current.x = x;
+    pointerRef.current.y = y;
+
+    const item =
+      getNavigationItemAtPoint(x, y);
+
+    if (!item) {
+      activeItemRef.current = null;
+      setActiveItem(null);
+
+      return null;
+    }
+
+    const href =
+      item.dataset.navigationItem ?? null;
+
+    activeItemRef.current = item;
+    setActiveItem(href);
+
+    return href;
+  };
+
+  const handlePointerDown = (
+    event: React.PointerEvent<HTMLElement>,
+  ) => {
+    if (
+      event.pointerType !== "touch" &&
+      event.pointerType !== "pen"
+    ) {
+      return;
+    }
+
+    touchTrackingRef.current = true;
+
+    pointerRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+      active: true,
+    };
+
+    navigationRef.current?.setPointerCapture(
+      event.pointerId,
+    );
+
+    updateTouchTarget(
+      event.clientX,
+      event.clientY,
+    );
+  };
+
+  const handlePointerMove = (
+    event: React.PointerEvent<HTMLElement>,
+  ) => {
+    if (!touchTrackingRef.current) {
+      return;
+    }
+
+    updateTouchTarget(
+      event.clientX,
+      event.clientY,
+    );
+  };
+
+  const handlePointerUp = (
+    event: React.PointerEvent<HTMLElement>,
+  ) => {
+    if (!touchTrackingRef.current) {
+      return;
+    }
+
+    const href = updateTouchTarget(
+      event.clientX,
+      event.clientY,
+    );
+
+    touchTrackingRef.current = false;
+    pointerRef.current.active = false;
+
+    try {
+      navigationRef.current?.releasePointerCapture(
+        event.pointerId,
+      );
+    } catch {
+      // Pointer may already have been released.
+    }
+
+    if (!href) {
+      setActiveItem(null);
+      activeItemRef.current = null;
+
+      return;
+    }
+
+    onClose();
+    router.push(href);
+  };
+
+  const handlePointerCancel = () => {
+    touchTrackingRef.current = false;
+    pointerRef.current.active = false;
+
+    setActiveItem(null);
+    activeItemRef.current = null;
+  };
 
   if (!isOpen) {
     return null;
@@ -73,16 +218,18 @@ export default function MobileMenu({
       <ParticleField
         targetRef={activeItemRef}
         active={Boolean(activeItem)}
+        pointerRef={pointerRef}
         particleCount={65}
       />
 
-      <div className="relative z-10 flex flex-1 min-h-full flex-col">
+      <div className="relative z-10 flex min-h-full flex-1 flex-col">
         {/* Header */}
-        <div className="flex h-[72px] items-center justify-between px-6">
+        <div className="flex h-[72px] shrink-0 items-center justify-between px-6">
           <Link
             href="/"
             onClick={onClose}
             className="
+              font-sans
               text-sm
               font-light
               uppercase
@@ -111,16 +258,20 @@ export default function MobileMenu({
             aria-label="Close menu"
             className="
               flex
-              h-10
-              w-10
+              h-11
+              w-11
               items-center
               justify-center
-              text-2xl
+              font-sans
+              text-[32px]
               font-light
-              text-[#2F2E2C]
-              transition-opacity
+              leading-none
+              text-white/55
+              transition-all
               duration-300
-              hover:opacity-60
+              hover:text-brand-gold
+              focus-visible:text-brand-gold
+              focus-visible:outline-none
             "
           >
             ×
@@ -128,8 +279,30 @@ export default function MobileMenu({
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-1 items-center px-8">
-          <ul className="w-full space-y-7">
+        <nav
+          ref={navigationRef}
+          className="
+            flex
+            flex-1
+            touch-none
+            items-center
+            px-8
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:py-4
+          "
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
+        >
+          <ul
+            className="
+              w-full
+              space-y-7
+
+              [@media(orientation:landscape)_and_(max-height:600px)]:space-y-2
+            "
+          >
             {NAVIGATION_ITEMS.map((item) => {
               const isActive =
                 activeItem === item.href;
@@ -138,37 +311,54 @@ export default function MobileMenu({
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    onClick={onClose}
-                    ref={(element) => {
+                    onClick={(event) => {
+                      /*
+                       * Touch navigation is confirmed
+                       * manually on pointer release.
+                       */
                       if (
-                        isActive
+                        touchTrackingRef.current
                       ) {
+                        event.preventDefault();
+                        return;
+                      }
+
+                      onClose();
+                    }}
+                    ref={(element) => {
+                      if (isActive) {
                         activeItemRef.current =
                           element;
                       }
                     }}
-                    onPointerEnter={() => {
-                      activeItemRef.current =
-                        document.querySelector(
-                          `[data-navigation-item="${item.href}"]`,
-                        ) as HTMLAnchorElement | null;
+                    onPointerEnter={(event) => {
+                      if (
+                        event.pointerType ===
+                        "touch"
+                      ) {
+                        return;
+                      }
 
-                      setActiveItem(
-                        item.href,
-                      );
+                      activeItemRef.current =
+                        event.currentTarget;
+
+                      setActiveItem(item.href);
                     }}
-                    onPointerLeave={() => {
+                    onPointerLeave={(event) => {
+                      if (
+                        event.pointerType ===
+                        "touch"
+                      ) {
+                        return;
+                      }
+
                       setActiveItem(null);
                     }}
-                    onFocus={() => {
+                    onFocus={(event) => {
                       activeItemRef.current =
-                        document.querySelector(
-                          `[data-navigation-item="${item.href}"]`,
-                        ) as HTMLAnchorElement | null;
+                        event.currentTarget;
 
-                      setActiveItem(
-                        item.href,
-                      );
+                      setActiveItem(item.href);
                     }}
                     onBlur={() => {
                       setActiveItem(null);
@@ -177,7 +367,24 @@ export default function MobileMenu({
                       item.href
                     }
                     className={[
-                      "relative  z-10 block w-fit rounded-sm px-4 py-2 font-serif text-3xl font-light tracking-wide transition-all duration-500",
+                      `
+                        relative
+                        z-10
+                        block
+                        w-fit
+                        rounded-sm
+                        px-4
+                        py-2
+                        font-display
+                        text-3xl
+                        font-light
+                        tracking-[0.01em]
+                        transition-all
+                        duration-500
+
+                        [@media(orientation:landscape)_and_(max-height:600px)]:py-1
+                        [@media(orientation:landscape)_and_(max-height:600px)]:text-2xl
+                      `,
                       isActive
                         ? "bg-black text-brand-gold"
                         : "bg-transparent text-white/85",
@@ -192,10 +399,19 @@ export default function MobileMenu({
         </nav>
 
         {/* Footer */}
-        <div className="px-8 pb-10">
+        <div
+          className="
+            shrink-0
+            px-8
+            pb-10
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:pb-5
+          "
+        >
           <button
             type="button"
             className="
+              font-sans
               text-xs
               uppercase
               tracking-[0.18em]
