@@ -1,26 +1,223 @@
 @import "tailwindcss";
 
+
+/* =========================================================
+   DEL CARMEN — DESIGN SYSTEM
+   Global visual tokens
+   ========================================================= */
+
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ---------------------------------------------------------
+     COLOR
+     --------------------------------------------------------- */
+
+  --background: #0b0b0b;
+  --foreground: #f5f5f5;
+
+
+  --surface-primary: #111111;
+  --surface-deep: #090908;
+  --surface-ivory: #f4f1ec;
+
+
+  --text-primary: #f5f5f5;
+  --text-muted: #a1a1aa;
+  --text-charcoal: #2f2e2c;
+
+
+  --brand-gold: #c9a35a;
+  --brand-bronze: #a27b48;
+
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+
+  --success: #6b7b5b;
+  --error: #a25a45;
+
+
+
+  /* ---------------------------------------------------------
+     LAYOUT
+     --------------------------------------------------------- */
+
+  --content-width: 80rem;
+  --content-width-wide: 90rem;
+
+
+  --page-gutter: 1.5rem;
+
+
+
+  /* ---------------------------------------------------------
+     VERTICAL RHYTHM
+     --------------------------------------------------------- */
+
+  --section-space-compact: 4rem;
+  --section-space-default: 6rem;
+  --section-space-generous: 6rem;
+
+
+
+  /* ---------------------------------------------------------
+     TYPOGRAPHY
+     --------------------------------------------------------- */
+
+  --body-max-width: 42rem;
+
+
+  --tracking-heading: 0.01em;
+  --tracking-navigation: 0.12em;
+  --tracking-label: 0.30em;
+  --tracking-brand: 0.25em;
+  --tracking-button: 0.28em;
+
+
+
+  /* ---------------------------------------------------------
+     MOTION
+     --------------------------------------------------------- */
+
+  --duration-fast: 300ms;
+  --duration-medium: 500ms;
+  --duration-slow: 700ms;
+
+
+
+  /* ---------------------------------------------------------
+     SHADOW
+     --------------------------------------------------------- */
+
+  --shadow-artwork: 0 40px 100px rgba(0, 0, 0, 0.7);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
+
+/* =========================================================
+   RESPONSIVE TOKENS
+   ========================================================= */
+
+
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --page-gutter: 2.5rem;
+
+    --section-space-generous: 7rem;
   }
 }
 
+
+@media (min-width: 1024px) {
+  :root {
+    --page-gutter: 4rem;
+
+    --section-space-generous: 8rem;
+  }
+}
+
+
+@media (min-width: 1280px) {
+  :root {
+    --page-gutter: 5rem;
+  }
+}
+
+
+
+/* =========================================================
+   TAILWIND THEME
+   ========================================================= */
+
+
+@theme inline {
+  /* Color */
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+
+  --color-surface: var(--surface-primary);
+  --color-surface-deep: var(--surface-deep);
+  --color-surface-ivory: var(--surface-ivory);
+
+
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-charcoal: var(--text-charcoal);
+
+
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-bronze: var(--brand-bronze);
+
+
+  --color-border: var(--border-subtle);
+
+
+  --color-success: var(--success);
+  --color-error: var(--error);
+
+
+
+  /* Typography */
+
+  --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-cormorant);
+  --font-mono: var(--font-geist-mono);
+}
+
+
+
+/* =========================================================
+   DOCUMENT
+   ========================================================= */
+
+
+html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+body {
+  min-width: 320px;
+  font-family: var(--font-geist-sans);
+}
+
+
+
+/* =========================================================
+   TYPOGRAPHIC UTILITIES
+   ========================================================= */
+
+
+.font-display {
+  font-family: var(--font-cormorant);
+}
+
+
+
+/* =========================================================
+   LAYOUT PRIMITIVES
+   ========================================================= */
+
+
+
+
+
+/* =========================================================
+   ACCESSIBILITY / MOTION
+   ========================================================= */
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

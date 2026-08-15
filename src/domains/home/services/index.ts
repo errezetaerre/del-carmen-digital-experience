@@ -1,0 +1,1 @@
+export { getFeaturedArtwork } from "./getFeaturedArtwork";
