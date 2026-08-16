@@ -8,14 +8,21 @@ import Footer from "./sections/footer";
 
 export default function Home() {
   return (
-    <>
+    <main
+      className="
+        relative
+        w-full
+        min-w-0
+        overflow-x-clip
+      "
+    >
       <Hero />
       <FeaturedArtwork />
-      <ArtistStatement/>
+      <ArtistStatement />
       <Collection />
       <JournalPreview />
       <Invitation />
       <Footer />
-    </>
+    </main>
   );
 }

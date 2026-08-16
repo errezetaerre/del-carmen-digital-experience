@@ -12,26 +12,75 @@ export default function Hero() {
     <section
       className="
         relative
-        h-full
+        min-h-[100svh]
         w-full
         min-w-0
+        overflow-hidden
+
         md:min-h-screen
 
         [@media(orientation:landscape)_and_(max-height:600px)]:min-h-[100svh]
       "
     >
-      <Navigation />
+      {/* Mobile portrait artwork environment */}
+      <div
+        className="
+          absolute
+          inset-0
+          z-0
+
+          md:hidden
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
+        "
+      >
+        <HeroArtwork mode="mobile" />
+      </div>
 
       <HeroBackground />
       <HeroAtmosphere />
       <HeroLighting />
 
+      <Navigation />
+
+      {/* Mobile portrait composition */}
+      <div
+        className="
+          relative
+          z-20
+          flex
+          min-h-[100svh]
+          flex-col
+
+          md:hidden
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
+        "
+      >
+        <Container className="relative flex min-h-[100svh] flex-col">
+          {/* Brand */}
+          <div className="pt-24">
+            <HeroBrand />
+          </div>
+
+          {/* Lower content */}
+          <div className="mt-auto pb-10">
+            <HeroArtwork mode="mobileInfo" />
+          </div>
+        </Container>
+      </div>
+
+      {/* Tablet / Desktop / Mobile Landscape */}
       <Container
         className="
           relative
           z-10
+          hidden
           min-h-screen
 
+          md:block
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!block
           [@media(orientation:landscape)_and_(max-height:600px)]:min-h-[100svh]
         "
       >
@@ -39,6 +88,7 @@ export default function Hero() {
           className="
             grid
             w-full
+            min-w-0
             items-start
 
             md:min-h-screen
@@ -58,6 +108,7 @@ export default function Hero() {
               relative
               z-30
               flex
+              min-w-0
               flex-col
               pt-24
 
@@ -81,9 +132,6 @@ export default function Hero() {
               w-full
               min-w-0
 
-              max-md:-mx-[var(--page-gutter)]
-              max-md:w-[calc(100%+(var(--page-gutter)*2))]
-
               md:min-h-screen
 
               [@media(orientation:landscape)_and_(max-height:600px)]:!min-h-0
@@ -91,7 +139,7 @@ export default function Hero() {
               [@media(orientation:landscape)_and_(max-height:600px)]:!w-full
             "
           >
-            <HeroArtwork />
+            <HeroArtwork mode="desktop" />
           </div>
         </div>
       </Container>

@@ -1,17 +1,14 @@
 import { Button } from "@/shared/ui/button";
 import { brand } from "@/config/brand";
-import {
-  HERO_QUOTE,
-  HERO_CTA,
-} from "./constants";
+import { HERO_CTA } from "./constants";
 
 export default function HeroBrand() {
   return (
     <div className="flex h-full min-h-full flex-col">
-      {/* Brand */}
+      {/* Brand — Mobile */}
       <h1
         className="
-          mt-10
+          mt-4
           font-display
           text-6xl
           font-light
@@ -19,32 +16,88 @@ export default function HeroBrand() {
           leading-[0.88]
           tracking-[0.04em]
           text-white
+
+          md:hidden
+        "
+      >
+        <span className="block">Del</span>
+        <span className="block">Carmen</span>
+      </h1>
+
+      {/* Brand — Tablet / Desktop */}
+      <h1
+        className="
+          mt-10
+          hidden
+          font-display
+          font-light
+          uppercase
+          leading-[0.88]
+          tracking-[0.04em]
+          text-white
+
+          md:block
           md:text-7xl
+
           lg:text-8xl
         "
       >
         {brand.name}
       </h1>
 
-      {/* Tagline */}
+      {/* Tagline — Mobile */}
       <p
         className="
-          mt-8
-          max-w-md
+          mt-7
           font-display
           text-lg
           font-normal
           leading-[1.25]
           tracking-[0.08em]
           text-brand-gold
-          md:text-xl
+
+          md:hidden
+        "
+      >
+        Painting the Eternal
+        <br />
+        Essence Within
+      </p>
+
+      {/* Tagline — Tablet / Desktop */}
+      <p
+        className="
+          mt-8
+          hidden
+          max-w-md
+          font-display
+          text-xl
+          font-normal
+          leading-[1.25]
+          tracking-[0.08em]
+          text-brand-gold
+
+          md:block
         "
       >
         {brand.tagline}
       </p>
 
-      {/* CTA */}
-      <div className="mt-12 w-fit md:mt-20 lg:mt-20">
+      {/* Tablet / Desktop CTA */}
+      <div
+        className="
+          mt-12
+          hidden
+          w-fit
+
+          md:mt-20
+          md:block
+
+          lg:mt-20
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!block
+        "
+      >
         <Button
           type="button"
           variant="bronzeUnderline"
@@ -54,11 +107,11 @@ export default function HeroBrand() {
         </Button>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll — Tablet / Desktop */}
       <div
         className="
           mt-20
-          flex
+          hidden
           items-center
           gap-4
           font-sans
@@ -66,8 +119,13 @@ export default function HeroBrand() {
           uppercase
           tracking-[0.25em]
           text-white/40
+
           md:mt-12
+          md:flex
+
           lg:mt-20
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!flex
         "
       >
         <span className="h-px w-12 bg-white/30" />
