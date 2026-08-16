@@ -4,8 +4,8 @@ import { HERO_CTA } from "./constants";
 
 export default function HeroBrand() {
   return (
-    <div className="flex h-full min-h-full flex-col">
-      {/* Brand — Mobile */}
+    <div className="flex h-full flex-col">
+      {/* Mobile portrait brand */}
       <h1
         className="
           mt-4
@@ -24,7 +24,7 @@ export default function HeroBrand() {
         <span className="block">Carmen</span>
       </h1>
 
-      {/* Brand — Tablet / Desktop */}
+      {/* Tablet / Desktop / Mobile landscape */}
       <h1
         className="
           mt-10
@@ -40,12 +40,15 @@ export default function HeroBrand() {
           md:text-7xl
 
           lg:text-8xl
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!mt-6
+          [@media(orientation:landscape)_and_(max-height:600px)]:!text-6xl
         "
       >
         {brand.name}
       </h1>
 
-      {/* Tagline — Mobile */}
+      {/* Mobile portrait tagline */}
       <p
         className="
           mt-7
@@ -64,7 +67,7 @@ export default function HeroBrand() {
         Essence Within
       </p>
 
-      {/* Tagline — Tablet / Desktop */}
+      {/* Tablet / Desktop / Mobile landscape tagline */}
       <p
         className="
           mt-8
@@ -78,12 +81,15 @@ export default function HeroBrand() {
           text-brand-gold
 
           md:block
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!mt-5
+          [@media(orientation:landscape)_and_(max-height:600px)]:!text-base
         "
       >
         {brand.tagline}
       </p>
 
-      {/* Tablet / Desktop CTA */}
+      {/* CTA */}
       <div
         className="
           mt-12
@@ -95,19 +101,23 @@ export default function HeroBrand() {
 
           lg:mt-20
 
-          [@media(orientation:landscape)_and_(max-height:600px)]:!block
+          [@media(orientation:landscape)_and_(max-height:600px)]:!mt-5
         "
       >
         <Button
           type="button"
           variant="bronzeUnderline"
-          className="mt-10"
+          className="
+            mt-10
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:!mt-2
+          "
         >
           {HERO_CTA}
         </Button>
       </div>
 
-      {/* Scroll — Tablet / Desktop */}
+      {/* Scroll — desktop only */}
       <div
         className="
           mt-20
@@ -120,12 +130,9 @@ export default function HeroBrand() {
           tracking-[0.25em]
           text-white/40
 
-          md:mt-12
-          md:flex
+          lg:flex
 
-          lg:mt-20
-
-          [@media(orientation:landscape)_and_(max-height:600px)]:!flex
+          [@media(pointer:coarse)]:!hidden
         "
       >
         <span className="h-px w-12 bg-white/30" />

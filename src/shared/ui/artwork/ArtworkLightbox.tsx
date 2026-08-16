@@ -38,6 +38,10 @@ export default function ArtworkLightbox({
 
     const total = artworks.length;
 
+    const isPortrait =
+        artwork.dimensions.height >
+        artwork.dimensions.width;
+
     useEffect(() => {
         if (!isOpen) {
             return;
@@ -274,32 +278,121 @@ export default function ArtworkLightbox({
                 {/* Artwork */}
                 <div
                     className="
-            relative
-            flex
-            min-h-0
-            w-full
-            flex-1
-            items-center
-            justify-center
-          "
+    relative
+    flex
+    min-h-0
+    w-full
+    flex-1
+    items-center
+    justify-center
+  "
                 >
-                    <img
-                        key={artwork.id}
-                        src={artwork.image.src}
-                        alt={artwork.image.alt}
-                        draggable={false}
+                    {/* Artwork + orientation frame */}
+                    <div
                         className="
-              max-h-[68svh]
-              max-w-full
-              select-none
-              object-contain
-              shadow-[0_30px_100px_rgba(0,0,0,0.65)]
+      relative
+      flex
+      max-h-full
+      max-w-full
+      items-center
+      justify-center
+    "
+                    >
+                        <img
+                            key={artwork.id}
+                            src={artwork.image.src}
+                            alt={artwork.image.alt}
+                            draggable={false}
+                            className="
+        relative
+        z-10
+        max-h-[62svh]
+        max-w-full
+        select-none
+        object-contain
+        shadow-[0_30px_100px_rgba(0,0,0,0.65)]
 
-              md:max-h-[72vh]
+        md:max-h-[68vh]
 
-              [@media(orientation:landscape)_and_(max-height:600px)]:max-h-[62svh]
-            "
-                    />
+        [@media(orientation:landscape)_and_(max-height:600px)]:max-h-[58svh]
+      "
+                        />
+
+                        {/* Museum frame accents */}
+                        {isPortrait ? (
+                            <>
+                                {/* Left */}
+                                <span
+                                    aria-hidden
+                                    className="
+            pointer-events-none
+            absolute
+            bottom-[8%]
+            left-[-12px]
+            top-[8%]
+            w-px
+            bg-gradient-to-b
+            from-transparent
+            via-brand-gold/65
+            to-transparent
+          "
+                                />
+
+                                {/* Right */}
+                                <span
+                                    aria-hidden
+                                    className="
+            pointer-events-none
+            absolute
+            bottom-[8%]
+            right-[-12px]
+            top-[8%]
+            w-px
+            bg-gradient-to-b
+            from-transparent
+            via-brand-gold/65
+            to-transparent
+          "
+                                />
+                            </>
+                        ) : (
+                            <>
+                                {/* Top */}
+                                <span
+                                    aria-hidden
+                                    className="
+            pointer-events-none
+            absolute
+            left-[8%]
+            right-[8%]
+            top-[-12px]
+            h-px
+            bg-gradient-to-r
+            from-transparent
+            via-brand-gold/65
+            to-transparent
+          "
+                                />
+
+                                {/* Bottom */}
+                                <span
+                                    aria-hidden
+                                    className="
+            pointer-events-none
+            absolute
+            bottom-[-12px]
+            left-[8%]
+            right-[8%]
+            h-px
+            bg-gradient-to-r
+            from-transparent
+            via-brand-gold/65
+            to-transparent
+          "
+                                />
+                            </>
+                        )}
+                    </div>
 
                     {/* Desktop previous */}
                     {total > 1 && (
@@ -308,23 +401,23 @@ export default function ArtworkLightbox({
                             onClick={goPrevious}
                             aria-label="Previous artwork"
                             className="
-                absolute
-                left-0
-                hidden
-                h-14
-                w-14
-                items-center
-                justify-center
-                font-display
-                text-4xl
-                font-light
-                text-white/35
-                transition-colors
-                duration-300
-                hover:text-brand-gold
+        absolute
+        left-0
+        hidden
+        h-14
+        w-14
+        items-center
+        justify-center
+        font-display
+        text-4xl
+        font-light
+        text-white/35
+        transition-colors
+        duration-300
+        hover:text-brand-gold
 
-                md:flex
-              "
+        md:flex
+      "
                         >
                             ‹
                         </button>
@@ -337,23 +430,23 @@ export default function ArtworkLightbox({
                             onClick={goNext}
                             aria-label="Next artwork"
                             className="
-                absolute
-                right-0
-                hidden
-                h-14
-                w-14
-                items-center
-                justify-center
-                font-display
-                text-4xl
-                font-light
-                text-white/35
-                transition-colors
-                duration-300
-                hover:text-brand-gold
+        absolute
+        right-0
+        hidden
+        h-14
+        w-14
+        items-center
+        justify-center
+        font-display
+        text-4xl
+        font-light
+        text-white/35
+        transition-colors
+        duration-300
+        hover:text-brand-gold
 
-                md:flex
-              "
+        md:flex
+      "
                         >
                             ›
                         </button>
@@ -373,12 +466,17 @@ export default function ArtworkLightbox({
                 >
                     <p
                         className="
-              font-sans
-              text-[9px]
-              uppercase
-              tracking-[0.28em]
-              text-brand-gold
-            "
+                            font-sans
+                            text-xs
+                            font-medium
+                            uppercase
+                            tracking-[0.30em]
+                            text-brand-gold/90
+
+                            md:text-sm
+
+                            [@media(orientation:landscape)_and_(max-height:600px)]:text-[11px]
+                        "
                     >
                         {artwork.year}
                     </p>

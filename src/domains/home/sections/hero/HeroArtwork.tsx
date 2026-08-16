@@ -26,12 +26,19 @@ export default function HeroArtwork({
   }
 
   /* =========================================================
-     MOBILE PORTRAIT — ARTWORK ENVIRONMENT
+     MOBILE PORTRAIT — ARTWORK
      ========================================================= */
 
   if (mode === "mobile") {
     return (
-      <div className="absolute inset-0">
+      <div
+        className="
+          absolute
+          inset-0
+          h-full
+          w-full
+        "
+      >
         <Image
           src="/artworks/epifania_nupcial_mobile.png"
           alt={artwork.image.alt}
@@ -40,7 +47,9 @@ export default function HeroArtwork({
           sizes="100vw"
           className="
             object-cover
-            object-center
+            object-left-center
+            -translate-y-[2%]
+            scale-[1.08]
           "
         />
 
@@ -52,10 +61,10 @@ export default function HeroArtwork({
             absolute
             inset-x-0
             top-0
-            h-[46%]
+            h-[34%]
             bg-gradient-to-b
-            from-black/95
-            via-black/65
+            from-black/90
+            via-black/45
             to-transparent
           "
         />
@@ -76,7 +85,7 @@ export default function HeroArtwork({
           "
         />
 
-        {/* Soft vignette */}
+        {/* Vignette */}
         <div
           aria-hidden
           className="
@@ -96,7 +105,13 @@ export default function HeroArtwork({
 
   if (mode === "mobileInfo") {
     return (
-      <div className="relative z-30 w-full">
+      <div
+        className="
+          relative
+          z-30
+          w-full
+        "
+      >
         <ArtworkInfo artwork={artwork} />
 
         <div className="mt-8 flex justify-center">
@@ -112,20 +127,16 @@ export default function HeroArtwork({
   }
 
   /* =========================================================
-     TABLET / DESKTOP / LANDSCAPE
+     TABLET / DESKTOP / MOBILE LANDSCAPE
      ========================================================= */
 
   return (
     <div
       className="
         relative
-        h-full
+        h-[var(--hero-height)]
         w-full
         min-w-0
-
-        md:min-h-screen
-
-        [@media(orientation:landscape)_and_(max-height:600px)]:!min-h-0
       "
     >
       {/* Artwork visual layer */}
@@ -134,16 +145,15 @@ export default function HeroArtwork({
           pointer-events-none
           absolute
           top-0
+          h-[var(--hero-height)]
 
           md:right-[-6vw]
-          md:h-screen
           md:w-[min(118vw,1060px)]
 
           lg:right-[-11vw]
 
-          [@media(orientation:landscape)_and_(max-height:600px)]:!right-[-4vw]
-          [@media(orientation:landscape)_and_(max-height:600px)]:!min-h-0
-          [@media(orientation:landscape)_and_(max-height:600px)]:!w-[110%]
+          [@media(orientation:landscape)_and_(max-height:600px)]:!right-[-6vw]
+          [@media(orientation:landscape)_and_(max-height:600px)]:!w-[150%]
         "
       >
         <ArtworkImage
@@ -161,9 +171,13 @@ export default function HeroArtwork({
             object-contain
             object-right-top
 
-            md:scale-[1.08]
+            md:scale-[1.04]
 
-            lg:scale-[1.28]
+            lg:scale-[1.12]
+
+            [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!scale-100
+            [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!object-cover
+            [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!object-right-top
 
             [@media(orientation:landscape)_and_(max-height:600px)]:!scale-[1.02]
             [@media(orientation:landscape)_and_(max-height:600px)]:!object-cover
@@ -179,7 +193,7 @@ export default function HeroArtwork({
             left-0
             top-0
             hidden
-            h-screen
+            h-full
             w-[52%]
             bg-gradient-to-r
             from-black
@@ -194,22 +208,35 @@ export default function HeroArtwork({
         />
       </div>
 
-      {/* Artwork information UI layer */}
+      {/* Artwork information */}
       <div
         className="
           absolute
           z-30
 
-          md:bottom-16
           md:right-4
+          md:top-[50%]
+          md:-translate-y-1/2
 
           lg:bottom-10
           lg:right-6
+          lg:top-auto
+          lg:translate-y-0
 
           xl:right-8
 
-          [@media(orientation:landscape)_and_(max-height:600px)]:!bottom-4
-          [@media(orientation:landscape)_and_(max-height:600px)]:!right-2
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!top-[62%]
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!bottom-auto
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!-translate-y-1/2
+
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!top-[70%]
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!bottom-auto
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!-translate-y-1/2
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!bottom-6
+          [@media(orientation:landscape)_and_(max-height:600px)]:!right-3
+          [@media(orientation:landscape)_and_(max-height:600px)]:!top-auto
+          [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-0
         "
       >
         <ArtworkInfo artwork={artwork} />

@@ -10,23 +10,44 @@ export default function FeaturedArtwork() {
   }
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-background text-white">
+    <section
+      className="
+        relative
+        overflow-hidden
+        bg-background-alternate
+        text-white
+
+        lg:min-h-screen
+      "
+    >
       <Container
         className="
           relative
           z-10
           flex
-          min-h-screen
           flex-col
           items-center
-          justify-center
-          py-14
+          justify-start
+
+          py-16
+
+          md:py-20
+
+          lg:min-h-screen
+          lg:justify-center
           lg:py-24
           lg:pb-14
         "
       >
         {/* Section heading */}
-        <div className="mb-12 text-center">
+        <div
+          className="
+            mb-12
+            text-center
+
+            md:mb-14
+          "
+        >
           <p
             className="
               mb-4
@@ -48,6 +69,7 @@ export default function FeaturedArtwork() {
               leading-[1]
               tracking-[0.02em]
               text-white
+
               md:text-5xl
               lg:text-6xl
             "
@@ -58,7 +80,18 @@ export default function FeaturedArtwork() {
 
         {/* Artwork */}
         <div className="flex w-full flex-col items-center">
-          <ArtworkFrame className="mb-10 w-[300px] md:w-[420px] lg:w-[500px] xl:w-[560px]">
+          <ArtworkFrame
+            className="
+              mb-10
+              w-[300px]
+
+              md:w-[420px]
+
+              lg:w-[500px]
+
+              xl:w-[560px]
+            "
+          >
             <ArtworkImage
               src={artwork.image.src}
               alt={artwork.image.alt}
@@ -91,6 +124,7 @@ export default function FeaturedArtwork() {
                 font-light
                 leading-7
                 text-white/55
+
                 md:text-base
               "
             >

@@ -21,6 +21,9 @@ export default function ArtworkInfo({
         md:bg-black/10
         md:p-[6px]
         md:backdrop-blur-none
+
+        [@media(orientation:landscape)_and_(max-height:600px)]:!w-[min(38vw,420px)]
+        [@media(orientation:landscape)_and_(max-height:600px)]:!min-w-0
       "
     >
       <div
@@ -34,10 +37,19 @@ export default function ArtworkInfo({
           md:px-8
           md:py-7
           md:backdrop-blur-[4px]
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!px-5
+          [@media(orientation:landscape)_and_(max-height:600px)]:!py-4
         "
       >
-        {/* Mobile compact layout */}
-        <div className="md:hidden">
+        {/* ===================================================
+            MOBILE PORTRAIT
+           =================================================== */}
+        <div
+          className="
+            md:hidden
+          "
+        >
           <h2
             className="
               whitespace-nowrap
@@ -68,16 +80,7 @@ export default function ArtworkInfo({
             </p>
           )}
 
-          <div
-            className="
-              mt-4
-              h-px
-              w-full
-              bg-gradient-to-r
-              from-brand-gold
-              to-transparent
-            "
-          />
+          <div className="mt-4 h-px w-full bg-gradient-to-r from-brand-gold to-transparent" />
 
           <div
             className="
@@ -112,14 +115,118 @@ export default function ArtworkInfo({
           </div>
         </div>
 
-        {/* Tablet / Desktop layout */}
-        <div className="hidden md:block">
-          <h2 className="font-display text-2xl font-light tracking-[0.01em] text-brand-gold">
+        {/* ===================================================
+            MOBILE LANDSCAPE
+           =================================================== */}
+        <div
+          className="
+            hidden
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:!block
+          "
+        >
+          <h2
+            className="
+              whitespace-nowrap
+              font-display
+              text-xl
+              font-light
+              tracking-[0.01em]
+              text-brand-gold
+            "
+          >
             {artwork.title}
           </h2>
 
           {artwork.quote && (
-            <p className="mt-3 max-w-sm font-display text-base font-light italic leading-relaxed text-white/75 md:text-lg">
+            <p
+              className="
+                mt-1
+                whitespace-nowrap
+                font-display
+                text-sm
+                font-light
+                italic
+                leading-relaxed
+                text-white/70
+              "
+            >
+              &quot;{artwork.quote}&quot;
+            </p>
+          )}
+
+          <div className="mt-3 h-px w-full bg-gradient-to-r from-brand-gold to-transparent" />
+
+          <div
+            className="
+              mt-3
+              flex
+              items-center
+              gap-3
+              whitespace-nowrap
+              font-sans
+              text-[11px]
+              text-white/65
+            "
+          >
+            <span>{artwork.technique}</span>
+
+            <span className="text-brand-gold/40">
+              ·
+            </span>
+
+            <span>{artwork.year}</span>
+
+            <span className="text-brand-gold/40">
+              ·
+            </span>
+
+            <span>
+              {artwork.dimensions.width} ×{" "}
+              {artwork.dimensions.height}{" "}
+              {artwork.dimensions.unit}
+            </span>
+          </div>
+        </div>
+
+        {/* ===================================================
+            TABLET / DESKTOP
+           =================================================== */}
+        <div
+          className="
+            hidden
+            md:block
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
+          "
+        >
+          <h2
+            className="
+              font-display
+              text-2xl
+              font-light
+              tracking-[0.01em]
+              text-brand-gold
+            "
+          >
+            {artwork.title}
+          </h2>
+
+          {artwork.quote && (
+            <p
+              className="
+                mt-3
+                max-w-sm
+                font-display
+                text-base
+                font-light
+                italic
+                leading-relaxed
+                text-white/75
+
+                md:text-lg
+              "
+            >
               &quot;{artwork.quote}&quot;
             </p>
           )}

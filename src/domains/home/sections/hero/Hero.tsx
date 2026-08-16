@@ -12,14 +12,21 @@ export default function Hero() {
     <section
       className="
         relative
-        min-h-[100svh]
         w-full
         min-w-0
         overflow-hidden
 
-        md:min-h-screen
+        [--hero-height:100svh]
+        h-[var(--hero-height)]
 
-        [@media(orientation:landscape)_and_(max-height:600px)]:min-h-[100svh]
+        md:[--hero-height:100vh]
+
+
+        [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:[--hero-height:650px]
+
+        [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:[--hero-height:600px]
+
+        [@media(orientation:landscape)_and_(max-height:600px)]:[--hero-height:100svh]
       "
     >
       {/* Mobile portrait artwork environment */}
@@ -30,8 +37,6 @@ export default function Hero() {
           z-0
 
           md:hidden
-
-          [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
         "
       >
         <HeroArtwork mode="mobile" />
@@ -43,28 +48,32 @@ export default function Hero() {
 
       <Navigation />
 
-      {/* Mobile portrait composition */}
+      {/* Mobile portrait */}
       <div
         className="
           relative
           z-20
-          flex
-          min-h-[100svh]
-          flex-col
+          h-[var(--hero-height)]
 
           md:hidden
-
-          [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
         "
       >
-        <Container className="relative flex min-h-[100svh] flex-col">
+        <Container className="relative h-full">
           {/* Brand */}
           <div className="pt-24">
             <HeroBrand />
           </div>
 
-          {/* Lower content */}
-          <div className="mt-auto pb-10">
+          {/* Artwork info + CTA */}
+          <div
+            className="
+              absolute
+              bottom-[12svh]
+              left-[var(--page-gutter)]
+              right-[var(--page-gutter)]
+              z-30
+            "
+          >
             <HeroArtwork mode="mobileInfo" />
           </div>
         </Container>
@@ -76,49 +85,42 @@ export default function Hero() {
           relative
           z-10
           hidden
-          min-h-screen
+          h-[var(--hero-height)]
 
           md:block
-
-          [@media(orientation:landscape)_and_(max-height:600px)]:!block
-          [@media(orientation:landscape)_and_(max-height:600px)]:min-h-[100svh]
         "
       >
         <div
           className="
             grid
+            h-full
             w-full
             min-w-0
-            items-start
+            items-center
 
-            md:min-h-screen
-            md:grid-cols-[40%_60%]
-            md:items-center
+            md:grid-cols-[42%_58%]
 
-            lg:grid-cols-[34%_66%]
+            lg:grid-cols-[38%_62%]
 
-            [@media(orientation:landscape)_and_(max-height:600px)]:!min-h-[100svh]
             [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-[38%_62%]
-            [@media(orientation:landscape)_and_(max-height:600px)]:!items-center
           "
         >
-          {/* Narrative / Brand */}
+          {/* Brand */}
           <div
             className="
               relative
               z-30
               flex
+              h-full
               min-w-0
               flex-col
               pt-24
 
-              md:min-h-screen
-
               lg:pt-28
 
-              [@media(orientation:landscape)_and_(max-height:600px)]:!min-h-0
               [@media(orientation:landscape)_and_(max-height:600px)]:!pt-16
               [@media(orientation:landscape)_and_(max-height:600px)]:!justify-center
+              [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-[8svh]
             "
           >
             <HeroBrand />
@@ -131,12 +133,6 @@ export default function Hero() {
               h-full
               w-full
               min-w-0
-
-              md:min-h-screen
-
-              [@media(orientation:landscape)_and_(max-height:600px)]:!min-h-0
-              [@media(orientation:landscape)_and_(max-height:600px)]:!mx-0
-              [@media(orientation:landscape)_and_(max-height:600px)]:!w-full
             "
           >
             <HeroArtwork mode="desktop" />

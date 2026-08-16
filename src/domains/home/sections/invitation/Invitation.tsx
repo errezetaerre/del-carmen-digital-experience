@@ -8,7 +8,7 @@ export default function Invitation() {
       className="
         relative
         overflow-hidden
-        bg-background
+        bg-background-alternate
         py-[var(--section-space-generous)]
         text-white
       "

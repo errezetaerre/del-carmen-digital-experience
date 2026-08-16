@@ -12,7 +12,8 @@
      COLOR
      --------------------------------------------------------- */
 
-  --background: #0b0b0b;
+  --background: #080808;
+  --background-alternate: #10100f;
   --foreground: #f5f5f5;
 
 
@@ -134,6 +135,8 @@
   /* Color */
 
   --color-background: var(--background);
+  --color-background-alternate: var(--background-alternate);
+
   --color-foreground: var(--foreground);
 
 
@@ -212,6 +215,7 @@ body {
 
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
