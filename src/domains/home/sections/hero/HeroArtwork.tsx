@@ -142,7 +142,7 @@ export default function HeroArtwork({
           lg:right-[-11vw]
 
           [@media(orientation:landscape)_and_(max-height:600px)]:!right-[-4vw]
-          [@media(orientation:landscape)_and_(max-height:600px)]:!h-full
+          [@media(orientation:landscape)_and_(max-height:600px)]:!min-h-0
           [@media(orientation:landscape)_and_(max-height:600px)]:!w-[110%]
         "
       >
@@ -166,6 +166,7 @@ export default function HeroArtwork({
             lg:scale-[1.28]
 
             [@media(orientation:landscape)_and_(max-height:600px)]:!scale-[1.02]
+            [@media(orientation:landscape)_and_(max-height:600px)]:!object-cover
             [@media(orientation:landscape)_and_(max-height:600px)]:!object-right
           "
         />
