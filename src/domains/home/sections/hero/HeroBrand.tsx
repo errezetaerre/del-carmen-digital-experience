@@ -59,6 +59,7 @@ export default function HeroBrand() {
           leading-[1.25]
           tracking-[0.08em]
           text-brand-gold
+          drop-shadow-[0_2px_2px_rgba(0,0,0,0.85)]
 
           md:hidden
         "

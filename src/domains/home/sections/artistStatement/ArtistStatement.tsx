@@ -103,7 +103,7 @@ export default function ArtistStatement() {
                 lg:text-6xl
               "
             >
-              El arte como memoria eterna
+              Art as eternal memory
             </h2>
 
             {/* Statement */}
@@ -126,13 +126,13 @@ export default function ArtistStatement() {
               "
             >
               <p>
-                Mis obras nacen de un voto con el cielo: plasmar las bellezas
-                que el alma reconoce, pero el mundo ha olvidado.
+                My works are born from a vow with heaven: to capture the
+                beauty that the soul recognizes, but the world has forgotten.
               </p>
 
               <p>
-                Pinto para despertar conciencia, para recordarnos que lo
-                esencial no se ve, pero se siente.
+                I paint to awaken consciousness, to remind us that what is
+                essential is not seen, but felt.
               </p>
             </div>
 
@@ -161,7 +161,7 @@ export default function ArtistStatement() {
                   tracking-[0.28em]
                 "
               >
-                Conoce mi historia →
+                Discover my story →
               </LinkButton>
             </div>
           </div>
