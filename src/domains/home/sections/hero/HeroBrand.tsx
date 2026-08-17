@@ -15,7 +15,7 @@ export default function HeroBrand() {
           uppercase
           leading-[0.88]
           tracking-[0.04em]
-          text-white
+          text-[#F5EFE6]
 
           md:hidden
         "
@@ -34,7 +34,7 @@ export default function HeroBrand() {
           uppercase
           leading-[0.88]
           tracking-[0.04em]
-          text-white
+          text-[#F5EFE6]
 
           md:block
           md:text-7xl
@@ -55,6 +55,7 @@ export default function HeroBrand() {
           font-display
           text-lg
           font-normal
+          uppercase
           leading-[1.25]
           tracking-[0.08em]
           text-brand-gold
@@ -76,6 +77,7 @@ export default function HeroBrand() {
           font-display
           text-xl
           font-normal
+          uppercase
           leading-[1.25]
           tracking-[0.08em]
           text-brand-gold
@@ -128,7 +130,7 @@ export default function HeroBrand() {
           text-xs
           uppercase
           tracking-[0.25em]
-          text-white/40
+          text-[#F5EFE6]/40
 
           lg:flex
 

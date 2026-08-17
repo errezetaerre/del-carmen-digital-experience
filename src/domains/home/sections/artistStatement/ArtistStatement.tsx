@@ -31,27 +31,49 @@ export default function ArtistStatement() {
           <div
             className="
               relative
-              aspect-[4/5]
-              overflow-hidden
-              bg-black/5
+              flex
+              items-center
+
               md:col-span-3
               lg:col-span-5
             "
             aria-label="Artist portrait"
           >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Image
-                src="/images/artist/about_the_artist.png"
-                alt="Del Carmen"
-                width={2200}
-                height={600}
+            {/* Mask */}
+            <div
+              className="
+                relative
+                h-[80%]
+                min-h-[420px]
+                w-full
+                overflow-hidden
+                bg-black/5
+
+                md:min-h-[520px]
+                lg:min-h-[620px]
+              "
+            >
+              {/* Movable image layer */}
+              <div
                 className="
-                  h-[1000px]
-                  w-auto
-                  object-contain
-                  object-left
+                  absolute
+                  inset-0
+
+                  translate-x-[1%]
+                  translate-y-[0%]
+                  scale-[1]
                 "
-              />
+              >
+                <Image
+                  src="/images/artist/about_the_artist.png"
+                  alt="Del Carmen"
+                  fill
+                  className="
+                    object-cover
+                    object-contain
+                  "
+                />
+              </div>
             </div>
           </div>
 

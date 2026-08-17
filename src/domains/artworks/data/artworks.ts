@@ -6,19 +6,19 @@ export const artworks: Artwork[] = [
 
     title: "Epifania Nupcial",
 
-    year: 2025,
+    year: 2026,
 
     technique: "Oil on canvas",
 
     dimensions: {
-      width: 95,
-      height: 113,
+      width: 113,
+      height: 95,
       unit: "cm",
     },
 
     image: {
       src: "/artworks/epifania_nupcial.png",
-      alt: "Epifania Nupcial",
+      alt: "Epifania Nupcial real",
     },
 
     quote: "She wears no veil, only silence.",
@@ -74,8 +74,8 @@ export const artworks: Artwork[] = [
     technique: "Oil on canvas",
 
     dimensions: {
-      width: 60,
-      height: 90,
+      width: 90,
+      height: 60,
       unit: "cm",
     },
 
@@ -88,11 +88,11 @@ export const artworks: Artwork[] = [
 
     description:
       "A symbolic journey toward the discovery of the soul and the treasures hidden within.",
-    
+
     price: 6000,
 
     currency: "USD",
-    
+
     availability: "available",
   },
 
@@ -115,12 +115,12 @@ export const artworks: Artwork[] = [
       src: "/artworks/sendero_del_sol.jpg",
       alt: "Sendero del Sol",
     },
-    
+
     quote: "She wears no sendero, only silence.",
 
     description:
       "A reflection on life's path, hope, serenity and the light we leave behind.",
-    
+
     price: 6000,
 
     currency: "USD",

@@ -1,5 +1,5 @@
 "use client";
- 
+
 import Link from "next/link";
 import { useState } from "react";
 
@@ -17,7 +17,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const headerState = isScrolled
-    ? "bg-[#F4F1EC]/90 backdrop-blur-md shadow-sm"
+    ? "bg-foreground/90 backdrop-blur-md shadow-sm"
     : "bg-transparent";
 
   return (
@@ -28,14 +28,14 @@ export default function Navigation() {
           headerState,
         ].join(" ")}
       >
-        <Container className="flex h-[72px] items-center justify-between">
+        <Container className="flex h-[52px] items-center justify-between">
           {/* Brand */}
           <Link
             href="/"
             className={[
               "text-sm font-light uppercase tracking-[0.30em] transition-opacity duration-300 hover:opacity-80",
               isScrolled
-                ? "text-[#2F2E2C]"
+                ? "text-brand-gold/100"
                 : "text-white",
             ].join(" ")}
           >
@@ -56,7 +56,7 @@ export default function Navigation() {
                     className={[
                       "text-xs uppercase tracking-[0.12em] transition-colors duration-300",
                       isScrolled
-                        ? "text-brand-gold/70 hover:text-brand-gold"
+                        ? "text-brand-gold/90 hover:text-background"
                         : "text-white/65 hover:text-white",
                     ].join(" ")}
                   >
@@ -73,7 +73,7 @@ export default function Navigation() {
             className={[
               "hidden text-xs uppercase tracking-[0.12em] transition-colors duration-300 md:block",
               isScrolled
-                ? "text-brand-gold/70 hover:text-brand-gold"
+                ? "text-brand-gold/90 hover:text-background"
                 : "text-white/65 hover:text-white",
             ].join(" ")}
           >
