@@ -37,7 +37,8 @@ export default function FeaturedArtwork() {
           items-center
           justify-start
 
-          py-16
+          pt-0
+          pb-16
 
           md:py-20
 
@@ -89,23 +90,27 @@ export default function FeaturedArtwork() {
         {/* Artwork */}
         <div className="flex w-full flex-col items-center">
           <ArtworkFrame
+            aspectRatio={`${artwork.dimensions.width} / ${artwork.dimensions.height}`}
             className="
-              mb-10
-              w-[300px]
+    mb-10
+    w-[340px]
 
-              md:w-[420px]
-
-              lg:w-[500px]
-
-              xl:w-[1024]
-            "
+    md:w-[500px]
+    lg:w-[560px]
+    xl:w-[620px]
+  "
           >
             <ArtworkImage
               src={primaryImage.src}
               alt={primaryImage.alt}
-              width={primaryImage.width}
-              height={primaryImage.height}
-              className="h-full w-full object-contain"
+              fill
+              sizes="
+      (min-width: 1280px) 620px,
+      (min-width: 1024px) 560px,
+      (min-width: 768px) 500px,
+      340px
+    "
+              className="object-contain"
             />
           </ArtworkFrame>
 

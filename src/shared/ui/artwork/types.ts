@@ -4,8 +4,9 @@ import type { ReactNode } from "react";
 export type ArtworkImageProps = ImageProps;
 
 export interface ArtworkFrameProps {
-  children: ReactNode;
+  children: React.ReactNode;
   className?: string;
+  aspectRatio?: string;
 }
 
 import type { Artwork } from "@/domains/artworks";

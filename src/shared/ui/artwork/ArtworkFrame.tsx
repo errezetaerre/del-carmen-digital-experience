@@ -3,6 +3,7 @@ import type { ArtworkFrameProps } from "./types";
 export default function ArtworkFrame({
   children,
   className = "",
+  aspectRatio = "16 / 9",
 }: ArtworkFrameProps) {
   return (
     <div
@@ -10,7 +11,6 @@ export default function ArtworkFrame({
         "group",
         "relative",
         "mb-16",
-        "aspect-[16/9]",
         "w-[340px]",
         "overflow-hidden",
         "border",
@@ -20,6 +20,9 @@ export default function ArtworkFrame({
         "xl:w-[520px]",
         className,
       ].join(" ")}
+      style={{
+        aspectRatio,
+      }}
     >
       {children}
     </div>
