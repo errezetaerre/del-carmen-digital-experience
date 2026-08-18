@@ -37,7 +37,7 @@ export default function FeaturedArtwork() {
           items-center
           justify-start
 
-          pt-0
+          pt-8
           pb-16
 
           md:py-20
@@ -92,24 +92,24 @@ export default function FeaturedArtwork() {
           <ArtworkFrame
             aspectRatio={`${artwork.dimensions.width} / ${artwork.dimensions.height}`}
             className="
-    mb-10
-    w-[340px]
+              mb-10
+              w-[340px]
 
-    md:w-[500px]
-    lg:w-[560px]
-    xl:w-[620px]
-  "
+              md:w-[500px]
+              lg:w-[560px]
+              xl:w-[620px]
+            "
           >
             <ArtworkImage
               src={primaryImage.src}
               alt={primaryImage.alt}
               fill
               sizes="
-      (min-width: 1280px) 620px,
-      (min-width: 1024px) 560px,
-      (min-width: 768px) 500px,
-      340px
-    "
+                (min-width: 1280px) 620px,
+                (min-width: 1024px) 560px,
+                (min-width: 768px) 500px,
+                340px
+              "
               className="object-contain"
             />
           </ArtworkFrame>
