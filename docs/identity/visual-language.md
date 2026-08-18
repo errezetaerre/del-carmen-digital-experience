@@ -3,7 +3,7 @@
 Painting the Eternal Essence Within
 
 Version:
-1.1
+1.2
 
 Document ID:
 DOC-VL
@@ -27,7 +27,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-14
+2026-08-17
 
 ---
 
@@ -319,7 +319,7 @@ The artwork should normally remain the most colorful element on screen.
 
 The interface uses restrained neutral environments to support it.
 
-The current Home is predominantly dark.
+The current Home is predominantly dark. Subtle near-black surface changes may distinguish adjacent scenes while preserving continuity.
 
 Primary Gold identifies selected visual focal points.
 
@@ -492,6 +492,60 @@ Effects that obscure important areas
 The interface should adapt to the artwork whenever reasonably possible.
 
 The artwork should not be forced to adapt to arbitrary UI conventions.
+
+---
+
+---
+
+# Artwork Visual Representations
+
+An Artwork is a single canonical artistic entity even when different visual assets are required to present it across the experience.
+
+Visual representations must not create duplicate Artwork records. They are context-specific representations of the same work.
+
+Canonical representation roles are:
+
+Primary
+
+The faithful default representation of the artwork. It is the preferred source for artwork detail, Featured Artwork and Collection contexts unless a more specific representation is intentionally required.
+
+Hero Portrait
+
+An optional composition prepared for portrait Hero environments when the artwork requires different framing, negative space, atmosphere or integration with brand copy.
+
+Hero Landscape
+
+An optional composition prepared for landscape Hero environments. When no dedicated Hero Landscape representation exists, Primary is the canonical fallback.
+
+Thumbnail
+
+An optional optimized representation for compact cards, previews or discovery surfaces. A thumbnail must preserve the identity and visual integrity of the artwork.
+
+The existence of a Hero-specific representation does not imply that the artwork itself is exclusive to the Hero.
+
+Hero treatments may introduce surrounding darkness, gradients, negative space or atmospheric integration when necessary for composition, but they must not materially alter the artwork itself.
+
+Every meaningful artwork image representation must provide appropriate alternative text. Alternative text belongs to the representation and should describe the visual content accurately without unnecessary promotional language.
+
+The interface should prefer the most context-appropriate representation while preserving Primary as the canonical visual source and fallback.
+
+---
+
+# Artwork, Series and Curatorial Presentation
+
+The visual language distinguishes between an individual Artwork and an Artwork Series.
+
+An Artwork represents one artistic work.
+
+An Artwork Series represents a curated body of related works connected through concept, subject, narrative, visual language or artistic intention.
+
+A Series may use one artwork as its visual cover without reducing the Series to that individual work.
+
+When a Series appears in a discovery or Collection context, its presentation should communicate that the visitor is entering a broader body of work rather than opening only the cover artwork.
+
+Home placement is curatorial rather than intrinsic to the identity of an artwork. Hero, Featured Artwork and Featured Collection may therefore use different works, and repetition should occur only when it reinforces the intended narrative.
+
+The Home should avoid unnecessary repetition of the same artwork across consecutive scenes.
 
 ---
 
@@ -963,6 +1017,15 @@ The visitor should remember the art before remembering the interface.
 
 ---
 
+# Canonical Status
+
+This document represents the approved visual language of Del Carmen Digital Experience as of Version 1.2.
+
+Future modifications must be explicitly approved before becoming canonical.
+
+---
+
 Del Carmen Digital Experience
 
 Painting the Eternal Essence Within
+

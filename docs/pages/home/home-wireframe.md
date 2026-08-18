@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Wireframe
 
-Version: 1.2
+Version: 1.3
 
 Document ID:
 
@@ -32,7 +32,7 @@ Del Carmen Digital Experience
 
 Last Updated:
 
-2026-08-09
+2026-08-17
 
 ------------------------------------------------------------------------
 
@@ -389,6 +389,16 @@ Artwork occupies approximately 70% of section height.
 
 No secondary artworks.
 
+Curatorial role:
+
+Featured Artwork presents one individual Artwork as a focused editorial moment.
+
+It is distinct from the Hero: the Hero establishes arrival, identity and atmosphere, while Featured Artwork allows deeper contemplation of a selected work.
+
+The same Artwork may appear in both contexts when curatorially justified, but repetition is not required.
+
+The Featured Artwork action leads to the selected Artwork detail experience rather than functioning as a duplicate of the Hero collection CTA.
+
 ------------------------------------------------------------------------
 
 Scene 03
@@ -429,6 +439,44 @@ Portrait and statement stack vertically.
 
   ------------------------------------------
   Scene 04
+  ------------------------------------------
+
+  Collection
+
+  Purpose:
+
+  Expand from one featured work into the broader artistic universe.
+
+  The Home Collection is a curated preview, not the complete artwork archive.
+
+  A collection entry may represent either:
+
+  • one individual Artwork
+
+  • one ArtworkSeries
+
+  When an entry represents an Artwork, opening it leads to that Artwork experience.
+
+  When an entry represents an ArtworkSeries, opening it leads to the series experience and exposes the works belonging to that series.
+
+  Example:
+
+  Yasemi
+
+  → Yasemi I
+
+  → Yasemi II
+
+  → Yasemi III
+
+  → Yasemi IV
+
+  → Yasemi V
+
+  The preview image is therefore an editorial thumbnail/cover for the selected Artwork or ArtworkSeries; it does not imply that every work in a series must appear directly on Home.
+
+  The Collection CTA leads toward the broader collection/gallery experience.
+
   ------------------------------------------
   Scene 05
 
@@ -493,6 +541,36 @@ ratio.
 
 The current editorial image set includes photography with different
 native proportions.
+
+------------------------------------------------------------------------
+
+Artwork Image Roles
+
+An Artwork is one canonical domain entity even when different visual files are required by the interface.
+
+Approved visual roles include:
+
+Primary
+
+Canonical presentation of the artwork.
+
+Hero Portrait
+
+Optional portrait-oriented Hero composition.
+
+Hero Landscape
+
+Optional landscape-oriented Hero composition.
+
+Thumbnail
+
+Optional optimized preview representation for grids or compact discovery surfaces.
+
+If a specialized Hero representation does not exist, the interface may fall back to Primary when the composition remains valid.
+
+These visual roles do not create duplicate Artwork entities.
+
+Every rendered artwork image requires appropriate alt text.
 
 ------------------------------------------------------------------------
 
@@ -778,6 +856,20 @@ Home
 
 The canonical Home order is fixed unless explicitly revised.
 
+Home selection is curatorial rather than encoded as independent identity flags on each Artwork.
+
+The Home composition conceptually selects:
+
+Hero Artwork
+
+Featured Artwork
+
+Featured Collection entries
+
+A Featured Collection entry may reference either an Artwork or an ArtworkSeries.
+
+This separation allows the same Artwork to participate in multiple approved contexts without duplicating its domain record.
+
 ------------------------------------------------------------------------
 
 Shared UI Dependencies
@@ -856,7 +948,7 @@ interface.
 Canonical Status
 
 This document represents the approved spatial and structural
-architecture of the Home page as of Version 1.2.
+architecture of the Home page as of Version 1.3.
 
 Every approved decision becomes part of the living system.
 

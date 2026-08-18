@@ -1,6 +1,6 @@
 # Project Roadmap
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-RM
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-07-08
+2026-08-17
 
 ---
 
@@ -82,11 +82,21 @@ Deliverables
 
 Homepage
 
+Home Curation
+
 Navigation
 
 Artwork Gallery
 
 Artwork Details
+
+Artwork Series
+
+Series Detail Experience
+
+Artwork Classification Model
+
+Artwork Media Representations
 
 Artist Page
 
@@ -103,6 +113,19 @@ Responsive Design
 SEO
 
 Deployment on Vercel
+
+Phase 1 artwork architecture must support:
+
+• Artwork as the canonical individual work
+• ArtworkSeries as a coherent body of related artworks
+• Curated Home placement independent from Artwork identity
+• Featured Collection entries that may reference either an Artwork or an ArtworkSeries
+• Distinct public image representations such as Primary, Hero Portrait, Hero Landscape and Thumbnail
+• Accessibility metadata, including alt text, for every public artwork image representation
+• Explicit distinction between original authored work and master studies / copies
+• Independent classification dimensions for authorship, creation context, medium, category and series
+
+The exact persistence schema is defined only after the canonical Artwork domain model is approved.
 
 Target
 
@@ -158,9 +181,15 @@ Interviews
 
 Exhibitions
 
+Awards and Recognition
+
 Search
 
 Categories
+
+Content may reference Artworks and ArtworkSeries without duplicating their canonical records.
+
+Exhibitions, awards, process stories and editorial narratives belong to the content / artist-history experience rather than being treated as artwork classification values.
 
 ---
 
@@ -178,6 +207,10 @@ CMS
 
 Artwork Management
 
+Artwork Series Management
+
+Home Curation Management
+
 Journal Management
 
 Media Library
@@ -189,6 +222,8 @@ Collectors
 Analytics
 
 Settings
+
+Administration should manage canonical Artwork data separately from editorial placement and commercial configuration.
 
 ---
 
@@ -206,6 +241,8 @@ Prints
 
 Limited Editions
 
+Product Variants
+
 Shopping Cart
 
 Payments
@@ -217,6 +254,14 @@ Shipping
 Order Tracking
 
 Wishlist
+
+Commerce extends the artwork experience without redefining Artwork identity.
+
+Prints, editions and reproductions are commercial Products associated with an Artwork.
+
+An Artwork may exist without a Product and may later support multiple purchasable manifestations, sizes or editions.
+
+The canonical Print / Edition persistence model is defined during this phase.
 
 ---
 

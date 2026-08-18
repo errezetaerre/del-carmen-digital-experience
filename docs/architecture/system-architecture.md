@@ -1,6 +1,6 @@
 # System Architecture
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-SA
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-07-08
+2026-08-17
 
 ---
 
@@ -279,6 +279,85 @@ Unlike traditional ecommerce systems, artworks contain:
 • Ownership history
 • Exhibition history
 • Media assets
+
+Artwork identity and presentation context are separate concerns.
+
+The Artwork entity describes the work itself. It must not become coupled to a specific Home scene, viewport, card, campaign or commercial presentation.
+
+Canonical artwork classification is multidimensional. Terms such as authorship, context, medium, category and series are not interchangeable.
+
+Artwork classification may include:
+
+• Authorship — the relationship between the artist and the work, such as original authorship, master copy or study after another work
+• Context — the circumstance in which the work was created, such as independent practice, academic study or commission
+• Medium — the material or technique used, such as oil, graphite or charcoal
+• Categories — thematic, formal or genre classifications such as portrait, still life or figurative work
+• Series — an optional relationship to a coherent body of works
+
+An artwork may therefore be both original in authorship and academic in context. These properties must remain independent.
+
+Master studies and master copies must be explicitly distinguishable from the artist's original authored corpus without removing their value as artworks or records of artistic formation.
+
+ArtworkSeries is a separate curatorial entity.
+
+An ArtworkSeries groups multiple Artwork entities that belong to a coherent artistic body, narrative, exhibition concept or thematic investigation.
+
+Example:
+
+Yasemi
+├── Yasemi I
+├── Yasemi II
+├── Yasemi III
+├── Yasemi IV
+└── Yasemi V
+
+The series does not replace its artworks. Each Artwork remains independently addressable and may have its own metadata, media, detail view and commercial status.
+
+A series may define:
+
+• Title
+• Slug
+• Description
+• Cover artwork
+• Ordered artwork membership
+• Curatorial metadata
+
+Artwork media must support multiple visual representations of the same Artwork without duplicating the Artwork entity.
+
+Canonical visual roles may include:
+
+• Primary
+• Hero Portrait
+• Hero Landscape
+• Thumbnail
+
+Each visual representation must carry its own accessibility metadata, including alt text.
+
+Primary is the canonical public representation of the artwork.
+
+Hero Portrait and Hero Landscape are optional editorial derivatives used when the Home composition requires a different crop, negative space, atmospheric integration or framing.
+
+If a specialized Hero representation does not exist, the presentation layer should fall back to Primary.
+
+Thumbnail is an optional optimized derivative for compact collection or navigation contexts.
+
+Original protected high-resolution artwork files remain governed by SA-10 File Storage and are not equivalent to public visual representations.
+
+Home curation is separate from Artwork identity.
+
+The Home determines which Artwork or ArtworkSeries appears in Hero, Featured Artwork and Collection through a dedicated curation/configuration concern rather than by redefining the Artwork itself.
+
+Conceptually:
+
+HomeCuration
+├── Hero → Artwork
+├── Featured Artwork → Artwork
+└── Featured Collection → Artwork | ArtworkSeries
+
+This allows the same Artwork to be reused intentionally in different contexts without duplicate database records while also allowing Home curation to change independently of artwork metadata.
+
+The exact persistence schema, field names and database implementation for Artwork, ArtworkSeries, ArtworkImage and HomeCuration are intentionally deferred until the canonical domain model is approved.
+
 ---
 
 # SA-06 Request Flow
@@ -385,7 +464,11 @@ Core entities
 
 Artworks
 
-Collections
+Artwork Series
+
+Artwork Media
+
+Collections / Curatorial Selections
 
 Categories
 
@@ -406,10 +489,41 @@ Media
 Art Domain
 
 Artwork
+ArtworkSeries
+ArtworkMedia
 Collection
 Exhibition
 JournalEntry
 ArtistStatement
+
+Artwork is the canonical record of an individual work.
+
+ArtworkSeries represents a coherent body of multiple artworks and maintains relationships to its member Artwork records.
+
+ArtworkMedia represents public or protected media associated with an Artwork. It must support multiple presentation roles without duplicating the Artwork record.
+
+Conceptual media roles include:
+
+• Primary
+• Hero Portrait
+• Hero Landscape
+• Thumbnail
+
+Every public artwork image representation requires accessibility metadata, including alt text.
+
+Home curation is an application/editorial concern that references existing Artwork and ArtworkSeries entities.
+
+It may conceptually determine:
+
+• Hero artwork
+• Featured artwork
+• Featured collection entries
+
+Featured collection entries may reference either an individual Artwork or an ArtworkSeries.
+
+The database must not treat Hero placement, Featured Artwork placement or Home Collection placement as intrinsic artistic properties of an Artwork.
+
+The persistence model for Home curation may later be implemented through configuration, database entities or CMS-managed editorial data. That implementation is not yet canonical.
 
 Commerce Domain
 
@@ -419,6 +533,18 @@ Payment
 Transaction
 Invoice
 
+Artwork and Product are separate concepts.
+
+Artwork describes the artistic work.
+
+Product describes something that can be transacted.
+
+Future prints, editions, reproductions and other purchasable manifestations must therefore be modeled through the commerce layer rather than being treated as artwork classification values.
+
+One Artwork may eventually relate to zero, one or multiple Products.
+
+The exact Print and Edition model is deferred to the commerce architecture phase.
+
 Identity Domain
 
 User
@@ -426,6 +552,10 @@ Role
 CollectorProfile
 
 The database must be extensible.
+
+Domain concepts must be finalized before persistence details.
+
+Database tables must express approved domain relationships rather than define the domain through implementation convenience.
 
 ---
 
@@ -453,6 +583,16 @@ Artwork preservation rule:
 Original high-resolution files must never be publicly exposed.
 
 Public images are optimized derivatives generated from protected originals.
+
+A public derivative may serve a specific presentation role such as Primary, Hero Portrait, Hero Landscape or Thumbnail.
+
+Multiple derivatives do not represent multiple artworks.
+
+They remain media representations associated with one canonical Artwork entity.
+
+Accessibility metadata must travel with each public image representation.
+
+Presentation-specific derivatives may differ in crop, framing, negative space, atmospheric integration or optimization while preserving the visual integrity of the artwork.
 
 ---
 
@@ -507,6 +647,10 @@ Invoice
 Marketplace remains independent from the gallery experience.
 
 The marketplace is commerce infrastructure, not the identity of the platform.
+
+Artwork identity must remain independent from Product identity.
+
+Prints, editions and reproductions belong to the commerce model and may reference an Artwork without changing the Artwork's artistic classification.
 
 The emotional experience happens before the transaction.
 

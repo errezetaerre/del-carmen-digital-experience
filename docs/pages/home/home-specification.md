@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Specification
 
-Version: 1.2
+Version: 1.3
 
 Document ID: DOC-HS
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-08-14
+Last Updated: 2026-08-17
 
 ------------------------------------------------------------------------
 
@@ -273,6 +273,12 @@ Example:
 Primary CTA:
 
 Explore Collection
+
+The Hero CTA is an exploration action. It leads toward the broader Collection / Artworks experience rather than the detail page of the Hero artwork.
+
+The artwork presented in the Hero is selected curatorially and is not required to be the same artwork selected for Scene 02 --- Featured Artwork.
+
+A Hero artwork may use a context-specific visual representation optimized for the composition, including portrait or landscape Hero imagery, while remaining the same canonical Artwork entity.
 
 CTA uses the shared LinkButton system and follows the established
 minimal underline language.
@@ -625,6 +631,24 @@ native aspect ratio when appropriate.
 Images must never be cropped merely to force an arbitrary aspect ratio
 when doing so damages the composition.
 
+Each canonical Artwork owns its visual representations. Context-specific image assets do not create duplicate Artwork entities.
+
+Approved image roles may include:
+
+Primary
+
+Hero Portrait
+
+Hero Landscape
+
+Thumbnail
+
+Primary is the canonical artwork representation and should be reused whenever a specialized representation is unnecessary.
+
+Hero Portrait and Hero Landscape exist only when the Hero composition requires a distinct crop, negative space, atmospheric integration or responsive treatment. A missing specialized Hero representation falls back to Primary.
+
+Every artwork image representation requires appropriate alt text.
+
 ------------------------------------------------------------------------
 
 # 12. Buttons and Links
@@ -779,6 +803,14 @@ Primary artwork presentation remains dominant.
 
 No prices are required in this scene.
 
+Featured Artwork is a curatorial selection of one individual Artwork. It is not a collection or series preview.
+
+The Featured Artwork is not required to be the same Artwork used in the Hero. Repetition is permitted only when curatorially intentional.
+
+Its Discover action leads to the detail experience for that specific Artwork, rather than to the general Collection landing page.
+
+The scene normally uses the Artwork Primary image representation. A Hero-specific representation must not be reused here merely because the same Artwork appears in the Hero.
+
 ------------------------------------------------------------------------
 
 # 17. Scene 03 --- Artist Statement
@@ -882,6 +914,26 @@ Tablet and above
 
 The collection preview may expose artwork metadata through the
 CollectionArtwork component according to the approved component design.
+
+The Home Collection is a curated preview of the broader Del Carmen pictorial universe. It is not required to reproduce the complete artwork inventory.
+
+A Collection entry may represent either:
+
+• an individual Artwork
+
+• an ArtworkSeries
+
+An ArtworkSeries is a curatorial body of related individual artworks sharing a coherent thematic, conceptual or visual relationship. Examples may include Yasemi or Ninfas.
+
+When a Collection entry represents an individual Artwork, interaction may open or navigate to that Artwork's individual viewing/detail experience.
+
+When a Collection entry represents an ArtworkSeries, interaction leads to the Series experience, where the visitor can discover the works belonging to that Series and then inspect each Artwork individually.
+
+A Series preview uses a curatorially selected cover Artwork or cover image and must not require every work in the Series to appear directly on the Home page.
+
+Technique alone does not define an ArtworkSeries. Oil, graphite, charcoal and other media remain artwork metadata and may later support Collection filtering or discovery.
+
+Original authorial works, academic studies and master studies may coexist in the broader artwork system but must remain clearly identified by canonical artwork metadata.
 
 No prices are required in the Home collection preview.
 
@@ -1175,6 +1227,12 @@ Collector Dashboard
 
 Private Collections
 
+Artwork Series
+
+Artwork Detail Experiences
+
+Curatorial Home Configuration
+
 Because of this, every section should be built as an independent
 component.
 
@@ -1197,6 +1255,12 @@ Repeated visual values should consume the canonical Design Tokens.
 
 Scene-specific composition may retain local values when those values are
 deliberate and not globally reusable.
+
+Artwork identity and Home placement are separate concerns. Artwork data defines what an artwork is; Home curation defines where selected artworks or series appear in the current Home experience.
+
+Hero selection, Featured Artwork selection and Featured Collection selection must therefore be treated as curatorial configuration rather than permanent intrinsic properties of an Artwork whenever the architecture supports that separation.
+
+An Artwork remains a single canonical entity even when multiple image representations are required for different presentation contexts.
 
 Examples:
 
@@ -1270,7 +1334,7 @@ wins.\*\***
 # 27. Canonical Status
 
 All decisions contained in this document represent the approved Home
-experience as of Version 1.2.
+experience as of Version 1.3.
 
 The canonical Home order is:
 
