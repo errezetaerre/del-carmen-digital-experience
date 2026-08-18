@@ -1,1 +1,4 @@
-export { getFeaturedArtwork } from "./getFeaturedArtwork";
+export {
+  getHeroArtwork,
+  getFeaturedWorkArtwork,
+} from "./getFeaturedArtwork";

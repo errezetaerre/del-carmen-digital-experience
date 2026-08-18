@@ -1,13 +1,21 @@
-import { getFeaturedArtwork } from "@/domains/home/services";
+import { getFeaturedWorkArtwork } from "@/domains/home/services";
 import { Container } from "@/shared/layout";
-import { ArtworkFrame, ArtworkImage } from "@/shared/ui/artwork";
+import {
+  ArtworkFrame,
+  ArtworkImage,
+} from "@/shared/ui/artwork";
 
 export default function FeaturedArtwork() {
-  const artwork = getFeaturedArtwork();
+  const artwork = getFeaturedWorkArtwork();
 
   if (!artwork) {
     return null;
   }
+
+  const primaryImage =
+    artwork.images.primary;
+
+  const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
 
   return (
     <section
@@ -89,15 +97,15 @@ export default function FeaturedArtwork() {
 
               lg:w-[500px]
 
-              xl:w-[560px]
+              xl:w-[1024]
             "
           >
             <ArtworkImage
-              src={artwork.image.src}
-              alt={artwork.image.alt}
-              width={artwork.dimensions.width}
-              height={artwork.dimensions.height}
-              className="h-full w-full object-cover"
+              src={primaryImage.src}
+              alt={primaryImage.alt}
+              width={primaryImage.width}
+              height={primaryImage.height}
+              className="h-full w-full object-contain"
             />
           </ArtworkFrame>
 
@@ -113,23 +121,25 @@ export default function FeaturedArtwork() {
                 text-white/55
               "
             >
-              {artwork.technique} · {artwork.year}
+              {techniqueLabel} · {artwork.year}
             </p>
 
-            <p
-              className="
-                max-w-lg
-                font-sans
-                text-sm
-                font-light
-                leading-7
-                text-white/55
+            {artwork.description && (
+              <p
+                className="
+                  max-w-lg
+                  font-sans
+                  text-sm
+                  font-light
+                  leading-7
+                  text-white/55
 
-                md:text-base
-              "
-            >
-              A moment suspended between memory, devotion and becoming.
-            </p>
+                  md:text-base
+                "
+              >
+                {artwork.description}
+              </p>
+            )}
 
             <button
               type="button"

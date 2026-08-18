@@ -11,32 +11,26 @@ import type { ArtworkProps } from "./types";
 export default function Artwork({
   artwork,
 }: ArtworkProps) {
+  const primaryImage = artwork.images.primary;
+
   return (
     <article className="flex flex-col items-center">
-
       <ArtworkFrame>
-
-        {artwork.image.src ? (
-
+        {primaryImage.src ? (
           <ArtworkImage
-            src={artwork.image.src}
-            alt={artwork.image.alt}
+            src={primaryImage.src}
+            alt={primaryImage.alt}
             width={artwork.dimensions.width}
             height={artwork.dimensions.height}
             priority
             className="h-full w-full object-cover"
           />
-
         ) : (
-
           <ArtworkPlaceholder />
-
         )}
-
       </ArtworkFrame>
 
       <ArtworkMetadata artwork={artwork} />
-
     </article>
   );
 }

@@ -3,6 +3,8 @@ import type { ArtworkProps } from "@/domains/artworks/components/types";
 export default function ArtworkInfo({
   artwork,
 }: ArtworkProps) {
+  const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
+
   return (
     <div
       className="
@@ -95,7 +97,7 @@ export default function ArtworkInfo({
               text-white/65
             "
           >
-            <span>{artwork.technique}</span>
+            <span>{techniqueLabel}</span>
 
             <span className="text-brand-gold/40">
               ·
@@ -169,7 +171,7 @@ export default function ArtworkInfo({
               text-white/65
             "
           >
-            <span>{artwork.technique}</span>
+            <span>{techniqueLabel}</span>
 
             <span className="text-brand-gold/40">
               ·
@@ -235,7 +237,7 @@ export default function ArtworkInfo({
 
           <div className="mt-6 space-y-3 font-sans">
             <p className="text-sm text-white/80">
-              {artwork.technique}
+              {techniqueLabel}
             </p>
 
             <p className="text-sm text-white/65">

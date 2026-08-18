@@ -37,80 +37,70 @@ export default function Collection() {
           "
         >
           {/* Editorial introduction */}
-          <div
-            className="
-              lg:flex
-              lg:flex-col
-              lg:justify-between
-            "
-          >
-            {/* Section Label */}
-            <p
-              className="
-                mb-5
-                font-sans
-                text-[10px]
-                font-medium
-                uppercase
-                tracking-[0.38em]
-                text-brand-gold
-              "
-            >
-              Featured Collection
-            </p>
-
-            {/* Editorial Heading */}
-            <h2
-              className="
-                whitespace-nowrap
-                font-display
-                text-3xl
-                font-light
-                leading-[1.05]
-                tracking-[0.01em]
-                text-white
-                md:text-[2.15rem]
-                lg:whitespace-normal
-                lg:text-5xl
-              "
-            >
-              Works that speak
-              <br className="hidden lg:block" />
-              <span className="lg:hidden"> </span>
-              in silence
-            </h2>
-
-            {/* Description */}
-            <p
-              className="
-                mt-6
-                max-w-xs
-                font-sans
-                text-sm
-                font-light
-                leading-[1.8]
-                tracking-[0.01em]
-                text-white/55
-              "
-            >
-              Each painting is a threshold. Each gaze, a story.
-            </p>
-
-            {/* CTA */}
-            <div className="mt-8 w-fit">
-              <LinkButton
-                href="/collection"
-                variant="bronzeUnderline"
+          <div className="lg:flex lg:flex-col lg:justify-between">
+            <div className="max-w-[320px] xl:max-w-[360px]">
+              <p
                 className="
-                  mt-10
-                  font-sans
-                  text-xs
-                  font-medium
-                  tracking-[0.28em]
-                "
+        mb-5
+        font-sans
+        text-[10px]
+        font-medium
+        uppercase
+        tracking-[0.38em]
+        text-brand-gold
+      "
               >
-                View the collection →
-              </LinkButton>
+                Featured Collection
+              </p>
+
+              <h2
+                className="
+        font-display
+        text-3xl
+        font-light
+        leading-[1.05]
+        tracking-[0.01em]
+        text-white
+
+        md:text-[2.15rem]
+        lg:text-5xl
+      "
+              >
+                Works that speak
+                <br />
+                in silence
+              </h2>
+
+              <p
+                className="
+        mt-6
+        max-w-[280px]
+        font-sans
+        text-sm
+        font-light
+        leading-[1.8]
+        tracking-[0.01em]
+        text-white/55
+      "
+              >
+                Each painting is a threshold. Each gaze, a story.
+              </p>
+
+              <div className="mt-8 w-fit">
+                <LinkButton
+                  href="/collection"
+                  variant="bronzeUnderline"
+                  className="
+          mt-10
+          font-sans
+          text-xs
+          font-medium
+          tracking-[0.28em]
+        "
+                >
+                  View the collection →
+                </LinkButton>
+              </div>
             </div>
           </div>
 

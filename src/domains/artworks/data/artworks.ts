@@ -4,11 +4,24 @@ export const artworks: Artwork[] = [
   {
     id: "captura_de_jesucristo",
 
+    slug: "captura-de-jesucristo",
+
     title: "Captura de Jesucristo",
 
     year: 2025,
 
-    technique: "Oil on canvas",
+    authorship: "master-copy",
+
+    context: "academic-study",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "figurative",
+      "spiritual",
+    ],
 
     dimensions: {
       width: 100,
@@ -16,29 +29,51 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/captura_de_jesucristo.jpg",
-      alt: "Captura de Jesucristo master copy",
+    images: {
+      primary: {
+        src: "/artworks/captura_de_jesucristo.jpg",
+        alt: "Captura de Jesucristo, master copy by Rolando Del Carmen",
+        width: 2723,
+        height: 2036
+      },
     },
 
-    quote: "Capture of Christ is the start of everything.",
+    quote:
+      "Capture of Christ is the start of everything.",
 
-    description: "When the world is lost jesus is the only hope",
-
-    price: 2500,
-
-    currency: "USD",
+    description:
+      "When the world is lost, Jesus is the only hope.",
 
     availability: "available",
+
+    price: {
+      amount: 2500,
+      currency: "USD",
+    },
   },
+
   {
     id: "epifania_nupcial",
 
-    title: "Epifania Nupcial",
+    slug: "epifania-nupcial",
+
+    title: "Epifanía Nupcial",
 
     year: 2026,
 
-    technique: "Oil on canvas",
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "portrait",
+      "spiritual",
+      "symbolic",
+    ],
 
     dimensions: {
       width: 113,
@@ -46,30 +81,61 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/epifania_nupcial.png",
-      alt: "Epifania Nupcial real",
+    images: {
+      primary: {
+        src: "/artworks/epifania_nupcial.png",
+        alt: "Epifanía Nupcial by Rolando Del Carmen",
+        width: 1376,
+        height: 768
+      },
+
+      heroLandscape: {
+        src: "/artworks/epifania_nupcial_hero_landscape.png",
+        alt: "Epifanía Nupcial, landscape composition for the Del Carmen Hero",
+      },
+
+      heroPortrait: {
+        src: "/artworks/epifania_nupcial_hero_portrait.png",
+        alt: "Epifanía Nupcial, portrait composition for the Del Carmen Hero",
+      },
     },
 
-    quote: "She wears no veil, only silence.",
+    quote:
+      "She wears no veil, only silence.",
 
-    description: "A moment suspended between memory, devotion and becoming.",
-
-    price: 6000,
-
-    currency: "USD",
+    description:
+      "A moment suspended between memory, devotion and becoming.",
 
     availability: "available",
+
+    price: {
+      amount: 6000,
+      currency: "USD",
+    },
   },
 
   {
     id: "el_misionero",
 
+    slug: "el-misionero",
+
     title: "El Misionero",
 
     year: 2024,
 
-    technique: "Oil on canvas",
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "portrait",
+      "spiritual",
+      "symbolic",
+    ],
 
     dimensions: {
       width: 60,
@@ -77,30 +143,49 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/el_misionero.jpg",
-      alt: "El Misionero",
+    images: {
+      primary: {
+        src: "/artworks/el_misionero.jpg",
+        alt: "El Misionero by Rolando Del Carmen",
+        width: 832,
+        height: 1279,
+      },
     },
 
-    quote: "She wears no mision, only silence.",
+    quote:
+      "She wears no mission, only silence.",
 
     description:
       "A quiet meditation on inner light, compassion, freedom and the mission within.",
 
-    price: 6000,
-
-    currency: "USD",
-
     availability: "available",
+
+    price: {
+      amount: 6000,
+      currency: "USD",
+    },
   },
+
   {
     id: "perro_de_dani",
 
-    title: "Perro De Dani",
+    slug: "perro-de-dani",
+
+    title: "Perro de Dani",
 
     year: 2019,
 
-    technique: "Oil on canvas",
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "portrait",
+    ],
 
     dimensions: {
       width: 50,
@@ -108,30 +193,50 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/perro_de_dani.jpg",
-      alt: "Dani's dog in pandemia time. ",
+    images: {
+      primary: {
+        src: "/artworks/perro_de_dani.jpg",
+        alt: "Portrait of Dani's dog by Rolando Del Carmen",
+        width: 720,
+        height: 728,
+      },
     },
 
-    quote: "The love is found in the eyes of a dog.",
+    quote:
+      "Love is found in the eyes of a dog.",
 
-    description: "Nuances of white, gray and black. How the light plays with them is just magic.",
-
-    price: 1500,
-
-    currency: "USD",
+    description:
+      "Nuances of white, gray and black. How the light plays with them is just magic.",
 
     availability: "reserved",
+
+    price: {
+      amount: 1500,
+      currency: "USD",
+    },
   },
 
   {
     id: "el_cordero",
 
+    slug: "el-cordero",
+
     title: "El Cordero",
 
     year: 2022,
 
-    technique: "Oil on canvas",
+    authorship: "original",
+
+    context: "academic-study",
+
+    medium: "charcoal",
+
+    support: "paper",
+
+    categories: [
+      "figurative",
+      "spiritual",
+    ],
 
     dimensions: {
       width: 40,
@@ -139,30 +244,51 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/el_cordero.jpg",
-      alt: "El Cordero obra al natural",
+    images: {
+      primary: {
+        src: "/artworks/el_cordero.jpg",
+        alt: "El Cordero, charcoal academic study by Rolando Del Carmen",
+        width: 720,
+        height: 556,
+      },
     },
 
-    quote: "He looks like a normal cast, but he is much more than that.",
+    quote:
+      "He looks like a normal cast, but he is much more than that.",
 
-    description: "A very emotional charcoal drawing, before starting with oils.",
-
-    price: 600,
-
-    currency: "USD",
+    description:
+      "A very emotional charcoal drawing, created before beginning work in oils.",
 
     availability: "reserved",
+
+    price: {
+      amount: 600,
+      currency: "USD",
+    },
   },
 
   {
     id: "el_baul_de_los_tesoros",
 
+    slug: "el-baul-de-los-tesoros",
+
     title: "El Baúl de los Tesoros",
 
     year: 2022,
 
-    technique: "Oil on canvas",
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "still-life",
+      "spiritual",
+      "symbolic",
+    ],
 
     dimensions: {
       width: 90,
@@ -170,31 +296,51 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/el_baul_de_los_tesoros.jpg",
-      alt: "El Baúl de los Tesoros",
+    images: {
+      primary: {
+        src: "/artworks/el_baul_de_los_tesoros.jpg",
+        alt: "El Baúl de los Tesoros by Rolando Del Carmen",
+        width: 1090,
+        height: 1489,
+      },
     },
 
-    quote: "She wears no baul, only silence.",
+    quote:
+      "She wears no baúl, only silence.",
 
     description:
       "A symbolic journey toward the discovery of the soul and the treasures hidden within.",
 
-    price: 6000,
-
-    currency: "USD",
-
     availability: "available",
+
+    price: {
+      amount: 6000,
+      currency: "USD",
+    },
   },
 
   {
     id: "sendero_del_sol",
 
+    slug: "sendero-del-sol",
+
     title: "Sendero del Sol",
 
     year: 2023,
 
-    technique: "Oil on canvas",
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "landscape",
+      "spiritual",
+      "symbolic",
+    ],
 
     dimensions: {
       width: 100,
@@ -202,30 +348,49 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/sendero_del_sol.jpg",
-      alt: "Sendero del Sol",
+    images: {
+      primary: {
+        src: "/artworks/sendero_del_sol.jpg",
+        alt: "Sendero del Sol by Rolando Del Carmen",
+        width: 2096,
+        height: 2792,
+      },
     },
 
-    quote: "She wears no sendero, only silence.",
+    quote:
+      "She wears no sendero, only silence.",
 
     description:
       "A reflection on life's path, hope, serenity and the light we leave behind.",
 
-    price: 6000,
-
-    currency: "USD",
-
     availability: "available",
+
+    price: {
+      amount: 6000,
+      currency: "USD",
+    },
   },
+
   {
     id: "rosa_rojita",
+
+    slug: "rosa-rojita",
 
     title: "Rosa Rojita",
 
     year: 2024,
 
-    technique: "Oil on canvas",
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "still-life",
+    ],
 
     dimensions: {
       width: 30,
@@ -233,19 +398,26 @@ export const artworks: Artwork[] = [
       unit: "cm",
     },
 
-    image: {
-      src: "/artworks/rosa_rojita.jpg",
-      alt: "Rosa rojita real",
+    images: {
+      primary: {
+        src: "/artworks/rosa_rojita.jpg",
+        alt: "Rosa Rojita by Rolando Del Carmen",
+        width: 2238,
+        height: 2850,
+      },
     },
 
-    quote: "Petals full of color, a rose that blooms with intensity and passion.",
+    quote:
+      "Petals full of color, a rose that blooms with intensity and passion.",
 
-    description: "A red rose, with deep shadows that give it mystery and intensity.",
-
-    price: 500,
-
-    currency: "USD",
+    description:
+      "A red rose, with deep shadows that give it mystery and intensity.",
 
     availability: "available",
-  }
+
+    price: {
+      amount: 500,
+      currency: "USD",
+    },
+  },
 ];

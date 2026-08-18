@@ -1,11 +1,14 @@
 import Image from "next/image";
 
 import { ArtworkImage } from "@/shared/ui/artwork";
-import { getFeaturedArtwork } from "@/domains/home/services";
+import { getHeroArtwork } from "@/domains/home/services";
+
 import { Button } from "@/shared/ui/button";
 
 import ArtworkInfo from "./ArtworkInfo";
 import { HERO_CTA } from "./constants";
+
+
 
 type HeroArtworkMode =
   | "mobile"
@@ -19,11 +22,24 @@ interface HeroArtworkProps {
 export default function HeroArtwork({
   mode = "desktop",
 }: HeroArtworkProps) {
-  const artwork = getFeaturedArtwork();
+  const artwork = getHeroArtwork();
 
   if (!artwork) {
     return null;
   }
+
+  const primaryImage =
+    artwork.images.primary;
+
+  const heroPortraitImage =
+    artwork.images.heroPortrait ??
+    primaryImage;
+
+  const heroLandscapeImage =
+    artwork.images.heroLandscape ??
+    primaryImage;
+
+
 
   /* =========================================================
      MOBILE PORTRAIT — ARTWORK
@@ -40,8 +56,8 @@ export default function HeroArtwork({
         "
       >
         <Image
-          src="/artworks/epifania_nupcial_mobile.png"
-          alt={artwork.image.alt}
+          src={heroPortraitImage.src}
+          alt={heroPortraitImage.alt}
           fill
           priority
           sizes="100vw"
@@ -157,8 +173,8 @@ export default function HeroArtwork({
         "
       >
         <ArtworkImage
-          src={artwork.image.src}
-          alt={artwork.image.alt}
+          src={heroLandscapeImage.src}
+          alt={heroLandscapeImage.alt}
           fill
           sizes="
             (min-width: 1920px) 66vw,

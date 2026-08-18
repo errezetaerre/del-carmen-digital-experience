@@ -98,6 +98,14 @@ export default function ArtworkLightbox({
 
     const total = artworks.length;
 
+    const primaryImage =
+        artwork?.images.primary;
+
+    const techniqueLabel =
+        artwork
+            ? `${artwork.medium} on ${artwork.support}`
+            : "";
+
     /* =========================================================
        HELPERS
        ========================================================= */
@@ -951,8 +959,8 @@ export default function ArtworkLightbox({
                     >
                         <img
                             key={artwork.id}
-                            src={artwork.image.src}
-                            alt={artwork.image.alt}
+                            src={primaryImage.src}
+                            alt={primaryImage.alt}
                             draggable={false}
                             className="
                 relative
@@ -1191,7 +1199,7 @@ export default function ArtworkLightbox({
             "
                     >
                         <span>
-                            {artwork.technique}
+                            {techniqueLabel}
                         </span>
 
                         <span className="mx-3 text-brand-gold/40">

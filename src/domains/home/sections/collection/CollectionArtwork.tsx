@@ -2,7 +2,9 @@
 
 import { useRef } from "react";
 import gsap from "gsap";
+
 import type { Artwork } from "@/domains/artworks";
+
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
 
 interface CollectionArtworkProps {
@@ -20,6 +22,12 @@ export default function CollectionArtwork({
   const detailsTitleRef = useRef<HTMLHeadingElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+
+  const collectionImage =
+    artwork.images.thumbnail ??
+    artwork.images.primary;
+
+  const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
 
   const animateIn = () => {
     if (
@@ -129,7 +137,11 @@ export default function CollectionArtwork({
     const timeline = gsap.timeline();
 
     timeline.to(
-      [detailsTitleRef.current, metaRef.current, footerRef.current],
+      [
+        detailsTitleRef.current,
+        metaRef.current,
+        footerRef.current,
+      ],
       {
         y: 8,
         opacity: 0,
@@ -176,12 +188,33 @@ export default function CollectionArtwork({
         <CollectionArtworkFrame>
           <div className="relative aspect-[4/5] overflow-hidden bg-black">
             <img
-              src={artwork.image.src}
-              alt={artwork.image.alt}
-              className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.035]"
+              src={collectionImage.src}
+              alt={collectionImage.alt}
+              className="
+                h-full
+                w-full
+                object-cover
+                transition-transform
+                duration-1000
+                ease-out
+                group-hover:scale-[1.035]
+              "
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent opacity-70 transition-opacity duration-700 group-hover:opacity-90" />
+            <div
+              className="
+                absolute
+                inset-0
+                bg-gradient-to-t
+                from-black/90
+                via-black/10
+                to-transparent
+                opacity-70
+                transition-opacity
+                duration-700
+                group-hover:opacity-90
+              "
+            />
 
             <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
               {/* Estado inicial */}
@@ -198,7 +231,15 @@ export default function CollectionArtwork({
               {/* Estado revelado */}
               <div
                 ref={detailsRef}
-                className="absolute inset-x-0 bottom-0 p-4 opacity-0 md:p-5"
+                className="
+                  absolute
+                  inset-x-0
+                  bottom-0
+                  p-4
+                  opacity-0
+
+                  md:p-5
+                "
               >
                 <h3
                   ref={detailsTitleRef}
@@ -209,9 +250,16 @@ export default function CollectionArtwork({
 
                 <div
                   ref={metaRef}
-                  className="mt-3 space-y-1 text-[8px] uppercase tracking-[0.2em] text-white/55"
+                  className="
+                    mt-3
+                    space-y-1
+                    text-[8px]
+                    uppercase
+                    tracking-[0.2em]
+                    text-white/55
+                  "
                 >
-                  <p>{artwork.technique}</p>
+                  <p>{techniqueLabel}</p>
 
                   <p>
                     {artwork.dimensions.width} ×{" "}
