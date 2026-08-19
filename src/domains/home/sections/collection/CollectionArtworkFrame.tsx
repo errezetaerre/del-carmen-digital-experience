@@ -102,60 +102,60 @@ export default function CollectionArtworkFrame({
         <defs>
           {/* Normal state: solid at top → transparent at bottom */}
           <linearGradient
-  id="collection-left-normal"
-  x1="0"
-  y1="0"
-  x2="0"
-  y2="125"
-  gradientUnits="userSpaceOnUse"
->
-  <stop offset="0%" stopColor="#b5a48e" stopOpacity="0.95" />
-  <stop offset="35%" stopColor="#b5a48e" stopOpacity="0.55" />
-  <stop offset="70%" stopColor="#b5a48e" stopOpacity="0.18" />
-  <stop offset="100%" stopColor="#b5a48e" stopOpacity="0" />
-</linearGradient>
+            id="collection-left-normal"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="125"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#b5a48e" stopOpacity="0.95" />
+            <stop offset="35%" stopColor="#b5a48e" stopOpacity="0.55" />
+            <stop offset="70%" stopColor="#b5a48e" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#b5a48e" stopOpacity="0" />
+          </linearGradient>
 
-<linearGradient
-  id="collection-right-normal"
-  x1="0"
-  y1="0"
-  x2="0"
-  y2="125"
-  gradientUnits="userSpaceOnUse"
->
-  <stop offset="0%" stopColor="#b5a48e" stopOpacity="0.95" />
-  <stop offset="35%" stopColor="#b5a48e" stopOpacity="0.55" />
-  <stop offset="70%" stopColor="#b5a48e" stopOpacity="0.18" />
-  <stop offset="100%" stopColor="#b5a48e" stopOpacity="0" />
-</linearGradient>
+          <linearGradient
+            id="collection-right-normal"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="125"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#b5a48e" stopOpacity="0.95" />
+            <stop offset="35%" stopColor="#b5a48e" stopOpacity="0.55" />
+            <stop offset="70%" stopColor="#b5a48e" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#b5a48e" stopOpacity="0" />
+          </linearGradient>
 
-<linearGradient
-  id="collection-left-hover"
-  x1="0"
-  y1="0"
-  x2="0"
-  y2="125"
-  gradientUnits="userSpaceOnUse"
->
-  <stop offset="0%" stopColor="#b5a48e" stopOpacity="0" />
-  <stop offset="30%" stopColor="#b5a48e" stopOpacity="0.18" />
-  <stop offset="65%" stopColor="#b5a48e" stopOpacity="0.55" />
-  <stop offset="100%" stopColor="#b5a48e" stopOpacity="0.95" />
-</linearGradient>
+          <linearGradient
+            id="collection-left-hover"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="125"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#b5a48e" stopOpacity="0" />
+            <stop offset="30%" stopColor="#b5a48e" stopOpacity="0.18" />
+            <stop offset="65%" stopColor="#b5a48e" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#b5a48e" stopOpacity="0.95" />
+          </linearGradient>
 
-<linearGradient
-  id="collection-right-hover"
-  x1="0"
-  y1="0"
-  x2="0"
-  y2="125"
-  gradientUnits="userSpaceOnUse"
->
-  <stop offset="0%" stopColor="#b5a48e" stopOpacity="0" />
-  <stop offset="30%" stopColor="#b5a48e" stopOpacity="0.18" />
-  <stop offset="65%" stopColor="#b5a48e" stopOpacity="0.55" />
-  <stop offset="100%" stopColor="#b5a48e" stopOpacity="0.95" />
-</linearGradient>
+          <linearGradient
+            id="collection-right-hover"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="125"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#b5a48e" stopOpacity="0" />
+            <stop offset="30%" stopColor="#b5a48e" stopOpacity="0.18" />
+            <stop offset="65%" stopColor="#b5a48e" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#b5a48e" stopOpacity="0.95" />
+          </linearGradient>
 
           <filter
             id="collection-frame-glow"
@@ -213,7 +213,7 @@ export default function CollectionArtworkFrame({
             x2="0"
             y2="125"
             stroke="url(#collection-left-hover)"
-            strokeWidth="1"
+            strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
 
@@ -224,7 +224,7 @@ export default function CollectionArtworkFrame({
             x2="100"
             y2="125"
             stroke="url(#collection-right-hover)"
-            strokeWidth="1"
+            strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
 
@@ -235,7 +235,7 @@ export default function CollectionArtworkFrame({
             x2="100"
             y2="125"
             stroke="#b5a48e"
-            strokeWidth="0.25"
+            strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
         </g>

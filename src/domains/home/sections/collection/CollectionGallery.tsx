@@ -1,23 +1,59 @@
 "use client";
 
 import {
+    useMemo,
     useState,
 } from "react";
 
-import type { Artwork } from "@/domains/artworks/model";
-import { ArtworkLightbox } from "@/shared/ui/artwork";
+import type {
+    FeaturedCollectionItem,
+} from "@/domains/home/services";
 
-import CollectionArtwork from "./CollectionArtwork";
+import {
+    ArtworkLightbox,
+} from "@/shared/ui/artwork";
+
+import CollectionEntry from "./CollectionEntry";
 
 interface CollectionGalleryProps {
-    artworks: Artwork[];
+    items: FeaturedCollectionItem[];
 }
 
 export default function CollectionGallery({
-    artworks,
+    items,
 }: CollectionGalleryProps) {
-    const [selectedIndex, setSelectedIndex] =
-        useState<number | null>(null);
+    const artworks = useMemo(
+        () =>
+            items
+                .filter(
+                    (
+                        item,
+                    ): item is Extract<
+                        FeaturedCollectionItem,
+                        { type: "artwork" }
+                    > =>
+                        item.type === "artwork",
+                )
+                .map(
+                    (item) =>
+                        item.artwork,
+                ),
+        [items],
+    );
+
+    const [
+        selectedArtworkId,
+        setSelectedArtworkId,
+    ] = useState<string | null>(null);
+
+    const selectedIndex =
+        selectedArtworkId === null
+            ? null
+            : artworks.findIndex(
+                (artwork) =>
+                    artwork.id ===
+                    selectedArtworkId,
+            );
 
     return (
         <>
@@ -40,29 +76,35 @@ export default function CollectionGallery({
           [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
         "
             >
-                {artworks.map(
-                    (artwork, index) => (
-                        <CollectionArtwork
-                            key={artwork.id}
-                            artwork={artwork}
-                            onOpen={() => {
-                                setSelectedIndex(index);
-                            }}
-                        />
-                    ),
-                )}
+                {items.map((item) => (
+                    <CollectionEntry
+                        key={
+                            item.type === "artwork"
+                                ? `artwork-${item.artwork.id}`
+                                : `series-${item.series.id}`
+                        }
+                        item={item}
+                        onOpenArtwork={
+                            setSelectedArtworkId
+                        }
+                    />
+                ))}
             </div>
 
             <ArtworkLightbox
                 artworks={artworks}
                 initialIndex={
-                    selectedIndex ?? 0
+                    selectedIndex !== null &&
+                        selectedIndex >= 0
+                        ? selectedIndex
+                        : 0
                 }
                 isOpen={
-                    selectedIndex !== null
+                    selectedIndex !== null &&
+                    selectedIndex >= 0
                 }
                 onClose={() => {
-                    setSelectedIndex(null);
+                    setSelectedArtworkId(null);
                 }}
             />
         </>

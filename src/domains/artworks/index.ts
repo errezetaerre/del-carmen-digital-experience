@@ -10,3 +10,16 @@ export {
     ArtworkHero,
     ArtworkMetadata,
 } from "./components";
+
+export {
+    artworkSeries,
+    getArtworkSeries,
+    getArtworkSeriesById,
+    getArtworkSeriesBySlug,
+    getArtworksBySeriesId,
+} from "./series";
+
+export type {
+    ArtworkSeries,
+    ArtworkSeriesStatus,
+} from "./series";

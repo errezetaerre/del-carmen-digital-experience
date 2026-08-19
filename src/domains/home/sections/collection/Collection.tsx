@@ -2,13 +2,15 @@ import { getArtworks } from "@/domains/artworks";
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
 import CollectionGallery from "./CollectionGallery";
-
 import CollectionArtwork from "./CollectionArtwork";
+import {
+  getFeaturedCollection,
+} from "@/domains/home/services";
 
 export default function Collection() {
-  const artworks = getArtworks();
+  const items = getFeaturedCollection();
 
-  if (!artworks.length) {
+  if (!items.length) {
     return null;
   }
 
@@ -105,7 +107,7 @@ export default function Collection() {
           </div>
 
           {/* Artwork collection */}
-          <CollectionGallery artworks={artworks} />
+          <CollectionGallery items={items} />
         </div>
       </Container>
     </section>

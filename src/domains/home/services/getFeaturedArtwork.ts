@@ -1,10 +1,14 @@
 import { getArtworkById } from "@/domains/artworks";
+import { homeCuration } from "@/domains/home/curation";
 
 export function getHeroArtwork() {
-  return getArtworkById("epifania_nupcial");
+  return getArtworkById(
+    homeCuration.hero.artworkId,
+  );
 }
 
-
 export function getFeaturedWorkArtwork() {
-  return getArtworkById("sendero_del_sol");
+  return getArtworkById(
+    homeCuration.featuredWork.artworkId,
+  );
 }

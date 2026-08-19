@@ -420,4 +420,210 @@ export const artworks: Artwork[] = [
       currency: "USD",
     },
   },
+  {
+    id: "yasemi_i",
+
+    slug: "yasemi-i",
+
+    title: "Yasemi I",
+
+    year: 2026,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "figurative",
+      "spiritual",
+    ],
+
+    seriesId: "yasemi",
+
+    dimensions: {
+      width: 40,
+      height: 30,
+      unit: "cm",
+    },
+    images: {
+      primary: {
+        src: "/artworks/yasemi_I.jpg",
+        alt: "Yasemi I by Rolando Del Carmen",
+        width: 888,
+        height: 592,
+      },
+    },
+
+    quote:
+      "The seed in the depth of the ocean with no light and no air, but the seed remains.",
+
+    description:
+      "",
+
+    availability: "available",
+
+    price: {
+      amount: 500,
+      currency: "USD",
+    },
+  },
+  {
+    id: "yasemi_ii",
+
+    slug: "yasemi-ii",
+
+    title: "Yasemi II",
+
+    year: 2026,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "figurative",
+      "spiritual",
+    ],
+
+    seriesId: "yasemi",
+
+    dimensions: {
+      width: 40,
+      height: 30,
+      unit: "cm",
+    },
+    images: {
+      primary: {
+        src: "/artworks/yasemi_II.jpg",
+        alt: "Yasemi II by Rolando Del Carmen",
+        width: 888,
+        height: 592,
+      },
+    },
+
+    quote:
+      "The sea is a mirror of the soul, reflecting the depths of our being.",
+
+    description:
+      "In this artwork, the colors and shapes merge to create a sense of movement and emotion.",
+
+    availability: "available",
+
+    price: {
+      amount: 500,
+      currency: "USD",
+    },
+  },
+
+  {
+    id: "yasemi_iii",
+
+    slug: "yasemi-iii",
+
+    title: "Yasemi III",
+
+    year: 2026,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "figurative",
+      "spiritual",
+    ],
+
+    seriesId: "yasemi",
+
+    dimensions: {
+      width: 40,
+      height: 30,
+      unit: "cm",
+    },
+    images: {
+      primary: {
+        src: "/artworks/yasemi_III.jpg",
+        alt: "Yasemi III by Rolando Del Carmen",
+        width: 888,
+        height: 592,
+      },
+    },
+
+    quote:
+      "She sleeps in the water, awake in the air.",
+
+    description:
+      "Yasemi, the seed that sleeps in the water and wakes in the air. The piece has three distinct sections: the darkness of the water at the bottom, the light of the air at the top, and the transition zone in between where Yasemi rests.",
+
+    availability: "available",
+
+    price: {
+      amount: 500,
+      currency: "USD",
+    },
+  },
+
+  {
+    id: "yasemi_iv",
+
+    slug: "yasemi-iv",
+
+    title: "Yasemi IV",
+
+    year: 2026,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "figurative",
+      "spiritual",
+    ],
+
+    seriesId: "yasemi",
+
+    dimensions: {
+      width: 40,
+      height: 30,
+      unit: "cm",
+    },
+    images: {
+      primary: {
+        src: "/artworks/yasemi_IV.jpg",
+        alt: "Yasemi IV by Rolando Del Carmen",
+        width: 888,
+        height: 592,
+      },
+    },
+
+    quote:
+      "More brilliant each day, no longer a seed but a flower in the air.",
+
+    description:
+      "The seed blooms and becomes a flower, spreading its brilliance day by day. She is in the air, with her colors, her light, her joy, her movement.",
+
+    availability: "available",
+
+    price: {
+      amount: 500,
+      currency: "USD",
+    },
+  },
 ];

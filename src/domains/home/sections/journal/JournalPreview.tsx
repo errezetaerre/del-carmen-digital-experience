@@ -145,6 +145,7 @@ export default function JournalPreview() {
               <div
                 className={[
                   "max-w-md",
+                  "[@media(orientation:landscape)_and_(max-height:600px)]:!max-w-none",
                   index % 2 === 0
                     ? "lg:order-2"
                     : "lg:order-1",
