@@ -1,59 +1,21 @@
 "use client";
 
-import {
-    useMemo,
-    useState,
-} from "react";
+import { useState } from "react";
 
-import type {
-    FeaturedCollectionItem,
-} from "@/domains/home/services";
+import type { Artwork } from "@/domains/artworks";
+import { ArtworkLightbox } from "@/shared/ui/artwork";
 
-import {
-    ArtworkLightbox,
-} from "@/shared/ui/artwork";
-
-import CollectionEntry from "./CollectionEntry";
+import CollectionArtwork from "./CollectionArtwork";
 
 interface CollectionGalleryProps {
-    items: FeaturedCollectionItem[];
+    artworks: Artwork[];
 }
 
 export default function CollectionGallery({
-    items,
+    artworks,
 }: CollectionGalleryProps) {
-    const artworks = useMemo(
-        () =>
-            items
-                .filter(
-                    (
-                        item,
-                    ): item is Extract<
-                        FeaturedCollectionItem,
-                        { type: "artwork" }
-                    > =>
-                        item.type === "artwork",
-                )
-                .map(
-                    (item) =>
-                        item.artwork,
-                ),
-        [items],
-    );
-
-    const [
-        selectedArtworkId,
-        setSelectedArtworkId,
-    ] = useState<string | null>(null);
-
-    const selectedIndex =
-        selectedArtworkId === null
-            ? null
-            : artworks.findIndex(
-                (artwork) =>
-                    artwork.id ===
-                    selectedArtworkId,
-            );
+    const [selectedIndex, setSelectedIndex] =
+        useState<number | null>(null);
 
     return (
         <>
@@ -76,35 +38,29 @@ export default function CollectionGallery({
           [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
         "
             >
-                {items.map((item) => (
-                    <CollectionEntry
-                        key={
-                            item.type === "artwork"
-                                ? `artwork-${item.artwork.id}`
-                                : `series-${item.series.id}`
-                        }
-                        item={item}
-                        onOpenArtwork={
-                            setSelectedArtworkId
-                        }
-                    />
-                ))}
+                {artworks.map(
+                    (artwork, index) => (
+                        <CollectionArtwork
+                            key={artwork.id}
+                            artwork={artwork}
+                            onOpen={() => {
+                                setSelectedIndex(index);
+                            }}
+                        />
+                    ),
+                )}
             </div>
 
             <ArtworkLightbox
                 artworks={artworks}
                 initialIndex={
-                    selectedIndex !== null &&
-                        selectedIndex >= 0
-                        ? selectedIndex
-                        : 0
+                    selectedIndex ?? 0
                 }
                 isOpen={
-                    selectedIndex !== null &&
-                    selectedIndex >= 0
+                    selectedIndex !== null
                 }
                 onClose={() => {
-                    setSelectedArtworkId(null);
+                    setSelectedIndex(null);
                 }}
             />
         </>

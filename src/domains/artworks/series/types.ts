@@ -3,6 +3,20 @@ export type ArtworkSeriesStatus =
     | "completed"
     | "archived";
 
+export interface ArtworkSeriesImage {
+    src: string;
+
+    alt: string;
+
+    width?: number;
+
+    height?: number;
+}
+
+export interface ArtworkSeriesImages {
+    featured?: ArtworkSeriesImage;
+}
+
 export interface ArtworkSeries {
     id: string;
 
@@ -15,6 +29,8 @@ export interface ArtworkSeries {
     statement?: string;
 
     coverArtworkId: string;
+
+    images?: ArtworkSeriesImages;
 
     status: ArtworkSeriesStatus;
 

@@ -1,5 +1,10 @@
-import { getArtworkById } from "@/domains/artworks";
-import { homeCuration } from "@/domains/home/curation";
+import {
+  getArtworkById,
+} from "@/domains/artworks";
+
+import {
+  homeCuration,
+} from "@/domains/home/curation";
 
 export function getHeroArtwork() {
   return getArtworkById(

@@ -1,6 +1,7 @@
-export { homeCuration } from "./homeCuration";
+export {
+    homeCuration,
+} from "./homeCuration";
 
 export type {
-    HomeCollectionEntry,
     HomeCuration,
 } from "./types";

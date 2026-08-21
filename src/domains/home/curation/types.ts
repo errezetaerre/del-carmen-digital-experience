@@ -1,13 +1,3 @@
-export type HomeCollectionEntry =
-    | {
-        type: "artwork";
-        id: string;
-    }
-    | {
-        type: "series";
-        id: string;
-    };
-
 export interface HomeCuration {
     hero: {
         artworkId: string;
@@ -17,5 +7,9 @@ export interface HomeCuration {
         artworkId: string;
     };
 
-    featuredCollection: HomeCollectionEntry[];
+    featuredCollection: {
+        seriesId: string;
+    };
+
+    selectedWorks: string[];
 }

@@ -9,60 +9,38 @@ import {
 } from "@/domains/home/curation";
 
 import type {
-    FeaturedCollectionItem,
+    FeaturedCollection,
 } from "./types";
 
 export function getFeaturedCollection():
-    FeaturedCollectionItem[] {
-    return homeCuration.featuredCollection
-        .map((entry) => {
-            if (entry.type === "artwork") {
-                const artwork =
-                    getArtworkById(entry.id);
-
-                if (!artwork) {
-                    return null;
-                }
-
-                return {
-                    type: "artwork",
-                    artwork,
-                } satisfies FeaturedCollectionItem;
-            }
-
-            const series =
-                getArtworkSeriesById(entry.id);
-
-            if (!series) {
-                return null;
-            }
-
-            const coverArtwork =
-                getArtworkById(
-                    series.coverArtworkId,
-                );
-
-            if (!coverArtwork) {
-                return null;
-            }
-
-            const seriesArtworks =
-                getArtworksBySeriesId(
-                    series.id,
-                );
-
-            return {
-                type: "series",
-                series,
-                coverArtwork,
-                artworkCount:
-                    seriesArtworks.length,
-            } satisfies FeaturedCollectionItem;
-        })
-        .filter(
-            (
-                item,
-            ): item is FeaturedCollectionItem =>
-                item !== null,
+    FeaturedCollection | undefined {
+    const series =
+        getArtworkSeriesById(
+            homeCuration.featuredCollection.seriesId,
         );
+
+    if (!series) {
+        return undefined;
+    }
+
+    const coverArtwork =
+        getArtworkById(
+            series.coverArtworkId,
+        );
+
+    if (!coverArtwork) {
+        return undefined;
+    }
+
+    const artworks =
+        getArtworksBySeriesId(
+            series.id,
+        );
+
+    return {
+        series,
+        coverArtwork,
+        artworks,
+        artworkCount: artworks.length,
+    };
 }

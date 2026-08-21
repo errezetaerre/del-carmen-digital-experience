@@ -7,6 +7,10 @@ export {
   getFeaturedCollection,
 } from "./getFeaturedCollection";
 
+export {
+  getSelectedWorks,
+} from "./getSelectedWorks";
+
 export type {
-  FeaturedCollectionItem,
+  FeaturedCollection,
 } from "./types";

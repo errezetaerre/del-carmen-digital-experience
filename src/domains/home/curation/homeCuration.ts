@@ -9,42 +9,18 @@ export const homeCuration: HomeCuration = {
         artworkId: "sendero_del_sol",
     },
 
-    featuredCollection: [
-        {
-            type: "series",
-            id: "yasemi",
-        },
-        {
-            type: "artwork",
-            id: "captura_de_jesucristo",
-        },
-        {
-            type: "artwork",
-            id: "epifania_nupcial",
-        },
-        {
-            type: "artwork",
-            id: "el_misionero",
-        },
-        {
-            type: "artwork",
-            id: "perro_de_dani",
-        },
-        {
-            type: "artwork",
-            id: "el_cordero",
-        },
-        {
-            type: "artwork",
-            id: "el_baul_de_los_tesoros",
-        },
-        {
-            type: "artwork",
-            id: "sendero_del_sol",
-        },
-        {
-            type: "artwork",
-            id: "rosa_rojita",
-        },
+    featuredCollection: {
+        seriesId: "yasemi",
+    },
+
+    selectedWorks: [
+        "captura_de_jesucristo",
+        "epifania_nupcial",
+        "el_misionero",
+        "perro_de_dani",
+        "el_cordero",
+        "el_baul_de_los_tesoros",
+        "sendero_del_sol",
+        "rosa_rojita"
     ],
 };
