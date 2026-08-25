@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { useNavigationScroll } from "../hooks";
@@ -13,6 +14,7 @@ import {
 import MobileMenu from "./MobileMenu";
 
 export default function Navigation() {
+  const pathname = usePathname();
   const isScrolled = useNavigationScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -49,21 +51,49 @@ export default function Navigation() {
           {/* Desktop / Tablet Navigation */}
           <nav className="hidden md:block">
             <ul className="flex items-center gap-12">
-              {NAVIGATION_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={[
-                      "text-xs uppercase tracking-[0.12em] transition-colors duration-300",
-                      isScrolled
-                        ? "text-brand-gold/90 hover:text-background"
-                        : "text-white/65 hover:text-white",
-                    ].join(" ")}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              {NAVIGATION_ITEMS.map((item) => {
+                const isActive =
+                  pathname === item.href ||
+                  (
+                    item.href !== "/" &&
+                    pathname.startsWith(
+                      `${item.href}/`,
+                    )
+                  );
+
+                return (
+                  <li key={item.href}>
+                    {isActive ? (
+                      <span
+                        aria-current="page"
+                        className="
+                            cursor-default
+                            text-xs
+                            font-medium
+                            uppercase
+                            tracking-[0.12em]
+                            text-brand-gold
+                          "
+                      >
+                        {item.label}
+                      </span>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={[
+                          "text-xs uppercase tracking-[0.12em] transition-colors duration-300",
+
+                          isScrolled
+                            ? "text-[#2F2E2C]/75 hover:text-brand-gold"
+                            : "text-white/65 hover:text-white",
+                        ].join(" ")}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
@@ -73,7 +103,7 @@ export default function Navigation() {
             className={[
               "hidden text-xs uppercase tracking-[0.12em] transition-colors duration-300 md:block",
               isScrolled
-                ? "text-brand-gold/90 hover:text-background"
+                ? "text-[#2F2E2C]/75 hover:text-brand-gold"
                 : "text-white/65 hover:text-white",
             ].join(" ")}
           >

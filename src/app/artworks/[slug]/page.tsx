@@ -152,6 +152,7 @@ export default async function ArtworkPage({
                     href={artworksBackHref}
                     className="
             inline-block
+            translate-y-4
             font-sans
             text-[10px]
             uppercase
