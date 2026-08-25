@@ -37,6 +37,8 @@ export default function Hero() {
           z-0
 
           md:hidden
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
         "
       >
         <HeroArtwork mode="mobile" />
@@ -56,6 +58,8 @@ export default function Hero() {
           h-[var(--hero-height)]
 
           md:hidden
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
         "
       >
         <Container className="relative h-full">
@@ -88,6 +92,8 @@ export default function Hero() {
           h-[var(--hero-height)]
 
           md:block
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!block
         "
       >
         <div
@@ -131,8 +137,10 @@ export default function Hero() {
             className="
               relative
               h-full
-              w-full
               min-w-0
+
+              w-[calc(100%+var(--page-gutter))]
+              -mr-[var(--page-gutter)]
             "
           >
             <HeroArtwork mode="desktop" />

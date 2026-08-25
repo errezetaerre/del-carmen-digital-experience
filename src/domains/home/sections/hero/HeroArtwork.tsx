@@ -227,33 +227,33 @@ export default function HeroArtwork({
       {/* Artwork information */}
       <div
         className="
-          absolute
-          z-30
+    absolute
+    z-30
 
-          md:right-4
-          md:top-[50%]
-          md:-translate-y-1/2
+    md:right-10
+    md:top-[60%]
+    md:-translate-y-1/2
 
-          lg:bottom-10
-          lg:right-6
-          lg:top-auto
-          lg:translate-y-0
+    xl:right-12
+    xl:bottom-36
+    xl:top-auto
+    xl:translate-y-0
 
-          xl:right-8
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!right-12 
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!top-[68%]
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!bottom-auto
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!-translate-y-1/2
 
-          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!top-[62%]
-          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!bottom-auto
-          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!-translate-y-1/2
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!right-12
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!top-[70%]
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!bottom-auto
+    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!-translate-y-1/2
 
-          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!top-[70%]
-          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!bottom-auto
-          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!-translate-y-1/2
-
-          [@media(orientation:landscape)_and_(max-height:600px)]:!bottom-6
-          [@media(orientation:landscape)_and_(max-height:600px)]:!right-3
-          [@media(orientation:landscape)_and_(max-height:600px)]:!top-auto
-          [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-0
-        "
+    [@media(orientation:landscape)_and_(max-height:600px)]:!right-8
+    [@media(orientation:landscape)_and_(max-height:600px)]:!bottom-6
+    [@media(orientation:landscape)_and_(max-height:600px)]:!top-auto
+    [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-0
+  "
       >
         <ArtworkInfo artwork={artwork} />
       </div>

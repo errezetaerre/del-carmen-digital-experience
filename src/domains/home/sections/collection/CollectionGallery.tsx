@@ -1,21 +1,46 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import type { Artwork } from "@/domains/artworks";
 import { ArtworkLightbox } from "@/shared/ui/artwork";
 
 import CollectionArtwork from "./CollectionArtwork";
 
+type ArtworkInteraction =
+    | "lightbox"
+    | "detail";
+
 interface CollectionGalleryProps {
     artworks: Artwork[];
+
+    interaction?: ArtworkInteraction;
 }
 
 export default function CollectionGallery({
     artworks,
+    interaction = "lightbox",
 }: CollectionGalleryProps) {
+    const router = useRouter();
+
     const [selectedIndex, setSelectedIndex] =
         useState<number | null>(null);
+
+    const handleOpen = (
+        artwork: Artwork,
+        index: number,
+    ) => {
+        if (interaction === "detail") {
+            router.push(
+                `/artworks/${artwork.slug}`,
+            );
+
+            return;
+        }
+
+        setSelectedIndex(index);
+    };
 
     return (
         <>
@@ -43,26 +68,34 @@ export default function CollectionGallery({
                         <CollectionArtwork
                             key={artwork.id}
                             artwork={artwork}
-                            onOpen={() => {
-                                setSelectedIndex(index);
-                            }}
+                            onOpen={() =>
+                                handleOpen(
+                                    artwork,
+                                    index,
+                                )
+                            }
                         />
                     ),
                 )}
             </div>
 
-            <ArtworkLightbox
-                artworks={artworks}
-                initialIndex={
-                    selectedIndex ?? 0
-                }
-                isOpen={
-                    selectedIndex !== null
-                }
-                onClose={() => {
-                    setSelectedIndex(null);
-                }}
-            />
+            {interaction ===
+                "lightbox" && (
+                    <ArtworkLightbox
+                        artworks={artworks}
+                        initialIndex={
+                            selectedIndex ?? 0
+                        }
+                        isOpen={
+                            selectedIndex !== null
+                        }
+                        onClose={() => {
+                            setSelectedIndex(
+                                null,
+                            );
+                        }}
+                    />
+                )}
         </>
     );
 }

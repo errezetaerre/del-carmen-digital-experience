@@ -107,6 +107,34 @@ export default function SelectedWorks() {
                 <CollectionGallery
                     artworks={artworks}
                 />
+
+                <div
+                    className="
+    mt-16
+    flex
+    justify-center
+
+    md:mt-20
+  "
+                >
+                    <a
+                        href="/artworks"
+                        className="
+      font-sans
+      text-xs
+      font-medium
+      uppercase
+      tracking-[0.28em]
+      text-brand-gold
+      transition-opacity
+      duration-300
+
+      hover:opacity-70
+    "
+                    >
+                        View all works →
+                    </a>
+                </div>
             </Container>
         </section>
     );

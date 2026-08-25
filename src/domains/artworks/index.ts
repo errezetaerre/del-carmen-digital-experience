@@ -2,6 +2,7 @@ export type { Artwork } from "./model";
 
 export {
     getArtworkById,
+    getArtworkBySlug,
     getArtworks,
 } from "./services";
 

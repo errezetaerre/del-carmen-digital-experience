@@ -8,25 +8,28 @@ export default function ArtworkInfo({
   return (
     <div
       className="
-        relative
-        z-20
-        w-full
-        rounded-[10px]
-        border
-        border-brand-gold/55
-        bg-black/20
-        p-[5px]
-        backdrop-blur-[6px]
+    relative
+    z-20
+    w-full
+    rounded-[10px]
+    border
+    border-brand-gold/55
+    bg-black/20
+    p-[5px]
+    backdrop-blur-[6px]
 
-        md:w-[min(22vw,360px)]
-        md:min-w-[260px]
-        md:bg-black/10
-        md:p-[6px]
-        md:backdrop-blur-none
+    md:w-[420px]
+    md:min-w-0
+    md:bg-black/10
+    md:p-[6px]
+    md:backdrop-blur-none
 
-        [@media(orientation:landscape)_and_(max-height:600px)]:!w-[min(38vw,420px)]
-        [@media(orientation:landscape)_and_(max-height:600px)]:!min-w-0
-      "
+    xl:w-[340px]
+
+    [@media(orientation:landscape)_and_(max-height:600px)]:!w-[360px]
+    [@media(orientation:landscape)_and_(max-height:600px)]:!min-w-0
+    [@media(orientation:landscape)_and_(max-height:600px)]:!max-w-none
+  "
     >
       <div
         className="
@@ -36,9 +39,12 @@ export default function ArtworkInfo({
           py-4
           shadow-[0_20px_60px_rgba(0,0,0,0.35)]
 
-          md:px-8
-          md:py-7
+          md:px-6
+          md:py-5
           md:backdrop-blur-[4px]
+
+          xl:px-8
+xl:py-7
 
           [@media(orientation:landscape)_and_(max-height:600px)]:!px-5
           [@media(orientation:landscape)_and_(max-height:600px)]:!py-4
@@ -47,9 +53,12 @@ export default function ArtworkInfo({
         {/* ===================================================
             MOBILE PORTRAIT
            =================================================== */}
+
         <div
           className="
             md:hidden
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
           "
         >
           <h2
@@ -69,7 +78,6 @@ export default function ArtworkInfo({
             <p
               className="
                 mt-2
-                whitespace-nowrap
                 font-display
                 text-sm
                 font-light
@@ -120,6 +128,7 @@ export default function ArtworkInfo({
         {/* ===================================================
             MOBILE LANDSCAPE
            =================================================== */}
+
         <div
           className="
             hidden
@@ -127,38 +136,70 @@ export default function ArtworkInfo({
             [@media(orientation:landscape)_and_(max-height:600px)]:!block
           "
         >
-          <h2
+          {/* Title + tagline */}
+          <div
             className="
-              whitespace-nowrap
-              font-display
-              text-xl
-              font-light
-              tracking-[0.01em]
-              text-brand-gold
+              flex
+              items-start
+              gap-4
             "
           >
-            {artwork.title}
-          </h2>
-
-          {artwork.quote && (
-            <p
+            <h2
               className="
-                mt-1
+                shrink-0
                 whitespace-nowrap
                 font-display
-                text-sm
+                text-lg
                 font-light
-                italic
-                leading-relaxed
-                text-white/70
+                tracking-[0.01em]
+                text-brand-gold
               "
             >
-              &quot;{artwork.quote}&quot;
-            </p>
-          )}
+              {artwork.title}
+            </h2>
 
-          <div className="mt-3 h-px w-full bg-gradient-to-r from-brand-gold to-transparent" />
+            {artwork.quote && (
+              <>
+                <span
+                  aria-hidden
+                  className="
+                    h-8
+                    w-px
+                    shrink-0
+                    bg-brand-gold/35
+                  "
+                />
 
+                <p
+                  className="
+                    font-display
+                    text-xs
+                    font-light
+                    italic
+                    leading-relaxed
+                    text-white/70
+                  "
+                >
+                  &quot;{artwork.quote}&quot;
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* Divider */}
+          <div
+            className="
+              mt-3
+              h-px
+              w-full
+              bg-gradient-to-r
+              from-brand-gold
+              via-brand-gold/50
+              to-transparent
+            "
+          />
+
+          {/* Metadata */}
           <div
             className="
               mt-3
@@ -167,7 +208,7 @@ export default function ArtworkInfo({
               gap-3
               whitespace-nowrap
               font-sans
-              text-[11px]
+              text-[10px]
               text-white/65
             "
           >
@@ -192,12 +233,124 @@ export default function ArtworkInfo({
         </div>
 
         {/* ===================================================
-            TABLET / DESKTOP
+            TABLET
            =================================================== */}
+
         <div
           className="
             hidden
             md:block
+            xl:hidden
+
+            [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
+          "
+        >
+          {/* Title + tagline */}
+          <div
+            className="
+              flex
+              items-start
+              gap-5
+            "
+          >
+            <h2
+              className="
+                shrink-0
+                whitespace-nowrap
+                font-display
+                text-xl
+                font-light
+                tracking-[0.01em]
+                text-brand-gold
+              "
+            >
+              {artwork.title}
+            </h2>
+
+            {artwork.quote && (
+              <>
+                <span
+                  aria-hidden
+                  className="
+                    h-10
+                    w-px
+                    shrink-0
+                    bg-brand-gold/35
+                  "
+                />
+
+                <p
+                  className="
+                    max-w-[220px]
+                    font-display
+                    text-sm
+                    font-light
+                    italic
+                    leading-relaxed
+                    text-white/75
+                    whitespace-nowrap
+                  "
+                >
+                  &quot;{artwork.quote}&quot;
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* Divider */}
+          <div
+            className="
+              mt-4
+              h-px
+              w-full
+              bg-gradient-to-r
+              from-brand-gold
+              via-brand-gold/50
+              to-transparent
+            "
+          />
+
+          {/* Metadata */}
+          <div
+            className="
+              mt-4
+              flex
+              items-center
+              gap-4
+              whitespace-nowrap
+              font-sans
+              text-xs
+              text-white/65
+            "
+          >
+            <span>{techniqueLabel}</span>
+
+            <span className="text-brand-gold/40">
+              ·
+            </span>
+
+            <span>{artwork.year}</span>
+
+            <span className="text-brand-gold/40">
+              ·
+            </span>
+
+            <span>
+              {artwork.dimensions.width} ×{" "}
+              {artwork.dimensions.height}{" "}
+              {artwork.dimensions.unit}
+            </span>
+          </div>
+        </div>
+
+        {/* ===================================================
+            DESKTOP
+           =================================================== */}
+
+        <div
+          className="
+            hidden
+            xl:block
 
             [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
           "
@@ -220,13 +373,11 @@ export default function ArtworkInfo({
                 mt-3
                 max-w-sm
                 font-display
-                text-base
+                text-lg
                 font-light
                 italic
                 leading-relaxed
                 text-white/75
-
-                md:text-lg
               "
             >
               &quot;{artwork.quote}&quot;
