@@ -44,7 +44,7 @@ export default function ArtworkInfo({
           md:backdrop-blur-[4px]
 
           xl:px-8
-xl:py-7
+          xl:py-5
 
           [@media(orientation:landscape)_and_(max-height:600px)]:!px-5
           [@media(orientation:landscape)_and_(max-height:600px)]:!py-4

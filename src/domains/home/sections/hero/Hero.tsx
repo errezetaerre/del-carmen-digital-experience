@@ -5,7 +5,6 @@ import HeroAtmosphere from "./HeroAtmosphere";
 import HeroLighting from "./HeroLighting";
 
 import { Container } from "@/shared/layout";
-import { Navigation } from "@/domains/navigation";
 
 export default function Hero() {
   return (
@@ -48,7 +47,7 @@ export default function Hero() {
       <HeroAtmosphere />
       <HeroLighting />
 
-      <Navigation />
+
 
       {/* Mobile portrait */}
       <div

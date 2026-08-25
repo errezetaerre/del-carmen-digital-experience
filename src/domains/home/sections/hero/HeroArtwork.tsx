@@ -163,10 +163,11 @@ export default function HeroArtwork({
           top-0
           h-[var(--hero-height)]
 
-          md:right-[-6vw]
-          md:w-[min(118vw,1060px)]
+         md:right-[-6vw]
+md:w-[min(118vw,1060px)]
 
-          lg:right-[-11vw]
+lg:right-0
+lg:w-[min(68vw,1180px)]
 
           [@media(orientation:landscape)_and_(max-height:600px)]:!right-[-6vw]
           [@media(orientation:landscape)_and_(max-height:600px)]:!w-[150%]
@@ -189,7 +190,7 @@ export default function HeroArtwork({
 
             md:scale-[1.04]
 
-            lg:scale-[1.12]
+            lg:scale-[1.06]
 
             [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!scale-100
             [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!object-cover
@@ -235,9 +236,9 @@ export default function HeroArtwork({
     md:-translate-y-1/2
 
     xl:right-12
-    xl:bottom-36
-    xl:top-auto
-    xl:translate-y-0
+xl:top-[52%]
+xl:bottom-auto
+xl:-translate-y-1/2
 
     [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!right-12 
     [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!top-[68%]

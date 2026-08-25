@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Navigation } from "@/domains/navigation";
+
 import {
   Cormorant_Garamond,
   Geist,
@@ -48,6 +50,7 @@ export default function RootLayout({
       ].join(" ")}
     >
       <body className="min-h-full flex flex-col">
+        <Navigation />
         {children}
       </body>
     </html>
