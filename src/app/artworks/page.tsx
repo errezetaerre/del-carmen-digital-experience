@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import {
   getArtworks,
 } from "@/domains/artworks";
@@ -7,6 +9,8 @@ import {
 } from "@/shared/layout";
 
 import ArtworkArchive from "./ArtworkArchive";
+
+
 
 export default function ArtworksPage() {
   const artworks =
@@ -94,9 +98,19 @@ export default function ArtworksPage() {
             ARCHIVE
            =================================================== */}
 
-        <ArtworkArchive
-          artworks={artworks}
-        />
+        <Suspense
+          fallback={
+            <div
+              className="
+                min-h-[40vh]
+            "
+            />
+          }
+        >
+          <ArtworkArchive
+            artworks={artworks}
+          />
+        </Suspense>
       </Container>
     </main>
   );

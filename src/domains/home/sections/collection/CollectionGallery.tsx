@@ -16,11 +16,14 @@ interface CollectionGalleryProps {
     artworks: Artwork[];
 
     interaction?: ArtworkInteraction;
+
+    detailCategory?: string;
 }
 
 export default function CollectionGallery({
     artworks,
     interaction = "lightbox",
+    detailCategory,
 }: CollectionGalleryProps) {
     const router = useRouter();
 
@@ -32,8 +35,15 @@ export default function CollectionGallery({
         index: number,
     ) => {
         if (interaction === "detail") {
+            const categoryQuery =
+                detailCategory
+                    ? `?category=${encodeURIComponent(
+                        detailCategory,
+                    )}`
+                    : "";
+
             router.push(
-                `/artworks/${artwork.slug}`,
+                `/artworks/${artwork.slug}${categoryQuery}`,
             );
 
             return;
@@ -94,6 +104,7 @@ export default function CollectionGallery({
                                 null,
                             );
                         }}
+                        showDetailsCta
                     />
                 )}
         </>

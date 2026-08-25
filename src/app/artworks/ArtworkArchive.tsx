@@ -2,8 +2,12 @@
 
 import {
     useMemo,
-    useState,
 } from "react";
+
+import {
+    useRouter,
+    useSearchParams,
+} from "next/navigation";
 
 import type {
     Artwork,
@@ -38,8 +42,13 @@ function formatCategory(
 export default function ArtworkArchive({
     artworks,
 }: ArtworkArchiveProps) {
-    const [activeCategory, setActiveCategory] =
-        useState("all");
+    const router = useRouter();
+
+    const searchParams =
+        useSearchParams();
+
+    const requestedCategory =
+        searchParams.get("category");
 
     const categories = useMemo(() => {
         const uniqueCategories =
@@ -80,6 +89,14 @@ export default function ArtworkArchive({
         );
     }, [artworks]);
 
+    const activeCategory =
+        requestedCategory &&
+            categories.includes(
+                requestedCategory,
+            )
+            ? requestedCategory
+            : "all";
+
     const filteredArtworks =
         useMemo(() => {
             if (
@@ -90,7 +107,7 @@ export default function ArtworkArchive({
 
             return artworks.filter(
                 (artwork) =>
-                    artwork.categories?.includes(
+                    artwork.categories.includes(
                         activeCategory,
                     ),
             );
@@ -99,40 +116,64 @@ export default function ArtworkArchive({
             artworks,
         ]);
 
+    const selectCategory = (
+        category: string,
+    ) => {
+        if (category === "all") {
+            router.replace(
+                "/artworks",
+                {
+                    scroll: false,
+                },
+            );
+
+            return;
+        }
+
+        router.replace(
+            `/artworks?category=${encodeURIComponent(
+                category,
+            )}`,
+            {
+                scroll: false,
+            },
+        );
+    };
+
     return (
         <div>
             {/* =====================================================
-          ARCHIVE CONTROLS
-         ===================================================== */}
+                ARCHIVE CONTROLS
+               ===================================================== */}
 
             <div
                 className="
-          mb-14
-          border-y
-          border-white/[0.06]
-          py-6
+                    mb-14
+                    border-y
+                    border-white/[0.06]
+                    py-6
 
-          md:mb-16
-          md:flex
-          md:items-center
-          md:justify-between
-          md:gap-10
-        "
+                    md:mb-16
+                    md:flex
+                    md:items-center
+                    md:justify-between
+                    md:gap-10
+                "
             >
                 {/* Count */}
 
                 <p
                     className="
-            mb-5
-            font-sans
-            text-[9px]
-            uppercase
-            tracking-[0.28em]
-            text-white/35
+                        mb-5
+                        font-sans
+                        text-[9px]
+                        uppercase
+                        tracking-[0.28em]
+                        text-white/35
 
-            md:mb-0
-            md:shrink-0
-          "
+                        md:mb-0
+                        md:shrink-0
+                    "
                 >
                     {filteredArtworks.length}{" "}
                     {filteredArtworks.length === 1
@@ -144,19 +185,19 @@ export default function ArtworkArchive({
 
                 <div
                     className="
-            flex
-            flex-wrap
-            items-center
-            gap-x-6
-            gap-y-3
+                        flex
+                        flex-wrap
+                        items-center
+                        gap-x-6
+                        gap-y-3
 
-            md:justify-end
-          "
+                        md:justify-end
+                    "
                 >
                     <button
                         type="button"
                         onClick={() =>
-                            setActiveCategory(
+                            selectCategory(
                                 "all",
                             )
                         }
@@ -180,15 +221,15 @@ export default function ArtworkArchive({
                             "all" && (
                                 <span
                                     className="
-                  absolute
-                  -bottom-2
-                  left-0
-                  h-px
-                  w-full
-                  bg-gradient-to-r
-                  from-brand-gold
-                  to-transparent
-                "
+                                    absolute
+                                    -bottom-2
+                                    left-0
+                                    h-px
+                                    w-full
+                                    bg-gradient-to-r
+                                    from-brand-gold
+                                    to-transparent
+                                "
                                 />
                             )}
                     </button>
@@ -204,7 +245,7 @@ export default function ArtworkArchive({
                                     key={category}
                                     type="button"
                                     onClick={() =>
-                                        setActiveCategory(
+                                        selectCategory(
                                             category,
                                         )
                                     }
@@ -229,15 +270,15 @@ export default function ArtworkArchive({
                                     {isActive && (
                                         <span
                                             className="
-                        absolute
-                        -bottom-2
-                        left-0
-                        h-px
-                        w-full
-                        bg-gradient-to-r
-                        from-brand-gold
-                        to-transparent
-                      "
+                                                absolute
+                                                -bottom-2
+                                                left-0
+                                                h-px
+                                                w-full
+                                                bg-gradient-to-r
+                                                from-brand-gold
+                                                to-transparent
+                                            "
                                         />
                                     )}
                                 </button>
@@ -248,25 +289,33 @@ export default function ArtworkArchive({
             </div>
 
             {/* =====================================================
-          ARTWORKS
-         ===================================================== */}
+                ARTWORKS
+               ===================================================== */}
 
             {filteredArtworks.length >
                 0 ? (
                 <CollectionGallery
-                    artworks={filteredArtworks}
+                    artworks={
+                        filteredArtworks
+                    }
                     interaction="detail"
+                    detailCategory={
+                        activeCategory ===
+                            "all"
+                            ? undefined
+                            : activeCategory
+                    }
                 />
             ) : (
                 <div
                     className="
-            py-24
-            text-center
-            font-sans
-            text-sm
-            font-light
-            text-white/35
-          "
+                        py-24
+                        text-center
+                        font-sans
+                        text-sm
+                        font-light
+                        text-white/35
+                    "
                 >
                     No works are currently
                     available in this category.
