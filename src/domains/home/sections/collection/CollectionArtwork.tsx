@@ -36,11 +36,7 @@ export default function CollectionArtwork({
       artwork.images.primary
       : artwork.images.thumbnail ??
       artwork.images.primary;
-  console.log(
-    artwork.title,
-    imageVariant,
-    displayImage.src,
-  );
+
   const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
 
   const animateIn = () => {
