@@ -299,6 +299,7 @@ export default function ArtworkArchive({
                         filteredArtworks
                     }
                     interaction="detail"
+                    imageVariant="thumbnail"
                     detailCategory={
                         activeCategory ===
                             "all"

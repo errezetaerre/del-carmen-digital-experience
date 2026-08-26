@@ -43,6 +43,8 @@ export interface ArtworkImages {
   heroLandscape?: ArtworkImage;
 
   thumbnail?: ArtworkImage;
+
+  collection?: ArtworkImage;
 }
 
 export interface ArtworkDimensions {

@@ -7,14 +7,21 @@ import type { Artwork } from "@/domains/artworks";
 
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
 
+type CollectionImageVariant =
+  | "collection"
+  | "thumbnail";
+
 interface CollectionArtworkProps {
   artwork: Artwork;
   onOpen?: () => void;
+
+  imageVariant?: CollectionImageVariant;
 }
 
 export default function CollectionArtwork({
   artwork,
   onOpen,
+  imageVariant = "thumbnail",
 }: CollectionArtworkProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const initialRef = useRef<HTMLDivElement>(null);
@@ -23,10 +30,17 @@ export default function CollectionArtwork({
   const metaRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
-  const collectionImage =
-    artwork.images.thumbnail ??
-    artwork.images.primary;
-
+  const displayImage =
+    imageVariant === "collection"
+      ? artwork.images.collection ??
+      artwork.images.primary
+      : artwork.images.thumbnail ??
+      artwork.images.primary;
+  console.log(
+    artwork.title,
+    imageVariant,
+    displayImage.src,
+  );
   const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
 
   const animateIn = () => {
@@ -188,8 +202,9 @@ export default function CollectionArtwork({
         <CollectionArtworkFrame>
           <div className="relative aspect-[4/5] overflow-hidden bg-black">
             <img
-              src={collectionImage.src}
-              alt={collectionImage.alt}
+              src={displayImage.src}
+              alt={displayImage.alt}
+
               className="
                 h-full
                 w-full

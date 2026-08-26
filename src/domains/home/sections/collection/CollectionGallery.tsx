@@ -11,11 +11,14 @@ import CollectionArtwork from "./CollectionArtwork";
 type ArtworkInteraction =
     | "lightbox"
     | "detail";
-
+type ArtworkImageVariant =
+    | "collection"
+    | "thumbnail";
 interface CollectionGalleryProps {
     artworks: Artwork[];
 
     interaction?: ArtworkInteraction;
+    imageVariant?: ArtworkImageVariant;
 
     detailCategory?: string;
 }
@@ -23,6 +26,7 @@ interface CollectionGalleryProps {
 export default function CollectionGallery({
     artworks,
     interaction = "lightbox",
+    imageVariant = "thumbnail",
     detailCategory,
 }: CollectionGalleryProps) {
     const router = useRouter();
@@ -78,6 +82,7 @@ export default function CollectionGallery({
                         <CollectionArtwork
                             key={artwork.id}
                             artwork={artwork}
+                            imageVariant={imageVariant}
                             onOpen={() =>
                                 handleOpen(
                                     artwork,

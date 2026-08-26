@@ -456,6 +456,20 @@ export const artworks: Artwork[] = [
         width: 888,
         height: 592,
       },
+
+      thumbnail: {
+        src: "/artworks/yasemi_I.jpg",
+        alt: "Yasemi I by Rolando Del Carmen",
+        width: 444,
+        height: 296,
+      },
+
+      collection: {
+        src: "/artworks/yasemi_I-collection.jpg",
+        alt: "Yasemi I — collection presentation",
+        width: 1920,
+        height: 1080,
+      },
     },
 
     quote:

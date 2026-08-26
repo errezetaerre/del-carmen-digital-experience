@@ -106,6 +106,7 @@ export default function SelectedWorks() {
 
                 <CollectionGallery
                     artworks={artworks}
+                    imageVariant="collection"
                 />
 
                 <div

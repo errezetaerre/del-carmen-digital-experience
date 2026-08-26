@@ -16,6 +16,15 @@ export const artworkSeries: ArtworkSeries[] = [
 
         coverArtworkId: "yasemi_i",
 
+        images: {
+            featured: {
+                src: "/artworks/yasemi_I-collection.jpg",
+                alt: "Yasemi — featured collection",
+                width: 1920,
+                height: 1200,
+            },
+        },
+
         status: "ongoing",
 
         yearStart: 2026,
