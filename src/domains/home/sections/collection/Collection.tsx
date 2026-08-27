@@ -166,6 +166,7 @@ export default function Collection() {
                     leading-[1.8]
                     tracking-[0.01em]
                     text-white/55
+                    md:text-base
                   "
                 >
                   {series.description}
@@ -259,7 +260,7 @@ export default function Collection() {
               <div
                 className="
                   relative
-                  aspect-[16/10]
+                  aspect-[16/9]
                   overflow-hidden
                   bg-black
                   shadow-[0_40px_100px_rgba(0,0,0,0.55)]
