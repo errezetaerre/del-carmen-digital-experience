@@ -1,6 +1,6 @@
 # Artwork Model
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-AM
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-18
+2026-08-26
 
 ---
 
@@ -99,6 +99,7 @@ Artwork
 │   ├── primary
 │   ├── heroPortrait?
 │   ├── heroLandscape?
+│   ├── collection?
 │   └── thumbnail?
 │
 ├── quote?
@@ -434,6 +435,7 @@ images
 ├── primary
 ├── heroPortrait?
 ├── heroLandscape?
+├── collection?
 └── thumbnail?
 ```
 
@@ -471,15 +473,23 @@ Hero Landscape is independent from Hero Portrait.
 
 If the Primary representation already works correctly in landscape, a separate Hero Landscape asset is not required.
 
+## collection
+
+Optional.
+
+Editorial representation prepared specifically for curated Collection / Selected Works presentation surfaces.
+
+It may use a different crop, framing or atmospheric treatment from the canonical Primary image when the Home composition requires it.
+
+Collection media must never replace Primary in Artwork Detail or other canonical artwork-viewing contexts.
+
 ## thumbnail
 
 Optional.
 
-Optimized representation for compact gallery or collection contexts.
+Optimized representation for compact archive, gallery or discovery contexts where the artwork itself should remain clearly recognizable.
 
-Initially, Featured Collection may use Primary when no Thumbnail exists.
-
-A dedicated Thumbnail may be introduced later when a specific artwork requires a different crop, framing or optimization.
+Thumbnail is distinct from Collection editorial media. It must not be substituted for Primary in Artwork Detail.
 
 ---
 
@@ -499,7 +509,11 @@ Hero Landscape
 Featured Work
 → primary
 
-Featured Collection
+Home Selected Works / Collection Artwork
+→ collection if available
+→ otherwise primary
+
+Artwork Archive / compact gallery
 → thumbnail if available
 → otherwise primary
 
@@ -621,6 +635,8 @@ ArtworkSeries
 ├── description?
 ├── statement?
 ├── coverArtworkId
+├── images?
+│   └── featured?
 ├── status
 ├── yearStart?
 └── yearEnd?
@@ -680,7 +696,23 @@ The series does not require a duplicate cover image by default.
 
 The cover may use the selected Artwork's appropriate public image representation.
 
-Dedicated series-specific media may be introduced later if a real curatorial requirement appears.
+When a real curatorial requirement exists, ArtworkSeries may own dedicated editorial media independently from the media of its member Artworks.
+
+The current canonical optional role is:
+
+```text
+images.featured
+```
+
+`featured` is used for editorial presentation of the series itself, including the Home Featured Collection scene. It does not become the Primary image of `coverArtworkId` and must not alter any member Artwork record.
+
+Fallback behavior:
+
+```text
+Series Featured Collection
+→ series.images.featured if available
+→ otherwise coverArtworkId appropriate public representation
+```
 
 ---
 
@@ -943,9 +975,9 @@ When an entry references an ArtworkSeries:
 type: series
 ```
 
-presentation resolves the ArtworkSeries and its `coverArtworkId`.
+presentation resolves the ArtworkSeries.
 
-The system may then use the cover Artwork's appropriate public image representation.
+The system uses `series.images.featured` when available. Otherwise it resolves `coverArtworkId` and uses the cover Artwork's appropriate public image representation.
 
 Series metadata must be resolved from ArtworkSeries rather than duplicated in HomeCuration.
 
@@ -1033,7 +1065,6 @@ The following concepts are intentionally not part of the initial canonical Artwo
 • conservation metadata
 • focal point / crop metadata
 • photographer / image credit metadata
-• dedicated series media
 • print configuration
 • edition configuration
 • auction configuration

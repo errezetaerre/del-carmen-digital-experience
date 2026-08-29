@@ -11,24 +11,32 @@ export default function Hero() {
     <section
       className="
         relative
+        h-[var(--hero-height)]
         w-full
         min-w-0
         overflow-hidden
 
         [--hero-height:100svh]
-        h-[var(--hero-height)]
 
         md:[--hero-height:100vh]
 
+        // [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:[--hero-height:950px]
 
-        [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:[--hero-height:650px]
+        // [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:[--hero-height:900px]
 
-        [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:[--hero-height:600px]
+        // [@media(orientation:landscape)_and_(max-height:600px)]:[--hero-height:100svh]
+
+        [--hero-height:100svh]
+
+        md:[--hero-height:100dvh]
 
         [@media(orientation:landscape)_and_(max-height:600px)]:[--hero-height:100svh]
       "
     >
-      {/* Mobile portrait artwork environment */}
+      {/* =====================================================
+          MOBILE PORTRAIT — ARTWORK ENVIRONMENT
+         ===================================================== */}
+
       <div
         className="
           absolute
@@ -43,13 +51,41 @@ export default function Hero() {
         <HeroArtwork mode="mobile" />
       </div>
 
+      {/* =====================================================
+          TABLET / DESKTOP — FULL-BLEED ARTWORK
+
+          Important:
+          This visual layer belongs to the viewport,
+          not to Container.
+         ===================================================== */}
+
+      <div
+        className="
+          absolute
+          inset-0
+          z-0
+          hidden
+
+          md:block
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!block
+        "
+      >
+        <HeroArtwork mode="desktop" />
+      </div>
+
+      {/* =====================================================
+          GLOBAL ENVIRONMENT
+         ===================================================== */}
+
       <HeroBackground />
       <HeroAtmosphere />
       <HeroLighting />
 
+      {/* =====================================================
+          MOBILE PORTRAIT — CONTENT
+         ===================================================== */}
 
-
-      {/* Mobile portrait */}
       <div
         className="
           relative
@@ -63,11 +99,13 @@ export default function Hero() {
       >
         <Container className="relative h-full">
           {/* Brand */}
+
           <div className="pt-24">
             <HeroBrand />
           </div>
 
           {/* Artwork info + CTA */}
+
           <div
             className="
               absolute
@@ -82,11 +120,16 @@ export default function Hero() {
         </Container>
       </div>
 
-      {/* Tablet / Desktop / Mobile Landscape */}
+      {/* =====================================================
+          TABLET / DESKTOP / MOBILE LANDSCAPE — CONTENT
+
+          Container now controls content only.
+         ===================================================== */}
+
       <Container
         className="
           relative
-          z-10
+          z-20
           hidden
           h-[var(--hero-height)]
 
@@ -101,7 +144,6 @@ export default function Hero() {
             h-full
             w-full
             min-w-0
-            items-center
 
             md:grid-cols-[42%_58%]
 
@@ -111,6 +153,7 @@ export default function Hero() {
           "
         >
           {/* Brand */}
+
           <div
             className="
               relative
@@ -123,27 +166,28 @@ export default function Hero() {
 
               lg:pt-28
 
-              [@media(orientation:landscape)_and_(max-height:600px)]:!pt-16
               [@media(orientation:landscape)_and_(max-height:600px)]:!justify-center
+              [@media(orientation:landscape)_and_(max-height:600px)]:!pt-16
               [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-[8svh]
             "
           >
             <HeroBrand />
           </div>
 
-          {/* Artwork */}
+          {/* Structural empty column.
+
+              The artwork itself is now rendered
+              outside Container as a full-bleed layer.
+          */}
+
           <div
+            aria-hidden
             className="
               relative
               h-full
               min-w-0
-
-              w-[calc(100%+var(--page-gutter))]
-              -mr-[var(--page-gutter)]
             "
-          >
-            <HeroArtwork mode="desktop" />
-          </div>
+          />
         </div>
       </Container>
     </section>

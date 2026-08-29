@@ -24,7 +24,7 @@ export default function ArtworkInfo({
     md:p-[6px]
     md:backdrop-blur-none
 
-    xl:w-[340px]
+    xl:w-[430px]
 
     [@media(orientation:landscape)_and_(max-height:600px)]:!w-[360px]
     [@media(orientation:landscape)_and_(max-height:600px)]:!min-w-0
@@ -43,8 +43,8 @@ export default function ArtworkInfo({
           md:py-5
           md:backdrop-blur-[4px]
 
-          xl:px-8
-          xl:py-5
+          xl:px-9
+          xl:py-7
 
           [@media(orientation:landscape)_and_(max-height:600px)]:!px-5
           [@media(orientation:landscape)_and_(max-height:600px)]:!py-4
@@ -65,7 +65,7 @@ export default function ArtworkInfo({
             className="
               whitespace-nowrap
               font-display
-              text-xl
+              text-2xl
               font-light
               tracking-[0.01em]
               text-brand-gold
@@ -77,7 +77,7 @@ export default function ArtworkInfo({
           {artwork.quote && (
             <p
               className="
-                mt-2
+                mt-1
                 font-display
                 text-sm
                 font-light
@@ -90,7 +90,7 @@ export default function ArtworkInfo({
             </p>
           )}
 
-          <div className="mt-4 h-px w-full bg-gradient-to-r from-brand-gold to-transparent" />
+          <div className="mt-3 h-px w-full bg-gradient-to-r from-brand-gold to-transparent" />
 
           <div
             className="
@@ -101,7 +101,7 @@ export default function ArtworkInfo({
               gap-x-3
               gap-y-1
               font-sans
-              text-[11px]
+              text-[0.5em]
               text-white/65
             "
           >
@@ -149,7 +149,7 @@ export default function ArtworkInfo({
                 shrink-0
                 whitespace-nowrap
                 font-display
-                text-lg
+                text-xl
                 font-light
                 tracking-[0.01em]
                 text-brand-gold
@@ -173,7 +173,7 @@ export default function ArtworkInfo({
                 <p
                   className="
                     font-display
-                    text-xs
+                    text-sm
                     font-light
                     italic
                     leading-relaxed
@@ -250,7 +250,7 @@ export default function ArtworkInfo({
             className="
               flex
               items-start
-              gap-5
+              gap-3
             "
           >
             <h2
@@ -258,7 +258,7 @@ export default function ArtworkInfo({
                 shrink-0
                 whitespace-nowrap
                 font-display
-                text-xl
+                text-2xl
                 font-light
                 tracking-[0.01em]
                 text-brand-gold
@@ -283,7 +283,7 @@ export default function ArtworkInfo({
                   className="
                     max-w-[220px]
                     font-display
-                    text-sm
+                    text-base
                     font-light
                     italic
                     leading-relaxed
@@ -358,7 +358,7 @@ export default function ArtworkInfo({
           <h2
             className="
               font-display
-              text-2xl
+              text-5xl
               font-light
               tracking-[0.01em]
               text-brand-gold
@@ -373,7 +373,7 @@ export default function ArtworkInfo({
                 mt-3
                 max-w-sm
                 font-display
-                text-lg
+                text-2xl
                 font-light
                 italic
                 leading-relaxed
@@ -384,18 +384,31 @@ export default function ArtworkInfo({
             </p>
           )}
 
-          <div className="mt-6 h-px w-32 bg-gradient-to-r from-brand-gold to-transparent" />
+          <div className="mt-4 h-px w-90 bg-gradient-to-r from-brand-gold to-transparent" />
 
-          <div className="mt-6 space-y-3 font-sans">
-            <p className="text-sm text-white/80">
+          <div className="
+              mt-4
+              
+              font-sans
+              
+              flex
+              flex-wrap
+              items-center
+              gap-x-8
+              gap-y-1
+              
+              text-[0.5em]
+              text-white/75
+          ">
+            <p className="text-base">
               {techniqueLabel}
             </p>
 
-            <p className="text-sm text-white/65">
+            <p className="text-base">
               {artwork.year}
             </p>
 
-            <p className="text-sm text-white/55">
+            <p className="text-base">
               {artwork.dimensions.width} ×{" "}
               {artwork.dimensions.height}{" "}
               {artwork.dimensions.unit}

@@ -10,7 +10,7 @@ export default function HeroBrand() {
         className="
           mt-4
           font-display
-          text-6xl
+          text-5xl
           font-light
           uppercase
           leading-[0.88]
@@ -38,8 +38,8 @@ export default function HeroBrand() {
 
           md:block
           md:text-7xl
-
-          lg:text-8xl
+          lg:text-9xl
+          xl:text-[9rem]
 
           [@media(orientation:landscape)_and_(max-height:600px)]:!mt-6
           [@media(orientation:landscape)_and_(max-height:600px)]:!text-6xl
@@ -53,7 +53,7 @@ export default function HeroBrand() {
         className="
           mt-7
           font-display
-          text-lg
+          text-base
           font-normal
           uppercase
           leading-[1.25]
@@ -76,7 +76,9 @@ export default function HeroBrand() {
           hidden
           max-w-md
           font-display
-          text-xl
+          md:text-xl
+lg:text-2xl
+xl:text-[1.65rem]
           font-normal
           uppercase
           leading-[1.25]
@@ -84,7 +86,7 @@ export default function HeroBrand() {
           text-brand-gold
 
           md:block
-
+          drop-shadow-[0_2px_2px_rgba(0,0,0,0.85)]
           [@media(orientation:landscape)_and_(max-height:600px)]:!mt-5
           [@media(orientation:landscape)_and_(max-height:600px)]:!text-base
         "

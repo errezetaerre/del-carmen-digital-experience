@@ -8,8 +8,6 @@ import { Button } from "@/shared/ui/button";
 import ArtworkInfo from "./ArtworkInfo";
 import { HERO_CTA } from "./constants";
 
-
-
 type HeroArtworkMode =
   | "mobile"
   | "mobileInfo"
@@ -38,8 +36,6 @@ export default function HeroArtwork({
   const heroLandscapeImage =
     artwork.images.heroLandscape ??
     primaryImage;
-
-
 
   /* =========================================================
      MOBILE PORTRAIT — ARTWORK
@@ -70,6 +66,7 @@ export default function HeroArtwork({
         />
 
         {/* Top reading gradient */}
+
         <div
           aria-hidden
           className="
@@ -86,6 +83,7 @@ export default function HeroArtwork({
         />
 
         {/* Bottom integration gradient */}
+
         <div
           aria-hidden
           className="
@@ -102,6 +100,7 @@ export default function HeroArtwork({
         />
 
         {/* Vignette */}
+
         <div
           aria-hidden
           className="
@@ -144,6 +143,9 @@ export default function HeroArtwork({
 
   /* =========================================================
      TABLET / DESKTOP / MOBILE LANDSCAPE
+
+     Full-bleed visual environment.
+     This component now receives the complete Hero viewport.
      ========================================================= */
 
   return (
@@ -152,109 +154,117 @@ export default function HeroArtwork({
         relative
         h-[var(--hero-height)]
         w-full
-        min-w-0
+        overflow-hidden
       "
     >
-      {/* Artwork visual layer */}
+      {/* =====================================================
+          ARTWORK VISUAL LAYER
+         ===================================================== */}
+
       <div
         className="
           pointer-events-none
           absolute
-          top-0
-          h-[var(--hero-height)]
+          inset-y-0
+          right-0
+          md:-right-[15%]
+          md:left-0
 
-         md:right-[-6vw]
-md:w-[min(118vw,1060px)]
-
-lg:right-0
-lg:w-[min(68vw,1180px)]
-
-          [@media(orientation:landscape)_and_(max-height:600px)]:!right-[-6vw]
-          [@media(orientation:landscape)_and_(max-height:600px)]:!w-[150%]
+          lg:left-[18%]
+          [@media(orientation:landscape)_and_(max-height:600px)]:!right-15
+          [@media(orientation:landscape)_and_(max-height:600px)]:!left-0
+          
         "
       >
         <ArtworkImage
           src={heroLandscapeImage.src}
           alt={heroLandscapeImage.alt}
           fill
+          priority
           sizes="
-            (min-width: 1920px) 66vw,
-            (min-width: 1024px) 66vw,
-            (min-width: 768px) 60vw,
+            (min-width: 1440px) 82vw,
+            (min-width: 1024px) 82vw,
+            (min-width: 768px) 76vw,
             100vw
           "
           className="
-            origin-top-right
-            object-contain
+            object-cover
             object-right-top
 
-            md:scale-[1.04]
-
-            lg:scale-[1.06]
-
-            [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!scale-100
-            [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!object-cover
-            [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)]:!object-right-top
-
-            [@media(orientation:landscape)_and_(max-height:600px)]:!scale-[1.02]
-            [@media(orientation:landscape)_and_(max-height:600px)]:!object-cover
             [@media(orientation:landscape)_and_(max-height:600px)]:!object-right
-          "
-        />
-
-        {/* Tablet integration */}
-        <div
-          aria-hidden
-          className="
-            absolute
-            left-0
-            top-0
-            hidden
-            h-full
-            w-[52%]
-            bg-gradient-to-r
-            from-black
-            via-black/75
-            to-transparent
-
-            md:block
-            lg:hidden
-
-            [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
+            
           "
         />
       </div>
 
-      {/* Artwork information */}
+      {/* =====================================================
+          LEFT ARTWORK INTEGRATION
+
+          This does NOT define the black content column.
+          It only blends the artwork into the black environment.
+
+          clamp() prevents the transition from collapsing
+          between approximately 768–900px.
+         ===================================================== */}
+
+      <div
+        aria-hidden
+        className="
+          pointer-events-none
+          absolute
+          inset-y-0
+          left-0
+          z-10
+
+          hidden
+          w-[clamp(360px,38vw,680px)]
+
+          bg-gradient-to-r
+          from-black
+          from-[38%]
+          via-black/85
+          via-[62%]
+          to-transparent
+
+          md:block
+
+          [@media(orientation:landscape)_and_(max-height:600px)]:!w-[42vw]
+        "
+      />
+
+      {/* =====================================================
+          ARTWORK INFORMATION
+         ===================================================== */}
+
       <div
         className="
-    absolute
-    z-30
+          absolute
+          z-30
 
-    md:right-10
-    md:top-[60%]
-    md:-translate-y-1/2
+          md:right-[max(2rem,var(--page-gutter))]
+          md:top-[30%]
+          md:-translate-y-1/2
 
-    xl:right-12
-xl:top-[52%]
-xl:bottom-auto
-xl:-translate-y-1/2
+          xl:right-[max(2rem,var(--page-gutter))]
+          xl:top-[78%]
+          xl:bottom-auto
+          xl:-translate-y-1/2
 
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!right-12 
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!top-[68%]
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!bottom-auto
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!-translate-y-1/2
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!right-12
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!top-[68%]
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!bottom-auto
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:portrait)]:!-translate-y-1/2
 
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!right-12
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!top-[70%]
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!bottom-auto
-    [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!-translate-y-1/2
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!right-24
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!top-[70%]
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!bottom-auto
+          [@media(min-width:768px)_and_(max-width:1366px)_and_(min-height:700px)_and_(orientation:landscape)]:!-translate-y-1/2
 
-    [@media(orientation:landscape)_and_(max-height:600px)]:!right-8
-    [@media(orientation:landscape)_and_(max-height:600px)]:!bottom-6
-    [@media(orientation:landscape)_and_(max-height:600px)]:!top-auto
-    [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-0
-  "
+          [@media(orientation:landscape)_and_(max-height:600px)]:!right-8
+          [@media(orientation:landscape)_and_(max-height:600px)]:!bottom-6
+          [@media(orientation:landscape)_and_(max-height:600px)]:!top-auto
+          [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-0
+        "
       >
         <ArtworkInfo artwork={artwork} />
       </div>

@@ -30,12 +30,12 @@ export default function Navigation() {
           headerState,
         ].join(" ")}
       >
-        <Container className="flex h-[52px] items-center justify-between">
+        <Container className="flex h-[64px] items-center justify-between">
           {/* Brand */}
           <Link
             href="/"
             className={[
-              "text-sm font-light uppercase tracking-[0.30em] transition-opacity duration-300 hover:opacity-80",
+              "text-base font-light uppercase tracking-[0.30em] transition-opacity duration-300 hover:opacity-80",
               isScrolled
                 ? "text-brand-gold/100"
                 : "text-white",
@@ -43,7 +43,7 @@ export default function Navigation() {
           >
             <span>{brand.name}</span>
 
-            <span className="block text-[10px] tracking-[0.28em] text-brand-gold">
+            <span className="block text-[11px] tracking-[0.28em] text-brand-gold">
               by {brand.parentBrand}
             </span>
           </Link>
@@ -68,7 +68,7 @@ export default function Navigation() {
                         aria-current="page"
                         className="
                             cursor-default
-                            text-xs
+                            text-sm
                             font-medium
                             uppercase
                             tracking-[0.12em]
@@ -81,7 +81,7 @@ export default function Navigation() {
                       <Link
                         href={item.href}
                         className={[
-                          "text-xs uppercase tracking-[0.12em] transition-colors duration-300",
+                          "text-sm uppercase tracking-[0.12em] transition-colors duration-300",
 
                           isScrolled
                             ? "text-[#2F2E2C]/75 hover:text-brand-gold"
@@ -101,7 +101,7 @@ export default function Navigation() {
           <button
             type="button"
             className={[
-              "hidden text-xs uppercase tracking-[0.12em] transition-colors duration-300 md:block",
+              "hidden text-sm uppercase tracking-[0.12em] transition-colors duration-300 md:block",
               isScrolled
                 ? "text-[#2F2E2C]/75 hover:text-brand-gold"
                 : "text-white/65 hover:text-white",

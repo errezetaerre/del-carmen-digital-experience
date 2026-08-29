@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Specification
 
-Version: 1.3
+Version: 1.4
 
 Document ID: DOC-HS
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-08-17
+Last Updated: 2026-08-26
 
 ------------------------------------------------------------------------
 
@@ -103,7 +103,7 @@ modules.
 
 # 3. Layout Structure
 
-The homepage is composed of seven sequential scenes.
+The homepage is composed of eight sequential scenes.
 
 Instead of sections, every block is called a Scene.
 
@@ -127,21 +127,29 @@ Artist Statement
 
 Scene 04
 
-Collection
+Featured Collection
 
 ↓
 
 Scene 05
 
-Journal
+Selected Works
 
 ↓
 
 Scene 06
 
+Journal
+
+↓
+
+Scene 07
+
 Invitation
 
 ↓
+
+Scene 08
 
 Footer
 
@@ -872,11 +880,41 @@ narrative.
 
 ------------------------------------------------------------------------
 
-# 18. Scene 04 --- Collection
+# 18. Scene 04 --- Featured Collection
 
 Purpose:
 
-Expand from the artist's philosophy into the broader pictorial universe.
+Introduce one curated ArtworkSeries as an editorial threshold into a broader body of work.
+
+Current composition:
+
+Editorial series information
+
+↓
+
+Featured series image
+
+The Home Featured Collection currently resolves the series selected by HomeCuration.
+
+For ArtworkSeries presentation, the preferred visual source is dedicated series editorial media when available. The current canonical role is `series.images.featured`. If no dedicated series image exists, the presentation may fall back to the series `coverArtworkId`.
+
+Dedicated series media belongs to ArtworkSeries and must not replace the Primary or Thumbnail representation of any member Artwork.
+
+Interaction leads to the Series Detail Experience, where the visitor can discover the works belonging to that series and inspect each Artwork individually.
+
+The Featured Collection scene uses the Deep Surface token to create subtle scene differentiation without breaking the dark institutional environment.
+
+Primary CTA:
+
+Explore collection →
+
+------------------------------------------------------------------------
+
+# 19. Scene 05 --- Selected Works
+
+Purpose:
+
+Present a curated selection of individual artworks after the featured series experience.
 
 Current composition:
 
@@ -890,63 +928,29 @@ The editorial heading is:
 
 Works that speak in silence
 
-Responsive heading behavior:
+Selected Works is curated independently through HomeCuration and is not the complete artwork archive.
 
-Desktop
+The grid uses CollectionArtwork for compact artwork presentation and may expose title, year, technique and dimensions through the approved interaction design.
 
-Two intentional lines:
+Image behavior:
 
-Works that speak in silence
+`artwork.images.collection` when available
 
-Tablet / Mobile
+↓
 
-Single line when available space permits.
+otherwise `artwork.images.primary`
 
-Current artwork preview grid:
+The Collection image role is editorial and belongs only to curated collection / Selected Works presentation. It must not replace the Artwork Detail Primary image.
 
-Mobile
-
-2 columns
-
-Tablet and above
-
-4 columns
-
-The collection preview may expose artwork metadata through the
-CollectionArtwork component according to the approved component design.
-
-The Home Collection is a curated preview of the broader Del Carmen pictorial universe. It is not required to reproduce the complete artwork inventory.
-
-A Collection entry may represent either:
-
-• an individual Artwork
-
-• an ArtworkSeries
-
-An ArtworkSeries is a curatorial body of related individual artworks sharing a coherent thematic, conceptual or visual relationship. Examples may include Yasemi or Ninfas.
-
-When a Collection entry represents an individual Artwork, interaction may open or navigate to that Artwork's individual viewing/detail experience.
-
-When a Collection entry represents an ArtworkSeries, interaction leads to the Series experience, where the visitor can discover the works belonging to that Series and then inspect each Artwork individually.
-
-A Series preview uses a curatorially selected cover Artwork or cover image and must not require every work in the Series to appear directly on the Home page.
-
-Technique alone does not define an ArtworkSeries. Oil, graphite, charcoal and other media remain artwork metadata and may later support Collection filtering or discovery.
-
-Original authorial works, academic studies and master studies may coexist in the broader artwork system but must remain clearly identified by canonical artwork metadata.
-
-No prices are required in the Home collection preview.
+Artwork Archive uses Thumbnail independently when available.
 
 Primary CTA:
 
-View the collection →
-
-The Collection uses the Deep Surface token to create subtle scene
-differentiation without breaking the dark institutional environment.
+View all works →
 
 ------------------------------------------------------------------------
 
-# 19. Scene 05 --- Journal
+# 20. Scene 06 --- Journal
 
 Editorial style.
 
@@ -972,7 +976,7 @@ Interaction remains subtle and subordinate to the content.
 
 ------------------------------------------------------------------------
 
-# 20. Scene 06 --- Invitation
+# 21. Scene 07 --- Invitation
 
 Purpose:
 
@@ -1026,7 +1030,7 @@ section rhythm.
 
 ------------------------------------------------------------------------
 
-# 21. Footer
+# 22. Scene 08 --- Footer
 
 The Footer is the final, quiet closing element of the Home experience.
 
@@ -1165,7 +1169,7 @@ The Footer must preserve generous spacing and remain visually quiet.
 
 ------------------------------------------------------------------------
 
-# 22. Components and Systems
+# 23. Components and Systems
 
 The following list contains both current canonical components and
 approved future systems.
@@ -1211,7 +1215,7 @@ Language Selector
 
 ------------------------------------------------------------------------
 
-# 23. Future Ready
+# 24. Future Ready
 
 This homepage must support future modules without redesign.
 
@@ -1238,7 +1242,7 @@ component.
 
 ------------------------------------------------------------------------
 
-# 24. Architecture Principle
+# 25. Architecture Principle
 
 Every approved Home scene must remain modular and independently
 maintainable.
@@ -1274,7 +1278,7 @@ ParticleField
 
 ------------------------------------------------------------------------
 
-# 25. Current Home Surface Strategy
+# 26. Current Home Surface Strategy
 
 Hero
 
@@ -1294,9 +1298,15 @@ Inherits Primary Background
 
 ↓
 
-Collection
+Featured Collection
 
 Deep Surface
+
+↓
+
+Selected Works
+
+Primary Background
 
 ↓
 
@@ -1324,17 +1334,17 @@ Footer-specific internal rhythm
 
 ------------------------------------------------------------------------
 
-# 26. Golden Rule
+# 27. Golden Rule
 
 **\*\*If any new feature competes with the artwork, the artwork always
 wins.\*\***
 
 ------------------------------------------------------------------------
 
-# 27. Canonical Status
+# 28. Canonical Status
 
 All decisions contained in this document represent the approved Home
-experience as of Version 1.3.
+experience as of Version 1.4.
 
 The canonical Home order is:
 
@@ -1344,13 +1354,15 @@ The canonical Home order is:
 
 03 --- Artist Statement
 
-04 --- Collection
+04 --- Featured Collection
 
-05 --- Journal
+05 --- Selected Works
 
-06 --- Invitation / Newsletter
+06 --- Journal
 
-07 --- Footer
+07 --- Invitation / Newsletter
+
+08 --- Footer
 
 Implemented behavior and approved future direction must remain
 distinguishable.

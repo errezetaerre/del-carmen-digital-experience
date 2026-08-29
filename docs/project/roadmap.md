@@ -1,6 +1,6 @@
 # Project Roadmap
 
-Version: 1.1
+Version: 1.2
 
 Document ID:
 DOC-RM
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-17
+2026-08-26
 
 ---
 
@@ -92,6 +92,8 @@ Artwork Details
 
 Artwork Series
 
+Collection / Series Discovery Experience
+
 Series Detail Experience
 
 Artwork Classification Model
@@ -102,7 +104,7 @@ Artist Page
 
 About
 
-Journal
+Journal Foundation / Preview
 
 Contact
 
@@ -120,7 +122,8 @@ Phase 1 artwork architecture must support:
 • ArtworkSeries as a coherent body of related artworks
 • Curated Home placement independent from Artwork identity
 • Featured Collection entries that may reference either an Artwork or an ArtworkSeries
-• Distinct public image representations such as Primary, Hero Portrait, Hero Landscape and Thumbnail
+• Distinct public image representations such as Primary, Hero Portrait, Hero Landscape, Collection and Thumbnail
+• ArtworkSeries editorial media may exist independently from canonical Artwork media when a real curatorial requirement exists
 • Accessibility metadata, including alt text, for every public artwork image representation
 • Explicit distinction between original authored work and master studies / copies
 • Independent classification dimensions for authorship, creation context, medium, category and series
@@ -284,6 +287,14 @@ Curated Rooms
 Audio Narratives
 
 Special Exhibitions
+
+Immersive Collection Experiences
+
+Spatial Artwork Navigation
+
+Advanced Motion / Depth Interactions
+
+These capabilities describe experiential intent rather than a fixed rendering technology. The implementation technology is selected only when this phase is designed.
 
 ---
 

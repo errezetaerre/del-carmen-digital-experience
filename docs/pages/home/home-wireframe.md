@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Wireframe
 
-Version: 1.3
+Version: 1.4
 
 Document ID:
 
@@ -32,7 +32,7 @@ Del Carmen Digital Experience
 
 Last Updated:
 
-2026-08-17
+2026-08-26
 
 ------------------------------------------------------------------------
 
@@ -131,22 +131,26 @@ or 38/62 when the artwork or editorial hierarchy requires it.
 
   ├── Scene 04
   ---
-  Collection
+  Featured Collection
 
   │
 
   ├── Scene 05
-  --- Journal
+  --- Selected Works
 
   │
 
   ├── Scene 06
-  ---
-  Invitation
+  --- Journal
 
   │
 
-  └── FOOTER
+  ├── Scene 07
+  --- Invitation
+
+  │
+
+  └── Scene 08 --- FOOTER
   ------------
 
 Scene 01
@@ -441,44 +445,54 @@ Portrait and statement stack vertically.
   Scene 04
   ------------------------------------------
 
-  Collection
+  Featured Collection
 
   Purpose:
 
-  Expand from one featured work into the broader artistic universe.
+  Introduce one curated ArtworkSeries as an editorial experience.
 
-  The Home Collection is a curated preview, not the complete artwork archive.
+  Composition:
 
-  A collection entry may represent either:
+  Series editorial content     Featured series image
 
-  • one individual Artwork
+  The preferred image source is `series.images.featured` when available.
 
-  • one ArtworkSeries
+  Fallback:
 
-  When an entry represents an Artwork, opening it leads to that Artwork experience.
+  `coverArtworkId` public representation.
 
-  When an entry represents an ArtworkSeries, opening it leads to the series experience and exposes the works belonging to that series.
+  Dedicated series media never replaces the canonical media of a member Artwork.
 
-  Example:
-
-  Yasemi
-
-  → Yasemi I
-
-  → Yasemi II
-
-  → Yasemi III
-
-  → Yasemi IV
-
-  → Yasemi V
-
-  The preview image is therefore an editorial thumbnail/cover for the selected Artwork or ArtworkSeries; it does not imply that every work in a series must appear directly on Home.
-
-  The Collection CTA leads toward the broader collection/gallery experience.
+  Interaction opens the Series Detail Experience.
 
   ------------------------------------------
   Scene 05
+  ------------------------------------------
+
+  Selected Works
+
+  Purpose:
+
+  Present a curated grid of individual artworks.
+
+  Mobile: 2 columns
+
+  Tablet and above: 4 columns
+
+  Image source:
+
+  `artwork.images.collection` when available
+
+  → otherwise `artwork.images.primary`
+
+  Artwork Archive remains independent and may use `thumbnail`.
+
+  CTA:
+
+  View all works →
+
+  ------------------------------------------
+  Scene 06
 
   Journal
 
@@ -588,7 +602,7 @@ Subtle increase in emphasis only.
 
 ------------------------------------------------------------------------
 
-Scene 06
+Scene 07
 
 Invitation
 
@@ -852,7 +866,7 @@ Component Tree
 Home
 
 ├── Navigation │ ├── Hero │ ├── FeaturedArtwork │ ├── ArtistStatement │
-├── Collection │ ├── JournalPreview │ ├── Invitation │ └── Footer
+├── Collection │ ├── SelectedWorks │ ├── JournalPreview │ ├── Invitation │ └── Footer
 
 The canonical Home order is fixed unless explicitly revised.
 
@@ -905,7 +919,7 @@ src/
 
 └── domains/ └── home/ ├── index.tsx │ └── sections/ ├── hero/ │ ├──
 featured-artwork/ │ ├── artist-statement/ │ ├── collection/ │ ├──
-journal/ │ ├── invitation/ │ └── footer/
+selected-works/ │ ├── journal/ │ ├── invitation/ │ └── footer/
 
 Folder names follow the project rule of lowercase naming.
 
@@ -948,7 +962,7 @@ interface.
 Canonical Status
 
 This document represents the approved spatial and structural
-architecture of the Home page as of Version 1.3.
+architecture of the Home page as of Version 1.4.
 
 Every approved decision becomes part of the living system.
 

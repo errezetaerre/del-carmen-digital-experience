@@ -1,6 +1,6 @@
 Del Carmen Digital Experience
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-MI
@@ -18,13 +18,13 @@ Authority Level:
 High
 
 Status:
-⚪ Draft
+🟢 Approved
 
 Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-07-08
+2026-08-26
 
 
 --
@@ -35,47 +35,49 @@ Identity
 
 ✅ brand-philosophy.md
 
+✅ brand-lexicon.md
+
 ✅ design-tokens.md
+
+✅ visual-language.md
+
+Experience
+
+✅ experience-principles.md
+
+✅ hero-blueprint.md
 
 Project
 
-✅ manifesto.md
+✅ project-manifesto.md
 
-✅ memory.md
+✅ project-memory.md
 
 ✅ roadmap.md
 
-Pages
+Architecture / Technical
+
+✅ repository-structure.md
+
+✅ folder-architecture.md
+
+◻ system-architecture.md — Draft
+
+◻ domain-model.md — In Progress
+
+◻ implementation-roadmap.md — In Progress
+
+✅ artwork-model.md
+
+Home
 
 ✅ home-specification.md
 
 ✅ home-wireframe.md
 
-Components
+◻ home-art-direction.md — Draft
 
-⬜ hero.md
-
-⬜ navigation.md
-
-⬜ footer.md
-
-Database
-
-⬜ schema.md
-
-Prompts
-
-✅ system
-
-⬜ tasks
-
-Implementation
-
-⬜ v0
-
-⬜ next.js
-
-⬜ prisma
+◻ home-moodboard.md — Draft
 
 Frozen Documentation
 
@@ -85,9 +87,11 @@ Frozen Documentation
 
 Current Phase
 
-Sprint
+Phase 1 — MVP
 
-Hero Experience
+Current Focus
+
+Artwork / Collection experience and documentation alignment
 
 Status
 

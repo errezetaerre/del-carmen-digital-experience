@@ -1,6 +1,6 @@
 # Project Memory
 
-Version: 1.1
+Version: 1.2
 
 Document ID:
 DOC-MEN
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-14
+2026-08-26
 
 ---
 
@@ -873,7 +873,8 @@ The following scenes currently constitute the canonical Home:
 - Hero
 - Featured Artwork
 - Artist Statement
-- Collection
+- Featured Collection
+- Selected Works
 - Journal Preview
 - Invitation / Newsletter
 - Footer
@@ -963,4 +964,104 @@ The project contains approved future concepts such as advanced motion and immers
 Impact
 
 All future documentation must explicitly identify planned behavior when implementation has not yet occurred.
+
+---
+
+## Decision 032
+
+Category
+
+Artwork Media Roles
+
+Status
+
+Approved
+
+Date
+
+2026-08-26
+
+Dependencies
+
+- artwork-model.md
+- home-specification.md
+
+Decision
+
+Artwork media roles are context-specific and must not be interchanged implicitly. Primary remains the canonical artwork representation for Artwork Detail. Thumbnail is used for compact archive/gallery discovery when available. Collection is an optional editorial artwork representation used by curated Collection / Selected Works surfaces.
+
+Reasoning
+
+Separating these roles prevents an editorial crop or archive thumbnail from accidentally replacing the canonical artwork image in detail experiences.
+
+Impact
+
+Presentation components must resolve the image role explicitly and use Primary only as the defined fallback.
+
+---
+
+## Decision 033
+
+Category
+
+Artwork Series Media
+
+Status
+
+Approved
+
+Date
+
+2026-08-26
+
+Dependencies
+
+- artwork-model.md
+- home-specification.md
+
+Decision
+
+ArtworkSeries may own dedicated editorial media when a real curatorial requirement exists. The current canonical role is `images.featured`, used by the Home Featured Collection experience. If unavailable, the series may fall back to its `coverArtworkId`.
+
+Reasoning
+
+A series may require an editorial cover composition that is different from the canonical representation of any individual member Artwork.
+
+Impact
+
+Series editorial media remains independent from Artwork Primary, Thumbnail and Collection representations.
+
+---
+
+## Decision 034
+
+Category
+
+Home Architecture
+
+Status
+
+Approved
+
+Date
+
+2026-08-26
+
+Dependencies
+
+- home-specification.md
+- home-wireframe.md
+- roadmap.md
+
+Decision
+
+The canonical Home now contains eight sequential scenes: Hero, Featured Artwork, Artist Statement, Featured Collection, Selected Works, Journal Preview, Invitation / Newsletter and Footer.
+
+Reasoning
+
+Featured Collection and Selected Works serve different curatorial purposes: one introduces a series; the other presents selected individual artworks.
+
+Impact
+
+Future Home documentation and implementation must preserve this distinction unless an explicit Home experience revision is approved.
 

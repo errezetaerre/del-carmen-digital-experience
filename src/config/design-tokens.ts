@@ -4,7 +4,7 @@ export const colors = {
   surfaceDeep: "#090908",
   surfaceIvory: "#F4F1EC",
 
-  text: "#F5F5F5",
+  text: "#f5f5f5ff",
   textMuted: "#A1A1AA",
   textCharcoal: "#2F2E2C",
 
