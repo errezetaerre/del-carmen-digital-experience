@@ -196,7 +196,7 @@ export default function CollectionArtwork({
         aria-label={`View ${artwork.title}`}
       >
         <CollectionArtworkFrame>
-          <div className="relative aspect-[16/9] overflow-hidden bg-black">
+          <div className="relative aspect-[4/5] overflow-hidden bg-black">
             <img
               src={displayImage.src}
               alt={displayImage.alt}

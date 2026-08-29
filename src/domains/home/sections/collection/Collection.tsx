@@ -260,7 +260,7 @@ export default function Collection() {
               <div
                 className="
                   relative
-                  aspect-[16/9]
+                  aspect-[4/5]
                   overflow-hidden
                   bg-black
                   shadow-[0_40px_100px_rgba(0,0,0,0.55)]
