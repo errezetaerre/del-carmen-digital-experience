@@ -16,6 +16,8 @@ export type ArtworkMedium =
 
 export type ArtworkSupport =
   | "canvas"
+  | "tonal paper Strathmore"
+  | "tonal paper Canon"
   | "paper";
 
 export type ArtworkAvailability =

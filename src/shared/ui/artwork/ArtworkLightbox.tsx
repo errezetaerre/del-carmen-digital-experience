@@ -982,13 +982,50 @@ export default function ArtworkLightbox({
                                         : "artwork-swipe-hint-reminder",
                                 ].join(" ")}
                             >
-                                <div className="artwork-swipe-hint-content flex flex-col items-center text-center">
-                                    <span className="font-sans text-[clamp(18px,5vw,34px)] font-light uppercase tracking-[0.30em] text-white/70 drop-shadow-[0_3px_18px_rgba(0,0,0,0.85)]">
+                                <div
+                                    className="
+                                artwork-swipe-hint-content
+                                flex
+                                items-center
+                                gap-5
+                                rounded-full
+                                bg-black/30
+                                px-5
+                                py-3
+                                backdrop-blur-md
+                            "
+                                >
+                                    <span
+                                        className="
+                                font-display
+                                text-lg
+                                text-white/40
+                                "
+                                    >
+                                        ‹
+                                    </span>
+
+                                    <span
+                                        className="
+                                font-sans
+                                text-[9px]
+                                font-medium
+                                uppercase
+                                tracking-[0.3em]
+                                text-white/70
+                                "
+                                    >
                                         Swipe to explore
                                     </span>
-                                    <span className="mt-3 flex w-[150px] items-center justify-between font-display text-4xl font-light text-brand-gold/65">
-                                        <span>‹</span>
-                                        <span>›</span>
+
+                                    <span
+                                        className="
+                                font-display
+                                text-lg
+                                text-white/40
+                                "
+                                    >
+                                        ›
                                     </span>
                                 </div>
                             </div>
