@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function CollectionMotion() {
-    useEffect(() => {
+    useLayoutEffect(() => {
         const section = document.querySelector(
             "[data-featured-collection]",
         );
@@ -57,6 +57,44 @@ export default function CollectionMotion() {
 
                 return;
             }
+
+            /*
+ * Initial visual state.
+ *
+ * Prevents animated elements from being painted
+ * in their final state before GSAP initializes.
+ */
+
+            gsap.set(eyebrow, {
+                autoAlpha: 0,
+                y: 14,
+            });
+
+            gsap.set(title, {
+                autoAlpha: 0,
+                y: 24,
+            });
+
+            gsap.set(description, {
+                autoAlpha: 0,
+                y: 18,
+            });
+
+            gsap.set(metadata, {
+                autoAlpha: 0,
+                y: 14,
+            });
+
+            gsap.set(cta, {
+                autoAlpha: 0,
+                y: 12,
+            });
+
+            gsap.set(visual, {
+                autoAlpha: 0,
+                y: 36,
+                scale: 0.985,
+            });
 
             /*
              * ======================================================

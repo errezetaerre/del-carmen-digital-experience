@@ -273,3 +273,12 @@ body {
     animation: none;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .featured-motion,
+  .artist-statement-motion,
+  .collection-motion {
+    visibility: hidden;
+  }
+}

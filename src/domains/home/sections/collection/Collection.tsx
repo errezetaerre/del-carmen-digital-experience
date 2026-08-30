@@ -133,6 +133,7 @@ export default function Collection() {
               <p
                 data-collection-eyebrow
                 className="
+                  collection-motion
                   mb-5
                   font-sans
                   text-[10px]
@@ -148,6 +149,7 @@ export default function Collection() {
               <h2
                 data-collection-title
                 className="
+                  collection-motion
                   font-display
                   text-4xl
                   font-light
@@ -166,6 +168,7 @@ export default function Collection() {
                 <p
                   data-collection-description
                   className="
+                    collection-motion
                     mt-6
                     max-w-[300px]
                     font-sans
@@ -184,6 +187,7 @@ export default function Collection() {
               <div
                 data-collection-metadata
                 className="
+                  collection-motion
                   mt-7
                   flex
                   flex-wrap
@@ -227,7 +231,7 @@ export default function Collection() {
 
               <div
                 data-collection-cta
-                className="mt-10 w-fit">
+                className="mt-10 w-fit collection-motion">
                 <LinkButton
                   href={`/series/${series.slug}`}
                   variant="bronzeUnderline"
@@ -253,6 +257,7 @@ export default function Collection() {
             href={`/series/${series.slug}`}
             aria-label={`Explore ${series.title} artwork series`}
             className="
+              collection-motion
               group
               relative
               block

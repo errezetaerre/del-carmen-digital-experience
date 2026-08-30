@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ArtistStatementMotion() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const section = document.querySelector(
       "[data-artist-statement]",
     );
@@ -53,6 +53,39 @@ export default function ArtistStatementMotion() {
 
         return;
       }
+
+      /*
+      * Initial visual state.
+      *
+      * Prevents animated elements from being painted
+      * in their final state before GSAP initializes.
+      */
+
+      gsap.set(portrait, {
+        autoAlpha: 0,
+        y: 34,
+        scale: 0.99,
+      });
+
+      gsap.set(title, {
+        autoAlpha: 0,
+        y: 26,
+      });
+
+      gsap.set(paragraphs, {
+        autoAlpha: 0,
+        y: 22,
+      });
+
+      gsap.set(signature, {
+        autoAlpha: 0,
+        y: 18,
+      });
+
+      gsap.set(cta, {
+        autoAlpha: 0,
+        y: 14,
+      });
 
       /*
        * ======================================================

@@ -36,6 +36,7 @@ export default function ArtistStatement() {
           <div
             data-artist-portrait
             className="
+              artist-statement-motion
               relative
               flex
               items-center
@@ -99,6 +100,7 @@ export default function ArtistStatement() {
               data-artist-title
               id="artist-philosophy-title"
               className="
+                artist-statement-motion
                 max-w-2xl
                 font-display
                 text-4xl
@@ -132,12 +134,14 @@ export default function ArtistStatement() {
                 lg:leading-[1.7]
               "
             >
-              <p data-artist-paragraph>
+              <p data-artist-paragraph
+                className="artist-statement-motion">
                 My works are born from a vow with heaven: to capture the
                 beauty that the soul recognizes, but the world has forgotten.
               </p>
 
-              <p data-artist-paragraph>
+              <p data-artist-paragraph
+                className="artist-statement-motion">
                 I paint to awaken consciousness, to remind us that what is
                 essential is not seen, but felt.
               </p>
@@ -145,7 +149,8 @@ export default function ArtistStatement() {
 
             {/* Signature & CTA */}
             <div className="mt-12">
-              <div data-artist-signature>
+              <div data-artist-signature
+                className="artist-statement-motion">
                 <Image
                   src="/images/artist/Rolando_del_Carmen_white_high_res_signature.png"
                   alt="Del Carmen"
@@ -160,7 +165,8 @@ export default function ArtistStatement() {
                 />
               </div>
 
-              <div data-artist-cta>
+              <div data-artist-cta
+                className="artist-statement-motion">
                 <LinkButton
                   href="/collection"
                   variant="bronzeUnderline"

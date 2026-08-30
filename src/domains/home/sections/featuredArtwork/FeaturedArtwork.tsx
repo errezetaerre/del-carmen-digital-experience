@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+//import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -19,7 +20,7 @@ export default function FeaturedArtwork() {
 
   const artwork = getFeaturedWorkArtwork();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const section = sectionRef.current;
 
     if (!section) {
@@ -47,6 +48,46 @@ export default function FeaturedArtwork() {
 
         return;
       }
+
+      /*
+ * Initial visual state.
+ *
+ * useLayoutEffect + gsap.set prevents the browser from
+ * painting the final state before GSAP initializes.
+ */
+
+      gsap.set(
+        "[data-featured-eyebrow]",
+        {
+          autoAlpha: 0,
+          y: 14,
+        },
+      );
+
+      gsap.set(
+        "[data-featured-title]",
+        {
+          autoAlpha: 0,
+          y: 24,
+        },
+      );
+
+      gsap.set(
+        "[data-featured-artwork]",
+        {
+          autoAlpha: 0,
+          y: 40,
+          scale: 0.885,
+        },
+      );
+
+      gsap.set(
+        "[data-featured-info]",
+        {
+          autoAlpha: 0,
+          y: 24,
+        },
+      );
 
       /*
       * ============================================================
@@ -261,6 +302,7 @@ export default function FeaturedArtwork() {
           <p
             data-featured-eyebrow
             className="
+              featured-motion
               mb-4
               font-sans
               text-[10px]
@@ -278,6 +320,7 @@ export default function FeaturedArtwork() {
           <h2
             data-featured-title
             className="
+              featured-motion
               font-display
               text-4xl
               font-light
@@ -303,10 +346,12 @@ export default function FeaturedArtwork() {
             items-center
           "
         >
-          <div data-featured-artwork>
+          <div data-featured-artwork
+            className="featured-motion">
             <ArtworkFrame
               aspectRatio={`${artwork.dimensions.width} / ${artwork.dimensions.height}`}
               className="
+                
                 mb-10
                 w-[min(82vw,380px)]
 
@@ -328,7 +373,10 @@ export default function FeaturedArtwork() {
                   (min-width: 768px) 500px,
                   82vw
                 "
-                className="object-contain"
+                className="
+                  
+                  object-contain
+                "
               />
             </ArtworkFrame>
           </div>
@@ -337,6 +385,7 @@ export default function FeaturedArtwork() {
           <div
             data-featured-info
             className="
+              featured-motion
               flex
               max-w-xl
               flex-col
