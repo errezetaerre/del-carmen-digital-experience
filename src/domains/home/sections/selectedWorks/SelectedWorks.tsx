@@ -5,6 +5,7 @@ import {
 import { Container } from "@/shared/layout";
 
 import CollectionGallery from "../collection/CollectionGallery";
+import SelectedWorksMotion from "./SelectedWorksMotion";
 
 export default function SelectedWorks() {
     const artworks =
@@ -16,15 +17,17 @@ export default function SelectedWorks() {
 
     return (
         <section
+            data-selected-works
             className="
-        relative
-        overflow-hidden
-        bg-background-alternate
-        text-white
-      "
+                relative
+                overflow-hidden
+                bg-background-alternate
+                text-white
+            "
         >
+            <SelectedWorksMotion />
+
             <Container
-                size="wide"
                 className="
           py-24
 
@@ -41,29 +44,31 @@ export default function SelectedWorks() {
 
                 <div
                     className="
-            mb-14
-            max-w-xl
+                        mb-14
+                        max-w-xl
 
-            md:mb-16
+                        md:mb-16
 
-            lg:mb-20
-          "
+                        lg:mb-20
+                    "
                 >
                     <p
+                        data-selected-eyebrow
                         className="
-              mb-5
-              font-sans
-              text-[10px]
-              font-medium
-              uppercase
-              tracking-[0.38em]
-              text-brand-gold
-            "
+                            mb-5
+                            font-sans
+                            text-[10px]
+                            font-medium
+                            uppercase
+                            tracking-[0.38em]
+                            text-brand-gold
+                            "
                     >
                         Selected Works
                     </p>
 
                     <h2
+                        data-selected-title
                         className="
               font-display
               text-4xl
@@ -82,6 +87,7 @@ export default function SelectedWorks() {
                     </h2>
 
                     <p
+                        data-selected-description
                         className="
               mt-6
               max-w-md
@@ -110,28 +116,29 @@ export default function SelectedWorks() {
                 />
 
                 <div
+                    data-selected-cta
                     className="
-    mt-16
-    flex
-    justify-center
+            mt-16
+            flex
+            justify-center
 
-    md:mt-20
-  "
+            md:mt-20
+          "
                 >
                     <a
                         href="/artworks"
                         className="
-      font-sans
-      text-xs
-      font-medium
-      uppercase
-      tracking-[0.28em]
-      text-brand-gold
-      transition-opacity
-      duration-300
+              font-sans
+              text-xs
+              font-medium
+              uppercase
+              tracking-[0.28em]
+              text-brand-gold
+              transition-opacity
+              duration-300
 
-      hover:opacity-70
-    "
+              hover:opacity-70
+            "
                     >
                         View all works →
                     </a>

@@ -3,9 +3,12 @@ import Image from "next/image";
 import { Container } from "@/shared/layout";
 import LinkButton from "@/shared/ui/button/LinkButton";
 
+import ArtistStatementMotion from "./ArtistStatementMotion";
+
 export default function ArtistStatement() {
   return (
     <section
+      data-artist-statement
       aria-labelledby="artist-philosophy-title"
       className="
         relative
@@ -15,6 +18,8 @@ export default function ArtistStatement() {
         lg:pb-[14px]
       "
     >
+      <ArtistStatementMotion />
+
       <Container>
         <div
           className="
@@ -29,6 +34,7 @@ export default function ArtistStatement() {
         >
           {/* Artist Portrait */}
           <div
+            data-artist-portrait
             className="
               relative
               flex
@@ -90,6 +96,7 @@ export default function ArtistStatement() {
           >
             {/* Heading */}
             <h2
+              data-artist-title
               id="artist-philosophy-title"
               className="
                 max-w-2xl
@@ -125,12 +132,12 @@ export default function ArtistStatement() {
                 lg:leading-[1.7]
               "
             >
-              <p>
+              <p data-artist-paragraph>
                 My works are born from a vow with heaven: to capture the
                 beauty that the soul recognizes, but the world has forgotten.
               </p>
 
-              <p>
+              <p data-artist-paragraph>
                 I paint to awaken consciousness, to remind us that what is
                 essential is not seen, but felt.
               </p>
@@ -138,31 +145,35 @@ export default function ArtistStatement() {
 
             {/* Signature & CTA */}
             <div className="mt-12">
-              <Image
-                src="/images/artist/Rolando_del_Carmen_white_high_res_signature.png"
-                alt="Del Carmen"
-                width={220}
-                height={60}
-                className="
-                  h-auto
-                  w-[200px]
-                  object-contain
-                  object-left
-                "
-              />
+              <div data-artist-signature>
+                <Image
+                  src="/images/artist/Rolando_del_Carmen_white_high_res_signature.png"
+                  alt="Del Carmen"
+                  width={220}
+                  height={60}
+                  className="
+                    h-auto
+                    w-[200px]
+                    object-contain
+                    object-left
+                  "
+                />
+              </div>
 
-              <LinkButton
-                href="/collection"
-                variant="bronzeUnderline"
-                className="
-                  mt-10
-                  font-sans
-                  text-xs
-                  tracking-[0.28em]
-                "
-              >
-                Discover my story →
-              </LinkButton>
+              <div data-artist-cta>
+                <LinkButton
+                  href="/collection"
+                  variant="bronzeUnderline"
+                  className="
+                    mt-10
+                    font-sans
+                    text-xs
+                    tracking-[0.28em]
+                  "
+                >
+                  Discover my story →
+                </LinkButton>
+              </div>
             </div>
           </div>
         </div>

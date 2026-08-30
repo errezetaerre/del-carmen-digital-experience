@@ -1,6 +1,8 @@
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
 
+import JournalPreviewMotion from "./JournalPreviewMotion";
+
 type JournalEntry = {
   category: string;
   date: string;
@@ -44,6 +46,8 @@ export default function JournalPreview() {
   return (
     <section
       id="journal"
+      data-journal-preview
+
       className="
         relative
         overflow-hidden
@@ -52,6 +56,7 @@ export default function JournalPreview() {
         text-white
       "
     >
+      <JournalPreviewMotion />
       <Container>
         {/* Section heading */}
         <div
@@ -63,6 +68,8 @@ export default function JournalPreview() {
           "
         >
           <p
+            data-journal-eyebrow
+
             className="
               mb-5
               font-sans
@@ -77,6 +84,8 @@ export default function JournalPreview() {
           </p>
 
           <h2
+            data-journal-title
+
             className="
               font-display
               text-4xl
@@ -107,6 +116,8 @@ export default function JournalPreview() {
         >
           {JOURNAL_ENTRIES.map((entry, index) => (
             <article
+              data-journal-entry
+
               key={entry.title}
               className={[
                 "group grid items-center gap-10",
@@ -117,6 +128,8 @@ export default function JournalPreview() {
             >
               {/* Image */}
               <div
+                data-journal-image
+
                 className={[
                   "overflow-hidden",
                   index % 2 === 0
@@ -150,6 +163,7 @@ export default function JournalPreview() {
                     ? "lg:order-2"
                     : "lg:order-1",
                 ].join(" ")}
+                data-journal-heading
               >
                 {/* Metadata */}
                 <div
@@ -189,34 +203,38 @@ export default function JournalPreview() {
                 </h3>
 
                 {/* Excerpt */}
-                <p
-                  className="
-                    mt-6
-                    font-sans
-                    text-base
-                    font-light
-                    leading-[1.8]
-                    tracking-[0.01em]
-                    text-white/55
-                    md:text-lg
-                  "
-                >
-                  {entry.excerpt}
-                </p>
+                <div data-journal-copy>
+                  <p
+                    className="
+                      mt-6
+                      font-sans
+                      text-base
+                      font-light
+                      leading-[1.8]
+                      tracking-[0.01em]
+                      text-white/55
+                      md:text-lg
+                    "
+                  >
+                    {entry.excerpt}
+                  </p>
+                </div>
 
                 {/* CTA */}
-                <LinkButton
-                  href={entry.href}
-                  variant="bronzeUnderline"
-                  className="
-                    mt-10
-                    font-sans
-                    text-xs
-                    tracking-[0.28em]
-                  "
-                >
-                  Read Journal →
-                </LinkButton>
+                <div data-journal-cta>
+                  <LinkButton
+                    href={entry.href}
+                    variant="bronzeUnderline"
+                    className="
+                      mt-10
+                      font-sans
+                      text-xs
+                      tracking-[0.28em]
+                    "
+                  >
+                    Read Journal →
+                  </LinkButton>
+                </div>
               </div>
             </article>
           ))}

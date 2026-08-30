@@ -7,6 +7,8 @@ import {
 } from "@/domains/navigation/constants";
 import { Container } from "@/shared/layout";
 
+import FooterMotion from "./FooterMotion";
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -17,9 +19,12 @@ export default function Footer() {
     "flex h-6 w-6 items-center justify-center text-white/45 transition-all duration-500 hover:text-brand-gold hover:drop-shadow-[0_0_8px_rgba(201,163,90,0.45)]";
 
   return (
-    <footer className="relative bg-background text-white">
+    <footer
+      data-footer
+      className="relative bg-background text-white">
       {/* Closing line */}
       <div
+        data-footer-line
         aria-hidden="true"
         className="
           h-px
@@ -30,7 +35,7 @@ export default function Footer() {
           to-transparent
         "
       />
-
+      <FooterMotion />
       <Container
         className="
           py-20
@@ -56,7 +61,9 @@ export default function Footer() {
           "
         >
           {/* Left — Identity & Navigation */}
-          <div className="flex flex-col">
+          <div
+            data-footer-identity
+            className="flex flex-col">
             {/* Brand */}
             <Link
               href="/"
@@ -109,6 +116,7 @@ export default function Footer() {
 
           {/* Right — Artist / Social / Language / Legal */}
           <div
+            data-footer-secondary
             className="
               flex
               flex-col
@@ -165,7 +173,9 @@ export default function Footer() {
                 {/* Instagram */}
                 <li>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/errezetaerre"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Instagram"
                     className={socialLinkStyles}
                   >
@@ -184,7 +194,9 @@ export default function Footer() {
                 {/* Facebook */}
                 <li>
                   <a
-                    href="#"
+                    href="https://www.facebook.com/errezetaerre"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Facebook"
                     className={socialLinkStyles}
                   >
@@ -203,7 +215,9 @@ export default function Footer() {
                 {/* YouTube */}
                 <li>
                   <a
-                    href="#"
+                    href="https://www.youtube.com/@errezetaerre"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="YouTube"
                     className={socialLinkStyles}
                   >
@@ -291,6 +305,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div
+          data-footer-copyright
           className="
             mt-20
             border-t

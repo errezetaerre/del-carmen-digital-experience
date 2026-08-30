@@ -18,7 +18,7 @@ export const homeCuration: HomeCuration = {
         "epifania_nupcial",
         "el_misionero",
         "perro_de_dani",
-        "el_cordero",
+        "el_carnero",
         "el_baul_de_los_tesoros",
         "sendero_del_sol",
         "rosa_rojita"

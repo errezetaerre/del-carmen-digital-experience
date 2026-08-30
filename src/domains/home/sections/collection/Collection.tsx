@@ -7,7 +7,10 @@ import {
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
 
+import CollectionMotion from "./CollectionMotion";
+
 export default function Collection() {
+
   const featuredCollection =
     getFeaturedCollection();
 
@@ -37,6 +40,7 @@ export default function Collection() {
 
   return (
     <section
+      data-featured-collection
       className="
         relative
         overflow-hidden
@@ -44,6 +48,7 @@ export default function Collection() {
         text-white
       "
     >
+      <CollectionMotion />
       {/* =====================================================
             TOP SEPARATOR
           ===================================================== */}
@@ -89,7 +94,7 @@ export default function Collection() {
       />
 
       <Container
-        size="wide"
+        // size="wide"
         className="
           py-24
 
@@ -126,6 +131,7 @@ export default function Collection() {
               "
             >
               <p
+                data-collection-eyebrow
                 className="
                   mb-5
                   font-sans
@@ -140,6 +146,7 @@ export default function Collection() {
               </p>
 
               <h2
+                data-collection-title
                 className="
                   font-display
                   text-4xl
@@ -157,6 +164,7 @@ export default function Collection() {
 
               {series.description && (
                 <p
+                  data-collection-description
                   className="
                     mt-6
                     max-w-[300px]
@@ -174,6 +182,7 @@ export default function Collection() {
               )}
 
               <div
+                data-collection-metadata
                 className="
                   mt-7
                   flex
@@ -216,7 +225,9 @@ export default function Collection() {
                 </span>
               </div>
 
-              <div className="mt-10 w-fit">
+              <div
+                data-collection-cta
+                className="mt-10 w-fit">
                 <LinkButton
                   href={`/series/${series.slug}`}
                   variant="bronzeUnderline"
@@ -238,6 +249,7 @@ export default function Collection() {
              ================================================= */}
 
           <Link
+            data-collection-visual
             href={`/series/${series.slug}`}
             aria-label={`Explore ${series.title} artwork series`}
             className="

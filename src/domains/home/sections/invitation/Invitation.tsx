@@ -1,10 +1,12 @@
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
+import InvitationMotion from "./InvitationMotion";
 
 export default function Invitation() {
   return (
     <section
       id="invitation"
+      data-invitation
       className="
         relative
         overflow-hidden
@@ -13,6 +15,7 @@ export default function Invitation() {
         text-white
       "
     >
+      <InvitationMotion />
       <Container>
         <div
           className="
@@ -27,6 +30,7 @@ export default function Invitation() {
         >
           {/* Closing statement */}
           <p
+            data-invitation-brand
             className="
               font-sans
               text-xs
@@ -40,6 +44,7 @@ export default function Invitation() {
           </p>
 
           <h2
+            data-invitation-statement
             className="
               mt-8
               font-display
@@ -58,6 +63,7 @@ export default function Invitation() {
           </h2>
 
           <p
+            data-invitation-journey
             className="
               mt-6
               font-display
@@ -76,7 +82,9 @@ export default function Invitation() {
           </p>
 
           {/* Newsletter */}
-          <div className="mt-16 max-w-2xl md:mt-20">
+          <div
+            data-invitation-newsletter
+            className="mt-16 max-w-2xl md:mt-20">
             <p
               className="
                 font-sans
@@ -110,6 +118,7 @@ export default function Invitation() {
 
           {/* Actions */}
           <div
+            data-invitation-actions
             className="
               mt-10
               flex
