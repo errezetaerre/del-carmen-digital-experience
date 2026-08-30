@@ -700,9 +700,9 @@ export const artworks: Artwork[] = [
     },
   },
   {
-    id: "busto_de_bevedere",
+    id: "la_chercheuse",
 
-    slug: "busto_de_bevedere",
+    slug: "la_chercheuse",
 
     title: "Busto de Bevedere - Chercheuse",
 
@@ -733,7 +733,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/busto_de_bevedere.png",
+        src: "/artworks/la_chercheuse.png",
         alt: "Busto de Bevedere - Chercheuse by Rolando Del Carmen",
         width: 3072,
         height: 4096,
@@ -1447,7 +1447,7 @@ export const artworks: Artwork[] = [
 
     slug: "torso_de_bevedere",
 
-    title: "Torso de Bevedere",
+    title: "Le Torse du Belvédère",
 
     year: 2018,
 
