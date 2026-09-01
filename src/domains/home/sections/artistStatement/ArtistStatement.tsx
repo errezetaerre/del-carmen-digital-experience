@@ -168,7 +168,7 @@ export default function ArtistStatement() {
               <div data-artist-cta
                 className="artist-statement-motion">
                 <LinkButton
-                  href="/collection"
+                  href="/artist"
                   variant="bronzeUnderline"
                   className="
                     mt-10

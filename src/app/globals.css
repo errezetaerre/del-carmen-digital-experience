@@ -278,7 +278,12 @@ body {
 
   .featured-motion,
   .artist-statement-motion,
-  .collection-motion {
+  .collection-motion,
+  .artist-hero-motion,
+  .the-artist-motion,
+  .artist-philosophy-motion,
+  .practice-motion,
+  .journey-motion {
     visibility: hidden;
   }
 }

@@ -5,7 +5,7 @@ import ArtistStatement from "./sections/artistStatement";
 import SelectedWorks from "./sections/selectedWorks";
 import JournalPreview from "./sections/journal";
 import Invitation from "./sections/invitation";
-import Footer from "./sections/footer";
+import Footer from "@/shared/layout/footer";
 
 export default function Home() {
   return (

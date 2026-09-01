@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   useEffect,
   useRef,
@@ -16,6 +15,13 @@ import {
 
 import { ParticleField } from "@/shared/ui/particle-field";
 
+import {
+  usePathname,
+  useRouter,
+} from "next/navigation";
+
+import { isNavigationItemActive } from "../utils/isNavigationItemActive";
+
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,6 +32,25 @@ export default function MobileMenu({
   onClose,
 }: MobileMenuProps) {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const currentNavigationHref =
+    pathname === "/artist" ||
+      pathname.startsWith("/artist/")
+      ? "/about"
+      : NAVIGATION_ITEMS.find(
+        (item) =>
+          pathname === item.href ||
+          (
+            item.href !== "/" &&
+            pathname.startsWith(`${item.href}/`)
+          ),
+      )?.href ?? null;
+
+
+
+  const currentItemRef =
+    useRef<HTMLAnchorElement | null>(null);
 
   const [activeItem, setActiveItem] =
     useState<string | null>(null);
@@ -97,7 +122,9 @@ export default function MobileMenu({
       getNavigationItemAtPoint(x, y);
 
     if (!item) {
-      activeItemRef.current = null;
+      activeItemRef.current =
+        currentItemRef.current;
+
       setActiveItem(null);
 
       return null;
@@ -192,7 +219,9 @@ export default function MobileMenu({
     pointerRef.current.active = false;
 
     setActiveItem(null);
-    activeItemRef.current = null;
+
+    activeItemRef.current =
+      currentItemRef.current;
   };
 
   if (!isOpen) {
@@ -217,7 +246,7 @@ export default function MobileMenu({
       {/* Particle atmosphere */}
       <ParticleField
         targetRef={activeItemRef}
-        active={Boolean(activeItem)}
+        active={Boolean(activeItem || currentNavigationHref)}
         pointerRef={pointerRef}
         particleCount={65}
       />
@@ -304,13 +333,36 @@ export default function MobileMenu({
             "
           >
             {NAVIGATION_ITEMS.map((item) => {
+              const isArtistRoute =
+                pathname === "/artist" ||
+                pathname.startsWith("/artist/");
+
+              const isCurrentRoute =
+                isNavigationItemActive(
+                  pathname,
+                  item.href,
+                );
+
+
               const isActive =
                 activeItem === item.href;
+
+              const isHighlighted =
+                isActive || isCurrentRoute;
+
+              // isActive
+              //   ? "bg-black text-brand-gold"
+              //   : isCurrentRoute
+              //     ? "bg-transparent text-brand-gold"
+              //     : "bg-transparent text-white/85",
 
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    aria-current={
+                      isCurrentRoute ? "page" : undefined
+                    }
                     onClick={(event) => {
                       /*
                        * Touch navigation is confirmed
@@ -326,9 +378,14 @@ export default function MobileMenu({
                       onClose();
                     }}
                     ref={(element) => {
-                      if (isActive) {
-                        activeItemRef.current =
-                          element;
+                      if (!element) return;
+
+                      if (isCurrentRoute) {
+                        currentItemRef.current = element;
+                      }
+
+                      if (isActive || (!activeItem && isCurrentRoute)) {
+                        activeItemRef.current = element;
                       }
                     }}
                     onPointerEnter={(event) => {
@@ -385,12 +442,14 @@ export default function MobileMenu({
                         [@media(orientation:landscape)_and_(max-height:600px)]:py-1
                         [@media(orientation:landscape)_and_(max-height:600px)]:text-2xl
                       `,
-                      isActive
+                      isHighlighted
                         ? "bg-black text-brand-gold"
                         : "bg-transparent text-white/85",
                     ].join(" ")}
+
                   >
                     {item.label}
+
                   </Link>
                 </li>
               );

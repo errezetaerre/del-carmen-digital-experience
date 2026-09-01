@@ -12,6 +12,7 @@ import {
   NAVIGATION_ITEMS,
 } from "../constants";
 import MobileMenu from "./MobileMenu";
+import { isNavigationItemActive } from "../utils/isNavigationItemActive";
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -53,12 +54,9 @@ export default function Navigation() {
             <ul className="flex items-center gap-12">
               {NAVIGATION_ITEMS.map((item) => {
                 const isActive =
-                  pathname === item.href ||
-                  (
-                    item.href !== "/" &&
-                    pathname.startsWith(
-                      `${item.href}/`,
-                    )
+                  isNavigationItemActive(
+                    pathname,
+                    item.href,
                   );
 
                 return (
@@ -67,13 +65,13 @@ export default function Navigation() {
                       <span
                         aria-current="page"
                         className="
-                            cursor-default
-                            text-sm
-                            font-medium
-                            uppercase
-                            tracking-[0.12em]
-                            text-brand-gold
-                          "
+                          cursor-default
+                          text-sm
+                          font-medium
+                          uppercase
+                          tracking-[0.12em]
+                          text-brand-gold
+                        "
                       >
                         {item.label}
                       </span>

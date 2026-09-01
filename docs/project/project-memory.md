@@ -1,44 +1,54 @@
 # Project Memory
 
-Version: 1.2
+Version: 1.4
 
 Document ID:
+
 DOC-MEN
 
 Project:
+
 Del Carmen Digital Experience
 
 Parent Brand:
-R≈ç Visual
+
+Rō Visual
 
 Document Type:
+
 Governance
 
 Authority Level:
+
 Highest
 
 Status:
-üü¢ Approved
+
+🟢 Approved
 
 Owner:
+
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-26
 
----
+2026-09-01
+
+------------------------------------------------------------------------
 
 # Purpose
 
-This document is the single source of truth for all approved project decisions.
+This document is the single source of truth for all approved project
+decisions.
 
 It records only finalized decisions.
 
 Ideas and proposals are intentionally excluded.
 
-Every AI assistant, designer and developer must consult this document before generating code, interfaces or documentation.
+Every AI assistant, designer and developer must consult this document
+before generating code, interfaces or documentation.
 
----
+------------------------------------------------------------------------
 
 ## Decision 001
 
@@ -54,8 +64,7 @@ Del Carmen Digital Experience
 
 Status
 
-Superseded by Decision 022
----
+## Superseded by Decision 022
 
 ## Decision 002
 
@@ -73,7 +82,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 003
 
@@ -91,7 +100,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 004
 
@@ -107,7 +116,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 005
 
@@ -125,7 +134,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 006
 
@@ -141,7 +150,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 007
 
@@ -157,7 +166,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 008
 
@@ -175,7 +184,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 009
 
@@ -193,7 +202,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 010
 
@@ -217,7 +226,7 @@ Status
 
 Superseded by Decision 023
 
----
+------------------------------------------------------------------------
 
 ## Decision 011
 
@@ -233,7 +242,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 012
 
@@ -251,7 +260,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 013
 
@@ -265,13 +274,14 @@ The canonical technology stack is governed by tech-stack.md.
 
 The project currently uses:
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Vercel
+-   Next.js
+-   React
+-   TypeScript
+-   Tailwind CSS
+-   Vercel
 
-Future infrastructure and platform technologies are introduced according to the approved roadmap and architecture documents.
+Future infrastructure and platform technologies are introduced according
+to the approved roadmap and architecture documents.
 
 Motion technology is governed separately by Decision 024.
 
@@ -279,7 +289,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 014
 
@@ -297,7 +307,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 015
 
@@ -315,7 +325,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 016
 
@@ -325,13 +335,14 @@ Methodology
 
 Decision
 
-Every approved document becomes immutable unless a strategic decision requires revision.
+Every approved document becomes immutable unless a strategic decision
+requires revision.
 
 Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 017
 
@@ -359,7 +370,7 @@ Status
 
 Approved
 
----
+------------------------------------------------------------------------
 
 ## Decision 018
 
@@ -377,123 +388,88 @@ Status
 
 Approved
 
----
-## Decision 019
+  ---------------------
+  \## Decision 019
+  ---------------------
+  \## Decision 020
 
-Category
+  Category
 
-Brand Ecosystem
+  Documentation
 
-Status
+  Status
 
-Approved
+  Approved
 
-Date
+  Decision
 
-2026-07-08
+  Each core concept
+  must have a single
+  source of truth.
 
-Dependencies
+  Documents must
+  reference each other
+  instead of
+  duplicating content.
 
-- brand-philosophy.md
-- project-manifesto.md
-- roadmap.md
+  The Brand Philosophy
+  is the highest-level
+  document for all
+  identity-related
+  decisions.
 
-Decision
+  Every identity
+  document must inherit
+  from it.
 
-R≈ç Visual is the parent creative brand.
+  Reasoning
 
-Del Carmen is the fine art ecosystem.
+  A single source of
+  truth prevents
+  inconsistencies,
+  simplifies
+  maintenance and
+  ensures that AI
+  assistants, designers
+  and developers always
+  work from the same
+  foundation.
 
-R≈ç Visual Lab is the digital innovation studio.
+  Impact
 
-The Del Carmen ecosystem includes:
+  No future document
+  may redefine the
+  brand philosophy.
 
-- Art Collection
-- Digital Experience
-- Virtual Museum
-- Journal
-- Collector Circle
-- Online Academy
-- Marketplace
-- Digital Exhibitions
-- Immersive Experiences
-- Archive
+  Changes to the brand
+  must be made only in
+  brand-philosophy.md
+  and then inherited by
+  the rest of the
+  documentation.
 
-The R≈ç Visual Lab ecosystem includes:
+  No new division
+  should be created
+  without updating the
+  Brand Ecosystem.
+  ---------------------
 
-- Web Development
-- Creative Technology
-- Motion Design
-- Artificial Intelligence
-- Digital Innovation
+Decision 021 Category Code Convention Status Approved Decision The
+project follows the following naming conventions: ‚Ä¢ Folders use
+lowercase. ‚Ä¢ React Components use PascalCase. ‚Ä¢ TypeScript
+interfaces and types use PascalCase. ‚Ä¢ Utility files (index.ts,
+types.ts, constants.ts, helpers.ts, etc.) use lowercase. ‚Ä¢ Each
+reusable component follows the same internal structure: component-name/
+ComponentName.tsx types.ts index.ts
 
-Reasoning
+Reasoning A single naming convention improves consistency, readability
+and maintainability across the entire codebase while reducing ambiguity
+during development.
 
-The project requires a scalable brand architecture capable of growing over many years without losing coherence. Separating the artistic ecosystem from the technology studio allows each division to evolve independently while remaining part of the same creative vision.
+Impact All future folders, components and modules must follow this
+convention unless an architectural decision explicitly states otherwise.
 
-Impact
-
-All future products, services and digital platforms must belong to one of these ecosystems.
-
----
-## Decision 020
-
-Category
-
-Documentation
-
-Status
-
-Approved
-
-Decision
-
-Each core concept must have a single source of truth.
-
-Documents must reference each other instead of duplicating content.
-
-The Brand Philosophy is the highest-level document for all identity-related decisions.
-
-Every identity document must inherit from it.
-
-Reasoning
-
-A single source of truth prevents inconsistencies, simplifies maintenance and ensures that AI assistants, designers and developers always work from the same foundation.
-
-Impact
-
-No future document may redefine the brand philosophy.
-
-Changes to the brand must be made only in brand-philosophy.md and then inherited by the rest of the documentation.
-
-No new division should be created without updating the Brand Ecosystem.
-
----
-
-Decision 021
-Category
-Code Convention
-Status
-Approved
-Decision
-The project follows the following naming conventions:
-‚Ä¢	Folders use lowercase. 
-‚Ä¢	React Components use PascalCase. 
-‚Ä¢	TypeScript interfaces and types use PascalCase. 
-‚Ä¢	Utility files (index.ts, types.ts, constants.ts, helpers.ts, etc.) use lowercase. 
-‚Ä¢	Each reusable component follows the same internal structure: 
-component-name/
-ComponentName.tsx
-types.ts
-index.ts
-
-Reasoning
-A single naming convention improves consistency, readability and maintainability across the entire codebase while reducing ambiguity during development.
-
-Impact
-All future folders, components and modules must follow this convention unless an architectural decision explicitly states otherwise.
-
----
+------------------------------------------------------------------------
 
 ## Decision 022
 
@@ -511,10 +487,10 @@ Date
 
 Dependencies
 
-- design-tokens.md
-- visual-language.md
-- home-specification.md
-- home-wireframe.md
+-   design-tokens.md
+-   visual-language.md
+-   home-specification.md
+-   home-wireframe.md
 
 Decision
 
@@ -522,31 +498,35 @@ Space is an intentional compositional material.
 
 Large whitespace is not mandatory.
 
-The experience must breathe without creating excessive or arbitrary separation between scenes.
+The experience must breathe without creating excessive or arbitrary
+separation between scenes.
 
 The canonical semantic vertical rhythm is:
 
-- Compact
-- Default
-- Generous
+-   Compact
+-   Default
+-   Generous
 
 Exact values are governed by design-tokens.md.
 
-Scene-specific spacing may remain local when required by an approved artistic composition.
+Scene-specific spacing may remain local when required by an approved
+artistic composition.
 
 Reasoning
 
-The Home implementation demonstrated that excessive vertical spacing can interrupt narrative continuity.
+The Home implementation demonstrated that excessive vertical spacing can
+interrupt narrative continuity.
 
 The objective is contemplation, not emptiness.
 
 Impact
 
-Future sections must use intentional spatial rhythm rather than automatically applying large whitespace.
+Future sections must use intentional spatial rhythm rather than
+automatically applying large whitespace.
 
 This decision supersedes Decision 009.
 
----
+------------------------------------------------------------------------
 
 ## Decision 023
 
@@ -564,21 +544,22 @@ Date
 
 Dependencies
 
-- design-tokens.md
-- visual-language.md
+-   design-tokens.md
+-   visual-language.md
 
 Decision
 
-The current Del Carmen Digital Experience uses a predominantly dark institutional environment.
+The current Del Carmen Digital Experience uses a predominantly dark
+institutional environment.
 
 The canonical visual hierarchy includes:
 
-- Deep neutral backgrounds
-- Soft white primary text
-- Muted secondary text
-- Primary Gold for selected visual focal points
-- Muted Bronze for interaction and secondary emphasis
-- Smoke Ivory as an available light editorial surface
+-   Deep neutral backgrounds
+-   Soft white primary text
+-   Muted secondary text
+-   Primary Gold for selected visual focal points
+-   Muted Bronze for interaction and secondary emphasis
+-   Smoke Ivory as an available light editorial surface
 
 The exact canonical values are governed exclusively by design-tokens.md.
 
@@ -586,17 +567,20 @@ The artwork remains the most colorful visual element whenever possible.
 
 Reasoning
 
-The implemented Home established darkness as a primary visual material that creates silence, depth and visual support around the artwork.
+The implemented Home established darkness as a primary visual material
+that creates silence, depth and visual support around the artwork.
 
-Smoke Ivory remains part of the broader system but no longer defines the primary Home environment.
+Smoke Ivory remains part of the broader system but no longer defines the
+primary Home environment.
 
 Impact
 
-Future Home scenes must inherit the established dark visual environment unless an explicitly approved composition requires a light surface.
+Future Home scenes must inherit the established dark visual environment
+unless an explicitly approved composition requires a light surface.
 
 This decision supersedes Decision 010.
 
----
+------------------------------------------------------------------------
 
 ## Decision 024
 
@@ -614,17 +598,19 @@ Date
 
 Dependencies
 
-- tech-stack.md
-- design-tokens.md
-- visual-language.md
+-   tech-stack.md
+-   design-tokens.md
+-   visual-language.md
 
 Decision
 
-GSAP is the approved motion technology for advanced artistic and immersive motion in Del Carmen Digital Experience.
+GSAP is the approved motion technology for advanced artistic and
+immersive motion in Del Carmen Digital Experience.
 
 Motion must remain subordinate to the artwork.
 
-Advanced motion is introduced only when required by an approved experience.
+Advanced motion is introduced only when required by an approved
+experience.
 
 Motion infrastructure must not be created prematurely.
 
@@ -632,15 +618,18 @@ Reduced-motion accessibility is mandatory.
 
 Reasoning
 
-The project requires a motion system capable of supporting future atmospheric, scroll-based and immersive experiences while preserving precise artistic control.
+The project requires a motion system capable of supporting future
+atmospheric, scroll-based and immersive experiences while preserving
+precise artistic control.
 
 Impact
 
 Framer Motion is not the canonical motion technology for the project.
 
-Future advanced motion implementation should use GSAP unless an explicit architectural decision revises this choice.
+Future advanced motion implementation should use GSAP unless an explicit
+architectural decision revises this choice.
 
----
+------------------------------------------------------------------------
 
 ## Decision 025
 
@@ -658,8 +647,8 @@ Date
 
 Dependencies
 
-- design-tokens.md
-- visual-language.md
+-   design-tokens.md
+-   visual-language.md
 
 Decision
 
@@ -671,7 +660,8 @@ for display, editorial and expressive artistic language.
 
 Geist
 
-for body copy, navigation, metadata, labels, buttons and interface language.
+for body copy, navigation, metadata, labels, buttons and interface
+language.
 
 Geist Mono
 
@@ -679,13 +669,15 @@ is reserved for technical contexts when required.
 
 Reasoning
 
-The combination creates a deliberate contrast between classical artistic expression and contemporary digital clarity.
+The combination creates a deliberate contrast between classical artistic
+expression and contemporary digital clarity.
 
 Impact
 
-Future interface typography must inherit this hierarchy unless an explicit visual-language revision is approved.
+Future interface typography must inherit this hierarchy unless an
+explicit visual-language revision is approved.
 
----
+------------------------------------------------------------------------
 
 ## Decision 026
 
@@ -703,13 +695,14 @@ Date
 
 Dependencies
 
-- design-tokens.md
-- repository-structure.md
-- home-wireframe.md
+-   design-tokens.md
+-   repository-structure.md
+-   home-wireframe.md
 
 Decision
 
-Global horizontal layout behavior is centralized through the shared Container primitive.
+Global horizontal layout behavior is centralized through the shared
+Container primitive.
 
 Canonical location:
 
@@ -717,19 +710,23 @@ src/shared/layout/container/
 
 Container governs recurring content width and responsive page gutters.
 
-Scene-specific composition may intentionally exceed or diverge from Container when required by an approved immersive composition.
+Scene-specific composition may intentionally exceed or diverge from
+Container when required by an approved immersive composition.
 
 Reasoning
 
-Repeated max-width and responsive padding values created unnecessary duplication across sections.
+Repeated max-width and responsive padding values created unnecessary
+duplication across sections.
 
-Centralizing global layout behavior improves consistency and maintainability without removing artistic compositional freedom.
+Centralizing global layout behavior improves consistency and
+maintainability without removing artistic compositional freedom.
 
 Impact
 
-Future sections must use Container for standard global layout instead of recreating page gutters and content widths locally.
+Future sections must use Container for standard global layout instead of
+recreating page gutters and content widths locally.
 
----
+------------------------------------------------------------------------
 
 ## Decision 027
 
@@ -747,28 +744,32 @@ Date
 
 Dependencies
 
-- design-tokens.md
-- visual-language.md
+-   design-tokens.md
+-   visual-language.md
 
 Decision
 
 Repeated global visual decisions must be centralized.
 
-Scene-specific values may remain local when they represent deliberate compositional behavior.
+Scene-specific values may remain local when they represent deliberate
+compositional behavior.
 
 Not every numeric value should become a global token.
 
-A value should be promoted to the Design System when it represents a recurring or platform-level visual rule.
+A value should be promoted to the Design System when it represents a
+recurring or platform-level visual rule.
 
 Reasoning
 
-The project requires consistency without creating premature abstractions or removing the flexibility required by artistic scenes.
+The project requires consistency without creating premature abstractions
+or removing the flexibility required by artistic scenes.
 
 Impact
 
-Future development must avoid both arbitrary duplication and unnecessary tokenization.
+Future development must avoid both arbitrary duplication and unnecessary
+tokenization.
 
----
+------------------------------------------------------------------------
 
 ## Decision 028
 
@@ -786,8 +787,8 @@ Date
 
 Dependencies
 
-- home-specification.md
-- home-wireframe.md
+-   home-specification.md
+-   home-wireframe.md
 
 Decision
 
@@ -839,9 +840,10 @@ Institutional Closure
 
 Impact
 
-The order must remain stable unless an explicit Home experience revision is approved.
+The order must remain stable unless an explicit Home experience revision
+is approved.
 
----
+------------------------------------------------------------------------
 
 ## Decision 029
 
@@ -859,10 +861,10 @@ Date
 
 Dependencies
 
-- home-specification.md
-- home-wireframe.md
-- design-tokens.md
-- visual-language.md
+-   home-specification.md
+-   home-wireframe.md
+-   design-tokens.md
+-   visual-language.md
 
 Decision
 
@@ -870,28 +872,33 @@ The structural and visual foundation of the Home is consolidated.
 
 The following scenes currently constitute the canonical Home:
 
-- Hero
-- Featured Artwork
-- Artist Statement
-- Featured Collection
-- Selected Works
-- Journal Preview
-- Invitation / Newsletter
-- Footer
+-   Hero
+-   Featured Artwork
+-   Artist Statement
+-   Featured Collection
+-   Selected Works
+-   Journal Preview
+-   Invitation / Newsletter
+-   Footer
 
-The Home now consumes the shared visual and layout system where recurring patterns exist.
+The Home now consumes the shared visual and layout system where
+recurring patterns exist.
 
-Advanced motion, final artwork optimization and other explicitly planned behaviors remain separate future implementation work.
+Advanced motion, final artwork optimization and other explicitly planned
+behaviors remain separate future implementation work.
 
 Reasoning
 
-The Home has reached sufficient structural and visual maturity to serve as the first reference implementation of the Del Carmen Design System.
+The Home has reached sufficient structural and visual maturity to serve
+as the first reference implementation of the Del Carmen Design System.
 
 Impact
 
-Future Home work should prioritize refinement, responsive validation, content integration, accessibility, performance and approved motion rather than unnecessary structural redesign.
+Future Home work should prioritize refinement, responsive validation,
+content integration, accessibility, performance and approved motion
+rather than unnecessary structural redesign.
 
----
+------------------------------------------------------------------------
 
 ## Decision 030
 
@@ -909,30 +916,35 @@ Date
 
 Dependencies
 
-- design-tokens.md
-- visual-language.md
+-   design-tokens.md
+-   visual-language.md
 
 Decision
 
 Del Carmen primarily uses typographic interaction.
 
-Editorial calls to action use the shared Button and LinkButton system with restrained underline treatments.
+Editorial calls to action use the shared Button and LinkButton system
+with restrained underline treatments.
 
-Navigation links remain visually clean and generally do not use decorative underlines.
+Navigation links remain visually clean and generally do not use
+decorative underlines.
 
 Legal links use simple typographic interaction.
 
-Social links use monochromatic inline SVG icons with restrained interaction states.
+Social links use monochromatic inline SVG icons with restrained
+interaction states.
 
 Reasoning
 
-The interface should communicate interactivity without introducing conventional application-style visual weight.
+The interface should communicate interactivity without introducing
+conventional application-style visual weight.
 
 Impact
 
-Future interaction patterns must preserve this hierarchy unless functional requirements justify a different control treatment.
+Future interaction patterns must preserve this hierarchy unless
+functional requirements justify a different control treatment.
 
----
+------------------------------------------------------------------------
 
 ## Decision 031
 
@@ -952,20 +964,24 @@ Decision
 
 Project documentation must distinguish clearly between:
 
-- Implemented / Canonical
-- Approved Direction / Planned
+-   Implemented / Canonical
+-   Approved Direction / Planned
 
-The presence of a feature in an approved specification does not automatically mean that the feature has already been implemented.
+The presence of a feature in an approved specification does not
+automatically mean that the feature has already been implemented.
 
 Reasoning
 
-The project contains approved future concepts such as advanced motion and immersive interaction systems that should not be mistaken for current implementation state.
+The project contains approved future concepts such as advanced motion
+and immersive interaction systems that should not be mistaken for
+current implementation state.
 
 Impact
 
-All future documentation must explicitly identify planned behavior when implementation has not yet occurred.
+All future documentation must explicitly identify planned behavior when
+implementation has not yet occurred.
 
----
+------------------------------------------------------------------------
 
 ## Decision 032
 
@@ -983,22 +999,29 @@ Date
 
 Dependencies
 
-- artwork-model.md
-- home-specification.md
+-   artwork-model.md
+-   home-specification.md
 
 Decision
 
-Artwork media roles are context-specific and must not be interchanged implicitly. Primary remains the canonical artwork representation for Artwork Detail. Thumbnail is used for compact archive/gallery discovery when available. Collection is an optional editorial artwork representation used by curated Collection / Selected Works surfaces.
+Artwork media roles are context-specific and must not be interchanged
+implicitly. Primary remains the canonical artwork representation for
+Artwork Detail. Thumbnail is used for compact archive/gallery discovery
+when available. Collection is an optional editorial artwork
+representation used by curated Collection / Selected Works surfaces.
 
 Reasoning
 
-Separating these roles prevents an editorial crop or archive thumbnail from accidentally replacing the canonical artwork image in detail experiences.
+Separating these roles prevents an editorial crop or archive thumbnail
+from accidentally replacing the canonical artwork image in detail
+experiences.
 
 Impact
 
-Presentation components must resolve the image role explicitly and use Primary only as the defined fallback.
+Presentation components must resolve the image role explicitly and use
+Primary only as the defined fallback.
 
----
+------------------------------------------------------------------------
 
 ## Decision 033
 
@@ -1016,22 +1039,27 @@ Date
 
 Dependencies
 
-- artwork-model.md
-- home-specification.md
+-   artwork-model.md
+-   home-specification.md
 
 Decision
 
-ArtworkSeries may own dedicated editorial media when a real curatorial requirement exists. The current canonical role is `images.featured`, used by the Home Featured Collection experience. If unavailable, the series may fall back to its `coverArtworkId`.
+ArtworkSeries may own dedicated editorial media when a real curatorial
+requirement exists. The current canonical role is `images.featured`,
+used by the Home Featured Collection experience. If unavailable, the
+series may fall back to its `coverArtworkId`.
 
 Reasoning
 
-A series may require an editorial cover composition that is different from the canonical representation of any individual member Artwork.
+A series may require an editorial cover composition that is different
+from the canonical representation of any individual member Artwork.
 
 Impact
 
-Series editorial media remains independent from Artwork Primary, Thumbnail and Collection representations.
+Series editorial media remains independent from Artwork Primary,
+Thumbnail and Collection representations.
 
----
+------------------------------------------------------------------------
 
 ## Decision 034
 
@@ -1049,19 +1077,390 @@ Date
 
 Dependencies
 
-- home-specification.md
-- home-wireframe.md
-- roadmap.md
+-   home-specification.md
+-   home-wireframe.md
+-   roadmap.md
+
+------------------------------------------------------------------------
+
+## Decision 035
+
+Category
+
+Artist Page Experience
+
+Status
+
+Approved
+
+Date
+
+2026-08-30
+
+Dependencies
+
+-   artist-specification.md
+-   artist-wireframe.md
+-   roadmap.md
+-   brand-philosophy.md
+-   visual-language.md
 
 Decision
 
-The canonical Home now contains eight sequential scenes: Hero, Featured Artwork, Artist Statement, Featured Collection, Selected Works, Journal Preview, Invitation / Newsletter and Footer.
+The Artist Page is a canonical editorial experience of the Del Carmen
+Digital Experience.
+
+Its public route is:
+
+`/artist`
+
+The page is not a traditional biography, résumé, exhibition archive or
+awards page.
+
+Its canonical narrative consists of six principal scenes:
+
+01 --- Artist Hero
+
+02 --- The Artist
+
+03 --- Artistic Philosophy
+
+04 --- The Practice
+
+05 --- The Journey
+
+06 --- The Work / Explore the Work
+
+The underlying narrative progression is:
+
+Curiosity → Observation → Discipline → Discovery → Art
+
+The artistic journey is presented through meaningful encounters rather
+than as a conventional chronological résumé.
+
+Academic technique is presented as a foundation rather than a
+destination, while the continuing search for an authentic visual
+language is presented as artistic evolution.
+
+The page ultimately returns attention from the artist to the artwork.
 
 Reasoning
 
-Featured Collection and Selected Works serve different curatorial purposes: one introduces a series; the other presents selected individual artworks.
+The Artist experience requires a human and philosophical narrative
+capable of explaining how observation, technology, drawing, academic
+formation, painting and lived experience gradually converged into the
+artist's current practice.
+
+A curated editorial narrative preserves the contemplative character of
+Del Carmen more effectively than a conventional professional biography.
 
 Impact
 
-Future Home documentation and implementation must preserve this distinction unless an explicit Home experience revision is approved.
+Future Artist Page development must preserve the approved six-scene
+narrative and its editorial character unless an explicit Artist
+experience revision is approved.
 
+Complete exhibition, awards and recognition systems must remain separate
+from the curated Artist narrative.
+
+The canonical editorial and spatial definitions are governed by
+`artist-specification.md` and `artist-wireframe.md`.
+
+------------------------------------------------------------------------
+
+## Decision 036
+
+Category
+
+Artist Media Experience
+
+Status
+
+Approved
+
+Date
+
+2026-08-30
+
+Dependencies
+
+-   artist-specification.md
+-   artist-wireframe.md
+-   artist-implementation.md
+-   design-tokens.md
+-   visual-language.md
+
+Decision
+
+Artist media is narrative media rather than decorative media.
+
+The Practice and Journey experiences must remain conceptually capable of
+supporting evolving media without requiring reconstruction of their
+surrounding editorial composition.
+
+Practice follows the conceptual visual progression:
+
+Environment → Material → Work
+
+Its principal media region may evolve from a static image toward
+cinematic process media or video when a real requirement exists.
+
+Journey Media is a dedicated editorial memory experience associated with
+The Journey.
+
+The approved initial direction for Journey Media is a slow cinematic
+photographic sequence moving from right to left.
+
+Journey Media:
+
+-   may intentionally escape the normal Container;
+-   may combine photographs of different dimensions, orientations, ages
+    and documentary qualities;
+-   does not behave as a conventional carousel;
+-   does not require arrows, pagination dots, slide counters or equal
+    cards;
+-   may use continuous environmental movement;
+-   must provide appropriate reduced-motion behavior;
+-   may evolve toward cinematic sequence or video when a real
+    requirement exists.
+
+Authentic photographs, artwork and documented artistic process remain
+the narrative foundation.
+
+AI-assisted media may support atmosphere, transitions, depth or subtle
+motion, but must not fabricate biographical events.
+
+The memory of the teacher whose encouragement became a decisive moment
+in the artist's return to drawing must be preserved as part of the
+Journey narrative.
+
+If presented publicly as a direct quotation, its exact wording and
+attribution must first be confirmed.
+
+Reasoning
+
+The Artist experience includes memory, process and passage of time that
+cannot always be expressed most effectively through static editorial
+layouts.
+
+Media flexibility allows these experiences to evolve while preserving
+authenticity and avoiding premature implementation complexity.
+
+Impact
+
+Future implementation must not bind Practice or Journey composition
+unnecessarily to one media technology.
+
+Journey Media must remain distinct from Artwork Gallery and other
+artwork discovery systems.
+
+Continuous movement is permitted for environmental media, while
+disclosure of required narrative information remains driven by physical
+scroll position.
+
+------------------------------------------------------------------------
+
+## Decision 037
+
+Category
+
+Artist Implementation Architecture
+
+Status
+
+Approved
+
+Date
+
+2026-08-30
+
+Dependencies
+
+-   artist-specification.md
+-   artist-wireframe.md
+-   artist-implementation.md
+-   repository-structure.md
+-   design-tokens.md
+-   visual-language.md
+-   tech-stack.md
+
+Decision
+
+The Artist experience is owned by:
+
+`src/domains/artist/`
+
+and exposed publicly through:
+
+`src/app/artist/page.tsx`
+
+Artist v1.0 is an editorial domain and does not require persistence
+infrastructure.
+
+Server Components are the default.
+
+Client Components are introduced only where browser-specific behavior
+requires them, including GSAP motion, continuous media movement or
+future interactive media behavior.
+
+Artist-specific components remain local to the Artist domain until
+genuine cross-domain reuse exists.
+
+The shared `Container` remains the authority for standard editorial
+alignment.
+
+Journey Media may intentionally escape the Container as an approved
+compositional exception.
+
+Practice Media and Journey Media are Artist-local responsibilities and
+must not become generalized media frameworks prematurely.
+
+Journey milestones use lightweight local structured data and do not
+introduce a global timeline or milestone model.
+
+Narrative motion remains restrained, scene-specific and driven by
+physical scroll position.
+
+Continuous movement is permitted for Journey Media because it does not
+control access to required narrative information.
+
+Hydration-safe motion initialization and reduced-motion accessibility
+are mandatory.
+
+The Artist closing experience reuses the existing shared interaction
+system and leads to:
+
+`/artworks`
+
+Reasoning
+
+Artist requires enough architectural separation to support its editorial
+composition, motion and media behavior without introducing
+infrastructure unsupported by current product requirements.
+
+The architecture inherits successful patterns established during Home
+while preserving Artist-specific composition and avoiding premature
+abstractions.
+
+Impact
+
+Artist implementation must proceed scene by scene through the
+established modular approval workflow.
+
+No Artist CMS, database, generalized timeline engine, generalized
+carousel engine, generalized media framework or AI video infrastructure
+should be introduced for v1.0 without a new demonstrated requirement.
+
+The canonical implementation architecture is governed by
+`artist-implementation.md`.
+
+The canonical Home now contains eight sequential scenes: Hero, Featured
+Artwork, Artist Statement, Featured Collection, Selected Works, Journal
+Preview, Invitation / Newsletter and Footer.
+
+Reasoning
+
+Featured Collection and Selected Works serve different curatorial
+purposes: one introduces a series; the other presents selected
+individual artworks.
+
+Impact
+
+## Future Home documentation and implementation must preserve this distinction unless an explicit Home experience revision is approved.
+
+## Decision 038
+
+Category
+
+Artist Page Completion
+
+Status
+
+Approved / Complete / Frozen
+
+Date
+
+2026-09-01
+
+Dependencies
+
+-   artist-specification.md v1.2
+-   artist-wireframe.md v1.2
+-   artist-implementation.md v1.1
+-   design-tokens.md
+-   visual-language.md
+-   tech-stack.md
+
+Decision
+
+Artist Page v1.0 is complete, approved and frozen.
+
+The canonical public route is:
+
+`/artist`
+
+The completed experience contains six scenes:
+
+01 --- Artist Hero\
+02 --- The Artist\
+03 --- Artistic Philosophy\
+04 --- The Practice\
+05 --- The Journey\
+06 --- The Work
+
+The final Journey desktop experience uses a pinned GSAP timeline with a
+peripheral vertical Journey Navigator.
+
+The Journey Navigator:
+
+-   represents the five approved milestones;
+-   uses Primary Gold for the active milestone;
+-   supports bidirectional scroll synchronization;
+-   supports direct click navigation;
+-   snaps to real stable milestone positions after scrolling stops;
+-   uses pointer-proximity magnification as a restrained dock-style
+    interaction;
+-   places its rail and date labels outside the primary editorial copy
+    column;
+-   remains desktop-only.
+
+Tablet and mobile preserve natural document flow.
+
+The Journey Navigator is Artist-local and does not establish a
+generalized platform timeline component.
+
+Global Navigation remains owned by the application shell.
+
+The Artist route maps to the existing About navigation state rather than
+introducing a separate Artist navigation item.
+
+Footer is a shared layout component at:
+
+`src/shared/layout/footer/`
+
+and may be composed by individual page/domain experiences rather than
+being forced globally.
+
+Reasoning
+
+The Artist experience has completed its modular approval cycle and now
+represents the canonical implementation of the approved Artist
+specification and wireframe.
+
+Freezing the module protects the visual and technical decisions already
+validated while allowing future project work to proceed without
+repeatedly reopening completed scenes.
+
+Impact
+
+Artist should not be redesigned during Phase 1 unless a verified bug,
+accessibility defect, production issue or explicitly approved experience
+revision requires a change.
+
+The next Phase 1 page focus is About.
+
+The canonical Artist documents are:
+
+-   `artist-specification.md` v1.2
+-   `artist-wireframe.md` v1.2
+-   `artist-implementation.md` v1.1

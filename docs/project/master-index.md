@@ -1,31 +1,22 @@
 Del Carmen Digital Experience
 
-Version: 1.1
+Version: 1.2
 
-Document ID:
-DOC-MI
+Document ID: DOC-MI
 
-Project:
-Del Carmen Digital Experience
+Project: Del Carmen Digital Experience
 
-Parent Brand:
-Rō Visual
+Parent Brand: Rō Visual
 
-Document Type:
-Governance
+Document Type: Governance
 
-Authority Level:
-High
+Authority Level: High
 
-Status:
-🟢 Approved
+Status: 🟢 Approved
 
-Owner:
-Del Carmen Digital Experience
+Owner: Del Carmen Digital Experience
 
-Last Updated:
-2026-08-26
-
+Last Updated: 2026-09-01
 
 --
 
@@ -61,11 +52,11 @@ Architecture / Technical
 
 ✅ folder-architecture.md
 
-◻ system-architecture.md — Draft
+◻ system-architecture.md --- Draft
 
-◻ domain-model.md — In Progress
+◻ domain-model.md --- In Progress
 
-◻ implementation-roadmap.md — In Progress
+◻ implementation-roadmap.md --- In Progress
 
 ✅ artwork-model.md
 
@@ -75,23 +66,29 @@ Home
 
 ✅ home-wireframe.md
 
-◻ home-art-direction.md — Draft
+◻ home-art-direction.md --- Draft
 
-◻ home-moodboard.md — Draft
+◻ home-moodboard.md --- Draft
+
+Artist
+
+✅ artist-specification.md --- v1.2 --- Approved / Frozen
+
+✅ artist-wireframe.md --- v1.2 --- Approved / Frozen
+
+✅ artist-implementation.md --- v1.1 --- Approved / Complete / Frozen
 
 Frozen Documentation
 
-🔒 DOC-RS
-🔒 DOC-SA
-🔒 DOC-GOV
+🔒 DOC-RS 🔒 DOC-SA 🔒 DOC-GOV
 
 Current Phase
 
-Phase 1 — MVP
+Phase 1 --- MVP
 
 Current Focus
 
-Artwork / Collection experience and documentation alignment
+About Page --- specification and experience definition
 
 Status
 
@@ -99,7 +96,8 @@ In Progress
 
 Documentation Rules
 
-✅ Documents marked as Frozen require technical justification before modification.
+✅ Documents marked as Frozen require technical justification before
+modification.
 
 ✅ Approved modules become the canonical implementation.
 
