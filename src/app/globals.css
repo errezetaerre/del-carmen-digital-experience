@@ -283,7 +283,10 @@ body {
   .the-artist-motion,
   .artist-philosophy-motion,
   .practice-motion,
-  .journey-motion {
+  .journey-motion,
+  .about-essence-motion,
+  .about-ecosystem-motion,
+  .about-continue-motion {
     visibility: hidden;
   }
 }

@@ -1,0 +1,7 @@
+// src/app/about/page.tsx
+
+import About from "@/domains/about";
+
+export default function AboutPage() {
+    return <About />;
+}
