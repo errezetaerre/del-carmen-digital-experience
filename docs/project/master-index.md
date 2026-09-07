@@ -1,6 +1,6 @@
 Del Carmen Digital Experience
 
-Version: 1.2
+Version: 1.3
 
 Document ID: DOC-MI
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-01
+Last Updated: 2026-09-07
 
 --
 
@@ -78,6 +78,16 @@ Artist
 
 ✅ artist-implementation.md --- v1.1 --- Approved / Complete / Frozen
 
+About
+
+✅ about-specification.md --- v1.0 --- Approved / Frozen
+
+✅ about-wireframe.md --- v1.0 --- Approved / Frozen
+
+✅ about-implementation.md --- v1.0 --- Approved / Complete / Frozen
+
+✅ about-film-treatment.md --- v1.0 --- Approved Direction / Planned Media Master
+
 Frozen Documentation
 
 🔒 DOC-RS 🔒 DOC-SA 🔒 DOC-GOV
@@ -88,7 +98,7 @@ Phase 1 --- MVP
 
 Current Focus
 
-About Page --- specification and experience definition
+Contact Page --- specification and experience definition
 
 Status
 

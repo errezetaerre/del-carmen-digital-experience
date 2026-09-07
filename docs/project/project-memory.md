@@ -1,6 +1,6 @@
 # Project Memory
 
-Version: 1.4
+Version: 1.5
 
 Document ID:
 
@@ -32,7 +32,7 @@ Del Carmen Digital Experience
 
 Last Updated:
 
-2026-09-01
+2026-09-07
 
 ------------------------------------------------------------------------
 
@@ -1464,3 +1464,175 @@ The canonical Artist documents are:
 -   `artist-specification.md` v1.2
 -   `artist-wireframe.md` v1.2
 -   `artist-implementation.md` v1.1
+
+------------------------------------------------------------------------
+
+## Decision 039
+
+Category
+
+About Page Experience
+
+Status
+
+Approved
+
+Date
+
+2026-09-07
+
+Dependencies
+
+-   about-specification.md v1.0
+-   about-wireframe.md v1.0
+-   brand-philosophy.md
+-   visual-language.md
+-   design-tokens.md
+
+Decision
+
+The About Page is the canonical institutional experience of Del Carmen Digital Experience.
+
+Its public route is:
+
+`/about`
+
+It is not a conventional corporate About page and does not duplicate the Artist biography.
+
+Its canonical narrative contains four principal scenes:
+
+01 --- Hero / The Encounter
+
+02 --- Essence
+
+03 --- Ecosystem
+
+04 --- Continue
+
+followed by the shared Footer.
+
+The Hero integrates The Encounter media directly into the scene as full-bleed background media rather than rendering a separate film section.
+
+The current canonical media is:
+
+`public/about/film/the_encounter_poster.png`
+
+The final audiovisual master may replace this poster without redesigning the About architecture.
+
+The Essence communicates the philosophical purpose of the experience through restrained typography.
+
+The Ecosystem communicates the approved relationship:
+
+Rō Visual → Del Carmen / Rō Visual Lab
+
+The Continue scene closes the institutional narrative through two canonical paths:
+
+`/artist`
+
+and
+
+`/artworks`
+
+Reasoning
+
+About must explain the identity and purpose of Del Carmen quickly and visually without repeating the Artist Page or becoming a conventional institutional text page.
+
+Integrating the audiovisual encounter directly into Hero creates a more immediate and coherent entry while preserving the project's contemplative character.
+
+Impact
+
+Future About development must preserve the four-scene narrative unless an explicitly approved About experience revision is made.
+
+The Artist biography remains owned by `/artist`.
+
+The final The Encounter film is a replaceable media layer, not a separate page architecture.
+
+------------------------------------------------------------------------
+
+## Decision 040
+
+Category
+
+About Page Completion
+
+Status
+
+Approved / Complete / Frozen
+
+Date
+
+2026-09-07
+
+Dependencies
+
+-   about-specification.md v1.0
+-   about-wireframe.md v1.0
+-   about-implementation.md v1.0
+-   about-film-treatment.md v1.0
+-   design-tokens.md
+-   visual-language.md
+-   tech-stack.md
+
+Decision
+
+About Page v1.0 is complete, approved and frozen.
+
+The canonical public route is:
+
+`/about`
+
+The completed experience contains:
+
+01 --- Hero / The Encounter
+
+02 --- Essence
+
+03 --- Ecosystem
+
+04 --- Continue
+
+05 --- Shared Footer
+
+About motion is scene-specific and uses GSAP.
+
+Required narrative disclosure is driven by initial scene presentation or physical scroll position rather than elapsed time while the visitor is elsewhere.
+
+Ordinary scroll reveals are non-scrubbed and run once.
+
+Reduced-motion accessibility is mandatory.
+
+The approved mobile portrait behavior includes sequential Hero disclosure and a complete semantic sequence in Continue:
+
+Heading → Discover the Artist path → Explore the Artworks path.
+
+Tablet, desktop and landscape preserve their approved cinematic/editorial compositions.
+
+Responsive QA and route/link review have been completed.
+
+The final audiovisual master for The Encounter remains planned.
+
+The approved treatment is governed by:
+
+`about-film-treatment.md`
+
+The current poster-based Hero remains the canonical implemented visual fallback until the final film is integrated.
+
+Reasoning
+
+The About experience has completed its visual, responsive and interaction approval cycle and now represents the canonical institutional expression of Del Carmen Digital Experience.
+
+Freezing the module protects validated design and motion decisions while allowing Phase 1 development to continue.
+
+Impact
+
+About should not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires a change.
+
+The next Phase 1 page focus is Contact.
+
+The canonical About documents are:
+
+-   `about-specification.md` v1.0
+-   `about-wireframe.md` v1.0
+-   `about-implementation.md` v1.0
+-   `about-film-treatment.md` v1.0
+

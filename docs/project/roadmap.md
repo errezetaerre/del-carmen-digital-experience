@@ -1,6 +1,6 @@
 # Project Roadmap
 
-Version: 1.3
+Version: 1.4
 
 Document ID: DOC-RM
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-01
+Last Updated: 2026-09-07
 
 ------------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ Artwork Media Representations
 
 Artist Page --- ✅ COMPLETE / APPROVED / FROZEN
 
-About
+About --- ✅ COMPLETE / APPROVED / FROZEN
 
 Journal Foundation / Preview
 
@@ -130,7 +130,9 @@ Phase 1 Current Delivery Status
 
 Artist Page --- ✅ COMPLETE / APPROVED / FROZEN
 
-Next Page Focus --- About
+About --- ✅ COMPLETE / APPROVED / FROZEN
+
+Next Page Focus --- Contact
 
 Target
 
