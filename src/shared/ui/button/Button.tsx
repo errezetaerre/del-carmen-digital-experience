@@ -7,6 +7,9 @@ const variantStyles = {
   default:
     "text-white hover:text-brand-gold",
 
+  outline:
+    "border border-stone-600/60 bg-transparent px-7 py-3.5 text-white hover:border-brand-gold/60 hover:bg-white/[0.025] hover:text-brand-gold",
+
   underline:
     "border-b border-current pb-2 text-white hover:text-brand-gold",
 
@@ -44,7 +47,7 @@ export default function Button({
 
   return (
     <button
-     
+
       {...props}
       className={[
         baseStyles,
@@ -55,7 +58,7 @@ export default function Button({
         .filter(Boolean)
         .join(" ")}
     >
-      <span>{children}</span>
+      {children}
 
       {hasGradientUnderline && (
         <span

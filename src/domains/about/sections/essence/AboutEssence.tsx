@@ -12,9 +12,9 @@ export default function AboutEssence() {
             <Container>
                 <div className="about-essence-motion grid gap-14 lg:grid-cols-12 lg:gap-8">
                     <div className="lg:col-span-3">
-                        <div className="about-essence-rule mb-6 h-px w-12 bg-amber-200/55" />
+                        <div className="about-essence-rule mb-6 h-px w-12 bg-brand-gold/55" />
 
-                        <p className="about-essence-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-amber-200/70">
+                        <p className="about-essence-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-brand-gold/70">
                             The Essence
                         </p>
                     </div>

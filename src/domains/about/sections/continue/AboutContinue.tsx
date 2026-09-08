@@ -8,7 +8,7 @@ export default function AboutContinue() {
             <Container>
                 <div className="about-continue-motion">
                     <div className="max-w-3xl">
-                        <p className="about-continue-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-amber-200/70">
+                        <p className="about-continue-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-brand-gold/70">
                             Continue
                         </p>
 
@@ -23,14 +23,14 @@ export default function AboutContinue() {
                             href="/artist"
                             className="about-continue-path group relative border-b border-white/[0.08] py-10 md:border-r md:py-12"
                         >
-                            <div className="about-continue-line absolute left-0 top-0 h-px w-full origin-left bg-amber-200/60" />
+                            <div className="about-continue-line absolute left-0 top-0 h-px w-full origin-left bg-brand-gold/60" />
 
                             <div className="md:pr-10">
-                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-amber-200/65">
+                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-gold/65">
                                     01
                                 </p>
 
-                                <h3 className="about-continue-title mt-4 font-display text-3xl font-light text-stone-100 transition-colors duration-500 group-hover:text-amber-100 md:text-4xl">
+                                <h3 className="about-continue-title mt-4 font-display text-3xl font-light text-stone-100 transition-colors duration-500 group-hover:text-brand-gold md:text-4xl">
                                     Discover the Artist
                                 </h3>
 
@@ -38,7 +38,7 @@ export default function AboutContinue() {
                                     The life and practice behind the work.
                                 </p>
 
-                                <span className="about-continue-arrow mt-7 inline-block font-sans text-lg text-stone-500 transition duration-500 group-hover:translate-x-2 group-hover:text-amber-200">
+                                <span className="about-continue-arrow mt-7 inline-block font-sans text-lg text-stone-500 transition duration-500 group-hover:translate-x-2 group-hover:text-brand-gold">
                                     →
                                 </span>
                             </div>
@@ -48,14 +48,14 @@ export default function AboutContinue() {
                             href="/artworks"
                             className="about-continue-path group relative border-b border-white/[0.08] py-10 md:pl-10 md:py-12"
                         >
-                            <div className="about-continue-line absolute left-0 top-0 h-px w-full origin-left bg-amber-200/60" />
+                            <div className="about-continue-line absolute left-0 top-0 h-px w-full origin-left bg-brand-gold/60" />
 
                             <div>
-                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-amber-200/65">
+                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-gold/65">
                                     02
                                 </p>
 
-                                <h3 className="about-continue-title mt-4 font-display text-3xl font-light text-stone-100 transition-colors duration-500 group-hover:text-amber-100 md:text-4xl">
+                                <h3 className="about-continue-title mt-4 font-display text-3xl font-light text-stone-100 transition-colors duration-500 group-hover:text-brand-gold md:text-4xl">
                                     Explore the Artworks
                                 </h3>
 
@@ -63,7 +63,7 @@ export default function AboutContinue() {
                                     Paintings, collections and their stories.
                                 </p>
 
-                                <span className="about-continue-arrow mt-7 inline-block font-sans text-lg text-stone-500 transition duration-500 group-hover:translate-x-2 group-hover:text-amber-200">
+                                <span className="about-continue-arrow mt-7 inline-block font-sans text-lg text-stone-500 transition duration-500 group-hover:translate-x-2 group-hover:text-brand-gold">
                                     →
                                 </span>
                             </div>

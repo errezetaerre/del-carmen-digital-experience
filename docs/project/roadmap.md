@@ -1,6 +1,6 @@
 # Project Roadmap
 
-Version: 1.4
+Version: 1.5
 
 Document ID: DOC-RM
 
@@ -99,7 +99,7 @@ About --- ✅ COMPLETE / APPROVED / FROZEN
 
 Journal Foundation / Preview
 
-Contact
+Contact --- ✅ COMPLETE / APPROVED / FROZEN
 
 Newsletter
 
@@ -132,7 +132,9 @@ Artist Page --- ✅ COMPLETE / APPROVED / FROZEN
 
 About --- ✅ COMPLETE / APPROVED / FROZEN
 
-Next Page Focus --- Contact
+Contact --- ✅ COMPLETE / APPROVED / FROZEN
+
+Next Page Focus --- Newsletter
 
 Target
 

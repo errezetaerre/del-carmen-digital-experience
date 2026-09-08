@@ -286,7 +286,8 @@ body {
   .journey-motion,
   .about-essence-motion,
   .about-ecosystem-motion,
-  .about-continue-motion {
+  .about-continue-motio,
+  .contact-motion {
     visibility: hidden;
   }
 }

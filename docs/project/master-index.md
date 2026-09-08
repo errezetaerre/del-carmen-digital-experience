@@ -1,6 +1,6 @@
 Del Carmen Digital Experience
 
-Version: 1.3
+Version: 1.4
 
 Document ID: DOC-MI
 
@@ -88,6 +88,14 @@ About
 
 ✅ about-film-treatment.md --- v1.0 --- Approved Direction / Planned Media Master
 
+Contact
+
+✅ contact-specification.md --- v1.0 --- Approved / Frozen
+
+✅ contact-wireframe.md --- v1.0 --- Approved / Frozen
+
+✅ contact-implementation.md --- v1.0 --- Approved / Complete / Frozen
+
 Frozen Documentation
 
 🔒 DOC-RS 🔒 DOC-SA 🔒 DOC-GOV
@@ -98,11 +106,13 @@ Phase 1 --- MVP
 
 Current Focus
 
-Contact Page --- specification and experience definition
+Newsletter --- functional subscription experience
 
 Status
 
-In Progress
+Contact --- ✅ COMPLETE / APPROVED / FROZEN
+
+Newsletter --- Next Focus
 
 Documentation Rules
 

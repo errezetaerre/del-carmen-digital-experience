@@ -6,7 +6,7 @@ export default function AboutFilm() {
             <Container>
                 <div className="mb-8 flex items-end justify-between gap-8">
                     <div>
-                        <p className="font-sans text-[10px] uppercase tracking-[0.34em] text-amber-200/70">
+                        <p className="font-sans text-[10px] uppercase tracking-[0.34em] text-brand-gold/70">
                             The Encounter
                         </p>
 

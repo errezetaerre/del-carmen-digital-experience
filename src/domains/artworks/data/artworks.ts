@@ -2141,7 +2141,6 @@ export const artworks: Artwork[] = [
 
     categories: [
       "study",
-      "portrait",
       "animal-lover",
     ],
 

@@ -8,7 +8,7 @@ export default function AboutEcosystem() {
                 <div className="about-ecosystem-motion grid gap-16 lg:grid-cols-12 lg:gap-8">
                     {/* Editorial introduction */}
                     <div className="lg:col-span-4">
-                        <p className="about-ecosystem-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-amber-200/70">
+                        <p className="about-ecosystem-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-brand-gold/70">
                             The Ecosystem
                         </p>
 
@@ -50,7 +50,7 @@ export default function AboutEcosystem() {
                         {/* Expressions */}
                         <div className="grid md:grid-cols-2">
                             <article className="about-ecosystem-child border-y border-white/[0.08] px-4 py-9 text-center md:border-r md:px-8 md:py-10">
-                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-amber-200/65">
+                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-gold/65">
                                     Fine Art
                                 </p>
 
@@ -65,7 +65,7 @@ export default function AboutEcosystem() {
                             </article>
 
                             <article className="about-ecosystem-child border-b border-white/[0.08] px-4 py-9 text-center md:border-y md:px-8 md:py-10">
-                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-amber-200/65">
+                                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-gold/65">
                                     Digital Innovation
                                 </p>
 

@@ -1,6 +1,6 @@
 # Project Memory
 
-Version: 1.5
+Version: 1.6
 
 Document ID:
 
@@ -1635,4 +1635,84 @@ The canonical About documents are:
 -   `about-wireframe.md` v1.0
 -   `about-implementation.md` v1.0
 -   `about-film-treatment.md` v1.0
+
+------------------------------------------------------------------------
+
+## Decision 041
+
+Category
+
+Contact Page Completion
+
+Status
+
+Approved / Complete / Frozen
+
+Date
+
+2026-09-07
+
+Dependencies
+
+-   contact-specification.md v1.0
+-   contact-wireframe.md v1.0
+-   contact-implementation.md v1.0
+-   design-tokens.md
+-   visual-language.md
+-   tech-stack.md
+
+Decision
+
+Contact Page v1.0 is complete, approved and frozen.
+
+The canonical public route is:
+
+`/contact`
+
+The canonical server endpoint is:
+
+`/api/contact`
+
+The Contact experience is a restrained editorial conversation interface rather than a conventional corporate contact page. It consists of one primary Contact scene followed by the shared Footer.
+
+The canonical form requires:
+
+-   Name
+-   Email
+-   Subject
+-   Message
+
+The approved subject categories are Artworks, Collaboration and General. Contextual descriptions clarify each category without introducing modal or secondary navigation complexity.
+
+The form supports idle, submitting, success, error and rate-limited states. Editing after feedback returns the interface to its normal state.
+
+Message delivery uses Resend through the server endpoint. The submitted visitor email is assigned as Reply-To so correspondence can continue directly from the delivered message.
+
+Contact protection includes server-side validation, a honeypot field and Upstash Redis rate limiting. The canonical rate limit is five requests per ten minutes per resolved client IP.
+
+Contact motion is scene-specific and uses GSAP. The entrance establishes the editorial invitation before revealing the form as a single functional unit. Reduced-motion accessibility is mandatory.
+
+The canonical public correspondence address displayed by the experience is provisionally `rolando@delcarmen.art`. It must not become an active mailto destination until the final domain and email infrastructure exist.
+
+The current Resend onboarding sender is temporary development infrastructure. Final domain selection, sender verification, public email provisioning, DNS authentication and delivery testing are deferred to Production QA.
+
+A production build completed successfully with Next.js 16.2.12 using webpack. TypeScript completed successfully, 51 of 51 static pages were generated, `/contact` was prerendered as static content and `/api/contact` remained a dynamic server route.
+
+Reasoning
+
+Contact must preserve the quiet, human and editorial character of Del Carmen while providing a real communication channel. A concise form is more appropriate than a large corporate contact system, while server-side delivery and abuse protection make the experience production-oriented without premature infrastructure.
+
+Impact
+
+Contact should not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires a change.
+
+Newsletter remains a separate permission-based subscription experience and must not be coupled implicitly to Contact submissions.
+
+The next Phase 1 focus is Newsletter.
+
+The canonical Contact documents are:
+
+-   `contact-specification.md` v1.0
+-   `contact-wireframe.md` v1.0
+-   `contact-implementation.md` v1.0
 

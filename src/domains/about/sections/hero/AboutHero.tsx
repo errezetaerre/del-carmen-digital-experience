@@ -31,15 +31,15 @@ export default function AboutHero() {
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 z-[1]"
             >
-                <div className="about-hero-light absolute left-[-20%] top-[10%] h-[65%] w-[45%] rounded-full bg-amber-100/[0.055] blur-[110px]" />
+                <div className="about-hero-light absolute left-[-20%] top-[10%] h-[65%] w-[45%] rounded-full bg-brand-gold/[0.055] blur-[110px]" />
             </div>
 
             {/* Content */}
             <Container>
                 <div className="relative z-20 flex min-h-[calc(100svh-5rem)] items-center py-28 md:py-32">
                     <div className="max-w-4xl">
-                        <p className="about-hero-eyebrow mb-7 font-sans text-[11px] uppercase tracking-[0.34em] text-amber-200/80">
-                            About
+                        <p className="about-hero-eyebrow mb-7 font-sans text-[11px] uppercase tracking-[0.34em] text-brand-gold/80">
+                            The Experience
                         </p>
 
                         <h1 className="font-display text-[clamp(3.4rem,7.5vw,7rem)] font-light leading-[0.9] tracking-[-0.035em] text-stone-100">
@@ -50,7 +50,7 @@ export default function AboutHero() {
                             </span>
 
                             <span className="about-hero-line block overflow-hidden">
-                                <span className="about-hero-line-inner block italic text-amber-200/90">
+                                <span className="about-hero-line-inner block italic text-brand-gold/90">
                                     experience.
                                 </span>
                             </span>
