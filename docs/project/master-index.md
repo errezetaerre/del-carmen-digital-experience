@@ -1,6 +1,6 @@
 Del Carmen Digital Experience
 
-Version: 1.4
+Version: 1.5
 
 Document ID: DOC-MI
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-07
+Last Updated: 2026-09-08
 
 --
 
@@ -96,6 +96,14 @@ Contact
 
 ✅ contact-implementation.md --- v1.0 --- Approved / Complete / Frozen
 
+Newsletter
+
+✅ newsletter-specification.md --- v1.0 --- Approved / Frozen
+
+✅ newsletter-wireframe.md --- v1.0 --- Approved / Frozen
+
+✅ newsletter-implementation.md --- v1.0 --- Approved / Complete / Frozen
+
 Frozen Documentation
 
 🔒 DOC-RS 🔒 DOC-SA 🔒 DOC-GOV
@@ -106,13 +114,13 @@ Phase 1 --- MVP
 
 Current Focus
 
-Newsletter --- functional subscription experience
+Responsive QA --- global Phase 1 validation
 
 Status
 
 Contact --- ✅ COMPLETE / APPROVED / FROZEN
 
-Newsletter --- Next Focus
+Newsletter --- ✅ COMPLETE / APPROVED / FROZEN
 
 Documentation Rules
 

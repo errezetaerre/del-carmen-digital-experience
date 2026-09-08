@@ -1,6 +1,6 @@
 # Project Memory
 
-Version: 1.6
+Version: 1.7
 
 Document ID:
 
@@ -32,7 +32,7 @@ Del Carmen Digital Experience
 
 Last Updated:
 
-2026-09-07
+2026-09-08
 
 ------------------------------------------------------------------------
 
@@ -1716,3 +1716,79 @@ The canonical Contact documents are:
 -   `contact-wireframe.md` v1.0
 -   `contact-implementation.md` v1.0
 
+
+
+------------------------------------------------------------------------
+
+## Decision 042
+
+Category
+
+Newsletter Completion
+
+Status
+
+Approved / Complete / Frozen
+
+Date
+
+2026-09-08
+
+Dependencies
+
+- newsletter-specification.md v1.0
+- newsletter-wireframe.md v1.0
+- newsletter-implementation.md v1.0
+- design-tokens.md
+- visual-language.md
+- tech-stack.md
+
+Decision
+
+Newsletter v1.0 is complete, approved and frozen.
+
+Newsletter is the canonical permission-based subscription experience and remains separate from Contact. Contact submissions must not subscribe visitors implicitly.
+
+The canonical public subscription surface is Home → Invitation / Newsletter. Newsletter does not introduce a standalone `/newsletter` page.
+
+The canonical server endpoints are:
+
+`POST /api/newsletter`
+
+`GET /api/newsletter/confirm`
+
+`GET /api/newsletter/unsubscribe`
+
+Email is the only required public subscriber field in v1.0.
+
+Double opt-in is mandatory. New requests enter pending state, receive a Resend confirmation email and become active only after confirmation. Confirmation tokens expire after 24 hours, are stored through hashed lookup, and superseded pending confirmation tokens are invalidated.
+
+Upstash Redis is the canonical v1.0 source of truth. Active subscribers are represented by subscriber records and membership in `newsletter:subscribers`.
+
+Newsletter protection includes server-side validation, email normalization, a honeypot field and Upstash Redis rate limiting. The canonical rate limit is five requests per ten minutes per resolved client IP.
+
+The implemented lifecycle supports unsubscribe and subsequent resubscription. The validated lifecycle is:
+
+Subscribe → Pending → Confirm → Active → Unsubscribe → Unsubscribed → Resubscribe → Pending → Confirm → Active.
+
+The Newsletter form reuses the shared Button system with the approved `outline` treatment. It remains visually integrated into the approved Invitation scene and does not introduce a duplicate motion or design system.
+
+A production build completed successfully with Next.js 16.2.12 using webpack. Compilation and TypeScript completed successfully, 54 of 54 static pages were generated, Home remained statically prerendered, and the three Newsletter API endpoints remained dynamic server routes.
+
+Final public domain configuration, sender-domain verification, DNS authentication and production delivery validation remain Production QA responsibilities and do not reopen the approved Newsletter experience.
+
+Reasoning
+
+Newsletter requires explicit consent, reliable subscription state and abuse protection while preserving the quiet editorial character of the Home Invitation. Separating it from Contact prevents ambiguous consent and keeps each interaction aligned with its distinct visitor intent.
+
+Impact
+
+Newsletter should not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires a change.
+
+The next Phase 1 focus is Responsive QA global.
+
+The canonical Newsletter documents are:
+
+- `newsletter-specification.md` v1.0
+- `newsletter-wireframe.md` v1.0
+- `newsletter-implementation.md` v1.0

@@ -1,6 +1,9 @@
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
+import { NewsletterForm } from "@/domains/newsletter";
 import InvitationMotion from "./InvitationMotion";
+
+import { Suspense } from "react";
 
 export default function Invitation() {
   return (
@@ -114,6 +117,10 @@ export default function Invitation() {
               exhibitions, and the evolving world of Rolando Del
               Carmen&apos;s art.
             </p>
+
+            <Suspense fallback={null}>
+              <NewsletterForm />
+            </Suspense>
           </div>
 
           {/* Actions */}
@@ -127,18 +134,6 @@ export default function Invitation() {
               gap-10
             "
           >
-            <LinkButton
-              href="/newsletter"
-              variant="goldUnderline"
-              className="
-                font-sans
-                text-xs
-                font-medium
-                tracking-[0.28em]
-              "
-            >
-              Subscribe
-            </LinkButton>
 
             <LinkButton
               href="/contact"

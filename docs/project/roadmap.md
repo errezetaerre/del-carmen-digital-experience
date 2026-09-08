@@ -1,6 +1,6 @@
 # Project Roadmap
 
-Version: 1.5
+Version: 1.6
 
 Document ID: DOC-RM
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-07
+Last Updated: 2026-09-08
 
 ------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ Journal Foundation / Preview
 
 Contact --- ✅ COMPLETE / APPROVED / FROZEN
 
-Newsletter
+Newsletter --- ✅ COMPLETE / APPROVED / FROZEN
 
 Responsive Design
 
@@ -134,7 +134,9 @@ About --- ✅ COMPLETE / APPROVED / FROZEN
 
 Contact --- ✅ COMPLETE / APPROVED / FROZEN
 
-Next Page Focus --- Newsletter
+Newsletter --- ✅ COMPLETE / APPROVED / FROZEN
+
+Next Focus --- Responsive QA Global
 
 Target
 
