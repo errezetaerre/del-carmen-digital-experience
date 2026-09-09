@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Footer from "@/shared/layout/footer";
 
 import {
   getArtworks,
@@ -17,35 +18,34 @@ export default function ArtworksPage() {
     getArtworks();
 
   return (
-    <main
-      className="
+    <>
+      <main
+        className="
         min-h-screen
         bg-surface-deep
         text-white
       "
-    >
-      <Container
-        size="wide"
-        className="
+      >
+        <Container
+          // size="wide"
+          className="
           py-24
-
           md:py-32
         "
-      >
-        {/* ===================================================
+        >
+          {/* ===================================================
             ARCHIVE INTRODUCTION
            =================================================== */}
 
-        <div
-          className="
+          <div
+            className="
             mb-16
             max-w-2xl
-
             md:mb-20
           "
-        >
-          <p
-            className="
+          >
+            <p
+              className="
               mb-5
               font-sans
               text-[10px]
@@ -54,28 +54,27 @@ export default function ArtworksPage() {
               tracking-[0.38em]
               text-brand-gold
             "
-          >
-            Artwork Archive
-          </p>
+            >
+              Artwork Archive
+            </p>
 
-          <h1
-            className="
+            <h1
+              className="
               font-display
               text-5xl
               font-light
               leading-[0.95]
               tracking-[0.01em]
-
               md:text-7xl
             "
-          >
-            The complete
-            <br />
-            body of work
-          </h1>
+            >
+              The complete
+              <br />
+              body of work
+            </h1>
 
-          <p
-            className="
+            <p
+              className="
               mt-6
               max-w-lg
               font-sans
@@ -83,35 +82,37 @@ export default function ArtworksPage() {
               font-light
               leading-[1.8]
               text-white/55
-
               md:text-base
             "
-          >
-            An evolving archive of original
-            works, studies and selected pieces
-            across different periods and
-            subjects.
-          </p>
-        </div>
+            >
+              An evolving archive of original
+              works, studies and selected pieces
+              across different periods and
+              subjects.
+            </p>
+          </div>
 
-        {/* ===================================================
+          {/* ===================================================
             ARCHIVE
            =================================================== */}
 
-        <Suspense
-          fallback={
-            <div
-              className="
+          <Suspense
+            fallback={
+              <div
+                className="
                 min-h-[40vh]
-            "
+              "
+              />
+            }
+          >
+            <ArtworkArchive
+              artworks={artworks}
             />
-          }
-        >
-          <ArtworkArchive
-            artworks={artworks}
-          />
-        </Suspense>
-      </Container>
-    </main>
+          </Suspense>
+        </Container>
+      </main>
+
+      <Footer />
+    </>
   );
 }

@@ -19,7 +19,7 @@ export default function Invitation() {
       "
     >
       <InvitationMotion />
-      <Container>
+      <Container >
         <div
           className="
             mx-auto
@@ -66,6 +66,7 @@ export default function Invitation() {
           </h2>
 
           <p
+            id="newsletter"
             data-invitation-journey
             className="
               mt-6

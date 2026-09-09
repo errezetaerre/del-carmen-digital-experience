@@ -20,7 +20,7 @@ interface ArtworkDetailViewerProps {
     previousArtwork?: Artwork;
     nextArtwork?: Artwork;
 
-    activeCategory?: string;
+    archiveQuery?: string;
 }
 
 const SWIPE_THRESHOLD = 70;
@@ -41,7 +41,7 @@ export default function ArtworkDetailViewer({
     artwork,
     previousArtwork,
     nextArtwork,
-    activeCategory,
+    archiveQuery,
 }: ArtworkDetailViewerProps) {
     const router = useRouter();
 
@@ -242,14 +242,12 @@ export default function ArtworkDetailViewer({
     const createArtworkHref = (
         targetArtwork: Artwork,
     ) => {
-        const categoryQuery =
-            activeCategory
-                ? `?category=${encodeURIComponent(
-                    activeCategory,
-                )}`
+        const query =
+            archiveQuery
+                ? `?${archiveQuery}`
                 : "";
 
-        return `/artworks/${targetArtwork.slug}${categoryQuery}`;
+        return `/artworks/${targetArtwork.slug}${query}`;
     };
 
     /* ============================================================

@@ -19,6 +19,7 @@ export default function Navigation() {
   const isScrolled = useNavigationScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+
   const headerState = isScrolled
     ? "bg-foreground/90 backdrop-blur-md shadow-sm"
     : "bg-transparent";
@@ -50,7 +51,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop / Tablet Navigation */}
-          <nav className="hidden md:block">
+          <nav className="hidden lg:block">
             <ul className="flex items-center gap-12">
               {NAVIGATION_ITEMS.map((item) => {
                 const isActive =
@@ -61,7 +62,7 @@ export default function Navigation() {
 
                 return (
                   <li key={item.href}>
-                    {isActive ? (
+                    {isActive && pathname === item.href ? (
                       <span
                         aria-current="page"
                         className="
@@ -81,9 +82,11 @@ export default function Navigation() {
                         className={[
                           "text-sm uppercase tracking-[0.12em] transition-colors duration-300",
 
-                          isScrolled
-                            ? "text-[#2F2E2C]/75 hover:text-brand-gold"
-                            : "text-white/65 hover:text-white",
+                          isActive
+                            ? "font-medium text-brand-gold"
+                            : isScrolled
+                              ? "text-[#2F2E2C]/75 hover:text-brand-gold"
+                              : "text-white/65 hover:text-white",
                         ].join(" ")}
                       >
                         {item.label}
@@ -99,7 +102,7 @@ export default function Navigation() {
           <button
             type="button"
             className={[
-              "hidden text-sm uppercase tracking-[0.12em] transition-colors duration-300 md:block",
+              "hidden text-sm uppercase tracking-[0.12em] transition-colors duration-300 lg:block",
               isScrolled
                 ? "text-[#2F2E2C]/75 hover:text-brand-gold"
                 : "text-white/65 hover:text-white",
@@ -116,7 +119,7 @@ export default function Navigation() {
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-navigation"
             className={[
-              "flex h-10 w-10 items-center justify-center md:hidden",
+              "flex h-10 w-10 items-center justify-center lg:hidden",
               isScrolled
                 ? "text-[#2F2E2C]"
                 : "text-white",

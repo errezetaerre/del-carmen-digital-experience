@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 import {
     getArtworkSeries,
@@ -170,49 +171,49 @@ export default async function SeriesPage({
             </section>
 
             {/* =====================================================
-          SERIES STATEMENT
-         ===================================================== */}
+                SERIES STATEMENT
+                ===================================================== */}
 
             {series.statement && (
                 <section
                     className="
-            bg-background-alternate
-            py-20
+                        bg-background-alternate
+                        py-20
 
-            md:py-28
-          "
+                        md:py-28
+                    "
                 >
                     <Container>
                         <div
                             className="
-                mx-auto
-                max-w-3xl
-                text-center
-              "
+                                mx-auto
+                                max-w-3xl
+                                text-center
+                            "
                         >
                             <p
                                 className="
-                  mb-5
-                  font-sans
-                  text-[10px]
-                  uppercase
-                  tracking-[0.35em]
-                  text-brand-gold
-                "
+                                mb-5
+                                font-sans
+                                text-[10px]
+                                uppercase
+                                tracking-[0.35em]
+                                text-brand-gold
+                            "
                             >
                                 Series Statement
                             </p>
 
                             <p
                                 className="
-                  font-display
-                  text-2xl
-                  font-light
-                  leading-[1.5]
-                  text-white/75
+                                font-display
+                                text-2xl
+                                font-light
+                                leading-[1.5]
+                                text-white/75
 
-                  md:text-3xl
-                "
+                                md:text-3xl
+                            "
                             >
                                 {series.statement}
                             </p>
@@ -220,6 +221,87 @@ export default async function SeriesPage({
                     </Container>
                 </section>
             )}
+
+            {/* =====================================================
+                SERIES CONTINUE
+            ===================================================== */}
+            <section
+                className="
+                    border-t
+                    border-white/[0.06]
+                    bg-background
+                    py-16
+
+                    md:py-20
+                "
+            >
+                <Container>
+                    <div
+                        className="
+                            mx-auto
+                            max-w-4xl
+                        "
+                    >
+                        <p
+                            className="
+                                text-center
+                                font-sans
+                                text-[10px]
+                                uppercase
+                                tracking-[0.35em]
+                                text-white/30
+                            "
+                        >
+                            Continue Exploring
+                        </p>
+
+                        <div
+                            className="
+                                mt-8
+                                flex
+                                flex-col
+                                items-center
+                                justify-between
+                                gap-6
+
+                                sm:flex-row
+                            "
+                        >
+                            <Link
+                                href="/artworks"
+                                className="
+                                    font-sans
+                                    text-[11px]
+                                    uppercase
+                                    tracking-[0.18em]
+                                    text-white/50
+                                    transition-colors
+                                    duration-300
+                                    hover:text-brand-gold
+                                "
+                            >
+                                ← Explore Artworks
+                            </Link>
+
+                            <Link
+                                href="/"
+                                className="
+                                    font-sans
+                                    text-[11px]
+                                    uppercase
+                                    tracking-[0.18em]
+                                    text-white/50
+                                    transition-colors
+                                    duration-300
+                                    hover:text-brand-gold
+                                "
+                            >
+                                Return Home →
+                            </Link>
+                        </div>
+                    </div>
+                </Container>
+            </section>
         </main>
     );
 }

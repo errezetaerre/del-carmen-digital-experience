@@ -17,6 +17,8 @@ interface ArtworkPageProps {
 
     searchParams: Promise<{
         category?: string;
+        year?: string;
+        medium?: string;
     }>;
 }
 
@@ -60,6 +62,8 @@ export default async function ArtworkPage({
 
     const {
         category,
+        year,
+        medium,
     } = await searchParams;
 
     const artwork =
@@ -89,15 +93,51 @@ export default async function ArtworkPage({
             ? category
             : undefined;
 
-    const navigationArtworks =
-        activeCategory
-            ? artworks.filter(
+    const parsedYear =
+        year
+            ? Number(year)
+            : undefined;
+
+    const activeYear =
+        parsedYear &&
+            artworks.some(
                 (item) =>
-                    item.categories.includes(
-                        activeCategory,
-                    ),
+                    item.year === parsedYear,
             )
-            : artworks;
+            ? parsedYear
+            : undefined;
+
+    const activeMedium =
+        medium &&
+            artworks.some(
+                (item) =>
+                    item.medium === medium,
+            )
+            ? medium
+            : undefined;
+
+    const navigationArtworks =
+        artworks.filter((item) => {
+            const matchesCategory =
+                !activeCategory ||
+                item.categories.includes(
+                    activeCategory,
+                );
+
+            const matchesYear =
+                !activeYear ||
+                item.year === activeYear;
+
+            const matchesMedium =
+                !activeMedium ||
+                item.medium === activeMedium;
+
+            return (
+                matchesCategory &&
+                matchesYear &&
+                matchesMedium
+            );
+        });
 
     const currentIndex =
         navigationArtworks.findIndex(
@@ -120,11 +160,36 @@ export default async function ArtworkPage({
             currentIndex + 1
             ]
             : undefined;
+
+    const archiveParams =
+        new URLSearchParams();
+
+    if (activeCategory) {
+        archiveParams.set(
+            "category",
+            activeCategory,
+        );
+    }
+
+    if (activeYear) {
+        archiveParams.set(
+            "year",
+            String(activeYear),
+        );
+    }
+
+    if (activeMedium) {
+        archiveParams.set(
+            "medium",
+            activeMedium,
+        );
+    }
+
+    const archiveQuery =
+        archiveParams.toString();
     const artworksBackHref =
-        activeCategory
-            ? `/artworks?category=${encodeURIComponent(
-                activeCategory,
-            )}`
+        archiveQuery
+            ? `/artworks?${archiveQuery}`
             : "/artworks";
     return (
         <main
@@ -137,53 +202,53 @@ export default async function ArtworkPage({
             <Container
                 size="wide"
                 className="
-    pb-20
-    pt-10
+                    pb-20
+                    pt-10
 
-    md:py-20
-    lg:py-28
-  "
+                    md:py-20
+                    lg:py-28
+                "
             >
                 {/* ================================================
-            BACK
-           ================================================ */}
+                    BACK
+                ================================================ */}
 
                 <Link
                     href={artworksBackHref}
                     className="
-            inline-block
-            translate-y-4
-            font-sans
-            text-[10px]
-            uppercase
-            tracking-[0.28em]
-            text-white/40
-            transition-colors
-            duration-300
-            hover:text-brand-gold
-          "
+                        inline-block
+                        translate-y-4
+                        font-sans
+                        text-[10px]
+                        uppercase
+                        tracking-[0.28em]
+                        text-white/40
+                        transition-colors
+                        duration-300
+                        hover:text-brand-gold
+                    "
                 >
                     ← Back to artworks
                 </Link>
 
                 {/* ================================================
-            ARTWORK
-           ================================================ */}
+                    ARTWORK
+                ================================================ */}
 
                 <div
                     className="
-    mt-7
-    grid
-    gap-8
+                        mt-7
+                        grid
+                        gap-8
 
-    md:mt-10
-    md:gap-10
+                        md:mt-10
+                        md:gap-10
 
-    lg:mt-12
-    lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,0.65fr)]
-    lg:items-center
-    lg:gap-20
-  "
+                        lg:mt-12
+                        lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,0.65fr)]
+                        lg:items-center
+                        lg:gap-20
+                    "
                 >
                     {/* ==============================================
                         IMAGE
@@ -197,8 +262,8 @@ export default async function ArtworkPage({
                         nextArtwork={
                             nextArtwork
                         }
-                        activeCategory={
-                            activeCategory
+                        archiveQuery={
+                            archiveQuery
                         }
                     />
 
@@ -376,75 +441,73 @@ export default async function ArtworkPage({
                                 </div>
                             )}
                         {/* ==============================================
-    PREVIOUS / NEXT ARTWORK
-============================================== */}
+                                PREVIOUS / NEXT ARTWORK
+                            ============================================== */}
 
                         {navigationArtworks.length > 1 && (
                             <div
                                 className="
-            mt-14
-            border-t
-            border-white/[0.08]
-            pt-7
+                                    mt-14
+                                    border-t
+                                    border-white/[0.08]
+                                    pt-7
 
-            md:mt-16
-            md:pt-8
-        "
+                                    md:mt-16
+                                    md:pt-8
+                                "
                             >
                                 <div
                                     className="
-                grid
-                grid-cols-2
-                gap-6
-            "
+                                        grid
+                                        grid-cols-2
+                                        gap-6
+                                    "
                                 >
                                     {/* Previous */}
 
                                     {previousArtwork ? (
                                         <Link
-                                            href={`/artworks/${previousArtwork.slug}${activeCategory
-                                                ? `?category=${encodeURIComponent(
-                                                    activeCategory,
-                                                )}`
+                                            href={`/artworks/${previousArtwork.slug}${archiveQuery
+                                                ? `?${archiveQuery}`
                                                 : ""
                                                 }`}
                                             className="
-                        group
-                        min-w-0
-                        text-left
-                    "
+                                                group
+                                                min-w-0
+                                                text-left
+                                            "
                                         >
                                             <span
                                                 className="
-                            block
-                            font-sans
-                            text-[9px]
-                            uppercase
-                            tracking-[0.28em]
-                            text-white/30
-                            transition-colors
-                            duration-300
+                                                    block
+                                                    font-sans
+                                                    text-[9px]
+                                                    uppercase
+                                                    tracking-[0.28em]
+                                                    text-white/30
+                                                    transition-colors
+                                                    duration-300
 
-                            group-hover:text-brand-gold/60
-                        "
+                                                    group-hover:text-brand-gold/60
+                                                "
                                             >
                                                 ← Previous
                                             </span>
 
                                             <span
                                                 className="
-                            mt-2
-                            block
-                            truncate
-                            font-display
-                            text-base
-                            font-light
-                            text-white/60
-                            transition-colors
-                            duration-300
+                                                    mt-2
+                                                    block
+                                                    truncate
+                                                    font-display
+                                                    text-base
+                                                    font-light
+                                                    text-white/60
+                                                    transition-colors
+                                                    duration-300
 
-                            group-hover:text-white
-                        "
+                                                    group-hover:text-white
+                                                "
                                             >
                                                 {previousArtwork.title}
                                             </span>
@@ -457,49 +520,47 @@ export default async function ArtworkPage({
 
                                     {nextArtwork ? (
                                         <Link
-                                            href={`/artworks/${nextArtwork.slug}${activeCategory
-                                                ? `?category=${encodeURIComponent(
-                                                    activeCategory,
-                                                )}`
+                                            href={`/artworks/${nextArtwork.slug}${archiveQuery
+                                                ? `?${archiveQuery}`
                                                 : ""
                                                 }`}
                                             className="
-                        group
-                        min-w-0
-                        text-right
-                    "
+                                                group
+                                                min-w-0
+                                                text-right
+                                            "
                                         >
                                             <span
                                                 className="
-                            block
-                            font-sans
-                            text-[9px]
-                            uppercase
-                            tracking-[0.28em]
-                            text-white/30
-                            transition-colors
-                            duration-300
+                                                    block
+                                                    font-sans
+                                                    text-[9px]
+                                                    uppercase
+                                                    tracking-[0.28em]
+                                                    text-white/30
+                                                    transition-colors
+                                                    duration-300
 
-                            group-hover:text-brand-gold/60
-                        "
+                                                    group-hover:text-brand-gold/60
+                                                "
                                             >
                                                 Next →
                                             </span>
 
                                             <span
                                                 className="
-                            mt-2
-                            block
-                            truncate
-                            font-display
-                            text-base
-                            font-light
-                            text-white/60
-                            transition-colors
-                            duration-300
+                                                    mt-2
+                                                    block
+                                                    truncate
+                                                    font-display
+                                                    text-base
+                                                    font-light
+                                                    text-white/60
+                                                    transition-colors
+                                                    duration-300
 
-                            group-hover:text-white
-                        "
+                                                    group-hover:text-white
+                                                "
                                             >
                                                 {nextArtwork.title}
                                             </span>

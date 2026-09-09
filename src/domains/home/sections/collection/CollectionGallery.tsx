@@ -32,14 +32,14 @@ interface CollectionGalleryProps {
     interaction?: ArtworkInteraction;
     imageVariant?: ArtworkImageVariant;
 
-    detailCategory?: string;
+    detailQuery?: string;
 }
 
 export default function CollectionGallery({
     artworks,
     interaction = "lightbox",
     imageVariant = "thumbnail",
-    detailCategory,
+    detailQuery,
 }: CollectionGalleryProps) {
     const router = useRouter();
 
@@ -121,15 +121,13 @@ export default function CollectionGallery({
         index: number,
     ) => {
         if (interaction === "detail") {
-            const categoryQuery =
-                detailCategory
-                    ? `?category=${encodeURIComponent(
-                        detailCategory,
-                    )}`
+            const query =
+                detailQuery
+                    ? `?${detailQuery}`
                     : "";
 
             router.push(
-                `/artworks/${artwork.slug}${categoryQuery}`,
+                `/artworks/${artwork.slug}${query}`,
             );
 
             return;

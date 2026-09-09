@@ -136,6 +136,7 @@ export const artworks: Artwork[] = [
       "portrait",
       "study",
       "spiritual",
+      "figurative",
       "symbolic",
     ],
 
@@ -400,6 +401,7 @@ export const artworks: Artwork[] = [
 
     categories: [
       "still-life",
+      "study"
     ],
 
     dimensions: {
@@ -450,6 +452,7 @@ export const artworks: Artwork[] = [
     categories: [
       "figurative",
       "spiritual",
+      "study"
     ],
 
     seriesId: "yasemi",
@@ -486,7 +489,7 @@ export const artworks: Artwork[] = [
       "The seed in the depth of the ocean with no light and no air, but the seed remains.",
 
     description:
-      "",
+      "Practice with a photo of a flower in a jar with intense and vibrant colors, study soft petals and its folds.",
 
     availability: "available",
 
@@ -1931,6 +1934,7 @@ export const artworks: Artwork[] = [
     categories: [
       "study",
       "portrait",
+      "figurative",
       "symbolic",
       "academic",
     ],

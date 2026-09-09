@@ -110,6 +110,15 @@ export default function Footer() {
                     </Link>
                   </li>
                 ))}
+
+                <li>
+                  <Link
+                    href="/#newsletter"
+                    className={footerLinkStyles}
+                  >
+                    Newsletter
+                  </Link>
+                </li>
               </ul>
             </nav>
           </div>

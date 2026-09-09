@@ -27,10 +27,17 @@ const preferredCategoryOrder = [
     "still-life",
 ];
 
-function formatCategory(
-    category: string,
+const preferredMediumOrder = [
+    "oil",
+    "graphite",
+    "charcoal",
+    "mixed-media",
+];
+
+function formatLabel(
+    value: string,
 ) {
-    return category
+    return value
         .replace(/[-_]/g, " ")
         .replace(
             /\b\w/g,
@@ -47,8 +54,9 @@ export default function ArtworkArchive({
     const searchParams =
         useSearchParams();
 
-    const requestedCategory =
-        searchParams.get("category");
+    /* =====================================================
+       AVAILABLE FILTER VALUES
+       ===================================================== */
 
     const categories = useMemo(() => {
         const uniqueCategories =
@@ -89,6 +97,71 @@ export default function ArtworkArchive({
         );
     }, [artworks]);
 
+    const years = useMemo(() => {
+        return Array.from(
+            new Set(
+                artworks.map(
+                    (artwork) =>
+                        artwork.year,
+                ),
+            ),
+        ).sort(
+            (a, b) => b - a,
+        );
+    }, [artworks]);
+
+    const mediums = useMemo(() => {
+        const uniqueMediums =
+            Array.from(
+                new Set(
+                    artworks.map(
+                        (artwork) =>
+                            artwork.medium,
+                    ),
+                ),
+            );
+
+        return uniqueMediums.sort(
+            (a, b) => {
+                const aIndex =
+                    preferredMediumOrder.indexOf(a);
+
+                const bIndex =
+                    preferredMediumOrder.indexOf(b);
+
+                if (
+                    aIndex !== -1 &&
+                    bIndex !== -1
+                ) {
+                    return aIndex - bIndex;
+                }
+
+                if (aIndex !== -1) {
+                    return -1;
+                }
+
+                if (bIndex !== -1) {
+                    return 1;
+                }
+
+                return a.localeCompare(b);
+            },
+        );
+    }, [artworks]);
+
+    /* =====================================================
+       ACTIVE FILTERS
+       ===================================================== */
+
+    const requestedCategory =
+        searchParams.get("category");
+
+    const requestedYear =
+        searchParams.get("year");
+
+    const requestedMedium =
+        searchParams.get("medium");
+
     const activeCategory =
         requestedCategory &&
             categories.includes(
@@ -97,48 +170,137 @@ export default function ArtworkArchive({
             ? requestedCategory
             : "all";
 
+    const parsedYear =
+        requestedYear
+            ? Number(requestedYear)
+            : null;
+
+    const activeYear =
+        parsedYear &&
+            years.includes(
+                parsedYear,
+            )
+            ? parsedYear
+            : "all";
+
+    const activeMedium =
+        requestedMedium &&
+            mediums.includes(
+                requestedMedium as Artwork["medium"],
+            )
+            ? requestedMedium as Artwork["medium"]
+            : "all";
+
+    const hasActiveFilters =
+        activeCategory !== "all" ||
+        activeYear !== "all" ||
+        activeMedium !== "all";
+
+    /* =====================================================
+       FILTERED ARTWORKS
+       ===================================================== */
+
     const filteredArtworks =
         useMemo(() => {
-            if (
-                activeCategory === "all"
-            ) {
-                return artworks;
-            }
-
             return artworks.filter(
-                (artwork) =>
-                    artwork.categories.includes(
-                        activeCategory,
-                    ),
+                (artwork) => {
+                    const matchesCategory =
+                        activeCategory === "all" ||
+                        artwork.categories.includes(
+                            activeCategory,
+                        );
+
+                    const matchesYear =
+                        activeYear === "all" ||
+                        artwork.year ===
+                        activeYear;
+
+                    const matchesMedium =
+                        activeMedium === "all" ||
+                        artwork.medium ===
+                        activeMedium;
+
+                    return (
+                        matchesCategory &&
+                        matchesYear &&
+                        matchesMedium
+                    );
+                },
             );
         }, [
             activeCategory,
+            activeYear,
+            activeMedium,
             artworks,
         ]);
 
-    const selectCategory = (
-        category: string,
+    /* =====================================================
+       URL FILTER MANAGEMENT
+       ===================================================== */
+
+    const updateFilter = (
+        key:
+            | "category"
+            | "year"
+            | "medium",
+        value: string,
     ) => {
-        if (category === "all") {
-            router.replace(
-                "/artworks",
-                {
-                    scroll: false,
-                },
+        const params =
+            new URLSearchParams(
+                searchParams.toString(),
             );
 
-            return;
+        if (value === "all") {
+            params.delete(key);
+        } else {
+            params.set(
+                key,
+                value,
+            );
         }
 
+        const query =
+            params.toString();
+
         router.replace(
-            `/artworks?category=${encodeURIComponent(
-                category,
-            )}`,
+            query
+                ? `/artworks?${query}`
+                : "/artworks",
             {
                 scroll: false,
             },
         );
     };
+
+    const clearFilters = () => {
+        router.replace(
+            "/artworks",
+            {
+                scroll: false,
+            },
+        );
+    };
+
+    /* =====================================================
+       FILTER BUTTON
+       ===================================================== */
+
+    const filterButtonClass = (
+        isActive: boolean,
+    ) =>
+        [
+            "relative",
+            "font-sans",
+            "text-[10px]",
+            "uppercase",
+            "tracking-[0.24em]",
+            "transition-colors",
+            "duration-300",
+
+            isActive
+                ? "text-brand-gold"
+                : "text-white/40 hover:text-white/75",
+        ].join(" ");
 
     return (
         <div>
@@ -154,136 +316,365 @@ export default function ArtworkArchive({
                     py-6
 
                     md:mb-16
-                    md:flex
-                    md:items-center
-                    md:justify-between
-                    md:gap-10
                 "
             >
-                {/* Count */}
-
-                <p
-                    className="
-                        mb-5
-                        font-sans
-                        text-[9px]
-                        uppercase
-                        tracking-[0.28em]
-                        text-white/35
-
-                        md:mb-0
-                        md:shrink-0
-                    "
-                >
-                    {filteredArtworks.length}{" "}
-                    {filteredArtworks.length === 1
-                        ? "work"
-                        : "works"}
-                </p>
-
-                {/* Categories */}
+                {/* ================================================
+                    CATEGORY
+                   ================================================ */}
 
                 <div
                     className="
-                        flex
-                        flex-wrap
-                        items-center
-                        gap-x-6
-                        gap-y-3
-
-                        md:justify-end
+                        md:flex
+                        md:items-start
+                        md:justify-between
+                        md:gap-10
                     "
                 >
-                    <button
-                        type="button"
-                        onClick={() =>
-                            selectCategory(
-                                "all",
-                            )
-                        }
-                        className={[
-                            "relative",
-                            "font-sans",
-                            "text-[10px]",
-                            "uppercase",
-                            "tracking-[0.24em]",
-                            "transition-colors",
-                            "duration-300",
+                    <p
+                        className="
+                            mb-5
+                            font-sans
+                            text-[9px]
+                            uppercase
+                            tracking-[0.28em]
+                            text-white/35
 
-                            activeCategory === "all"
-                                ? "text-brand-gold"
-                                : "text-white/40 hover:text-white/75",
-                        ].join(" ")}
+                            md:mb-0
+                            md:w-24
+                            md:shrink-0
+                            md:pt-[2px]
+                        "
                     >
-                        All Works
+                        Category
+                    </p>
 
-                        {activeCategory ===
-                            "all" && (
-                                <span
-                                    className="
-                                    absolute
-                                    -bottom-2
-                                    left-0
-                                    h-px
-                                    w-full
-                                    bg-gradient-to-r
-                                    from-brand-gold
-                                    to-transparent
-                                "
-                                />
-                            )}
-                    </button>
+                    <div
+                        className="
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-x-6
+                            gap-y-3
 
-                    {categories.map(
-                        (category) => {
-                            const isActive =
-                                activeCategory ===
-                                category;
+                            md:flex-1
+                        "
+                    >
+                        <button
+                            type="button"
+                            onClick={() =>
+                                updateFilter(
+                                    "category",
+                                    "all",
+                                )
+                            }
+                            className={
+                                filterButtonClass(
+                                    activeCategory ===
+                                    "all",
+                                )
+                            }
+                        >
+                            All Works
 
-                            return (
+                            {activeCategory ===
+                                "all" && (
+                                    <span
+                                        className="
+                                            absolute
+                                            -bottom-2
+                                            left-0
+                                            h-px
+                                            w-full
+                                            bg-gradient-to-r
+                                            from-brand-gold
+                                            to-transparent
+                                        "
+                                    />
+                                )}
+                        </button>
+
+                        {categories.map(
+                            (category) => {
+                                const isActive =
+                                    activeCategory ===
+                                    category;
+
+                                return (
+                                    <button
+                                        key={
+                                            category
+                                        }
+                                        type="button"
+                                        onClick={() =>
+                                            updateFilter(
+                                                "category",
+                                                category,
+                                            )
+                                        }
+                                        className={
+                                            filterButtonClass(
+                                                isActive,
+                                            )
+                                        }
+                                    >
+                                        {formatLabel(
+                                            category,
+                                        )}
+
+                                        {isActive && (
+                                            <span
+                                                className="
+                                                    absolute
+                                                    -bottom-2
+                                                    left-0
+                                                    h-px
+                                                    w-full
+                                                    bg-gradient-to-r
+                                                    from-brand-gold
+                                                    to-transparent
+                                                "
+                                            />
+                                        )}
+                                    </button>
+                                );
+                            },
+                        )}
+                    </div>
+                </div>
+
+                {/* ================================================
+                    YEAR
+                   ================================================ */}
+
+                <div
+                    className="
+                        mt-7
+                        border-t
+                        border-white/[0.05]
+                        pt-6
+
+                        md:flex
+                        md:items-start
+                        md:justify-between
+                        md:gap-10
+                    "
+                >
+                    <p
+                        className="
+                            mb-5
+                            font-sans
+                            text-[9px]
+                            uppercase
+                            tracking-[0.28em]
+                            text-white/35
+
+                            md:mb-0
+                            md:w-24
+                            md:shrink-0
+                            md:pt-[2px]
+                        "
+                    >
+                        Year
+                    </p>
+
+                    <div
+                        className="
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-x-6
+                            gap-y-3
+
+                            md:flex-1
+                        "
+                    >
+                        <button
+                            type="button"
+                            onClick={() =>
+                                updateFilter(
+                                    "year",
+                                    "all",
+                                )
+                            }
+                            className={
+                                filterButtonClass(
+                                    activeYear ===
+                                    "all",
+                                )
+                            }
+                        >
+                            All
+                        </button>
+
+                        {years.map(
+                            (year) => (
                                 <button
-                                    key={category}
+                                    key={year}
                                     type="button"
                                     onClick={() =>
-                                        selectCategory(
-                                            category,
+                                        updateFilter(
+                                            "year",
+                                            String(
+                                                year,
+                                            ),
                                         )
                                     }
-                                    className={[
-                                        "relative",
-                                        "font-sans",
-                                        "text-[10px]",
-                                        "uppercase",
-                                        "tracking-[0.24em]",
-                                        "transition-colors",
-                                        "duration-300",
-
-                                        isActive
-                                            ? "text-brand-gold"
-                                            : "text-white/40 hover:text-white/75",
-                                    ].join(" ")}
+                                    className={
+                                        filterButtonClass(
+                                            activeYear ===
+                                            year,
+                                        )
+                                    }
                                 >
-                                    {formatCategory(
-                                        category,
-                                    )}
+                                    {year}
+                                </button>
+                            ),
+                        )}
+                    </div>
+                </div>
 
-                                    {isActive && (
-                                        <span
-                                            className="
-                                                absolute
-                                                -bottom-2
-                                                left-0
-                                                h-px
-                                                w-full
-                                                bg-gradient-to-r
-                                                from-brand-gold
-                                                to-transparent
-                                            "
-                                        />
+                {/* ================================================
+                    MEDIUM
+                   ================================================ */}
+
+                <div
+                    className="
+                        mt-7
+                        border-t
+                        border-white/[0.05]
+                        pt-6
+
+                        md:flex
+                        md:items-start
+                        md:justify-between
+                        md:gap-10
+                    "
+                >
+                    <p
+                        className="
+                            mb-5
+                            font-sans
+                            text-[9px]
+                            uppercase
+                            tracking-[0.28em]
+                            text-white/35
+
+                            md:mb-0
+                            md:w-24
+                            md:shrink-0
+                            md:pt-[2px]
+                        "
+                    >
+                        Medium
+                    </p>
+
+                    <div
+                        className="
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-x-6
+                            gap-y-3
+
+                            md:flex-1
+                        "
+                    >
+                        <button
+                            type="button"
+                            onClick={() =>
+                                updateFilter(
+                                    "medium",
+                                    "all",
+                                )
+                            }
+                            className={
+                                filterButtonClass(
+                                    activeMedium ===
+                                    "all",
+                                )
+                            }
+                        >
+                            All
+                        </button>
+
+                        {mediums.map(
+                            (medium) => (
+                                <button
+                                    key={medium}
+                                    type="button"
+                                    onClick={() =>
+                                        updateFilter(
+                                            "medium",
+                                            medium,
+                                        )
+                                    }
+                                    className={
+                                        filterButtonClass(
+                                            activeMedium ===
+                                            medium,
+                                        )
+                                    }
+                                >
+                                    {formatLabel(
+                                        medium,
                                     )}
                                 </button>
-                            );
-                        },
+                            ),
+                        )}
+                    </div>
+                </div>
+
+                {/* ================================================
+                    RESULT SUMMARY
+                   ================================================ */}
+
+                <div
+                    className="
+                        mt-7
+                        flex
+                        items-center
+                        justify-between
+                        gap-6
+                        border-t
+                        border-white/[0.05]
+                        pt-6
+                    "
+                >
+                    <p
+                        className="
+                            font-sans
+                            text-[9px]
+                            uppercase
+                            tracking-[0.28em]
+                            text-white/35
+                        "
+                    >
+                        {filteredArtworks.length}{" "}
+                        {filteredArtworks.length ===
+                            1
+                            ? "work"
+                            : "works"}
+                    </p>
+
+                    {hasActiveFilters && (
+                        <button
+                            type="button"
+                            onClick={
+                                clearFilters
+                            }
+                            className="
+                                font-sans
+                                text-[9px]
+                                uppercase
+                                tracking-[0.22em]
+                                text-white/35
+                                transition-colors
+                                duration-300
+                                hover:text-brand-gold
+                            "
+                        >
+                            Clear filters
+                        </button>
                     )}
                 </div>
             </div>
@@ -295,16 +686,12 @@ export default function ArtworkArchive({
             {filteredArtworks.length >
                 0 ? (
                 <CollectionGallery
-                    artworks={
-                        filteredArtworks
-                    }
+                    artworks={filteredArtworks}
                     interaction="detail"
                     imageVariant="thumbnail"
-                    detailCategory={
-                        activeCategory ===
-                            "all"
-                            ? undefined
-                            : activeCategory
+                    detailQuery={
+                        searchParams.toString() ||
+                        undefined
                     }
                 />
             ) : (
@@ -318,8 +705,8 @@ export default function ArtworkArchive({
                         text-white/35
                     "
                 >
-                    No works are currently
-                    available in this category.
+                    No works match the
+                    selected filters.
                 </div>
             )}
         </div>
