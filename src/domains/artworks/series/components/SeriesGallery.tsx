@@ -1,6 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import {
+    useEffect,
+    useState,
+} from "react";
+
+import {
+    usePathname,
+    useRouter,
+} from "next/navigation";
 
 import type { Artwork } from "@/domains/artworks";
 import { ArtworkLightbox } from "@/shared/ui/artwork";
@@ -9,43 +17,122 @@ import CollectionArtwork from "@/domains/home/sections/collection/CollectionArtw
 
 interface SeriesGalleryProps {
     artworks: Artwork[];
+    seriesSlug: string;
+    initialArtworkSlug?: string;
 }
 
 export default function SeriesGallery({
     artworks,
+    seriesSlug,
+    initialArtworkSlug,
 }: SeriesGalleryProps) {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const getArtworkIndex = (
+        artworkSlug?: string,
+    ) => {
+        if (!artworkSlug) {
+            return null;
+        }
+
+        const index =
+            artworks.findIndex(
+                (artwork) =>
+                    artwork.slug ===
+                    artworkSlug,
+            );
+
+        return index >= 0
+            ? index
+            : null;
+    };
+
     const [selectedIndex, setSelectedIndex] =
-        useState<number | null>(null);
+        useState<number | null>(() =>
+            getArtworkIndex(
+                initialArtworkSlug,
+            ),
+        );
+
+    /*
+     * Keep the lightbox synchronized with
+     * artwork supplied by the Series route.
+     */
+    useEffect(() => {
+        setSelectedIndex(
+            getArtworkIndex(
+                initialArtworkSlug,
+            ),
+        );
+    }, [
+        initialArtworkSlug,
+        artworks,
+    ]);
+
+    const handleOpen = (
+        artwork: Artwork,
+        index: number,
+    ) => {
+        setSelectedIndex(index);
+
+        router.replace(
+            `${pathname}?artwork=${encodeURIComponent(
+                artwork.slug,
+            )}`,
+            {
+                scroll: false,
+            },
+        );
+    };
+
+    const handleClose = () => {
+        setSelectedIndex(null);
+
+        /*
+         * Remove ?artwork= while remaining
+         * inside the current ArtworkSeries.
+         */
+        router.replace(
+            `/series/${seriesSlug}`,
+            {
+                scroll: false,
+            },
+        );
+    };
 
     return (
         <>
             <div
                 className="
-          grid
-          grid-cols-2
-          items-start
-          justify-items-center
-          gap-x-6
-          gap-y-14
+                    grid
+                    grid-cols-2
+                    items-start
+                    justify-items-center
+                    gap-x-6
+                    gap-y-14
 
-          md:grid-cols-4
-          md:gap-x-5
+                    md:grid-cols-4
+                    md:gap-x-5
 
-          xl:gap-x-8
+                    xl:gap-x-8
 
-          [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-3
-          [@media(orientation:landscape)_and_(max-height:600px)]:!gap-x-4
-          [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
-        "
+                    [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-3
+                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-x-4
+                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
+                "
             >
                 {artworks.map(
                     (artwork, index) => (
                         <CollectionArtwork
                             key={artwork.id}
                             artwork={artwork}
-                            onOpen={() => {
-                                setSelectedIndex(index);
-                            }}
+                            onOpen={() =>
+                                handleOpen(
+                                    artwork,
+                                    index,
+                                )
+                            }
                         />
                     ),
                 )}
@@ -59,9 +146,11 @@ export default function SeriesGallery({
                 isOpen={
                     selectedIndex !== null
                 }
-                onClose={() => {
-                    setSelectedIndex(null);
-                }}
+                onClose={handleClose}
+                showDetailsCta
+                showAllWorksCta={false}
+                detailsCtaLabel="Explore in detail"
+                detailsQuery={`series=${seriesSlug}`}
             />
         </>
     );

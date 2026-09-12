@@ -14,6 +14,10 @@ interface SeriesPageProps {
     params: Promise<{
         slug: string;
     }>;
+
+    searchParams: Promise<{
+        artwork?: string | string[];
+    }>;
 }
 
 export function generateStaticParams() {
@@ -26,8 +30,11 @@ export function generateStaticParams() {
 
 export default async function SeriesPage({
     params,
+    searchParams,
 }: SeriesPageProps) {
     const { slug } = await params;
+    const resolvedSearchParams =
+        await searchParams;
 
     const series =
         getArtworkSeriesBySlug(slug);
@@ -41,6 +48,22 @@ export default async function SeriesPage({
             series.id,
         );
 
+    const requestedArtworkSlug =
+        typeof resolvedSearchParams.artwork ===
+            "string"
+            ? resolvedSearchParams.artwork
+            : undefined;
+
+    const initialArtworkSlug =
+        requestedArtworkSlug &&
+            artworks.some(
+                (artwork) =>
+                    artwork.slug ===
+                    requestedArtworkSlug,
+            )
+            ? requestedArtworkSlug
+            : undefined;
+
     return (
         <main
             className="
@@ -50,8 +73,8 @@ export default async function SeriesPage({
       "
         >
             {/* =====================================================
-          SERIES INTRO
-         ===================================================== */}
+                SERIES INTRO
+                ===================================================== */}
 
             <section
                 className="
@@ -166,6 +189,10 @@ export default async function SeriesPage({
                 <Container>
                     <SeriesGallery
                         artworks={artworks}
+                        seriesSlug={series.slug}
+                        initialArtworkSlug={
+                            initialArtworkSlug
+                        }
                     />
                 </Container>
             </section>
@@ -268,7 +295,7 @@ export default async function SeriesPage({
                             "
                         >
                             <Link
-                                href="/artworks"
+                                href="/collections"
                                 className="
                                     font-sans
                                     text-[11px]
@@ -280,7 +307,7 @@ export default async function SeriesPage({
                                     hover:text-brand-gold
                                 "
                             >
-                                ← Explore Artworks
+                                ← Back to Collections
                             </Link>
 
                             <Link

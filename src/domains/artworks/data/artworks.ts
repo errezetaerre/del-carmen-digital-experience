@@ -75,6 +75,7 @@ export const artworks: Artwork[] = [
       "spiritual",
       "symbolic",
     ],
+    seriesId: "epifanias",
 
     dimensions: {
       width: 113,
@@ -297,6 +298,7 @@ export const artworks: Artwork[] = [
       "symbolic",
       "figurative"
     ],
+    seriesId: "the_inner_treasury",
 
     dimensions: {
       width: 90,
@@ -352,6 +354,8 @@ export const artworks: Artwork[] = [
       "academic",
       "portrait"
     ],
+
+    seriesId: "epifanias",
 
     dimensions: {
       width: 100,
@@ -728,6 +732,8 @@ export const artworks: Artwork[] = [
       "academic"
     ],
 
+    seriesId: "the_discipline_of_seeing",
+
     dimensions: {
       width: 50,
       height: 60,
@@ -1101,6 +1107,8 @@ export const artworks: Artwork[] = [
       "academic",
     ],
 
+    // seriesId: "the_discipline_of_seeing",
+
     dimensions: {
       width: 40,
       height: 30,
@@ -1364,6 +1372,8 @@ export const artworks: Artwork[] = [
       "academic",
     ],
 
+    seriesId: "the_discipline_of_seeing",
+
     dimensions: {
       width: 45,
       height: 30,
@@ -1469,6 +1479,8 @@ export const artworks: Artwork[] = [
       "bargue",
       "lithography",
     ],
+
+    seriesId: "the_discipline_of_seeing",
 
     dimensions: {
       width: 34,
@@ -1677,6 +1689,8 @@ export const artworks: Artwork[] = [
       "cast",
       "symbolic",
     ],
+
+    seriesId: "the_discipline_of_seeing",
 
     dimensions: {
       width: 45,
@@ -2045,6 +2059,8 @@ export const artworks: Artwork[] = [
       "academic",
       "bargue",
     ],
+
+    seriesId: "the_discipline_of_seeing",
 
     dimensions: {
       width: 113,

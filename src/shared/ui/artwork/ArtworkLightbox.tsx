@@ -15,7 +15,12 @@ interface ArtworkLightboxProps {
     initialIndex: number;
     isOpen: boolean;
     onClose: () => void;
+
     showDetailsCta?: boolean;
+    showAllWorksCta?: boolean;
+
+    detailsCtaLabel?: string;
+    detailsQuery?: string;
 }
 
 type Point = {
@@ -50,7 +55,12 @@ export default function ArtworkLightbox({
     initialIndex,
     isOpen,
     onClose,
+
     showDetailsCta = false,
+    showAllWorksCta = true,
+
+    detailsCtaLabel = "View details",
+    detailsQuery,
 }: ArtworkLightboxProps) {
     /* =========================================================
        STATE
@@ -118,6 +128,13 @@ export default function ArtworkLightbox({
         artwork
             ? `${artwork.medium} on ${artwork.support}`
             : "";
+
+    const detailsHref = artwork
+        ? `/artworks/${artwork.slug}${detailsQuery
+            ? `?${detailsQuery}`
+            : ""
+        }`
+        : "/artworks";
 
     /* =========================================================
        HELPERS
@@ -1096,28 +1113,109 @@ export default function ArtworkLightbox({
                             )}
                         </div>
 
-                        {/* Equal-weight CTAs */}
+                        {/* Contextual artwork actions */}
                         {showDetailsCta && (
-                            <div className="absolute bottom-3 left-1/2 flex w-[calc(100%-32px)] -translate-x-1/2 items-center justify-center gap-4 whitespace-nowrap md:bottom-4 md:w-auto md:gap-7 [@media(orientation:landscape)_and_(max-height:600px)]:bottom-1 [@media(orientation:landscape)_and_(max-height:600px)]:gap-4">
+                            <div
+                                className="
+                                    absolute
+                                    bottom-3
+                                    left-1/2
+                                    flex
+                                    w-[calc(100%-32px)]
+                                    -translate-x-1/2
+                                    items-center
+                                    justify-center
+                                    gap-4
+                                    whitespace-nowrap
+
+                                    md:bottom-4
+                                    md:w-auto
+                                    md:gap-7
+
+                                    [@media(orientation:landscape)_and_(max-height:600px)]:bottom-1
+                                    [@media(orientation:landscape)_and_(max-height:600px)]:gap-4
+                                "
+                            >
                                 <Link
-                                    href={`/artworks/${artwork.slug}`}
-                                    onPointerDown={(event) => event.stopPropagation()}
-                                    className="font-sans text-[9px] font-medium uppercase tracking-[0.16em] text-white/55 transition-colors duration-300 hover:text-brand-gold focus-visible:text-brand-gold focus-visible:outline-none md:text-[10px] md:tracking-[0.22em] [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]"
+                                    href={detailsHref}
+                                    onPointerDown={(event) =>
+                                        event.stopPropagation()
+                                    }
+                                    className="
+                                        font-sans
+                                        text-[9px]
+                                        font-medium
+                                        uppercase
+                                        tracking-[0.16em]
+                                        text-white/55
+                                        transition-colors
+                                        duration-300
+
+                                        hover:text-brand-gold
+
+                                        focus-visible:text-brand-gold
+                                        focus-visible:outline-none
+
+                                        md:text-[10px]
+                                        md:tracking-[0.22em]
+
+                                        [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]
+                                    "
                                 >
-                                    View details
-                                    <span aria-hidden className="ml-1.5 inline-block">→</span>
+                                    {detailsCtaLabel}
+
+                                    <span
+                                        aria-hidden
+                                        className="ml-1.5 inline-block"
+                                    >
+                                        →
+                                    </span>
                                 </Link>
 
-                                <span aria-hidden className="h-3 w-px bg-white/15" />
+                                {showAllWorksCta && (
+                                    <>
+                                        <span
+                                            aria-hidden
+                                            className="h-3 w-px bg-white/15"
+                                        />
 
-                                <Link
-                                    href="/artworks"
-                                    onPointerDown={(event) => event.stopPropagation()}
-                                    className="font-sans text-[9px] font-medium uppercase tracking-[0.16em] text-white/55 transition-colors duration-300 hover:text-brand-gold focus-visible:text-brand-gold focus-visible:outline-none md:text-[10px] md:tracking-[0.22em] [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]"
-                                >
-                                    View all works
-                                    <span aria-hidden className="ml-1.5 inline-block">→</span>
-                                </Link>
+                                        <Link
+                                            href="/artworks"
+                                            onPointerDown={(event) =>
+                                                event.stopPropagation()
+                                            }
+                                            className="
+                                                font-sans
+                                                text-[9px]
+                                                font-medium
+                                                uppercase
+                                                tracking-[0.16em]
+                                                text-white/55
+                                                transition-colors
+                                                duration-300
+
+                                                hover:text-brand-gold
+
+                                                focus-visible:text-brand-gold
+                                                focus-visible:outline-none
+
+                                                md:text-[10px]
+                                                md:tracking-[0.22em]
+
+                                                [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]
+                                            "
+                                        >
+                                            View all works
+
+                                            <span
+                                                aria-hidden
+                                                className="ml-1.5 inline-block"
+                                            >
+                                                →
+                                            </span>
+                                        </Link>
+                                    </>
+                                )}
                             </div>
                         )}
                     </div>

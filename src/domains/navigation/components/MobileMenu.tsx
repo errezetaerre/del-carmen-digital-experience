@@ -35,17 +35,12 @@ export default function MobileMenu({
   const pathname = usePathname();
 
   const currentNavigationHref =
-    pathname === "/artist" ||
-      pathname.startsWith("/artist/")
-      ? "/about"
-      : NAVIGATION_ITEMS.find(
-        (item) =>
-          pathname === item.href ||
-          (
-            item.href !== "/" &&
-            pathname.startsWith(`${item.href}/`)
-          ),
-      )?.href ?? null;
+    NAVIGATION_ITEMS.find((item) =>
+      isNavigationItemActive(
+        pathname,
+        item.href,
+      ),
+    )?.href ?? null;
 
 
 

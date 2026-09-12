@@ -1,6 +1,4 @@
-export {
-    artworkSeries,
-} from "./artworkSeries";
+export { artworkSeries } from "./artworkSeries";
 
 export {
     getArtworkSeries,
@@ -12,4 +10,11 @@ export {
 export type {
     ArtworkSeries,
     ArtworkSeriesStatus,
+    ArtworkSeriesImage,
+    ArtworkSeriesImages,
+    ArtworkSeriesHero,
+    ArtworkSeriesHeroLayout,
+    ArtworkSeriesHeroMedia,
+    ArtworkSeriesHeroImageMedia,
+    ArtworkSeriesHeroVideoMedia,
 } from "./types";
