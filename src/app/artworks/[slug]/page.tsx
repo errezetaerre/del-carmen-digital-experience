@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import {
     getArtworks,
     getArtworkBySlug,
+    getArtworkSeriesBySlug,
+    getArtworksBySeriesId,
 } from "@/domains/artworks";
 
 import ArtworkDetailViewer from "@/domains/artworks/components/ArtworkDetailViewer";
@@ -19,6 +21,7 @@ interface ArtworkPageProps {
         category?: string;
         year?: string;
         medium?: string;
+        series?: string;
     }>;
 }
 
@@ -64,6 +67,7 @@ export default async function ArtworkPage({
         category,
         year,
         medium,
+        series: seriesSlug,
     } = await searchParams;
 
     const artwork =
@@ -84,6 +88,34 @@ export default async function ArtworkPage({
 
     const artworks =
         getArtworks();
+
+    const requestedSeries =
+        seriesSlug
+            ? getArtworkSeriesBySlug(
+                seriesSlug,
+            )
+            : undefined;
+
+    const seriesArtworks =
+        requestedSeries
+            ? getArtworksBySeriesId(
+                requestedSeries.id,
+            )
+            : [];
+
+    const isArtworkInSeries =
+        requestedSeries
+            ? seriesArtworks.some(
+                (item) =>
+                    item.id === artwork.id,
+            )
+            : false;
+
+    const activeSeries =
+        requestedSeries &&
+            isArtworkInSeries
+            ? requestedSeries
+            : undefined;
 
     const activeCategory =
         category &&
@@ -117,27 +149,30 @@ export default async function ArtworkPage({
             : undefined;
 
     const navigationArtworks =
-        artworks.filter((item) => {
-            const matchesCategory =
-                !activeCategory ||
-                item.categories.includes(
-                    activeCategory,
+        activeSeries
+            ? seriesArtworks
+            : artworks.filter((item) => {
+                const matchesCategory =
+                    !activeCategory ||
+                    item.categories.includes(
+                        activeCategory,
+                    );
+
+                const matchesYear =
+                    !activeYear ||
+                    item.year === activeYear;
+
+                const matchesMedium =
+                    !activeMedium ||
+                    item.medium ===
+                    activeMedium;
+
+                return (
+                    matchesCategory &&
+                    matchesYear &&
+                    matchesMedium
                 );
-
-            const matchesYear =
-                !activeYear ||
-                item.year === activeYear;
-
-            const matchesMedium =
-                !activeMedium ||
-                item.medium === activeMedium;
-
-            return (
-                matchesCategory &&
-                matchesYear &&
-                matchesMedium
-            );
-        });
+            });
 
     const currentIndex =
         navigationArtworks.findIndex(
@@ -164,6 +199,13 @@ export default async function ArtworkPage({
     const archiveParams =
         new URLSearchParams();
 
+    if (activeSeries) {
+        archiveParams.set(
+            "series",
+            activeSeries.slug,
+        );
+    }
+
     if (activeCategory) {
         archiveParams.set(
             "category",
@@ -185,19 +227,28 @@ export default async function ArtworkPage({
         );
     }
 
-    const archiveQuery =
+    const navigationQuery =
         archiveParams.toString();
-    const artworksBackHref =
-        archiveQuery
-            ? `/artworks?${archiveQuery}`
-            : "/artworks";
+
+    const backHref =
+        activeSeries
+            ? `/series/${activeSeries.slug}`
+            : navigationQuery
+                ? `/artworks?${navigationQuery}`
+                : "/artworks";
+
+    const backLabel =
+        activeSeries
+            ? `Back to ${activeSeries.title}`
+            : "Back to artworks";
+
     return (
         <main
             className="
-        min-h-screen
-        bg-surface-deep
-        text-white
-      "
+                min-h-screen
+                bg-surface-deep
+                text-white
+            "
         >
             <Container
                 size="wide"
@@ -214,7 +265,7 @@ export default async function ArtworkPage({
                 ================================================ */}
 
                 <Link
-                    href={artworksBackHref}
+                    href={backHref}
                     className="
                         inline-block
                         translate-y-4
@@ -228,7 +279,7 @@ export default async function ArtworkPage({
                         hover:text-brand-gold
                     "
                 >
-                    ← Back to artworks
+                    ← {backLabel}
                 </Link>
 
                 {/* ================================================
@@ -262,8 +313,8 @@ export default async function ArtworkPage({
                         nextArtwork={
                             nextArtwork
                         }
-                        archiveQuery={
-                            archiveQuery
+                        navigationQuery={
+                            navigationQuery
                         }
                     />
 
@@ -467,8 +518,8 @@ export default async function ArtworkPage({
 
                                     {previousArtwork ? (
                                         <Link
-                                            href={`/artworks/${previousArtwork.slug}${archiveQuery
-                                                ? `?${archiveQuery}`
+                                            href={`/artworks/${previousArtwork.slug}${navigationQuery
+                                                ? `?${navigationQuery}`
                                                 : ""
                                                 }`}
                                             className="
@@ -520,8 +571,8 @@ export default async function ArtworkPage({
 
                                     {nextArtwork ? (
                                         <Link
-                                            href={`/artworks/${nextArtwork.slug}${archiveQuery
-                                                ? `?${archiveQuery}`
+                                            href={`/artworks/${nextArtwork.slug}${navigationQuery
+                                                ? `?${navigationQuery}`
                                                 : ""
                                                 }`}
                                             className="

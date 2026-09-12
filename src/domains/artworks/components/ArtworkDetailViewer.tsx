@@ -20,7 +20,7 @@ interface ArtworkDetailViewerProps {
     previousArtwork?: Artwork;
     nextArtwork?: Artwork;
 
-    archiveQuery?: string;
+    navigationQuery?: string;
 }
 
 const SWIPE_THRESHOLD = 70;
@@ -41,7 +41,7 @@ export default function ArtworkDetailViewer({
     artwork,
     previousArtwork,
     nextArtwork,
-    archiveQuery,
+    navigationQuery,
 }: ArtworkDetailViewerProps) {
     const router = useRouter();
 
@@ -243,8 +243,8 @@ export default function ArtworkDetailViewer({
         targetArtwork: Artwork,
     ) => {
         const query =
-            archiveQuery
-                ? `?${archiveQuery}`
+            navigationQuery
+                ? `?${navigationQuery}`
                 : "";
 
         return `/artworks/${targetArtwork.slug}${query}`;
