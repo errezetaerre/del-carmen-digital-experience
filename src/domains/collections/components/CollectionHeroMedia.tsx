@@ -1,13 +1,19 @@
 import Image from "next/image";
 
-import type { ArtworkSeriesHeroMedia } from "@/domains/artworks/series";
+import type {
+    ArtworkSeriesHeroLayout,
+    ArtworkSeriesHeroMedia,
+    ArtworkSeriesHeroMediaVariant,
+} from "@/domains/artworks/series";
 
 interface CollectionHeroMediaProps {
     media: ArtworkSeriesHeroMedia;
+    layout?: ArtworkSeriesHeroLayout;
 }
 
 export default function CollectionHeroMedia({
     media,
+    layout,
 }: CollectionHeroMediaProps) {
     if (media.type === "video") {
         return (
@@ -27,24 +33,42 @@ export default function CollectionHeroMedia({
                             media="(max-width: 767px)"
                         />
                     )}
-
                     <source src={media.desktopSrc} />
                 </video>
             </div>
         );
     }
 
+    const mobileVariant = layout?.mobile?.media ?? "portrait";
+    const tabletVariant = layout?.tablet?.media ?? mobileVariant;
+    const desktopVariant = layout?.desktop?.media ?? "landscape";
+
+    const getImage = (
+        variant: ArtworkSeriesHeroMediaVariant,
+    ) =>
+        variant === "portrait"
+            ? media.mobile
+            : media.desktop;
+
+    const mobileImage = getImage(mobileVariant);
+    const tabletImage = getImage(tabletVariant);
+    const desktopImage = getImage(desktopVariant);
+
     return (
         <div className="absolute inset-0 overflow-hidden">
             <picture>
                 <source
-                    media="(max-width: 767px)"
-                    srcSet={media.mobile.src}
+                    media="(min-width: 1024px)"
+                    srcSet={desktopImage.src}
                 />
-
+                <source
+                    media="(min-width: 768px)"
+                    srcSet={tabletImage.src}
+                />
+                <source srcSet={mobileImage.src} />
                 <Image
-                    src={media.desktop.src}
-                    alt={media.desktop.alt}
+                    src={desktopImage.src}
+                    alt={desktopImage.alt}
                     fill
                     sizes="100vw"
                     className="object-cover"

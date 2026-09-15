@@ -36,12 +36,10 @@ export default function SeriesGallery({
             return null;
         }
 
-        const index =
-            artworks.findIndex(
-                (artwork) =>
-                    artwork.slug ===
-                    artworkSlug,
-            );
+        const index = artworks.findIndex(
+            (artwork) =>
+                artwork.slug === artworkSlug,
+        );
 
         return index >= 0
             ? index
@@ -105,35 +103,43 @@ export default function SeriesGallery({
         <>
             <div
                 className="
-                    grid
-                    grid-cols-2
+                    flex
+                    flex-wrap
                     items-start
-                    justify-items-center
+                    justify-center
                     gap-x-6
                     gap-y-14
 
-                    md:grid-cols-4
                     md:gap-x-5
 
                     xl:gap-x-8
 
-                    [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-3
-                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-x-4
-                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
+                    [@media(orientation:landscape)_and_(max-height:600px)]:gap-x-4
+                    [@media(orientation:landscape)_and_(max-height:600px)]:gap-y-8
                 "
             >
                 {artworks.map(
                     (artwork, index) => (
-                        <CollectionArtwork
+                        <div
                             key={artwork.id}
-                            artwork={artwork}
-                            onOpen={() =>
-                                handleOpen(
-                                    artwork,
-                                    index,
-                                )
-                            }
-                        />
+                            className="
+                                w-[calc(50%-0.75rem)]
+
+                                md:w-[calc(25%-0.9375rem)]
+
+                                [@media(orientation:landscape)_and_(max-height:600px)]:w-[calc(33.333%-0.75rem)]
+                            "
+                        >
+                            <CollectionArtwork
+                                artwork={artwork}
+                                onOpen={() =>
+                                    handleOpen(
+                                        artwork,
+                                        index,
+                                    )
+                                }
+                            />
+                        </div>
                     ),
                 )}
             </div>
