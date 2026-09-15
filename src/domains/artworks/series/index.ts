@@ -17,4 +17,7 @@ export type {
     ArtworkSeriesHeroMedia,
     ArtworkSeriesHeroImageMedia,
     ArtworkSeriesHeroVideoMedia,
+    ArtworkSeriesHeroContentPosition,
+    ArtworkSeriesHeroMediaVariant,
+    ArtworkSeriesHeroResponsiveLayout,
 } from "./types";
