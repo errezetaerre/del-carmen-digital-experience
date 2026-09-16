@@ -99,47 +99,60 @@ export default function SeriesGallery({
         );
     };
 
+    const mobileColumns =
+        artworks.length === 1
+            ? "grid-cols-1"
+            : "grid-cols-2";
+
+
+    const desktopColumns =
+        artworks.length >= 4
+            ? "md:grid-cols-4"
+            : artworks.length === 3
+                ? "md:grid-cols-3"
+                : artworks.length === 2
+                    ? "md:grid-cols-2"
+                    : "md:grid-cols-1";
+
     return (
         <>
             <div
-                className="
-                    flex
-                    flex-wrap
+                className={`
+                    mx-auto
+        w-fit
+                    -mt-35
+                    grid
+                    grid-cols-2
                     items-start
-                    justify-center
+                    justify-items-center
                     gap-x-6
                     gap-y-14
+                    
 
                     md:gap-x-5
 
                     xl:gap-x-8
 
-                    [@media(orientation:landscape)_and_(max-height:600px)]:gap-x-4
-                    [@media(orientation:landscape)_and_(max-height:600px)]:gap-y-8
-                "
+                    ${mobileColumns}
+                    ${desktopColumns}       
+
+                    [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-3
+                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-x-4
+                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
+                `}
             >
                 {artworks.map(
                     (artwork, index) => (
-                        <div
+                        <CollectionArtwork
                             key={artwork.id}
-                            className="
-                                w-[calc(50%-0.75rem)]
-
-                                md:w-[calc(25%-0.9375rem)]
-
-                                [@media(orientation:landscape)_and_(max-height:600px)]:w-[calc(33.333%-0.75rem)]
-                            "
-                        >
-                            <CollectionArtwork
-                                artwork={artwork}
-                                onOpen={() =>
-                                    handleOpen(
-                                        artwork,
-                                        index,
-                                    )
-                                }
-                            />
-                        </div>
+                            artwork={artwork}
+                            onOpen={() =>
+                                handleOpen(
+                                    artwork,
+                                    index,
+                                )
+                            }
+                        />
                     ),
                 )}
             </div>
