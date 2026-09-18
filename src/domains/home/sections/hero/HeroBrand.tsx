@@ -1,8 +1,16 @@
-import { Button } from "@/shared/ui/button";
+import { LinkButton } from "@/shared/ui/button";
 import { brand } from "@/config/brand";
+import { getHeroArtwork } from "@/domains/home/services";
 import { HERO_CTA } from "./constants";
 
 export default function HeroBrand() {
+  const heroArtwork = getHeroArtwork();
+
+  const heroHref =
+    heroArtwork?.seriesId
+      ? `/series/${heroArtwork.seriesId}?artwork=${encodeURIComponent(heroArtwork.slug)}`
+      : "/collections";
+
   return (
     <div className="flex h-full flex-col">
       {/* Mobile portrait brand */}
@@ -77,8 +85,8 @@ export default function HeroBrand() {
           max-w-md
           font-display
           md:text-xl
-lg:text-2xl
-xl:text-[1.65rem]
+          lg:text-2xl
+          xl:text-[1.65rem]
           font-normal
           uppercase
           leading-[1.25]
@@ -109,8 +117,8 @@ xl:text-[1.65rem]
           [@media(orientation:landscape)_and_(max-height:600px)]:!mt-5
         "
       >
-        <Button
-          type="button"
+        <LinkButton
+          href={heroHref}
           variant="bronzeUnderline"
           className="
             mt-10
@@ -119,7 +127,7 @@ xl:text-[1.65rem]
           "
         >
           {HERO_CTA}
-        </Button>
+        </LinkButton>
       </div>
 
       {/* Scroll — desktop only */}

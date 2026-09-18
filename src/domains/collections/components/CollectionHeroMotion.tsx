@@ -63,11 +63,6 @@ export default function CollectionHeroMotion({
              * --------------------------------------------------
              * HERO ENTRANCE
              * --------------------------------------------------
-             *
-             * Existing approved motion.
-             *
-             * Runs once when the Collection approaches
-             * the viewport.
              */
 
             const entranceTimeline = gsap.timeline({
@@ -113,26 +108,33 @@ export default function CollectionHeroMotion({
              * COLLECTION DEPARTURE
              * --------------------------------------------------
              *
-             * Once the Collection reaches the top of the
-             * viewport, its media begins to recede subtly.
-             *
-             * This creates visual depth between consecutive
-             * Collections without changing natural scrolling.
+             * Explicitly starts from the final entrance state.
+             * immediateRender:false prevents this tween from
+             * interfering with the entrance before departure.
              */
 
-            gsap.to(media, {
-                scale: 0.985,
-                opacity: 0.72,
-                yPercent: -1.5,
-                ease: "none",
-
-                scrollTrigger: {
-                    trigger: root,
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: 0.8,
+            gsap.fromTo(
+                media,
+                {
+                    scale: 1,
+                    opacity: 1,
+                    filter: "brightness(1)",
                 },
-            });
+                {
+                    scale: 0.94,
+                    opacity: 0.35,
+                    filter: "brightness(0.45)",
+                    ease: "none",
+                    immediateRender: false,
+                    scrollTrigger: {
+                        trigger: root,
+                        start: "top top",
+                        end: "bottom 20%",
+                        scrub: 1.5,
+                        invalidateOnRefresh: true,
+                    },
+                },
+            );
         }, root);
 
         return () => {

@@ -12,7 +12,7 @@ export default function CollectionsIntro() {
                 py-14
 
                 md:min-h-[36svh]
-                md:py-20
+                md:py-30
             "
         >
             <Container size="wide">

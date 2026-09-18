@@ -24,12 +24,12 @@ export default function CollectionHeroContent({
             className="
                 relative
                 z-20
-                max-w-xl
+                max-w-2xl
             "
         >
             <p
                 className="
-                    mb-5
+                    mb-25
                     font-sans
                     text-[10px]
                     uppercase

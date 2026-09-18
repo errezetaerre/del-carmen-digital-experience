@@ -450,7 +450,7 @@ export default function CollectionPreviewWorks({
                             text-white/35
                         "
                     >
-                        -- Works in this collection --
+                        Works in this collection
                     </p>
 
                     <div

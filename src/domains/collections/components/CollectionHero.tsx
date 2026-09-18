@@ -114,7 +114,8 @@ export default function CollectionHero({
                             flex-col
                             gap-10
 
-                            md:max-w-[48%]
+                            md:max-w-[58%]
+lg:max-w-[55%]
 
                             ${alignmentClass(tabletContent, "md:")}
                             ${alignmentClass(desktopContent, "lg:")}

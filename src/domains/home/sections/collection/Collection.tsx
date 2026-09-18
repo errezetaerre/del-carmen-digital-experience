@@ -231,9 +231,18 @@ export default function Collection() {
 
               <div
                 data-collection-cta
-                className="mt-10 w-fit collection-motion">
+                className="
+                    collection-motion
+                    relative
+                    z-30
+                    mt-10
+                    w-fit
+                    pointer-events-auto
+                  "
+              >
                 <LinkButton
                   href={`/series/${series.slug}`}
+
                   variant="bronzeUnderline"
                   className="
                     font-sans
@@ -242,6 +251,7 @@ export default function Collection() {
                     tracking-[0.28em]
                   "
                 >
+
                   Explore collection →
                 </LinkButton>
               </div>
@@ -264,6 +274,7 @@ export default function Collection() {
               w-full
               overflow-hidden
               focus-visible:outline-none
+              z-10
             "
           >
             <div
