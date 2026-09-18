@@ -95,36 +95,32 @@ export default function CollectionPreviewWorks({
                     </p>
 
                     <div
-                        className="
+                        className={`
                             grid
                             h-7
-                            grid-cols-4
                             gap-2
 
                             transition-[height]
                             duration-700
-                            ease-[cubic-bezier(0.22,1,0.36,1)]
+                    ease-[cubic-bezier(0.22,1,0.36,1)]
 
                             group-hover/works:h-52
 
                             xl:group-hover/works:h-56
-                        "
+
+                            ${artworks.length === 1
+                                ? "grid-cols-[repeat(3,minmax(0,1fr))] [&>*]:col-start-2"
+                                : "grid-cols-4"
+                            }
+    `}
                     >
-                        {artworks.map(
-                            (artwork) => (
-                                <CollectionPreviewArtwork
-                                    key={
-                                        artwork.id
-                                    }
-                                    artwork={
-                                        artwork
-                                    }
-                                    seriesSlug={
-                                        seriesSlug
-                                    }
-                                />
-                            ),
-                        )}
+                        {artworks.map((artwork) => (
+                            <CollectionPreviewArtwork
+                                key={artwork.id}
+                                artwork={artwork}
+                                seriesSlug={seriesSlug}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
