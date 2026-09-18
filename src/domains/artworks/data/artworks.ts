@@ -238,6 +238,8 @@ export const artworks: Artwork[] = [
 
     support: "tonal paper Strathmore",
 
+    seriesId: "the_discipline_of_seeing",
+
     categories: [
       "figurative",
       "spiritual",
@@ -2053,14 +2055,14 @@ export const artworks: Artwork[] = [
 
     support: "tonal paper Canson",
 
+    seriesId: "the_discipline_of_seeing",
+
     categories: [
       "study",
       "lithography",
       "academic",
       "bargue",
     ],
-
-    seriesId: "the_discipline_of_seeing",
 
     dimensions: {
       width: 113,
