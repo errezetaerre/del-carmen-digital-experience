@@ -484,7 +484,7 @@ export const artworks: Artwork[] = [
       },
 
       collection: {
-        src: "/artworks/yasemi_I-collection.jpg",
+        src: "/artworks/yasemi_I.jpg",
         alt: "Yasemi I — collection presentation",
         width: 1920,
         height: 1080,
