@@ -332,6 +332,61 @@ export const artworks: Artwork[] = [
   },
 
   {
+    id: "buda",
+
+    slug: "buda",
+
+    title: "Buda",
+
+    year: 2027,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "spiritual",
+      "symbolic",
+      "figurative",
+    ],
+    seriesId: "the_inner_treasury",
+
+    dimensions: {
+      width: 60,
+      height: 90,
+      unit: "cm",
+    },
+
+    images: {
+      primary: {
+        src: "/artworks/buda.jpg",
+        alt: "Buda by Rolando Del Carmen",
+        width: 1024,
+        height: 1168,
+      },
+    },
+
+    quote:
+      "The journey inward is the path to enlightenment.",
+
+    description:
+      "This artwork captures the serene and contemplative essence of Buddha, inviting viewers to reflect on inner peace, mindfulness, and the pursuit of enlightenment.",
+
+    availability: "available",
+
+    price: {
+      amount: 12000,
+      currency: "USD",
+    },
+  },
+
+
+
+  {
     id: "sendero_del_sol",
 
     slug: "sendero-del-sol",
@@ -379,6 +434,169 @@ export const artworks: Artwork[] = [
 
     description:
       "A reflection on life's path, hope, serenity and the light we leave behind.",
+
+    availability: "available",
+
+    price: {
+      amount: 6000,
+      currency: "USD",
+    },
+  },
+
+  {
+    id: "margarita",
+
+    slug: "margarita",
+
+    title: "Margarita",
+
+    year: 2027,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "symbolic",
+      "figurative",
+      "portrait"
+    ],
+
+    seriesId: "epifanias",
+
+    dimensions: {
+      width: 130,
+      height: 130,
+      unit: "cm",
+    },
+
+    images: {
+      primary: {
+        src: "/artworks/margarita.jpg",
+        alt: "Margarita by Rolando Del Carmen",
+        width: 1200,
+        height: 992,
+      },
+    },
+
+    quote:
+      "A symbol of purity, innocence, and the ephemeral nature of beauty.",
+
+    description:
+      "This artwork captures the serene and contemplative essence of a young girl named Margarita, surrounded by a delicate white flower that symbolizes purity and innocence. The soft lighting and gentle expression on her face evoke a sense of tranquility and grace, inviting viewers to reflect on the simple beauty of childhood and the fleeting moments of life.",
+
+    availability: "available",
+
+    price: {
+      amount: 12000,
+      currency: "USD",
+    },
+  },
+
+  {
+    id: "recordando_mi_puerto",
+
+    slug: "recordando-mi-puerto",
+
+    title: "Recordando Mi Puerto",
+
+    year: 2027,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "symbolic",
+      "figurative",
+      "landscape"
+    ],
+
+    seriesId: "epifanias",
+
+    dimensions: {
+      width: 130,
+      height: 90,
+      unit: "cm",
+    },
+
+    images: {
+      primary: {
+        src: "/artworks/recordando_mi_puerto.jpg",
+        alt: "Recordando Mi Puerto by Rolando Del Carmen",
+        width: 1312,
+        height: 912,
+      },
+    },
+
+    quote:
+      "Memories of childhood near the sea under the shadow of a tree.",
+
+    description:
+      "I remember the innocence of my childhood and the beauty of the simple moments that made me who I am today. Contemplating this scene I find myself immersed in those years, in the smell of the sea and the warmth of the sun on my skin. It is a tribute to those times and to the place that saw me grow.",
+
+    availability: "available",
+
+    price: {
+      amount: 12000,
+      currency: "USD",
+    },
+  },
+
+  {
+    id: "la_mujer_del_bosque",
+
+    slug: "la-mujer-del-bosque",
+
+    title: "La Mujer Del Bosque",
+
+    year: 2027,
+
+    authorship: "original",
+
+    context: "independent",
+
+    medium: "oil",
+
+    support: "canvas",
+
+    categories: [
+      "symbolic",
+      "figurative",
+      "landscape",
+      "portrait"
+    ],
+
+    seriesId: "epifanias",
+
+    dimensions: {
+      width: 90,
+      height: 140,
+      unit: "cm",
+    },
+
+    images: {
+      primary: {
+        src: "/artworks/la_mujer_del_bosque.jpg",
+        alt: "La Mujer Del Bosque by Rolando Del Carmen",
+        width: 896,
+        height: 1344,
+      },
+    },
+
+    quote:
+      "She carries the scent of leaves and the wisdom of the trees.",
+
+    description:
+      "A representation of the strength, wisdom, and beauty of nature. Her presence brings a sense of peace and tranquility to those who contemplate her.",
 
     availability: "available",
 
