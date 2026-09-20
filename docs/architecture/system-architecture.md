@@ -1,6 +1,6 @@
 # System Architecture
 
-Version: 1.1
+Version: 1.2
 
 Document ID:
 DOC-SA
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-17
+2026-09-19
 
 ---
 
@@ -235,9 +235,9 @@ Examples:
 
 Artwork
 
-Artist
+ArtworkSeries
 
-Collection
+Artist
 
 Journal
 
@@ -298,9 +298,13 @@ An artwork may therefore be both original in authorship and academic in context.
 
 Master studies and master copies must be explicitly distinguishable from the artist's original authored corpus without removing their value as artworks or records of artistic formation.
 
-ArtworkSeries is a separate curatorial entity.
+ArtworkSeries is the canonical curatorial entity for coherent bodies of work.
 
-An ArtworkSeries groups multiple Artwork entities that belong to a coherent artistic body, narrative, exhibition concept or thematic investigation.
+An ArtworkSeries groups Artwork entities that belong to a coherent artistic body, narrative, exhibition concept or thematic investigation.
+
+Visitor-facing language may use “Collection”, and `/collections` is the editorial discovery route for ArtworkSeries. This terminology does not create a parallel Collection domain or persistence model.
+
+The detailed curatorial route remains `/series/[slug]`.
 
 Example:
 
@@ -321,6 +325,10 @@ A series may define:
 • Cover artwork
 • Ordered artwork membership
 • Curatorial metadata
+
+The current Phase 1 implementation expresses optional Series membership through `Artwork.seriesId`.
+
+This relationship may evolve toward many-to-many membership only when a real curatorial requirement justifies it. No migration is required merely for conceptual purity.
 
 Artwork media must support multiple visual representations of the same Artwork without duplicating the Artwork entity.
 
@@ -352,11 +360,39 @@ Conceptually:
 HomeCuration
 ├── Hero → Artwork
 ├── Featured Artwork → Artwork
-└── Featured Collection → Artwork | ArtworkSeries
+└── Featured Collection → ArtworkSeries
 
 This allows the same Artwork to be reused intentionally in different contexts without duplicate database records while also allowing Home curation to change independently of artwork metadata.
 
-The exact persistence schema, field names and database implementation for Artwork, ArtworkSeries, ArtworkImage and HomeCuration are intentionally deferred until the canonical domain model is approved.
+The canonical domain distinction between Artwork and ArtworkSeries is approved. Persistence may continue to evolve without introducing duplicate domain concepts merely to mirror presentation terminology.
+
+---
+
+# SA-05A Collections and Series Presentation Boundary
+
+Status:
+🟢 Approved
+
+The Collections and Series experiences are presentation contexts over the canonical Artwork and ArtworkSeries domain model.
+
+`/collections`
+
+• Editorial discovery index for ArtworkSeries
+• Uses Collection Heroes
+• Uses responsive media/content composition
+• May expose desktop artwork previews
+• Does not duplicate the full Series statement or detailed gallery
+
+`/series/[slug]`
+
+• Detailed curatorial ArtworkSeries experience
+• Owns Series-level contemplation, statement, description and gallery presentation
+• May use artwork-derived atmospheric media belonging to the current Series
+• Preserves contextual artwork navigation when entering Artwork detail
+
+Hero layout, responsive composition, Lightbox state, carousel behavior and atmospheric transitions are presentation concerns. They must not become duplicate domain entities or persistence fields unless a durable business requirement exists.
+
+The shared Artwork Lightbox may adapt its navigation and information behavior to Series or Artwork/archive context while remaining one shared interaction system.
 
 ---
 
@@ -468,8 +504,6 @@ Artwork Series
 
 Artwork Media
 
-Collections / Curatorial Selections
-
 Categories
 
 Journal
@@ -491,14 +525,17 @@ Art Domain
 Artwork
 ArtworkSeries
 ArtworkMedia
-Collection
 Exhibition
 JournalEntry
 ArtistStatement
 
 Artwork is the canonical record of an individual work.
 
-ArtworkSeries represents a coherent body of multiple artworks and maintains relationships to its member Artwork records.
+ArtworkSeries represents a coherent body of artworks and maintains curatorial relationships to its member Artwork records.
+
+`Collection` is currently editorial/public terminology for ArtworkSeries discovery and must not be introduced as a duplicate persistence entity.
+
+The current Phase 1 implementation uses optional `Artwork.seriesId`. A future relationship entity may support many-to-many membership, ordering or Series-specific featured state when an actual requirement emerges.
 
 ArtworkMedia represents public or protected media associated with an Artwork. It must support multiple presentation roles without duplicating the Artwork record.
 
@@ -517,9 +554,9 @@ It may conceptually determine:
 
 • Hero artwork
 • Featured artwork
-• Featured collection entries
+• Featured collection
 
-Featured collection entries may reference either an individual Artwork or an ArtworkSeries.
+The Featured Collection references an existing ArtworkSeries.
 
 The database must not treat Hero placement, Featured Artwork placement or Home Collection placement as intrinsic artistic properties of an Artwork.
 

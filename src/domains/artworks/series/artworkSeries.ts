@@ -8,7 +8,7 @@ export const artworkSeries: ArtworkSeries[] = [
         description:
             "A contemplative exploration of serenity, transformation, and the shifting language of color.",
         statement:
-            "Yasemi unfolds as a space of contemplation...",
+            "Yasemi unfolds as a space of contemplation in the more deep of the ocean is living what the world needs from now on.",
         coverArtworkId: "yasemi_i",
         images: {
             featured: {
@@ -42,6 +42,10 @@ export const artworkSeries: ArtworkSeries[] = [
         },
         status: "ongoing",
         yearStart: 2026,
+        atmosphere: {
+            src: "/series/yasemi/yasemi_atmosphere.png",
+            alt: "",
+        },
     },
     {
         id: "epifanias",
@@ -76,6 +80,10 @@ export const artworkSeries: ArtworkSeries[] = [
         },
         status: "ongoing",
         yearStart: 2027,
+        atmosphere: {
+            src: "/series/epifanias/epifanias_atmosphere.png",
+            alt: "",
+        },
     },
     {
         id: "the_inner_treasury",
@@ -111,6 +119,10 @@ export const artworkSeries: ArtworkSeries[] = [
         status: "completed",
         yearStart: 2024,
         yearEnd: 2024,
+        atmosphere: {
+            src: "/series/the_inner_treasury/the_inner_treasury_atmosphere.png",
+            alt: "",
+        },
     },
     {
         id: "the_discipline_of_seeing",
@@ -146,5 +158,9 @@ export const artworkSeries: ArtworkSeries[] = [
         status: "completed",
         yearStart: 2023,
         yearEnd: 2023,
+        atmosphere: {
+            src: "/series/the_discipline_of_seeing/the_discipline_of_seeing_atmosphere.png",
+            alt: "",
+        },
     },
 ];

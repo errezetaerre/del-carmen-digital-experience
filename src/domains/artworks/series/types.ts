@@ -74,4 +74,11 @@ export interface ArtworkSeries {
     status: ArtworkSeriesStatus;
     yearStart?: number;
     yearEnd?: number;
+    atmosphere?: ArtworkSeriesAtmosphere;
+
+}
+
+export interface ArtworkSeriesAtmosphere {
+    src: string;
+    alt: string;
 }

@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 0.1
+Version: 1.0
 
 Document ID: DOC-COL-SPEC
 
@@ -12,11 +12,11 @@ Document Type: Domain Specification
 
 Authority Level: High
 
-Status: 🟡 Approved Direction / In Development
+Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-10
+Last Updated: 2026-09-19
 
 ---
 
@@ -135,30 +135,50 @@ These are distinct from artistic years and exhibition dates. Additional speculat
 
 Each entry in `/collections` is presented as a large reusable Collection Hero.
 
-The Hero owns presentation and media composition, not curatorial content.
+The Hero owns presentation and media composition, not duplicated curatorial content.
 
-Conceptual responsibility:
+Hero media orientation and content position are independent editorial decisions and may be configured per responsive breakpoint.
+
+Approved responsive responsibilities are:
 
 ```ts
-type CollectionHero = {
-  media: CollectionHeroMedia;
-  layout?: "default" | "content-left";
-};
+type ArtworkSeriesHeroContentPosition =
+  | "top"
+  | "bottom"
+  | "left"
+  | "right";
+
+type ArtworkSeriesHeroMediaVariant =
+  | "portrait"
+  | "landscape";
+
+interface ArtworkSeriesHeroResponsiveLayout {
+  media?: ArtworkSeriesHeroMediaVariant;
+  content?: ArtworkSeriesHeroContentPosition;
+}
+
+interface ArtworkSeriesHeroLayout {
+  mobile?: ArtworkSeriesHeroResponsiveLayout;
+  tablet?: ArtworkSeriesHeroResponsiveLayout;
+  desktop?: ArtworkSeriesHeroResponsiveLayout;
+}
 ```
 
-`default` means content left / media right.
+The system must not infer content position from media orientation.
 
-`content-left` means media left / content right.
+The system must not infer portrait media solely from a portrait viewport.
 
-The ambiguous inverse name `content-right` is not used.
+Each Series may therefore establish the composition that best serves its artwork at mobile, tablet and desktop while remaining inside the shared Del Carmen visual system.
 
-A preferred component boundary is conceptually:
+The preferred component boundary remains conceptually:
 
 ```tsx
 <CollectionHero collection={collection} />
 ```
 
-rather than passing a large set of duplicated loose content props.
+rather than passing duplicated curatorial values as loose presentation props.
+
+Responsive Collection Hero behavior has completed implementation and visual QA for the current Phase 1 collections.
 
 ## Hero Media
 
@@ -189,11 +209,13 @@ Hero text may be reduced or omitted when the media itself already carries the ne
 
 ## Directional Gradient
 
-Text readability uses a localized black-to-transparent directional gradient rather than a blanket dark overlay across the entire artwork.
+Collection Hero readability may use localized darkness, gradients, overlays and atmospheric falloff according to the composition of the current Series.
 
-For `default`, the stronger dark treatment begins on the content side and fades toward the media. For `content-left`, the direction is inverted.
+The original directional black-to-transparent treatment remains part of the visual vocabulary, but the final implementation may use a broader controlled overlay when required by artwork, responsive composition or text placement.
 
-The fade may extend approximately toward 60% of the composition as an initial visual reference. Exact stops and opacity are implementation details to be validated visually.
+The treatment must preserve artwork visibility and should never behave like a generic blanket filter.
+
+Exact stops, opacity and directional behavior remain implementation-level visual values rather than domain data.
 
 ## Visual Identity
 
@@ -215,45 +237,45 @@ The Hero may render a restrained highlight treatment when present. No empty layo
 
 ## Works Preview — Desktop
 
-Desktop Collection Heroes may include a curated preview labelled conceptually `Works in this collection`.
+Desktop Collection Heroes include a curated preview labelled `Works in this collection`.
 
-The preview contains up to approximately four real artworks shown initially as narrow masked windows / strips rather than conventional cards.
+The label and artwork preview behave as one visually attached, bottom-anchored unit. Artwork expansion grows upward so the label remains connected to the preview rather than drifting away from it.
 
-Primary interaction:
+For one to four artworks, the preview preserves the restrained masked-strip composition. The major reveal belongs to the group: hovering the preview expands the visible artwork windows together, while individual artwork interaction remains secondary and may expose restrained metadata or directional affordance.
 
-- hovering the preview group expands all visible artwork windows together
-- the expanded state reveals a substantial portion of each artwork, approximately 60–75% as an initial visual target
-- once expanded, an individual artwork may receive a restrained micro-hover exposing title, year and/or directional affordance
+A single artwork remains visually centered within the preview composition.
 
-The major reveal belongs to the group. Individual artworks must not each perform a competing dramatic expansion.
+When more than four artworks are available, the preview becomes a horizontal carousel rather than compressing an arbitrary number of artworks into the same width. The carousel preserves the same visual language and exposes a controlled visible window with navigation and drag interaction.
 
-This interaction is intentionally curatorial and cinematic rather than resembling an e-commerce product grid.
+The preview remains a dedicated presentation responsibility such as `CollectionPreviewWorks` / `CollectionPreviewArtwork`. It must not reuse the detailed Series gallery merely to avoid a specialized component.
 
-The preview should have a dedicated presentation responsibility such as `CollectionPreviewWorks` / `CollectionPreviewArtwork`. The existing detailed gallery artwork component should not be repurposed merely to avoid a small specialized component.
-
-The final artwork-selection rule is not frozen. Existing series data, artwork order and future featured relationship data should be evaluated during implementation before introducing new fields.
+Artwork targets may preserve Series context when opening deeper artwork experiences.
 
 ## Mobile
 
 Mobile does not render the desktop Works Preview.
 
-There are no artwork strips, horizontal thumbnail carousel or scroll-triggered substitute for the desktop hover interaction. The mobile Hero, collection information and `Explore Collection` action are sufficient.
+There are no artwork strips, thumbnail carousel or substitute hover interaction beneath the Collection Hero on mobile. The Hero, collection information and `Explore Collection` action provide the discovery path.
 
-Where architecture permits, desktop preview media should not be unnecessarily loaded on mobile merely to hide it with CSS.
+Responsive Hero media and content composition remain independently configurable at the mobile breakpoint.
+
+Where architecture permits, desktop-only preview media should not be unnecessarily loaded on mobile merely to hide it with CSS.
+
+This responsive behavior has completed visual QA for the current Phase 1 collections.
 
 ## Motion and Scroll
 
-The page uses natural vertical scroll. Scroll motion and Works Preview hover are separate interaction layers:
+The page uses natural vertical scroll. Scroll motion and Works Preview interaction remain separate layers:
 
-- scroll reveals the Collection Hero
-- hover reveals the desktop artwork preview
-- artwork micro-hover identifies an individual work
+- scroll introduces and releases the Collection Hero
+- group interaction reveals the desktop artwork preview
+- individual artwork interaction identifies or opens a specific work
 
-Hero entrance motion should remain restrained. Initial implementation references may include subtle media opacity/scale settling and a small content translate/fade entrance.
+Collection Hero entrance motion is restrained and atmospheric. The current implementation uses subtle media settling and content arrival rather than attention-seeking animation.
 
-A desktop Hero may begin around `min-height: 80svh` as a visual hypothesis so the following collection can remain perceptible. This value is not frozen until visual QA.
+Departure behavior may continue to be refined visually without changing the conceptual motion responsibility.
 
-All motion must respect `prefers-reduced-motion`, consistent with existing Del Carmen interaction behavior.
+All motion must respect `prefers-reduced-motion`, consistent with Del Carmen interaction behavior.
 
 ## Artwork Relationship
 
@@ -310,25 +332,109 @@ Detailed exhibition history belongs to `/series/[slug]`, not the Collections ind
 
 ## Detailed Series Experience
 
-The existing `/series/[slug]` route remains the detailed collection experience.
+The `/series/[slug]` route is the canonical detailed curatorial experience for an individual Artwork Series.
 
-Its gallery responsibility is already implemented through the Artwork Series domain and should remain distinct from `/collections` preview behavior.
+It develops the Series beyond the discovery role of `/collections` and should feel like entering the visual world of that body of work rather than opening a conventional gallery page.
 
-The detail experience may evolve to include:
+The experience includes:
 
-- title and artistic metadata
+- Series identity and title
+- artistic metadata
+- works count and artistic lifecycle status
+- Series artwork gallery
 - full `statement`
-- Featured Artwork
-- detailed artwork gallery
-- Exhibition History
-- artwork exploration
+- supporting `description`
+- contextual artwork exploration
 - Continue Exploring / return navigation
+- Exhibition History when available
 
-These additions should extend the existing series experience rather than duplicate it inside `/collections`.
+### Series Metadata
+
+Works count and Series status form a single restrained editorial expression, for example:
+
+`2 WORKS · ONGOING`
+
+Subtle horizontal rules may flank this metadata to reinforce balance and hierarchy.
+
+The rules remain secondary and must not become decorative focal points.
+
+### Series Artwork Presentation
+
+Artwork previews should have greater visual presence than compact discovery thumbnails.
+
+When composition allows, previews may use generous, near-square presentation areas while preserving the identity and integrity of each artwork.
+
+The current intentional composition allows artwork cards to overlap or cross the transition into the darker Series Statement environment. This slight overlap creates depth and continuity and should not be treated as an alignment error.
+
+With a single artwork, the artwork remains horizontally centered.
+
+When the artwork count exceeds the standard desktop gallery capacity, the Series gallery uses a horizontal carousel rather than compressing all works into the available width.
+
+Artwork interaction opens the shared Artwork Lightbox in Series context.
+
+### Series Atmosphere
+
+The upper Series experience may use atmospheric imagery derived from artwork belonging to the current Series.
+
+The atmospheric source may reveal an enlarged or selectively cropped detail rather than the complete artwork. Its purpose is to extend the visual language of the Series into the surrounding environment without competing with the primary artwork presentation.
+
+When multiple suitable artworks exist, the atmospheric source may either:
+
+- select one suitable Series artwork for the experience, or
+- transition subtly among multiple Series artworks over time.
+
+A reference interval of approximately 15 seconds may be used by implementation when timed rotation is enabled, but timing is not a visual-language invariant.
+
+Transitions should feel like environmental evolution rather than a slideshow.
+
+The atmosphere may use controlled darkness, gradients, vignette, reduced prominence and other treatments consistent with `visualIdentity`, while preserving the artistic identity and color relationships of the source artwork.
+
+The atmospheric artwork must belong to the current Series. No unrelated decorative imagery should be introduced merely to fill the background.
+
+### Series Statement and Description
+
+The Series Statement is the principal curatorial expression and remains visually dominant.
+
+The Series `description` may appear beneath the Statement as a quieter secondary editorial layer. This creates continuity between the concise description used in discovery contexts and the deeper interpretation provided by the Statement without duplicating either value.
+
+Statement and description remain domain-owned content and must not be duplicated in presentation configuration.
+
+### Decorative Restraint
+
+Peripheral corner quotations, ornamental messages or unrelated editorial fragments are not part of the default Series Detail composition.
+
+They may be introduced only when a specific curatorial reason justifies them.
+
+Artwork, atmosphere, typography, curatorial meaning and negative space remain the primary materials of the page.
+
+### Contextual Artwork Navigation
+
+The shared Artwork Lightbox supports contextual behavior rather than separate competing lightbox implementations.
+
+In Series context:
+
+- close returns to the Series experience
+- pagination / dots represent the current Series
+- previous and next navigation remain within the current Series
+- contemplative artwork information may be shown
+- `Explore in detail` opens the Artwork detail while preserving Series context
+
+Artwork detail reached from a Series preserves the originating Series through contextual navigation. Artwork detail reached independently continues to use the broader Artwork/archive context.
+
+### Continue Exploring
+
+Series Detail provides deliberate return paths after contemplation.
+
+The approved current navigation includes:
+
+- `← Back to Collections`
+- `Return Home →`
+
+These actions close the Series journey without duplicating the Collections discovery experience.
 
 ## Current Implementation Compatibility
 
-At the time of this specification, the working codebase already contains `ArtworkSeries` under the Artworks domain and `/series/[slug]` consumes it. Home also resolves its featured collection through existing Artwork Series data/services.
+The working codebase contains `ArtworkSeries` under the Artworks domain and `/series/[slug]` consumes it. Home and `/collections` resolve collection experiences through the existing Artwork Series source of truth and services.
 
 Therefore:
 
@@ -377,14 +483,21 @@ The initial Collections implementation does not require:
 
 ## Validation and Documentation Lifecycle
 
-This specification records approved direction before implementation and is intentionally not frozen.
+This specification has been reconciled with the implemented and visually approved Phase 1 Collections and Series behavior as of Version 1.0.
 
-Workflow:
+Future implementation discoveries may refine local non-semantic values such as exact heights, gradient stops, reveal percentages or animation timing without requiring a specification revision.
 
-Specification → component/file architecture → wireframe as needed → implementation → visual/responsive QA → specification reconciliation → implementation documentation → Approved / Frozen.
+The specification should be revised when a discovery changes a durable domain, system or experience rule.
 
-Implementation discoveries may refine non-semantic values such as exact Hero height, gradient stops, reveal percentages or animation timing. The specification should be updated only when a discovery changes a durable system or experience rule.
+New capabilities should continue to follow:
+
+Specification → architecture → implementation → visual/responsive QA → specification reconciliation.
 
 ## Status
 
-Collections v0.1 defines the approved Phase 1 conceptual and UX direction. Component architecture and implementation remain pending. After implementation and QA, this document must be reconciled with the final behavior before being promoted to Approved / Frozen.
+Collections v1.0 records the approved current Phase 1 Collections and Artwork Series Detail experience.
+
+The current responsive Collection Hero system, Collections discovery behavior, desktop Works Preview behavior, Series gallery behavior, contextual artwork navigation and Series Detail visual direction are approved.
+
+Deferred capabilities remain explicitly deferred where identified in this document and should not be interpreted as missing requirements for the approved Phase 1 experience.
+

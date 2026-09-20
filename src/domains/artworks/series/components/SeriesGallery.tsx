@@ -13,6 +13,7 @@ import {
 
 import type { Artwork } from "@/domains/artworks";
 import { ArtworkLightbox } from "@/shared/ui/artwork";
+import { InteractionHint } from "@/shared/ui/interaction-hint";
 
 import CollectionArtwork from "@/domains/home/sections/collection/CollectionArtwork";
 
@@ -32,6 +33,14 @@ export default function SeriesGallery({
 
     const carouselRef =
         useRef<HTMLDivElement>(null);
+
+    const settleTimeoutRef =
+        useRef<ReturnType<typeof setTimeout> | null>(
+            null,
+        );
+
+    const [carouselHintDismissed, setCarouselHintDismissed] =
+        useState(false);
 
     const getArtworkIndex = (
         artworkSlug?: string,
@@ -103,6 +112,73 @@ export default function SeriesGallery({
         );
     };
 
+    const dismissCarouselHint = () => {
+        setCarouselHintDismissed(true);
+    };
+
+    const settleCarousel = () => {
+        const carousel =
+            carouselRef.current;
+
+        if (!carousel) {
+            return;
+        }
+
+        if (settleTimeoutRef.current) {
+            clearTimeout(
+                settleTimeoutRef.current,
+            );
+        }
+
+        settleTimeoutRef.current =
+            setTimeout(() => {
+                const cards =
+                    Array.from(
+                        carousel.children,
+                    ).filter(
+                        (element) =>
+                            element instanceof HTMLElement &&
+                            element.dataset.carouselItem ===
+                            "true",
+                    ) as HTMLElement[];
+
+                if (!cards.length) {
+                    return;
+                }
+
+                const currentScroll =
+                    carousel.scrollLeft;
+
+                const nearestCard =
+                    cards.reduce(
+                        (nearest, card) => {
+                            const nearestDistance =
+                                Math.abs(
+                                    nearest.offsetLeft -
+                                    currentScroll,
+                                );
+
+                            const cardDistance =
+                                Math.abs(
+                                    card.offsetLeft -
+                                    currentScroll,
+                                );
+
+                            return cardDistance <
+                                nearestDistance
+                                ? card
+                                : nearest;
+                        },
+                        cards[0],
+                    );
+
+                carousel.scrollTo({
+                    left: nearestCard.offsetLeft,
+                    behavior: "smooth",
+                });
+            }, 440);
+    };
+
     const handleCarouselScroll = (
         direction: "previous" | "next",
     ) => {
@@ -112,6 +188,8 @@ export default function SeriesGallery({
         if (!carousel) {
             return;
         }
+
+        dismissCarouselHint();
 
         const scrollAmount =
             Math.min(
@@ -189,6 +267,7 @@ export default function SeriesGallery({
                         <CollectionArtwork
                             key={artwork.id}
                             artwork={artwork}
+                            presentation="series"
                             onOpen={() =>
                                 handleOpen(
                                     artwork,
@@ -221,6 +300,10 @@ export default function SeriesGallery({
                 >
                     <div
                         ref={carouselRef}
+                        onScroll={() => {
+                            dismissCarouselHint();
+                            settleCarousel();
+                        }}
                         className="
                             flex
                             w-full
@@ -229,7 +312,7 @@ export default function SeriesGallery({
                             gap-5
                             overflow-x-auto
                             scroll-smooth
-                            px-[max(2rem,calc((100%-896px)/2))]
+                            px-[max(2rem,calc((100%-1136px)/2))]
 
                             xl:gap-8
 
@@ -237,6 +320,12 @@ export default function SeriesGallery({
                             [&::-webkit-scrollbar]:hidden
                         "
                     >
+                        <InteractionHint
+                            active={useDesktopCarousel}
+                            dismissed={carouselHintDismissed}
+                            label="Scroll to explore"
+                        />
+
                         {artworks.map(
                             (
                                 artwork,
@@ -246,8 +335,9 @@ export default function SeriesGallery({
                                     key={
                                         artwork.id
                                     }
+                                    data-carousel-item="true"
                                     className="
-                                        w-[200px]
+                                        w-[260px]
                                         shrink-0
                                         snap-start
                                     "
@@ -256,6 +346,7 @@ export default function SeriesGallery({
                                         artwork={
                                             artwork
                                         }
+                                        presentation="series"
                                         onOpen={() =>
                                             handleOpen(
                                                 artwork,

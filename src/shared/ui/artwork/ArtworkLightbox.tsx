@@ -1,4 +1,5 @@
 "use client";
+import { createPortal } from "react-dom";
 
 import Link from "next/link";
 
@@ -9,6 +10,7 @@ import {
 } from "react";
 
 import type { Artwork } from "@/domains/artworks/model";
+import { InteractionHint } from "@/shared/ui/interaction-hint";
 
 interface ArtworkLightboxProps {
     artworks: Artwork[];
@@ -69,8 +71,8 @@ export default function ArtworkLightbox({
     const [currentIndex, setCurrentIndex] =
         useState(initialIndex);
 
-    const [swipeHintPhase, setSwipeHintPhase] =
-        useState<"primary" | "reminder" | null>(null);
+    const [swipeHintDismissed, setSwipeHintDismissed] =
+        useState(false);
 
     /* =========================================================
        REFS
@@ -106,9 +108,6 @@ export default function ArtworkLightbox({
         useRef(0);
 
     const hadMultiTouchRef =
-        useRef(false);
-
-    const swipeHintInteractedRef =
         useRef(false);
 
     /* =========================================================
@@ -413,38 +412,13 @@ export default function ArtworkLightbox({
        ========================================================= */
 
     useEffect(() => {
-        if (!isOpen) {
-            setSwipeHintPhase(null);
-            return;
+        if (isOpen) {
+            setSwipeHintDismissed(false);
         }
-
-        swipeHintInteractedRef.current = false;
-        setSwipeHintPhase("primary");
-
-        const hidePrimary = window.setTimeout(() => {
-            setSwipeHintPhase(null);
-        }, 3200);
-
-        const showReminder = window.setTimeout(() => {
-            if (!swipeHintInteractedRef.current) {
-                setSwipeHintPhase("reminder");
-            }
-        }, 9000);
-
-        const hideReminder = window.setTimeout(() => {
-            setSwipeHintPhase(null);
-        }, 11400);
-
-        return () => {
-            window.clearTimeout(hidePrimary);
-            window.clearTimeout(showReminder);
-            window.clearTimeout(hideReminder);
-        };
     }, [isOpen]);
 
     const dismissSwipeHint = () => {
-        swipeHintInteractedRef.current = true;
-        setSwipeHintPhase(null);
+        setSwipeHintDismissed(true);
     };
 
     /* =========================================================
@@ -878,7 +852,7 @@ export default function ArtworkLightbox({
        RENDER
        ========================================================= */
 
-    return (
+    return createPortal(
         <div
             className="fixed inset-0 z-[100] overflow-hidden bg-[#030303] text-white"
             role="dialog"
@@ -958,7 +932,7 @@ export default function ArtworkLightbox({
                         {/* Glow belongs to the artwork, not the canvas */}
                         <div
                             aria-hidden
-                            className="pointer-events-none absolute left-1/2 top-1/2 h-[78%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(198,151,79,0.16)_0%,rgba(198,151,79,0.07)_36%,transparent_72%)] blur-[28px] [@media(orientation:landscape)_and_(max-height:600px)]:h-[94%] [@media(orientation:landscape)_and_(max-height:600px)]:w-[88%]"
+                            className="pointer-events-none fixed left-1/2 top-1/2 h-[78%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(198,151,79,0.16)_0%,rgba(198,151,79,0.07)_36%,transparent_72%)] blur-[28px] [@media(orientation:landscape)_and_(max-height:600px)]:h-[94%] [@media(orientation:landscape)_and_(max-height:600px)]:w-[88%]"
                         />
 
                         {/* Zoomable artwork — no visible frame/border */}
@@ -977,76 +951,23 @@ export default function ArtworkLightbox({
                             {/* Subtle image-only integration */}
                             <div
                                 aria-hidden
-                                className="pointer-events-none absolute inset-0 z-20 shadow-[inset_0_0_42px_10px_rgba(0,0,0,0.28)]"
+                                className="pointer-events-none fixed inset-0 z-20 shadow-[inset_0_0_42px_10px_rgba(0,0,0,0.28)]"
                             />
 
                             {/* Image-only moving reflection */}
                             <div
                                 aria-hidden
-                                className="artwork-glass-reflection pointer-events-none absolute -left-[30%] -top-[20%] z-30 h-[140%] w-[24%] rotate-[14deg] bg-gradient-to-r from-transparent via-white/[0.045] to-transparent blur-[10px]"
+                                className="artwork-glass-reflection pointer-events-none fi  xed -left-[30%] -top-[20%] z-30 h-[140%] w-[24%] rotate-[14deg] bg-gradient-to-r from-transparent via-white/[0.045] to-transparent blur-[10px]"
                             />
                         </div>
 
-                        {/* Ephemeral touch guidance — visual only */}
-                        {swipeHintPhase && (
-                            <div
-                                key={swipeHintPhase}
-                                aria-hidden
-                                className={[
-                                    "pointer-events-none absolute inset-0 z-40 hidden items-center justify-center [@media(pointer:coarse)]:flex",
-                                    swipeHintPhase === "primary"
-                                        ? "artwork-swipe-hint-primary"
-                                        : "artwork-swipe-hint-reminder",
-                                ].join(" ")}
-                            >
-                                <div
-                                    className="
-                                artwork-swipe-hint-content
-                                flex
-                                items-center
-                                gap-5
-                                rounded-full
-                                bg-black/30
-                                px-5
-                                py-3
-                                backdrop-blur-md
-                            "
-                                >
-                                    <span
-                                        className="
-                                font-display
-                                text-lg
-                                text-white/40
-                                "
-                                    >
-                                        ‹
-                                    </span>
-
-                                    <span
-                                        className="
-                                font-sans
-                                text-[9px]
-                                font-medium
-                                uppercase
-                                tracking-[0.3em]
-                                text-white/70
-                                "
-                                    >
-                                        Swipe to explore
-                                    </span>
-
-                                    <span
-                                        className="
-                                font-display
-                                text-lg
-                                text-white/40
-                                "
-                                    >
-                                        ›
-                                    </span>
-                                </div>
-                            </div>
-                        )}
+                        {/* Ephemeral touch guidance — shared interaction language */}
+                        <InteractionHint
+                            active={isOpen}
+                            dismissed={swipeHintDismissed}
+                            label="Swipe to explore"
+                            visibility="coarse"
+                        />
                     </div>
 
                     {/* Position dots */}
@@ -1280,49 +1201,18 @@ export default function ArtworkLightbox({
                 .artwork-particle-4 { right: 31%; top: 27%; animation-delay: 9s; }
                 .artwork-particle-5 { left: 53%; top: 78%; animation-delay: 4.5s; }
 
-                @keyframes swipeHintPrimary {
-                    0% { opacity: 0; filter: blur(12px); transform: translate3d(10px, 0, 0) scale(0.985); }
-                    14% { opacity: 1; filter: blur(0); transform: translate3d(0, 0, 0) scale(1); }
-                    58% { opacity: 0.92; filter: blur(0); transform: translate3d(0, 0, 0) scale(1); }
-                    76% { opacity: 0.58; filter: blur(2px); transform: translate3d(-8px, 0, 0) scale(1.005); }
-                    100% { opacity: 0; filter: blur(14px); transform: translate3d(-34px, 0, 0) scale(1.02); letter-spacing: 0.42em; }
-                }
-
-                @keyframes swipeHintReminder {
-                    0%, 100% { opacity: 0; filter: blur(5px); }
-                    24%, 68% { opacity: 0.55; filter: blur(0); }
-                }
-
-                @keyframes swipeHintArrowBreath {
-                    0%, 100% { transform: scaleX(0.92); opacity: 0.45; }
-                    50% { transform: scaleX(1.08); opacity: 0.82; }
-                }
-
-                .artwork-swipe-hint-primary {
-                    animation: swipeHintPrimary 3.2s cubic-bezier(0.22, 1, 0.36, 1) both;
-                }
-
-                .artwork-swipe-hint-reminder {
-                    animation: swipeHintReminder 2.4s ease-in-out both;
-                }
-
-                .artwork-swipe-hint-content > span:last-child {
-                    animation: swipeHintArrowBreath 1.45s ease-in-out infinite;
-                }
-
                 @media (prefers-reduced-motion: reduce) {
                     .artwork-lightbox-aura,
                     .artwork-lightbox-smoke-a,
                     .artwork-lightbox-smoke-b,
                     .artwork-particle,
-                    .artwork-glass-reflection,
-                    .artwork-swipe-hint-primary,
-                    .artwork-swipe-hint-reminder,
-                    .artwork-swipe-hint-content > span:last-child {
+                    .artwork-glass-reflection {
                         animation: none;
                     }
                 }
             `}</style>
-        </div>
+        </div>,
+        document.body,
+
     );
 }

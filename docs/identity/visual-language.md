@@ -3,7 +3,7 @@
 Painting the Eternal Essence Within
 
 Version:
-1.2
+1.3
 
 Document ID:
 DOC-VL
@@ -27,7 +27,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-17
+2026-09-19
 
 ---
 
@@ -549,6 +549,158 @@ The Home should avoid unnecessary repetition of the same artwork across consecut
 
 ---
 
+# Artwork Series Detail
+
+An Artwork Series detail should feel like entering the visual world of the Series rather than opening a conventional gallery page.
+
+The experience should preserve the global Del Carmen visual language while allowing the identity and atmosphere of each Series to emerge through its own artworks.
+
+---
+
+## Series Atmosphere
+
+Artwork belonging to the current Series may extend beyond its direct presentation and become part of the surrounding atmosphere.
+
+An enlarged or cropped detail of a Series artwork may therefore appear as environmental imagery behind the primary Series composition.
+
+This treatment should suggest the visual world of the artwork without competing with the artwork itself.
+
+Atmospheric artwork imagery may use:
+
+Controlled cropping
+
+Enlarged details
+
+Darkness
+
+Gradients
+
+Vignettes
+
+Reduced visual prominence
+
+Subtle transitions
+
+When several suitable artworks belong to the Series, the atmospheric representation may change gradually between them.
+
+The transition should remain slow enough to be perceived as an environmental evolution rather than a slideshow.
+
+A Series may alternatively retain a single atmospheric representation when greater visual stillness is appropriate.
+
+The artwork used for atmosphere must always belong to the current Series.
+
+Atmospheric treatment must not materially alter the identity, color relationships or artistic character of the source artwork.
+
+---
+
+## Series Identity and Visual Variation
+
+Different Artwork Series may establish different emotional atmospheres while remaining within the Del Carmen visual system.
+
+Variation may emerge through:
+
+Artwork-derived atmosphere
+
+Background treatment
+
+Light
+
+Subtle accent behavior
+
+Media treatment
+
+Motion character
+
+These variations should never redefine:
+
+Typography
+
+Global spacing principles
+
+Responsive behavior
+
+Navigation
+
+Core interaction language
+
+Shared structural systems
+
+Visual variation should therefore behave as an expressive layer over the global system rather than as a separate visual identity.
+
+---
+
+## Series Metadata
+
+The number of works and the current Series status may appear together as a quiet editorial expression.
+
+Example:
+
+2 WORKS · ONGOING
+
+Restrained horizontal rules may flank this information when they reinforce balance and hierarchy.
+
+These lines should remain secondary to the typography and should not become decorative focal points.
+
+---
+
+## Series Artwork Presentation
+
+Artwork previews within a Series should have enough visual presence to support contemplation before interaction.
+
+When composition allows, artwork previews may use generous, near-square presentation areas while preserving the identity and integrity of each artwork.
+
+The presentation may reveal essential artwork information such as:
+
+Year
+
+Title
+
+Medium
+
+Dimensions
+
+Artwork metadata should remain subordinate to the artwork itself.
+
+The number of artworks may influence the presentation and navigation pattern, but should not change the visual identity of the Series.
+
+---
+
+## Series Statement and Description
+
+The Series Statement is the principal curatorial expression of an Artwork Series.
+
+It should receive greater visual emphasis than supporting editorial text.
+
+A longer Series description may appear beneath the Statement as a secondary layer of interpretation and context.
+
+The description should use a quieter typographic treatment and comfortable reading measure.
+
+Statement and description should feel connected while maintaining clear hierarchy.
+
+---
+
+## Decorative Restraint
+
+Additional peripheral quotations, corner messages or ornamental editorial fragments are optional.
+
+They should not be introduced by default.
+
+When they do not contribute meaningful narrative or curatorial value, they should be omitted.
+
+The composition should prioritize:
+
+Artwork
+
+Atmosphere
+
+Typography
+
+Curatorial meaning
+
+Negative space
+
+---
+
 # Portrait and Editorial Photography
 
 Photography supporting the artist, studio or Journal may have greater compositional flexibility than artwork imagery.
@@ -1019,7 +1171,7 @@ The visitor should remember the art before remembering the interface.
 
 # Canonical Status
 
-This document represents the approved visual language of Del Carmen Digital Experience as of Version 1.2.
+This document represents the approved visual language of Del Carmen Digital Experience as of Version 1.3.
 
 Future modifications must be explicitly approved before becoming canonical.
 

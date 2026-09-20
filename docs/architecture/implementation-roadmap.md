@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.0
+Version: 1.1
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,7 +7,7 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: YYYY-MM-DD
+Last Updated: 2026-09-19
  
 1. Objective
 This document defines the official implementation sequence of the Del Carmen Digital Experience platform.
@@ -88,6 +88,8 @@ This allows changing the database engine without affecting business logic.
 The system is organized around business domains rather than pages.
 Artwork
 
+ArtworkSeries
+
 Gallery
 
 Collectors
@@ -113,125 +115,141 @@ Each domain owns:
 •	Tests 
  
 6. Implementation Phases
-Sprint 0 — Platform Foundation
-Objective
-Build the technical foundation.
-Deliverables
-•	Git Repository 
-•	Next.js 
-•	TypeScript 
-•	Tailwind 
-•	ESLint 
-•	Prettier 
-•	Folder Structure 
-•	Path Aliases 
-•	Design Tokens 
-•	Global Layout 
-•	Theme 
-•	Providers 
-•	CI-ready structure 
-Status
-Pending
- 
-Sprint 1 — Home Hero
-Deliverables
-•	Hero 
-•	Typography 
-•	Smoke Background 
-•	Artwork Loader 
-•	Scroll Indicator 
-•	Responsive Layout 
-•	Initial Motion 
- 
-Sprint 2 — Navigation
-Deliverables
-•	Header 
-•	Logo 
-•	Desktop Navigation 
-•	Mobile Navigation 
-•	Menu Animation 
- 
-Sprint 3 — Featured Artwork
-Deliverables
-•	Artwork Card 
-•	Dynamic Data 
-•	Hover Experience 
-•	CTA 
- 
-Sprint 4 — About Preview
- 
-Sprint 5 — Gallery Preview
- 
-Sprint 6 — Footer
- 
-Phase 2
-Gallery
-Artwork Detail
-Collections
-Search
-Filtering
- 
-Phase 3
-Marketplace
-Collectors
-Authentication
-Admin
-Database
-Orders
-Payments
- 
-Phase 4
-Virtual Museum
-Immersive Experiences
-Digital Exhibitions
-Academy
-Community
-Mobile Experience
- 
-7. Dependency Flow
-Platform Foundation
 
-↓
+Phase 1 — Foundation and Public Art Experience
+
+Status
+🟢 Active / substantially implemented
+
+Completed and approved foundations include:
+
+• Next.js App Router foundation
+• React / TypeScript / Tailwind CSS
+• ESLint
+• Repository structure
+• Path aliases
+• Global design tokens
+• Shared layout / Container system
+• Global typography
+• Navigation
+• Responsive behavior
+• Core motion language
 
 Home
 
-↓
+Implemented and approved:
 
-Gallery
+• Hero
+• Featured Artwork
+• Artist Statement
+• Featured Collection
+• Selected Works
+• Journal Preview
+• Invitation / Newsletter
+• Footer
+• Data-driven Home curation
+• Dynamic Hero artwork-to-Series routing
 
-↓
+Collections / ArtworkSeries
+
+Implemented and approved:
+
+• `/collections` editorial discovery index
+• Collections Intro
+• Responsive Collection Heroes
+• Independent media orientation and content position per breakpoint
+• Portrait and landscape Hero media
+• Desktop Works Preview
+• Carousel behavior for larger artwork sets
+• Mobile-specific Collections behavior
+• Collection Hero motion
+• `/series/[slug]` detail route
+• Series gallery
+• Contextual Artwork Lightbox behavior
+• Series-aware Artwork detail navigation
+• Continue Exploring navigation
+
+Current refinement:
+
+• Series Detail visual presentation
+• Artwork-derived Series atmosphere
+• Expanded Series metadata presentation
+• Statement + supporting description hierarchy
 
 Artwork
 
+Implemented public foundations include:
+
+• Artwork data and domain types
+• Artwork detail routing
+• Artwork media representations
+• Context-aware navigation
+• Lightbox integration
+
+Phase 1 remaining work should be driven by the current approved specifications and visual QA rather than by the original sprint numbering.
+
+Phase 2 — Public Experience Expansion
+
+Planned capabilities may include:
+
+• Broader Artwork archive / gallery refinement
+• Search
+• Filtering
+• Exhibition presentation
+• Additional editorial experiences
+• Global SEO pass
+
+Phase 3 — Commerce and Collector Infrastructure
+
+Planned:
+
+• Marketplace
+• Collector accounts
+• Authentication
+• Administration
+• Database persistence
+• Products / editions / prints
+• Orders
+• Payments
+• Collector notifications
+
+Phase 4 — Extended Del Carmen Ecosystem
+
+Future:
+
+• Virtual Museum
+• Immersive Experiences
+• Digital Exhibitions
+• Academy
+• Community
+• Expanded mobile experiences
+
+7. Dependency Flow
+
+Implementation follows approved architectural dependencies rather than a rigid page-by-page chain.
+
+Canonical direction:
+
+Platform Foundation
 ↓
-
-Collections
-
+Domain
 ↓
-
-Authentication
-
+Application / Services
 ↓
-
-Marketplace
-
+Presentation
 ↓
+Routes and Experiences
 
-Collectors
+Artwork and ArtworkSeries provide canonical art-domain data.
 
-↓
+Home, `/collections`, `/series/[slug]` and Artwork detail consume those domain sources through their appropriate presentation and service boundaries.
 
-Museum
+A public route or UI scene must not create a duplicate business entity merely because it presents domain data differently.
 
-↓
+Future commerce, collector, authentication, museum, academy and community capabilities should extend the existing architecture when their requirements become real.
 
-Academy
+Every implementation cycle should depend on already approved foundations and should preserve frozen behavior unless a justified change is approved.
 
-↓
-
-Community
-Every sprint depends only on previously approved modules.
- 
 8. Approval Workflow
 Every sprint follows the same cycle.
 Planning

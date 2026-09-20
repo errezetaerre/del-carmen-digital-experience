@@ -16,12 +16,14 @@ interface CollectionArtworkProps {
   onOpen?: () => void;
 
   imageVariant?: CollectionImageVariant;
+  presentation?: "default" | "series";
 }
 
 export default function CollectionArtwork({
   artwork,
   onOpen,
   imageVariant = "thumbnail",
+  presentation = "default",
 }: CollectionArtworkProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const initialRef = useRef<HTMLDivElement>(null);
@@ -185,7 +187,10 @@ export default function CollectionArtwork({
   return (
     <article
       ref={cardRef}
-      className="group relative w-full max-w-[200px]"
+      className={`group relative w-full ${presentation === "series"
+        ? "max-w-[260px]"
+        : "max-w-[200px]"
+        }`}
       onMouseEnter={animateIn}
       onMouseLeave={animateOut}
     >
