@@ -889,7 +889,26 @@ export default function ArtworkLightbox({
                 onClick={onClose}
                 onPointerDown={(event) => event.stopPropagation()}
                 aria-label="Close artwork viewer"
-                className="fixed right-4 top-4 z-[150] flex h-11 w-11 items-center justify-center font-sans text-[32px] font-light leading-none text-white/75 transition-colors duration-300 hover:text-brand-gold focus-visible:text-brand-gold focus-visible:outline-none md:right-8 md:top-6"
+                className="
+                    fixed right-4 top-4 z-[150]
+                    flex h-11 w-11 items-center justify-center
+                    rounded-full
+                    border border-transparent
+                    font-sans text-[32px] font-light leading-none
+                    text-white/75
+                    transition-all duration-300
+
+                    hover:border-brand-gold/35
+                    hover:bg-brand-gold/[0.06]
+                    hover:text-brand-gold
+
+                    focus-visible:border-brand-gold/35
+                    focus-visible:bg-brand-gold/[0.06]
+                    focus-visible:text-brand-gold
+                    focus-visible:outline-none
+
+                    md:right-8 md:top-6
+                "
             >
                 ×
             </button>
@@ -926,7 +945,24 @@ export default function ArtworkLightbox({
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerCancel}
             >
-                <div className="relative flex h-[calc(100svh-24px)] w-full max-w-[1040px] flex-col md:h-[min(90vh,900px)] [@media(orientation:landscape)_and_(max-height:600px)]:h-[calc(100svh-16px)] [@media(orientation:landscape)_and_(max-height:600px)]:max-w-none">
+                <div
+                    className="
+                        relative
+                        flex
+                        h-[calc(100svh-24px)]
+                        w-full
+                        max-w-[1040px]
+                        flex-col
+
+                        lg:translate-x-[1.5vw]
+
+                        md:h-[min(90vh,900px)]
+
+                        [@media(orientation:landscape)_and_(max-height:600px)]:h-[calc(100svh-16px)]
+                        [@media(orientation:landscape)_and_(max-height:600px)]:max-w-none
+                        [@media(orientation:landscape)_and_(max-height:600px)]:translate-x-0
+                    "
+                >
                     {/* Artwork stage */}
                     <div className="relative flex min-h-0 flex-1 items-center justify-center px-7 pb-2 pt-12 md:px-10 md:pb-3 md:pt-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-12 [@media(orientation:landscape)_and_(max-height:600px)]:pb-1 [@media(orientation:landscape)_and_(max-height:600px)]:pt-3">
                         {/* Glow belongs to the artwork, not the canvas */}
@@ -936,30 +972,34 @@ export default function ArtworkLightbox({
                         />
 
                         {/* Zoomable artwork — no visible frame/border */}
-                        <div
-                            ref={zoomLayerRef}
-                            className="relative z-10 flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"
-                        >
-                            <img
-                                key={artwork.id}
-                                src={primaryImage.src}
-                                alt={primaryImage.alt}
-                                draggable={false}
-                                className="relative z-10 h-full max-h-full w-full max-w-full select-none object-contain"
-                            />
+                        <div className="relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center">
 
-                            {/* Subtle image-only integration */}
                             <div
-                                aria-hidden
-                                className="pointer-events-none fixed inset-0 z-20 shadow-[inset_0_0_42px_10px_rgba(0,0,0,0.28)]"
-                            />
+                                ref={zoomLayerRef}
+                                className="relative flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"
+                            >
+                                <img
+                                    key={artwork.id}
+                                    src={primaryImage.src}
+                                    alt={primaryImage.alt}
+                                    draggable={false}
+                                    className="relative z-10 h-full max-h-full w-full max-w-full translate-x-[5.5vw] select-none object-contain"
+                                />
 
-                            {/* Image-only moving reflection */}
-                            <div
-                                aria-hidden
-                                className="artwork-glass-reflection pointer-events-none fi  xed -left-[30%] -top-[20%] z-30 h-[140%] w-[24%] rotate-[14deg] bg-gradient-to-r from-transparent via-white/[0.045] to-transparent blur-[10px]"
-                            />
+                                {/* Subtle image-only integration */}
+                                <div
+                                    aria-hidden
+                                    className="pointer-events-none fixed inset-0 z-20 shadow-[inset_0_0_42px_10px_rgba(0,0,0,0.28)]"
+                                />
+
+                                {/* Image-only moving reflection */}
+                                <div
+                                    aria-hidden
+                                    className="artwork-glass-reflection pointer-events-none fi  xed -left-[30%] -top-[20%] z-30 h-[140%] w-[24%] rotate-[14deg] bg-gradient-to-r from-transparent via-white/[0.045] to-transparent blur-[10px]"
+                                />
+                            </div>
                         </div>
+
 
                         {/* Ephemeral touch guidance — shared interaction language */}
                         <InteractionHint
