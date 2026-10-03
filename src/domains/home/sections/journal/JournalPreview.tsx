@@ -1,46 +1,9 @@
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
+import { JOURNAL_ENTRIES } from "@/domains/journal";
 
 import JournalPreviewMotion from "./JournalPreviewMotion";
 
-type JournalEntry = {
-  category: string;
-  date: string;
-  title: string;
-  excerpt: string;
-  image: string;
-  href: string;
-};
-
-const JOURNAL_ENTRIES: JournalEntry[] = [
-  {
-    category: "Reflections",
-    date: "2026",
-    title: "The Art of Remembering",
-    excerpt:
-      "A reflection on memory, beauty and the invisible essence that remains within us.",
-    image: "/images/journal/placeholder-01.jpg",
-    href: "#",
-  },
-  {
-    category: "Studio",
-    date: "2026",
-    title: "Inside the Studio",
-    excerpt:
-      "Notes from the quiet space where observation becomes painting.",
-    image: "/images/journal/placeholder-02.jpg",
-    href: "#",
-  },
-  {
-    category: "Thoughts",
-    date: "2026",
-    title: "Painting What Cannot Be Seen",
-    excerpt:
-      "On the relationship between contemplation, silence and the act of creating.",
-    image: "/images/journal/placeholder-03.jpg",
-    href: "#",
-  },
-];
 
 export default function JournalPreview() {
   return (
@@ -184,7 +147,7 @@ export default function JournalPreview() {
 
                   <span className="h-px w-6 bg-brand-gold/50" />
 
-                  <span>{entry.date}</span>
+                  <span>{entry.year}</span>
                 </div>
 
                 {/* Entry title */}
@@ -223,7 +186,7 @@ export default function JournalPreview() {
                 {/* CTA */}
                 <div data-journal-cta>
                   <LinkButton
-                    href={entry.href}
+                    href={`/journal/${entry.slug}`}
                     variant="bronzeUnderline"
                     className="
                       mt-10
