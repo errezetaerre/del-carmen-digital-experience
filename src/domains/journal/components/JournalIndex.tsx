@@ -106,8 +106,7 @@ export default function JournalIndex({
                             className="
                                 grid
                                 min-h-[72svh]
-                                border-b
-                                border-white/10
+                                lg:min-h-[84svh]
                                 lg:grid-cols-2
                             "
                         >
@@ -116,38 +115,57 @@ export default function JournalIndex({
                                 href={`/journal/${entry.slug}`}
                                 data-journal-index-media
                                 className={[
-                                    "group relative min-h-[52svh] overflow-hidden bg-white/[0.025]",
+                                    `
+                                    group
+                                    relative
+                                    min-h-[52svh]
+                                    overflow-hidden
+                                    bg-white/[0.025]
+                                    lg:min-h-[84svh]
+                                `,
                                     imageLeft
                                         ? "lg:order-1"
                                         : "lg:order-2",
                                 ].join(" ")}
                             >
-                                <img
-                                    src={entry.image}
-                                    alt=""
+                                <div
+                                    data-journal-index-image-plane
                                     className="
-                                        absolute
-                                        inset-0
-                                        h-full
-                                        w-full
-                                        object-cover
-                                        transition-transform
-                                        duration-[1400ms]
-                                        ease-out
-                                        group-hover:scale-[1.025]
-                                    "
-                                />
+        pointer-events-none
+        absolute
+        -inset-y-[35%]
+        inset-x-0
+        will-change-transform
+    "
+                                >
+                                    <img
+                                        src={entry.image}
+                                        alt=""
+                                        draggable={false}
+                                        className="
+            h-full
+            w-full
+            object-cover
+            object-center
+            transition-transform
+            duration-1000
+            ease-out
+            group-hover:scale-[1.015]
+        "
+                                    />
+                                </div>
 
                                 <div
                                     aria-hidden="true"
                                     className="
-                                        absolute
-                                        inset-0
-                                        bg-gradient-to-t
-                                        from-black/25
-                                        via-transparent
-                                        to-transparent
-                                    "
+        pointer-events-none
+        absolute
+        inset-0
+        bg-gradient-to-t
+        from-black/25
+        via-transparent
+        to-transparent
+    "
                                 />
                             </Link>
 
@@ -174,10 +192,10 @@ export default function JournalIndex({
                                 >
                                     <div
                                         className="
-    mb-8
-    flex
-    items-center
-    justify-between
+                                            mb-8
+                                            flex
+                                            items-center
+                                            justify-between
                                             font-sans
                                             text-[10px]
                                             font-medium

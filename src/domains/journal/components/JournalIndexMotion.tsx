@@ -3,41 +3,38 @@
 import { useEffect } from "react";
 
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const PARALLAX_STRENGTH = 0.55;
 
 export default function JournalIndexMotion() {
     useEffect(() => {
-        const section = document.querySelector("[data-journal-index]");
+        const section =
+            document.querySelector<HTMLElement>(
+                "[data-journal-index]",
+            );
 
         if (!section) {
             return;
         }
 
-        const context = gsap.context(() => {
-            const prefersReducedMotion = window.matchMedia(
+        const prefersReducedMotion =
+            window.matchMedia(
                 "(prefers-reduced-motion: reduce)",
             ).matches;
 
-            const intro = "[data-journal-index-intro]";
+        /*
+         * ========================================
+         * INTRO
+         * ========================================
+         */
 
-            const entries = gsap.utils.toArray<HTMLElement>(
-                "[data-journal-index-entry]",
-            );
-
-            if (prefersReducedMotion) {
-                gsap.set(
-                    [
-                        intro,
-                        "[data-journal-index-media]",
-                        "[data-journal-index-content]",
-                    ],
-                    {
-                        clearProps: "all",
-                    },
+        const context = gsap.context(() => {
+            const intro =
+                section.querySelector<HTMLElement>(
+                    "[data-journal-index-intro]",
                 );
 
+            if (!intro || prefersReducedMotion) {
                 return;
             }
 
@@ -45,73 +42,182 @@ export default function JournalIndexMotion() {
                 intro,
                 {
                     autoAlpha: 0,
-                    y: 28,
+                    y: 42,
+                    filter: "blur(12px)",
                 },
                 {
                     autoAlpha: 1,
                     y: 0,
-                    duration: 1,
+                    filter: "blur(0px)",
+                    duration: 1.8,
                     ease: "power3.out",
                 },
             );
-
-            entries.forEach((entry) => {
-                const media = entry.querySelector(
-                    "[data-journal-index-media]",
-                );
-
-                const content = entry.querySelector(
-                    "[data-journal-index-content]",
-                );
-
-                if (media) {
-                    gsap.fromTo(
-                        media,
-                        {
-                            autoAlpha: 0,
-                            scale: 1.025,
-                        },
-                        {
-                            autoAlpha: 1,
-                            scale: 1,
-                            duration: 1.2,
-                            ease: "power2.out",
-
-                            scrollTrigger: {
-                                trigger: entry,
-                                start: "top 82%",
-                                once: true,
-                            },
-                        },
-                    );
-                }
-
-                if (content) {
-                    gsap.fromTo(
-                        content,
-                        {
-                            autoAlpha: 0,
-                            y: 24,
-                        },
-                        {
-                            autoAlpha: 1,
-                            y: 0,
-                            duration: 0.9,
-                            ease: "power3.out",
-
-                            scrollTrigger: {
-                                trigger: entry,
-                                start: "top 76%",
-                                once: true,
-                            },
-                        },
-                    );
-                }
-            });
         }, section);
+
+        /*
+         * ========================================
+         * IMAGE PLANES
+         * ========================================
+         */
+
+        const mediaElements =
+            Array.from(
+                section.querySelectorAll<HTMLElement>(
+                    "[data-journal-index-media]",
+                ),
+            );
+
+        const planes = mediaElements
+            .map((media) => {
+                const plane =
+                    media.querySelector<HTMLElement>(
+                        "[data-journal-index-image-plane]",
+                    );
+
+                if (!plane) {
+                    return null;
+                }
+
+                return {
+                    media,
+                    plane,
+                    setY: gsap.quickSetter(
+                        plane,
+                        "y",
+                        "px",
+                    ),
+                };
+            })
+            .filter(
+                (
+                    item,
+                ): item is {
+                    media: HTMLElement;
+                    plane: HTMLElement;
+                    setY: (
+                        value: number,
+                    ) => void;
+                } => item !== null,
+            );
+
+        let frameId: number | null = null;
+
+        /*
+         * ========================================
+         * PARALLAX
+         * ========================================
+         *
+         * No accumulated scroll delta.
+         * No easing.
+         * No interpolation.
+         *
+         * Every frame is derived directly from
+         * the media window's current position.
+         */
+
+        const render = () => {
+            frameId = null;
+
+            if (prefersReducedMotion) {
+                return;
+            }
+
+            const viewportHeight =
+                window.innerHeight;
+
+            planes.forEach(
+                ({
+                    media,
+                    setY,
+                }) => {
+                    const rect =
+                        media.getBoundingClientRect();
+
+                    if (
+                        rect.bottom < 0 ||
+                        rect.top > viewportHeight
+                    ) {
+                        return;
+                    }
+
+                    /*
+                     * progress:
+                     *
+                     * -1 = media below viewport center
+                     *  0 = media centered
+                     *  1 = media above viewport center
+                     */
+
+                    const mediaCenter =
+                        rect.top +
+                        rect.height / 2;
+
+                    const viewportCenter =
+                        viewportHeight / 2;
+
+                    const distance =
+                        viewportCenter -
+                        mediaCenter;
+
+                    const offset =
+                        distance *
+                        PARALLAX_STRENGTH;
+
+                    setY(offset);
+                },
+            );
+        };
+
+        const requestRender = () => {
+            if (
+                prefersReducedMotion ||
+                frameId !== null
+            ) {
+                return;
+            }
+
+            frameId =
+                window.requestAnimationFrame(
+                    render,
+                );
+        };
+
+        if (!prefersReducedMotion) {
+            render();
+
+            window.addEventListener(
+                "scroll",
+                requestRender,
+                {
+                    passive: true,
+                },
+            );
+
+            window.addEventListener(
+                "resize",
+                requestRender,
+            );
+        }
 
         return () => {
             context.revert();
+
+            window.removeEventListener(
+                "scroll",
+                requestRender,
+            );
+
+            window.removeEventListener(
+                "resize",
+                requestRender,
+            );
+
+            if (frameId !== null) {
+                window.cancelAnimationFrame(
+                    frameId,
+                );
+            }
         };
     }, []);
 

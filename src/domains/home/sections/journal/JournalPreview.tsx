@@ -77,7 +77,7 @@ export default function JournalPreview() {
             [@media(orientation:landscape)_and_(max-height:600px)]:!space-y-20
           "
         >
-          {JOURNAL_ENTRIES.map((entry, index) => (
+          {JOURNAL_ENTRIES.slice(0, 4).map((entry, index) => (
             <article
               data-journal-entry
 

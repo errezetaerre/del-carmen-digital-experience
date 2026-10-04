@@ -25,7 +25,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 layout: "split-left",
                 media: {
                     type: "image",
-                    src: "/images/journal/placeholder-01.jpg",
+                    src: "/images/journal/placeholder-02.jpg",
                 },
                 eyebrow: "II — Presence",
                 title: "Some things remain without being seen.",
@@ -38,7 +38,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 layout: "immersive",
                 media: {
                     type: "image",
-                    src: "/images/journal/placeholder-01.jpg",
+                    src: "/images/journal/placeholder-03.jpg",
                 },
                 eyebrow: "III — Light",
                 title: "Perhaps remembering is another way of illuminating.",

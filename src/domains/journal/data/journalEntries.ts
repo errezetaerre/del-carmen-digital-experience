@@ -21,15 +21,6 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         image: "/images/journal/placeholder-02.jpg",
     },
     {
-        slug: "painting-what-cannot-be-seen",
-        category: "Thoughts",
-        year: 2026,
-        title: "Painting What Cannot Be Seen",
-        excerpt:
-            "On the relationship between contemplation, silence and the act of creating.",
-        image: "/images/journal/placeholder-03.jpg",
-    },
-    {
         slug: "painting-always-a-conversation",
         category: "Conversation",
         year: 2026,
@@ -39,12 +30,21 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         image: "/images/journal/placeholder-03.jpg",
     },
     {
+        slug: "painting-what-cannot-be-seen",
+        category: "Thoughts",
+        year: 2026,
+        title: "Painting What Cannot Be Seen",
+        excerpt:
+            "Every painting responds to an inner image, to a way of looking that seeks to preserve a certain atmosphere, a color relationship or a moment of light.",
+        image: "/images/journal/placeholder-04.jpg",
+    },
+    {
         slug: "interview-of-painting",
         category: "Interview",
         year: 2026,
         title: "Enterview: Painting",
         excerpt:
-            "On the relationship between contemplation, silence and the act of creating.",
+            "i'm always surprised by how uncertain the dialogue becomes when you try to define something that lives in the realm of sensation, intuition and color",
         image: "/images/journal/placeholder-03.jpg",
     },
     {
