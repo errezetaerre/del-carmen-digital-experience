@@ -104,12 +104,15 @@ export default function JournalIndex({
                             key={entry.slug}
                             data-journal-index-entry
                             className="
+                                group/entry
+                                relative
                                 grid
                                 min-h-[72svh]
                                 lg:min-h-[84svh]
                                 lg:grid-cols-2
                             "
                         >
+
                             {/* Media */}
                             <Link
                                 href={`/journal/${entry.slug}`}
@@ -131,41 +134,41 @@ export default function JournalIndex({
                                 <div
                                     data-journal-index-image-plane
                                     className="
-        pointer-events-none
-        absolute
-        -inset-y-[35%]
-        inset-x-0
-        will-change-transform
-    "
+                                        pointer-events-none
+                                        absolute
+                                        -inset-y-[35%]
+                                        inset-x-0
+                                        will-change-transform
+                                    "
                                 >
                                     <img
                                         src={entry.journalImage ?? entry.image}
                                         alt=""
                                         draggable={false}
                                         className="
-            h-full
-            w-full
-            object-cover
-            object-center
-            transition-transform
-            duration-1000
-            ease-out
-            group-hover:scale-[1.015]
-        "
+                                            h-full
+                                            w-full
+                                            object-cover
+                                            object-center
+                                            transition-transform
+                                            duration-1000
+                                            ease-out
+                                            group-hover:scale-[1.015]
+                                        "
                                     />
                                 </div>
 
                                 <div
                                     aria-hidden="true"
                                     className="
-        pointer-events-none
-        absolute
-        inset-0
-        bg-gradient-to-t
-        from-black/25
-        via-transparent
-        to-transparent
-    "
+                                        pointer-events-none
+                                        absolute
+                                        inset-0
+                                        bg-gradient-to-t
+                                        from-black/25
+                                        via-transparent
+                                        to-transparent
+                                    "
                                 />
                             </Link>
 

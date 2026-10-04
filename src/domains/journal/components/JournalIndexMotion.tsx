@@ -134,12 +134,7 @@ export default function JournalIndexMotion() {
                     const rect =
                         media.getBoundingClientRect();
 
-                    if (
-                        rect.bottom < 0 ||
-                        rect.top > viewportHeight
-                    ) {
-                        return;
-                    }
+
 
                     /*
                      * progress:

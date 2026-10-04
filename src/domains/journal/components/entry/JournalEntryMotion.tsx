@@ -266,8 +266,19 @@ export default function JournalEntryMotion() {
             });
 
             /*
-             * PORTAL TRANSITION V1
-             */
+ * ========================================
+ * ATMOSPHERIC CONTINUITY V2
+ * ========================================
+ *
+ * The current scene dissolves into atmosphere
+ * while the next scene begins to exist before
+ * fully entering the viewport.
+ *
+ * Normal document scroll is preserved.
+ * No pinning.
+ * No scroll hijacking.
+ */
+
             scenes.forEach((scene, index) => {
                 const nextScene = scenes[index + 1];
 
@@ -290,15 +301,31 @@ export default function JournalEntryMotion() {
                         "[data-journal-scene-light]",
                     );
 
+                const nextMedia =
+                    nextScene.querySelector<HTMLElement>(
+                        "[data-journal-scene-media]",
+                    );
+
+                const nextLight =
+                    nextScene.querySelector<HTMLElement>(
+                        "[data-journal-scene-light]",
+                    );
+
                 const nextLightCore =
                     nextScene.querySelector<HTMLElement>(
                         "[data-journal-scene-light-core]",
                     );
 
+                /*
+                 * ----------------------------------------
+                 * CURRENT SCENE — DISSOLUTION
+                 * ----------------------------------------
+                 */
+
                 const portalOut = gsap.timeline({
                     scrollTrigger: {
                         trigger: scene,
-                        start: "bottom 38%",
+                        start: "bottom 42%",
                         end: "bottom top",
                         scrub: 2.2,
                     },
@@ -308,9 +335,9 @@ export default function JournalEntryMotion() {
                     portalOut.to(
                         currentCopy,
                         {
-                            y: -28,
-                            autoAlpha: 0.22,
-                            filter: "blur(7px)",
+                            y: -22,
+                            autoAlpha: 0.16,
+                            filter: "blur(8px)",
                             ease: "none",
                         },
                         0,
@@ -321,9 +348,9 @@ export default function JournalEntryMotion() {
                     portalOut.to(
                         currentMedia,
                         {
-                            scale: 1.095,
+                            scale: 1.085,
                             filter:
-                                "blur(7px) brightness(0.58)",
+                                "blur(9px) brightness(0.48)",
                             ease: "none",
                         },
                         0,
@@ -334,7 +361,41 @@ export default function JournalEntryMotion() {
                     portalOut.to(
                         currentLight,
                         {
-                            autoAlpha: 0.18,
+                            autoAlpha: 0.1,
+                            ease: "none",
+                        },
+                        0,
+                    );
+                }
+
+                /*
+                 * ----------------------------------------
+                 * NEXT SCENE — ATMOSPHERIC PRE-ECHO
+                 * ----------------------------------------
+                 *
+                 *
+                 *
+                 * The next scene begins to exist while it
+                 * is still approaching from below.
+                 */
+
+                const preEcho = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: nextScene,
+                        start: "top 112%",
+                        end: "top 76%",
+                        scrub: 2.4,
+                    },
+                });
+
+                if (nextLight) {
+                    preEcho.fromTo(
+                        nextLight,
+                        {
+                            autoAlpha: 0,
+                        },
+                        {
+                            autoAlpha: 0.55,
                             ease: "none",
                         },
                         0,
@@ -342,25 +403,47 @@ export default function JournalEntryMotion() {
                 }
 
                 if (nextLightCore) {
-                    gsap.fromTo(
+                    preEcho.fromTo(
                         nextLightCore,
                         {
-                            xPercent: -34,
-                            yPercent: -18,
-                            scale: 0.55,
+                            xPercent: -38,
+                            yPercent: -22,
+                            scale: 0.48,
+                            autoAlpha: 0.2,
                         },
                         {
                             xPercent: -20,
                             yPercent: -12,
                             scale: 0.78,
+                            autoAlpha: 0.7,
                             ease: "none",
-                            scrollTrigger: {
-                                trigger: nextScene,
-                                start: "top bottom",
-                                end: "top 72%",
-                                scrub: 2.6,
-                            },
                         },
+                        0,
+                    );
+                }
+
+                /*
+                 * Media presence is deliberately restrained.
+                 * We do NOT reveal the next copy early.
+                 */
+
+                if (nextMedia) {
+                    preEcho.fromTo(
+                        nextMedia,
+                        {
+                            autoAlpha: 0,
+                            scale: 1.075,
+                            filter:
+                                "blur(18px) brightness(0.38)",
+                        },
+                        {
+                            autoAlpha: 0.32,
+                            scale: 1.055,
+                            filter:
+                                "blur(10px) brightness(0.58)",
+                            ease: "none",
+                        },
+                        0,
                     );
                 }
             });
