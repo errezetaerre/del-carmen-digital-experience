@@ -8,7 +8,11 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         title: "The Art of Remembering",
         excerpt:
             "A reflection on memory, beauty and the invisible essence that remains within us.",
-        image: "/images/journal/placeholder-01.jpg",
+        image:
+            "/images/journal/placeholder-01.jpg",
+
+        journalImage:
+            "/journal/placeholder-journal-01.jpg",
         featured: true,
     },
     {
@@ -19,6 +23,8 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         excerpt:
             "Notes from the quiet space where observation becomes painting.",
         image: "/images/journal/placeholder-02.jpg",
+        journalImage:
+            "/journal/placeholder-journal-02.jpg",
     },
     {
         slug: "painting-always-a-conversation",
@@ -28,6 +34,8 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         excerpt:
             "On the relationship between contemplation, silence and the act of creating.",
         image: "/images/journal/placeholder-03.jpg",
+        journalImage:
+            "/journal/placeholder-journal-03.jpg",
     },
     {
         slug: "painting-what-cannot-be-seen",
@@ -37,6 +45,8 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         excerpt:
             "Every painting responds to an inner image, to a way of looking that seeks to preserve a certain atmosphere, a color relationship or a moment of light.",
         image: "/images/journal/placeholder-04.jpg",
+        journalImage:
+            "/journal/placeholder-journal-04.jpg",
     },
     {
         slug: "interview-of-painting",
@@ -46,6 +56,8 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         excerpt:
             "i'm always surprised by how uncertain the dialogue becomes when you try to define something that lives in the realm of sensation, intuition and color",
         image: "/images/journal/placeholder-03.jpg",
+        journalImage:
+            "/journal/placeholder-journal-03.jpg",
     },
     {
         slug: "children-as-teachers",
@@ -55,6 +67,8 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         excerpt:
             "How children’s ability to be present and curious can guide us in our own creative practice.",
         image: "/images/journal/placeholder-03.jpg",
+        journalImage:
+            "/journal/placeholder-journal-03.jpg",
     },
 
     {
@@ -65,6 +79,8 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
         excerpt:
             "On the relationship between contemplation, silence and the act of creating.",
         image: "/images/journal/placeholder-03.jpg",
+        journalImage:
+            "/journal/placeholder-journal-03.jpg",
     },
 ];
 

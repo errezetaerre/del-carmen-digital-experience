@@ -139,7 +139,7 @@ export default function JournalIndex({
     "
                                 >
                                     <img
-                                        src={entry.image}
+                                        src={entry.journalImage ?? entry.image}
                                         alt=""
                                         draggable={false}
                                         className="

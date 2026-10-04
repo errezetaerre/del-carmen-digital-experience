@@ -4,7 +4,19 @@ export interface JournalEntry {
     year: number;
     title: string;
     excerpt: string;
+
+    /**
+     * Canonical clean/original image.
+     * Used by Home and journal entry experiences.
+     */
     image: string;
+
+    /**
+     * Editorial image prepared specifically
+     * for the Journal Index presentation.
+     */
+    journalImage?: string;
+
     featured?: boolean;
 }
 
