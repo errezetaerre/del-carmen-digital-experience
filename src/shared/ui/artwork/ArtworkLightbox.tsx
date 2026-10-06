@@ -465,6 +465,22 @@ export default function ArtworkLightbox({
         );
     };
 
+    const handleBackdropClick = (
+        event: React.MouseEvent<HTMLDivElement>,
+    ) => {
+        const target = event.target as HTMLElement;
+
+        if (
+            target.closest(
+                "a, button, [data-lightbox-content='true']",
+            )
+        ) {
+            return;
+        }
+
+        onClose();
+    };
+
     /* =========================================================
        POINTER DOWN
        ========================================================= */
@@ -944,6 +960,7 @@ export default function ArtworkLightbox({
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerCancel}
+                onClick={handleBackdropClick}
             >
                 <div
                     className="
@@ -976,6 +993,7 @@ export default function ArtworkLightbox({
 
                             <div
                                 ref={zoomLayerRef}
+                                data-lightbox-content="true"
                                 className="relative flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"
                             >
                                 <img
@@ -1047,7 +1065,10 @@ export default function ArtworkLightbox({
                     )}
 
                     {/* Information panel */}
-                    <div className="relative z-30 h-[205px] w-full shrink-0 px-5 pb-4 pt-3 text-center md:h-[220px] md:px-10 md:pb-5 md:pt-4 [@media(orientation:landscape)_and_(max-height:600px)]:h-[92px] [@media(orientation:landscape)_and_(max-height:600px)]:px-6 [@media(orientation:landscape)_and_(max-height:600px)]:pb-2 [@media(orientation:landscape)_and_(max-height:600px)]:pt-1">
+                    <div
+                        data-lightbox-content="true"
+                        className="relative z-30 w-full shrink-0 px-5 pb-4 pt-3 text-center md:px-10 md:pb-5 md:pt-4 [@media(orientation:landscape)_and_(max-height:600px)]:h-[92px] [@media(orientation:landscape)_and_(max-height:600px)]:px-6 [@media(orientation:landscape)_and_(max-height:600px)]:pb-2 [@media(orientation:landscape)_and_(max-height:600px)]:pt-1"
+                    >
                         <p className="font-sans text-[10px] font-medium uppercase tracking-[0.30em] text-brand-gold/90 md:text-xs [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]">
                             {artwork.year}
                         </p>
@@ -1066,9 +1087,9 @@ export default function ArtworkLightbox({
 
                         <div aria-hidden className="mx-auto mt-3 h-px w-16 bg-gradient-to-r from-transparent via-brand-gold/45 to-transparent [@media(orientation:landscape)_and_(max-height:600px)]:mt-1" />
 
-                        <div className="mx-auto mt-3 h-[58px] max-w-xl overflow-hidden [@media(orientation:landscape)_and_(max-height:600px)]:hidden">
+                        <div className="mx-auto mt-3 max-w-xl [@media(orientation:landscape)_and_(max-height:600px)]:hidden">
                             {artwork.description && (
-                                <p className="line-clamp-2 font-sans text-sm font-light leading-6 text-white/45 md:line-clamp-3">
+                                <p className="font-sans text-sm font-light leading-6 text-white/45">
                                     {artwork.description}
                                 </p>
                             )}
@@ -1078,22 +1099,23 @@ export default function ArtworkLightbox({
                         {showDetailsCta && (
                             <div
                                 className="
-                                    absolute
-                                    bottom-3
-                                    left-1/2
+                                    mt-4
                                     flex
-                                    w-[calc(100%-32px)]
-                                    -translate-x-1/2
+                                    w-full
                                     items-center
                                     justify-center
                                     gap-4
                                     whitespace-nowrap
 
-                                    md:bottom-4
-                                    md:w-auto
+                                    md:mt-5
                                     md:gap-7
 
+                                    [@media(orientation:landscape)_and_(max-height:600px)]:absolute
                                     [@media(orientation:landscape)_and_(max-height:600px)]:bottom-1
+                                    [@media(orientation:landscape)_and_(max-height:600px)]:left-1/2
+                                    [@media(orientation:landscape)_and_(max-height:600px)]:mt-0
+                                    [@media(orientation:landscape)_and_(max-height:600px)]:w-auto
+                                    [@media(orientation:landscape)_and_(max-height:600px)]:-translate-x-1/2
                                     [@media(orientation:landscape)_and_(max-height:600px)]:gap-4
                                 "
                             >

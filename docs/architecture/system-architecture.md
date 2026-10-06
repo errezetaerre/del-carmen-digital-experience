@@ -1,6 +1,6 @@
 # System Architecture
 
-Version: 1.2
+Version: 1.3
 
 Document ID:
 DOC-SA
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-09-19
+2026-10-05
 
 ---
 
@@ -819,6 +819,285 @@ The technology should never become the experience.
 Visitors should remember the artwork, not the software.
 
 Technology exists only to protect, preserve and reveal beauty.
+
+---
+
+Del Carmen Digital Experience
+
+Painting the Eternal Essence Within
+
+
+---
+
+# SA-19 Architecture Evolution Update
+
+Status:
+🟡 Audited Extension — approval state follows the individual decisions it records
+
+Date:
+2026-10-05
+
+This section extends the supplied v1.2 System Architecture without deleting, compressing or replacing its existing current or future architecture.
+
+The architecture above remains preserved, including its planned technology and infrastructure direction.
+
+Implementation status must not be confused with architectural intent.
+
+A technology may be part of the approved/planned architecture even when its implementation belongs to a later phase.
+
+---
+
+# SA-19A Future Architecture Preservation
+
+The following architecture already documented above remains part of the project's planned evolution:
+
+Frontend / Runtime
+
+• Next.js  
+• React  
+• TypeScript  
+• Tailwind CSS  
+• Node.js  
+
+Backend / Application Architecture
+
+• Next.js Server Components  
+• Server Actions  
+• API Routes when required  
+• Service Layer / application orchestration  
+• Repository boundaries where persistence requires them  
+
+Database / Persistence
+
+• PostgreSQL  
+• Prisma  
+
+Authentication
+
+• NextAuth / Auth.js  
+
+Storage
+
+• Cloudinary for artwork-oriented storage as currently documented  
+• Local / future S3 document-storage direction as currently documented  
+• CDN-backed generated/public assets as currently documented  
+
+Deployment / Version Control
+
+• Vercel  
+• GitHub  
+
+CMS / Administration
+
+• Custom Admin Panel in the initial planned architecture  
+• Future Headless CMS if needed  
+
+Future Modules
+
+• Virtual Museum  
+• Online Academy  
+• Community  
+• Collector Circle  
+• Immersive Experiences  
+• Digital Exhibitions  
+• Artist Residency  
+• Licensing  
+• Archive  
+
+The fact that some of these systems are not yet implemented does not remove them from System Architecture.
+
+Their implementation details may be adjusted when their roadmap phase is reached.
+
+A future architectural change should update this document rather than silently erasing the earlier direction.
+
+---
+
+# SA-19B Current Phase 1 Shared Interaction Architecture
+
+Status:
+🟢 Approved / Implemented / Canonical for current Phase 1
+
+The current public art experience now includes reusable interaction architecture that was not yet documented in v1.2.
+
+## Shared KineticCarousel
+
+Canonical location:
+
+`src/shared/ui/kinetic-carousel/`
+
+Canonical files:
+
+• `KineticCarousel.tsx`  
+• `useKineticCarousel.ts`  
+• `index.ts`  
+
+The shared primitive owns reusable horizontal kinetic interaction.
+
+Collections and Series retain their own editorial composition rules.
+
+Collections Works Preview:
+
+• one to four artworks use the approved restrained editorial composition;  
+• five or more artworks use the shared KineticCarousel.  
+
+Series Gallery reuses the shared KineticCarousel when the artwork set exceeds its standard gallery capacity.
+
+This current shared primitive may evolve in future phases when new requirements justify changes.
+
+---
+
+# SA-19C Contextual Artwork Lightbox
+
+Status:
+🟢 Approved / Implemented / Canonical for current Phase 1
+
+Del Carmen uses one shared Artwork Lightbox whose navigation behavior adapts to context.
+
+Series context supports:
+
+• close back to the Series experience;  
+• dots representing the current Series;  
+• previous / next within the current Series;  
+• contemplative artwork information;  
+• `Explore in detail`;  
+• preservation of Series context into Artwork Detail.  
+
+Independent Artwork/archive context uses the applicable broader Artwork navigation set.
+
+Series context may be preserved through:
+
+`/artworks/[slug]?series=[series-slug]`
+
+This query context is presentation/navigation state and does not redefine Artwork identity or persistence.
+
+The shared lightbox uses a document-level portal so its interaction layer is not clipped by ancestor layout or transform contexts.
+
+---
+
+# SA-19D Artwork Detail Kinetic Navigation
+
+Status:
+🟢 Approved / Implemented / Canonical for current Phase 1
+
+`/artworks/[slug]` uses whole-scene horizontal kinetic navigation.
+
+Previous, current and next Artwork Detail scenes physically coexist in a three-panel track when the corresponding neighbors exist.
+
+Navigation context determines the sequence:
+
+• Series context → current ArtworkSeries;  
+• independent/archive context → applicable broader Artwork set.  
+
+Supported inputs:
+
+• horizontal trackpad gesture;  
+• pointer drag / touch swipe;  
+• keyboard left/right arrows.  
+
+Vertical page scrolling remains natural.
+
+Fullscreen artwork viewing remains isolated from kinetic scene navigation.
+
+Back navigation and persistent interaction guidance remain outside the horizontally animated track.
+
+The Back action reuses the existing shared `LinkButton` `goldUnderline` treatment.
+
+---
+
+# SA-19E Input Ownership and Physical Motion
+
+Status:
+🟢 Approved / Implemented / Canonical for current Phase 1
+
+The governing interaction principle is:
+
+`The artwork must feel as though it has weight.`
+
+Pointer drag and trackpad wheel operate as separate input sessions and must not compete for ownership.
+
+During horizontal trackpad interaction, the rendered track follows the visitor's gesture directly.
+
+Release behavior preserves trajectory and momentum.
+
+The interaction must avoid an artificial stop, pause or second acceleration before landing on the neighboring artwork.
+
+One physical trackpad burst may navigate at most one artwork.
+
+Its inertial tail must not trigger a second route transition after the next Artwork Detail scene becomes current.
+
+Edge behavior is symmetrical:
+
+• first artwork + backward gesture → resistance → settle to first;  
+• last artwork + forward gesture → resistance → settle to last;  
+• intermediate artwork → navigation available in both valid directions.  
+
+An invalid edge gesture must not be reinterpreted as movement toward the only available neighbor.
+
+These rules define the approved current implementation.
+
+Future immersive or museum phases may extend or supersede this interaction architecture through an explicit later decision.
+
+---
+
+# SA-19F Artwork Detail Interaction Onboarding
+
+Status:
+🟢 Approved / Implemented for current Phase 1
+
+`SWIPE TO EXPLORE` / `SWIPE / DRAG TO EXPLORE` is interaction onboarding rather than Artwork content.
+
+Before horizontal interaction is learned, the transient reminder may recur.
+
+After a real horizontal interaction through trackpad, drag/swipe or keyboard navigation, onboarding is learned for the current browser document.
+
+Client-side Artwork navigation does not reset it.
+
+A real browser refresh begins a new document session and may present the onboarding again.
+
+The current implementation does not require `localStorage` or `sessionStorage`.
+
+Future onboarding behavior may evolve when future experience phases introduce materially different interaction models.
+
+---
+
+# SA-19G Current Canonical Stability and Future Evolution
+
+Status:
+🟢 Approved principle for current Phase 1
+
+The following interaction systems are stable/canonical for the current Phase 1 implementation:
+
+• responsive Collection Hero behavior;  
+• Collections Works Preview;  
+• shared KineticCarousel core;  
+• Series Gallery kinetic integration;  
+• contextual Artwork Lightbox;  
+• Artwork Detail three-scene kinetic navigation;  
+• Artwork Detail trackpad / pointer ownership and approved edge semantics.  
+
+Stable/canonical means current work should build upon these approved systems rather than repeatedly redesigning them without justification.
+
+It does not mean they are permanently frozen for every future roadmap phase.
+
+Future Marketplace, Museum, immersive, mobile, CMS, Collector, Academy, Community or other phases may introduce new requirements.
+
+When that occurs, System Architecture should evolve through an explicit documented decision.
+
+---
+
+# Audit Note — 2026-10-05
+
+Version 1.3 uses the conservative documentation method.
+
+The complete supplied v1.2 System Architecture body is preserved above, apart from version and Last Updated metadata.
+
+This audit does not remove PostgreSQL, Prisma, NextAuth/Auth.js, Cloudinary, CMS direction, Marketplace architecture, Virtual Museum, Academy, Community or any other future-facing architecture because it is not implemented today.
+
+Instead, the new SA-19 section records the interaction architecture subsequently implemented during Phase 1 while preserving the long-term system direction.
+
+The original document-level Draft status also remains preserved. This audit does not silently promote the entire System Architecture to Approved.
+
+Individual subsections retain or receive their own status according to the decisions already made.
 
 ---
 

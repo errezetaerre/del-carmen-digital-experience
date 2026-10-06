@@ -1,6 +1,6 @@
 # About Implementation
 
-Version: 1.0
+Version: 1.1
 
 Document ID: DOC-AI
 
@@ -336,3 +336,80 @@ Replacing the poster with the approved final film is a media integration task, n
 # Freeze Rule
 
 About v1.0 must not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires change.
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete About Implementation v1.0 above.
+
+The module remains **Approved / Complete / Frozen**.
+
+## Canonical Implementation State
+
+Public route:
+
+`/about`
+
+The implemented experience remains:
+
+```text
+01 Hero / The Encounter
+02 Essence
+03 Ecosystem
+04 Continue
+05 Shared Footer
+```
+
+Responsive QA and route/link review are recorded as completed in the project completion decision.
+
+## Motion Contract
+
+About motion remains scene-specific and uses GSAP where documented.
+
+Required narrative disclosure must be triggered by initial scene presentation or physical scroll position rather than by elapsed time while the visitor is elsewhere.
+
+Ordinary scroll reveals remain non-scrubbed and run once.
+
+Reduced-motion accessibility remains mandatory.
+
+## Current and Planned Media
+
+Current canonical Hero fallback:
+
+`public/about/film/the_encounter_poster.png`
+
+Planned replacement:
+
+the final audiovisual master governed by `about-film-treatment.md`.
+
+The poster and final film represent implementation states of the same Hero media responsibility.
+
+The planned master must not be removed from the architecture merely because it has not yet been produced or integrated.
+
+## Architectural Stability
+
+The final film should integrate as a replaceable media layer.
+
+It should not introduce a second About page architecture or duplicate The Encounter as an independent scene unless a later explicit decision changes the experience.
+
+## Future Infrastructure
+
+The current About implementation should not acquire speculative infrastructure merely because richer media may exist later.
+
+Conversely, this rule does not prohibit future media delivery, CMS, streaming, analytics or other infrastructure if an approved requirement later justifies it.
+
+## Freeze Governance
+
+About should not be redesigned during Phase 1 except for verified defects, accessibility issues, production requirements or an explicitly approved revision.
+
+The planned film integration is compatible with the frozen architecture.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 implementation document is preserved above apart from Version metadata.
+
+Implemented behavior and planned media are kept as distinct statuses rather than treating one as evidence that the other no longer belongs to the project.

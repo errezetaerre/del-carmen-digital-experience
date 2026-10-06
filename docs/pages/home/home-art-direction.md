@@ -1,9 +1,10 @@
-# Home Moodboard
+# Home Art Direction
 
-Version: 1.0
+Version:
+1.1
 
 Document ID:
-DOC-HM
+DOC-HAD
 
 Project:
 Del Carmen Digital Experience
@@ -12,344 +13,601 @@ Parent Brand:
 Rō Visual
 
 Document Type:
-Creative Direction
+Art Direction
 
 Authority Level:
-High
+Highest
 
 Status:
-⚪ Draft
+🟢 Approved
 
 Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-07-08
+2026-10-05
 
 ---
 
 # Purpose
 
-This document defines the creative direction of the Home page.
+Define the artistic direction of every section of the Home experience.
 
-Rather than describing a specific artwork, it establishes the emotional atmosphere, visual language and sensory experience that every future Home page must preserve.
+This document does not describe functionality.
 
-The featured artwork may change over time, but the experience must remain timeless.
+This document defines composition, atmosphere, rhythm, visual hierarchy and emotional intention.
 
----
+Home Specification defines what every section contains.
 
-# Table of Contents
-
-HM-01 Emotional Atmosphere
-
-HM-02 Visual Narrative
-
-HM-03 Color Composition
-
-HM-04 Typography Mood
-
-HM-05 Spatial Composition
-
-HM-06 Photography Direction
-
-HM-07 Motion Mood
-
-HM-08 Emotional Journey
-
-HM-09 Inspirations
-
-HM-10 Overall Experience
+Home Art Direction defines how every section should feel.
 
 ---
 
-# HM-01 Emotional Atmosphere
+# Design Philosophy
 
-Status:
-⚪ Draft
+The Home is not a landing page.
 
-The Home must feel like entering a silent art gallery at sunrise.
+The Home is not a catalog.
 
-Visitors should immediately perceive:
+The Home is a digital exhibition.
 
-- Silence
-- Humanity
-- Beauty
-- Reflection
-- Timelessness
-- Presence
+Visitors should feel as if they are slowly walking through carefully curated gallery rooms.
 
-The experience should never feel commercial.
+Every section should breathe.
 
-It should feel contemplative.
+Every transition should feel intentional.
 
-The objective is not to impress.
-
-The objective is to invite.
+Silence is part of the composition.
 
 ---
 
-# HM-02 Visual Narrative
+# Visual Principles
 
-Status:
-⚪ Draft
+The artwork is always the protagonist.
 
-The homepage tells a simple story.
+The interface is secondary.
 
-Arrival.
+Negative space is part of the design.
 
-↓
+Motion should support emotion.
 
-Contemplation.
+Typography should never compete with paintings.
 
-↓
+Light becomes part of the narrative.
 
-Discovery.
-
-↓
-
-Connection.
-
-↓
-
-Invitation.
-
-The visitor should never feel rushed.
-
-Every section gently invites the next.
-
-Scrolling should resemble walking through a museum rather than browsing an online store.
+Every section has its own emotional atmosphere while preserving visual consistency.
 
 ---
 
-# HM-03 Color Composition
+# Home Structure
 
-Status:
-⚪ Draft
+The Home is divided into seven sections.
 
-Primary Background
-
-Smoke White
-
-Soft warm gray
-
-Very subtle gradients
-
-Primary Accent
-
-Antique Gold
-
-Secondary Accent
-
-Deep Charcoal
-
-Supporting Colors
-
-Warm Ivory
-
-Soft Stone
-
-Muted Bronze
-
-Color must never dominate the artwork.
-
-The paintings are always the protagonists.
+Each section represents one chapter of the visitor's emotional journey.
 
 ---
 
-# HM-04 Typography Mood
+# Section 01
 
-Status:
-⚪ Draft
+Hero
 
-Typography should communicate:
+Narrative
 
-Elegance
+Arrival
 
-Calm
+Purpose
 
-Breathing space
+Create curiosity.
 
-Editorial quality
+Slow the visitor down.
 
-Museum-level sophistication
+Present the artistic identity.
 
-Large margins.
+Visual Focus
 
-Generous line spacing.
+Brand identity.
 
-No visual noise.
+Featured artwork.
 
-Reading should feel effortless.
+Atmosphere.
 
----
+Transition
 
-# HM-05 Spatial Composition
-
-Status:
-⚪ Draft
-
-The interface breathes.
-
-Large vertical spacing.
-
-Generous white space.
-
-Balanced asymmetry.
-
-Editorial composition.
-
-Each block occupies nearly an entire viewport.
-
-Content density remains intentionally low.
-
-Silence is part of the design.
+Invite visitors to continue naturally.
 
 ---
 
-# HM-06 Photography Direction
+# Hero Blueprint
 
-Status:
-⚪ Draft
+## Mission
 
-Whenever artworks are displayed:
+The Hero should communicate one idea.
 
-Natural lighting.
-
-Neutral color calibration.
-
-No artificial saturation.
-
-No dramatic filters.
-
-No exaggerated HDR.
-
-Artworks must appear exactly as they exist in reality.
-
-Frames remain discreet.
-
-Textures remain authentic.
-
----
-
-# HM-07 Motion Mood
-
-Status:
-⚪ Draft
-
-Animation exists only to support contemplation.
-
-Motion principles:
-
-Slow.
-
-Natural.
-
-Elegant.
-
-Meaningful.
-
-Never distracting.
-
-Preferred animations:
-
-Gentle fade.
-
-Soft upward movement.
-
-Parallax with restraint.
-
-Slow image reveal.
-
-Smooth page transitions.
-
-Animation duration should encourage observation rather than speed.
-
----
-
-# HM-08 Emotional Journey
-
-Status:
-⚪ Draft
-
-Visitors should gradually experience:
-
-Curiosity
-
-↓
-
-Calm
-
-↓
-
-Reflection
-
-↓
-
-Connection
-
-↓
-
-Inspiration
-
-↓
-
-Desire to continue exploring
-
-The Home should never pressure users into taking action.
-
-Calls to action appear naturally after trust has been established.
-
----
-
-# HM-09 Inspirations
-
-Status:
-⚪ Draft
-
-Creative references:
-
-High-end museum websites
-
-Luxury editorial magazines
-
-Fine art exhibition catalogues
-
-Minimal architecture
-
-Japanese spatial harmony
-
-Quiet luxury
-
-Classical painting galleries
-
-Timeless print design
-
-The experience should feel international.
-
-Not regional.
-
-Not trendy.
-
-Not temporary.
-
----
-
-# HM-10 Overall Experience
-
-Status:
-⚪ Draft
-
-The homepage should feel like entering a timeless artistic sanctuary.
-
-Every visual decision should reinforce one central idea:
-
-Beauty deserves time.
+Art comes first.
 
 The interface disappears.
 
-The artwork remains.
+Visitors should immediately understand they have entered a curated artistic experience rather than a traditional website.
 
-The visitor leaves carrying an emotion rather than remembering a website.
+---
+
+## Emotional Goal
+
+Silence
+
+?
+
+Curiosity
+
+?
+
+Beauty
+
+?
+
+Calm
+
+?
+
+Contemplation
+
+?
+
+"I want to continue."
+
+---
+
+## Composition
+
+The Hero is composed as a single visual scene.
+
+It is not divided into rigid columns.
+
+The painting dominates the composition.
+
+The brand balances the artwork.
+
+Large areas of negative space create visual silence.
+
+---
+
+## Visual Hierarchy
+
+1. Artwork
+
+2. Brand
+
+3. Atmosphere
+
+4. Tagline
+
+5. Quote
+
+6. CTA
+
+7. Navigation
+
+---
+
+## Brand Zone
+
+The brand always remains on the left.
+
+Never attached to the top.
+
+The complete block remains vertically balanced.
+
+Elements:
+
+• DEL CARMEN
+
+• Tagline
+
+• Quote
+
+• CTA
+
+---
+
+## Artwork Zone
+
+The artwork occupies the largest visual area.
+
+It should feel like a museum painting.
+
+Never like a web card.
+
+Never like a product image.
+
+---
+
+## Floating Information Card
+
+Positioned over the artwork.
+
+Lower right corner.
+
+Elegant.
+
+Minimal.
+
+Contains only:
+
+Title
+
+Technique
+
+Year
+
+---
+
+## Light Environment
+
+Light creates the space.
+
+The background is not decorative.
+
+The atmosphere is built through light.
+
+Soft.
+
+Natural.
+
+Museum-like.
+
+---
+
+## Negative Space
+
+Empty space is intentional.
+
+Never fill space simply because it exists.
+
+Silence is part of the composition.
+
+---
+
+## Motion Direction
+
+Motion should be cinematic.
+
+Never technological.
+
+Never distracting.
+
+Motion should support contemplation.
+
+---
+
+## Mouse Interaction
+
+Interactions happen with intention.
+
+No immediate reactions.
+
+Interfaces reveal themselves progressively.
+
+---
+
+## Responsive Philosophy
+
+The composition adapts.
+
+The experience remains identical.
+
+The artwork always remains the protagonist.
+
+---
+
+## Hero Success Criteria
+
+The painting dominates the scene.
+
+The brand feels timeless.
+
+The interface disappears.
+
+The visitor wants to continue exploring.
+
+---
+
+# Section 02
+
+Featured Artwork
+
+(Status: Pending)
+
+---
+
+# Section 03
+
+About the Artist
+
+(Status: Pending)
+
+---
+
+# Section 04
+
+Collections
+
+(Status: Pending)
+
+---
+
+# Section 05
+
+Journal
+
+(Status: Pending)
+
+---
+
+# Section 06
+
+Circle of Collectors
+
+(Status: Pending)
+
+---
+
+# Section 07
+
+Contact
+
+(Status: Pending)
+
+---
+
+Del Carmen Digital Experience
+
+Painting the Eternal Essence Within
+
+---
+
+# Home Art Direction Evolution Update — 2026-10-05
+
+This section extends the supplied v1.0 Home Art Direction without deleting, compressing or silently completing its original pending sections.
+
+The original DOC-HAD v1.0 body remains preserved above as the Highest-authority approved art-direction foundation.
+
+## Documentation Integrity
+
+The retrieved source containing DOC-HAD also includes conversational drafting material before the canonical document body.
+
+That conversational material is not part of DOC-HAD.
+
+Version 1.1 therefore preserves the actual document beginning with its metadata block and ending with the Del Carmen signature.
+
+The original Pending labels remain preserved above.
+
+They are historical status markers from v1.0 and are not silently rewritten as though the missing art-direction sections had existed in that source.
+
+## Current Home Narrative Alignment
+
+Subsequent approved Home documentation establishes the current Home journey as:
+
+```text
+Hero
+→ Featured Artwork
+→ Artist Statement
+→ Featured Collection
+→ Selected Works
+→ Journal Preview
+→ Invitation
+→ Footer
+```
+
+This later Home structure supersedes the earlier v1.0 pending-section labels:
+
+```text
+About the Artist
+Collections
+Journal
+Circle of Collectors
+Contact
+```
+
+for the current Home architecture.
+
+Those original labels remain preserved above for historical traceability.
+
+This does not cancel Collector or Contact experiences from the broader Del Carmen platform.
+
+It only clarifies that they are not the current Home scene sequence.
+
+## Section 01 — Hero: Art-Direction Continuity
+
+The original Hero direction remains foundational:
+
+• art comes first;
+• the painting dominates;
+• negative space creates visual silence;
+• light builds atmosphere;
+• motion supports contemplation;
+• the interface progressively disappears.
+
+Subsequent responsive implementation may adapt exact placement, proportions and information hierarchy by breakpoint.
+
+Those implementation refinements should preserve the original emotional objective rather than force obsolete geometry when the current approved responsive composition requires another arrangement.
+
+The current Hero therefore remains an immersive editorial scene rather than a rigid diagram.
+
+## Featured Artwork
+
+Featured Artwork should function as the visitor's first sustained encounter with an individual work after Arrival.
+
+The scene should become quieter than the Hero.
+
+The artwork should receive enough visual space to be observed rather than consumed as promotional content.
+
+Editorial information should support the encounter without turning the scene into a product card.
+
+Motion, if present, should feel like gradual perception or materialization.
+
+The emotional movement is:
+
+```text
+Arrival
+→ Encounter
+→ Contemplation
+```
+
+## Artist Statement
+
+Artist Statement introduces the human and philosophical voice behind the work.
+
+It should not behave like a résumé or conventional About block.
+
+Typography, portraiture or supporting visual material should feel intimate, restrained and editorial.
+
+The scene should create a change of rhythm after sustained artwork observation.
+
+The visitor moves from:
+
+```text
+the work
+→ the person and philosophy behind the work
+```
+
+Silence and negative space remain essential.
+
+## Featured Collection
+
+Featured Collection is the Home threshold into an ArtworkSeries.
+
+Art direction should communicate expansion from one work into a broader artistic body.
+
+The scene may become more atmospheric and spatial than Featured Artwork while remaining contemplative.
+
+Dedicated Series editorial media may establish its atmosphere.
+
+The scene should suggest:
+
+```text
+one artwork
+→ a larger artistic world
+```
+
+It must not feel like a category card, product collection or commercial carousel.
+
+The current canonical domain relationship is:
+
+`Featured Collection → ArtworkSeries`
+
+## Selected Works
+
+Selected Works returns attention to individual artworks after the broader Series encounter.
+
+The scene should feel curated rather than exhaustive.
+
+It is not the complete archive.
+
+The visual rhythm may introduce multiple works while preserving enough space that each remains individually legible.
+
+If motion or horizontal exploration is later introduced here, it must be justified by the Home narrative rather than copied from another module merely because a shared kinetic primitive exists.
+
+## Journal Preview
+
+Journal Preview shifts from visual contemplation toward thought, process and reflection.
+
+It should feel editorial and literary.
+
+Typography may gain slightly greater narrative presence, but artwork and atmosphere should continue to prevent the section from becoming a conventional article grid.
+
+The emotional role is:
+
+```text
+seeing
+→ thinking
+```
+
+Journal motion should remain quieter than artwork exploration unless a future approved concept establishes another narrative need.
+
+## Invitation
+
+Invitation is the closing emotional gesture of Home.
+
+It should not pressure the visitor into conversion.
+
+The scene invites continued relationship with Del Carmen.
+
+Its tone should be human, calm and open.
+
+Any newsletter, contact or future membership/collector pathway presented here should feel like an invitation to remain connected rather than a commercial demand.
+
+The emotional movement is:
+
+```text
+experience
+→ connection
+```
+
+## Footer
+
+The Footer closes the exhibition quietly.
+
+It should feel like departure from a gallery rather than the sudden appearance of a utility-heavy application footer.
+
+Necessary navigation and institutional information remain accessible, but visual hierarchy should stay restrained.
+
+## Home Motion Language
+
+The broader approved Del Carmen motion vocabulary may support Home:
+
+• Stillness
+• Atmospheric Reveal
+• Materialization
+• Spatial Drift
+• Luminous Accent
+• Portal Transition
+
+These are expressive concepts, not mandatory effects.
+
+Home should alternate naturally between rest and movement.
+
+The Home must never become a showcase for animation technology.
+
+KineticCarousel and Artwork Detail physics are not automatically Home art direction.
+
+Reuse is appropriate only when the narrative and spatial purpose of a Home scene genuinely calls for it.
+
+## Responsive Art Direction
+
+Responsive adaptation should preserve emotional hierarchy rather than identical geometry.
+
+Across desktop, tablet and mobile:
+
+• artwork remains protagonist;
+• negative space remains intentional;
+• typography remains subordinate to the art;
+• content should never feel compressed merely to preserve desktop proportions;
+• motion should remain restrained;
+• visual silence must survive the smaller viewport.
+
+Mobile is a recomposition of the experience, not a reduced desktop layout.
+
+## Future Home Evolution
+
+Home Art Direction may continue evolving as new Home scenes, media or interactions are explicitly approved.
+
+Future platform capabilities such as Collector experiences, commerce, exhibitions, immersive environments, Academy, Community or other modules remain part of the broader Del Carmen roadmap even when they are not Home scenes.
+
+Their absence from the current Home sequence does not remove them from the project.
+
+The Home may reference future platform capabilities when the narrative requires it without becoming a dashboard for the entire ecosystem.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete canonical DOC-HAD v1.0 document body is preserved above apart from Version and Last Updated metadata.
+
+The original pending sections are retained rather than retroactively rewritten.
+
+Later approved Home structure is documented as an explicit evolution/supersession.
+
+No broader future Del Carmen capability is cancelled merely because the current Home architecture no longer contains an identically named scene.
 
 ---
 

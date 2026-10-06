@@ -1,6 +1,6 @@
 # PROJECT_MANIFESTO.md
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-PM
@@ -326,3 +326,75 @@ Only when all three exist in harmony does the experience become complete.
 Del Carmen Digital Experience
 
 Painting the Eternal Essence Within
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete approved Project Manifesto v1.0 above.
+
+DOC-PM remains **Highest Authority / Approved**.
+
+## Constitutional Role
+
+The Manifesto remains the project's constitutional layer.
+
+Later technical, design and implementation documents may become more specific, but they must not silently reverse the Manifesto's governing principles.
+
+Its enduring priorities remain:
+
+- meaningful encounters between people and art;
+- art before interface;
+- contemplation before manipulation;
+- humanity before technological spectacle;
+- clarity before cleverness;
+- documentation evolving intentionally;
+- respect for visitors as guests;
+- collectors as guardians of stories rather than merely customers;
+- technology becoming invisible in service of the work.
+
+## Current Interaction Systems
+
+Current sophisticated motion and kinetic interaction do not contradict the Manifesto merely because they are technically advanced.
+
+They remain compatible only when the visitor remembers the artwork rather than the mechanism.
+
+The current Artwork Detail principle:
+
+`The artwork must feel as though it has weight.`
+
+is therefore consistent with the Manifesto's demand that interaction reinforce presence and artistic experience rather than showcase technology for its own sake.
+
+It is not added to the constitutional text itself.
+
+## Documentation Evolution
+
+The original statement `Documentation precedes implementation` remains a governing ideal.
+
+The project has also reached a stage where implementation, testing and approved discoveries can legitimately require documentation reconciliation.
+
+That reconciliation must remain intentional and traceable.
+
+Documentation is therefore a living source of truth containing both:
+
+- approved/current implementation;
+- approved/planned future direction.
+
+Unimplemented future direction must not be deleted merely because implementation has not reached it.
+
+## Future Ecosystem
+
+The Manifesto's `living artistic ecosystem` remains compatible with the documented future platform: Collector experiences, Marketplace, Virtual Museum, Academy, Community, Rō Visual Lab, immersive experiences and other future capabilities.
+
+Those modules must inherit the Manifesto rather than transform the platform into a feature-first or transaction-first product.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 Manifesto is preserved above apart from Version metadata.
+
+No constitutional principle is removed or silently rewritten.
+
+No current implementation detail is promoted into the Manifesto as a new constitutional rule without explicit approval.

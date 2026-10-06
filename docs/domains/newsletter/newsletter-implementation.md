@@ -1,5 +1,5 @@
 # Newsletter Implementation
-Version: 1.0
+Version: 1.1
 Document ID: DOC-NEWS-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -70,3 +70,139 @@ Final public domain, sender address, sender-domain verification, DNS authenticat
 
 # Status
 Newsletter v1.0 is Approved / Complete / Frozen. Next Phase 1 focus: Responsive QA global.
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete Newsletter Implementation v1.0 above.
+
+The module remains **Approved / Complete / Frozen**.
+
+## Canonical Runtime Architecture
+
+Client domain remains under:
+
+`src/domains/newsletter/`
+
+Canonical server routes remain:
+
+`src/app/api/newsletter/route.ts`
+
+`src/app/api/newsletter/confirm/route.ts`
+
+`src/app/api/newsletter/unsubscribe/route.ts`
+
+Public API contract:
+
+`POST /api/newsletter`
+
+`GET /api/newsletter/confirm`
+
+`GET /api/newsletter/unsubscribe`
+
+## Consent and Persistence
+
+Double opt-in remains mandatory.
+
+Upstash Redis remains the canonical v1.0 source of truth.
+
+Confirmation tokens continue to expire after 24 hours and use hashed lookup.
+
+Superseded pending confirmation tokens remain invalidated.
+
+Active membership continues to be represented through the documented subscriber record and `newsletter:subscribers` membership.
+
+## Lifecycle Integrity
+
+The implementation must preserve the validated lifecycle:
+
+```text
+Subscribe
+→ Pending
+→ Confirm
+→ Active
+→ Unsubscribe
+→ Unsubscribed
+→ Resubscribe
+→ Pending
+→ Confirm
+→ Active
+```
+
+A future persistence/provider migration must preserve these semantics rather than flattening all email addresses into an undifferentiated mailing list.
+
+## Abuse Protection
+
+The canonical v1.0 protection remains:
+
+- server-side validation;
+- normalized email;
+- honeypot;
+- Upstash Redis rate limiting.
+
+Canonical limit:
+
+five requests per ten minutes per resolved client IP.
+
+## Production Validation Record
+
+The project completion decision records a successful production build with:
+
+- Next.js 16.2.12 using webpack;
+- successful compilation;
+- successful TypeScript validation;
+- 54 of 54 static pages generated;
+- Home remaining statically prerendered;
+- all three Newsletter API endpoints remaining dynamic server routes.
+
+This is a historical validation record, not a guarantee about every future build.
+
+## Production QA — Preserved
+
+Final public domain configuration, sender-domain verification, DNS authentication and production delivery validation remain Production QA responsibilities.
+
+These tasks do not reopen the approved Newsletter experience.
+
+They must not be deleted merely because Newsletter v1.0 is complete.
+
+## Provider and Infrastructure Evolution
+
+The current v1.0 implementation establishes the canonical Phase 1 architecture.
+
+Future approved infrastructure may migrate persistence, email delivery or subscriber-management responsibilities if a demonstrated requirement justifies it.
+
+Such a migration must preserve:
+
+- explicit consent;
+- pending versus active distinction;
+- confirmation security;
+- unsubscribe;
+- resubscription;
+- abuse protection;
+- privacy boundaries.
+
+Current completion does not make future architecture impossible.
+
+Future possibility does not make speculative migration necessary now.
+
+## Contact Boundary
+
+Newsletter subscription data must remain distinct from Contact submissions.
+
+Contact cannot silently populate the active subscriber set.
+
+Any future cross-system integration requires an explicit consent and data-governance decision.
+
+## Freeze Governance
+
+Newsletter should not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires a change.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 implementation document is preserved above apart from Version metadata.
+
+No implemented consent, lifecycle, security, persistence or Production QA responsibility has been removed because it may evolve later.

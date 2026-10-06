@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Wireframe
 
-Version: 1.4
+Version: 1.5
 
 Document ID:
 
@@ -32,7 +32,7 @@ Del Carmen Digital Experience
 
 Last Updated:
 
-2026-08-26
+2026-10-05
 
 ------------------------------------------------------------------------
 
@@ -971,3 +971,128 @@ canonical.
 
 **Del Carmen Digital Experience --- Every approved decision becomes part
 of the living system.**
+
+
+------------------------------------------------------------------------
+
+# Home Wireframe Evolution Update — 2026-10-05
+
+This section extends the supplied v1.4 Home Wireframe without deleting, compressing or replacing its approved spatial architecture, responsive rules or future planned behavior.
+
+The original v1.4 body remains preserved above.
+
+## Canonical Home Structure
+
+The current Home spatial sequence remains:
+
+```text
+NAVIGATION
+│
+├── Hero
+├── Featured Artwork
+├── Artist Statement
+├── Featured Collection
+├── Selected Works
+├── Journal Preview
+├── Invitation
+└── Footer
+```
+
+Each scene remains independently composable while participating in one continuous Home journey.
+
+## Featured Collection Reference — Explicit Supersession
+
+The v1.4 body contains an earlier rule stating:
+
+`A Featured Collection entry may reference either an Artwork or an ArtworkSeries.`
+
+That rule is now explicitly superseded for the current approved Home architecture.
+
+Current canonical relationship:
+
+```text
+Featured Collection
+→ ArtworkSeries
+```
+
+An individual Artwork may visually represent the Series through dedicated Series editorial media or `coverArtworkId`, but the Home scene still points conceptually to the ArtworkSeries.
+
+This preserves the distinction between:
+
+```text
+Featured Artwork
+→ Artwork
+
+Featured Collection
+→ ArtworkSeries
+```
+
+The original v1.4 wording remains above for historical traceability rather than being silently deleted.
+
+## Selected Works Remains a Separate Scene
+
+Selected Works continues to present curated individual Artwork records.
+
+It is not a continuation of Featured Collection membership and should not collapse into the Series model.
+
+This preserves the Home rhythm:
+
+```text
+individual encounter
+→ artist voice
+→ broader body of work
+→ selected individual works
+→ thought / Journal
+→ connection
+```
+
+## Shared Container and Intentional Exceptions
+
+The existing shared Container remains the canonical global horizontal layout primitive.
+
+Home scenes should consume it where global gutters and content widths apply.
+
+Immersive scenes may intentionally use the `full` strategy or approved scene-specific composition when the experience requires it.
+
+Scene-specific proportions, artwork offsets and responsive placements remain local when they are unique to that composition.
+
+## Responsive Preservation
+
+Desktop, tablet and mobile remain distinct compositions of the same emotional hierarchy.
+
+Mobile must not be treated as compressed desktop.
+
+Future Home changes should preserve:
+
+• artwork dominance
+• readable hierarchy
+• intentional negative space
+• natural vertical flow
+• contextual CTA placement
+• responsive visual integrity
+
+## Motion Placement
+
+Home motion should remain scene-specific and narratively justified.
+
+Shared kinetic mechanics from Collections, Series or Artwork Detail are not automatically part of the Home wireframe.
+
+If a future Home scene genuinely requires a shared interaction primitive, it may reuse one after the spatial and narrative requirement is established.
+
+This avoids architecture-by-fashion while preserving future reuse.
+
+## Planned Behavior Preservation
+
+Any behavior already marked Approved Direction / Planned in the original wireframe remains planned unless a later approved decision explicitly supersedes it.
+
+Absence from the current physical implementation is not sufficient reason to remove it from the wireframe.
+
+## Audit Note
+
+Version 1.5 uses the conservative documentation method.
+
+The complete supplied v1.4 Home Wireframe body is preserved above, apart from Version, Last Updated and the corresponding Canonical Status version reference.
+
+The historical Featured Collection Artwork-or-ArtworkSeries rule is preserved in place and explicitly superseded here by the later approved `Featured Collection → ArtworkSeries` architecture.
+
+No planned responsive, navigation, particle, motion or future Home behavior has been removed merely because it is not currently implemented.

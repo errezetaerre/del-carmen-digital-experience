@@ -53,6 +53,9 @@ export default function JournalEntryMotion() {
                             "[data-journal-scene-media]",
                         ),
                         ...root.querySelectorAll(
+                            "[data-journal-scene-reveal]",
+                        ),
+                        ...root.querySelectorAll(
                             "[data-journal-scene-copy]",
                         ),
                         ...root.querySelectorAll(
@@ -64,6 +67,9 @@ export default function JournalEntryMotion() {
                         ...root.querySelectorAll(
                             "[data-journal-scene-light-haze]",
                         ),
+                        ...root.querySelectorAll(
+                            "[data-journal-hero-meta], [data-journal-hero-title], [data-journal-hero-excerpt], [data-journal-hero-scroll]",
+                        ),
                     ],
                     {
                         clearProps: "all",
@@ -74,24 +80,123 @@ export default function JournalEntryMotion() {
             }
 
             /*
-             * HERO
-             */
+            * ========================================
+            * HERO — EDITORIAL REVEAL
+            * ========================================
+            *
+            * Context → title → thought → invitation.
+            *
+            * The composition itself remains static.
+            * Only its temporal hierarchy changes.
+            */
+
             if (hero) {
-                gsap.fromTo(
-                    hero,
-                    {
-                        autoAlpha: 0,
-                        y: 42,
-                        filter: "blur(12px)",
-                    },
-                    {
-                        autoAlpha: 1,
-                        y: 0,
-                        filter: "blur(0px)",
-                        duration: 2,
+                const heroMeta =
+                    hero.querySelector<HTMLElement>(
+                        "[data-journal-hero-meta]",
+                    );
+
+                const heroTitle =
+                    hero.querySelector<HTMLElement>(
+                        "[data-journal-hero-title]",
+                    );
+
+                const heroExcerpt =
+                    hero.querySelector<HTMLElement>(
+                        "[data-journal-hero-excerpt]",
+                    );
+
+                const heroScroll =
+                    hero.querySelector<HTMLElement>(
+                        "[data-journal-hero-scroll]",
+                    );
+
+                /*
+                 * Keep the hero container itself stable.
+                 * Its children carry the animation.
+                 */
+                gsap.set(hero, {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: "none",
+                });
+
+                const heroReveal = gsap.timeline({
+                    defaults: {
                         ease: "power3.out",
                     },
-                );
+                });
+
+                if (heroMeta) {
+                    heroReveal.fromTo(
+                        heroMeta,
+                        {
+                            autoAlpha: 0,
+                            y: 16,
+                            filter: "blur(7px)",
+                        },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            filter: "blur(0px)",
+                            duration: 1.25,
+                        },
+                        0.15,
+                    );
+                }
+
+                if (heroTitle) {
+                    heroReveal.fromTo(
+                        heroTitle,
+                        {
+                            autoAlpha: 0,
+                            y: 46,
+                            filter: "blur(14px)",
+                        },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            filter: "blur(0px)",
+                            duration: 2.1,
+                        },
+                        0.45,
+                    );
+                }
+
+                if (heroExcerpt) {
+                    heroReveal.fromTo(
+                        heroExcerpt,
+                        {
+                            autoAlpha: 0,
+                            y: 24,
+                            filter: "blur(9px)",
+                        },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            filter: "blur(0px)",
+                            duration: 1.65,
+                        },
+                        1.15,
+                    );
+                }
+
+                if (heroScroll) {
+                    heroReveal.fromTo(
+                        heroScroll,
+                        {
+                            autoAlpha: 0,
+                            y: 12,
+                        },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            duration: 1.25,
+                            ease: "sine.out",
+                        },
+                        1.85,
+                    );
+                }
             }
 
             /*
@@ -101,6 +206,11 @@ export default function JournalEntryMotion() {
                 const media =
                     scene.querySelector<HTMLElement>(
                         "[data-journal-scene-media]",
+                    );
+
+                const revealLayer =
+                    scene.querySelector<HTMLElement>(
+                        "[data-journal-scene-reveal]",
                     );
 
                 const copy =
@@ -125,8 +235,13 @@ export default function JournalEntryMotion() {
 
                 if (media) {
                     gsap.set(media, {
-                        autoAlpha: 0,
                         scale: 1.09,
+                    });
+                }
+
+                if (revealLayer) {
+                    gsap.set(revealLayer, {
+                        autoAlpha: 0,
                         filter:
                             "blur(22px) brightness(0.52)",
                     });
@@ -158,13 +273,24 @@ export default function JournalEntryMotion() {
 
                 if (media) {
                     reveal.to(media, {
-                        autoAlpha: 1,
                         scale: 1.025,
-                        filter:
-                            "blur(0px) brightness(1)",
                         duration: 2.8,
                         ease: "power3.out",
                     });
+                }
+
+                if (revealLayer) {
+                    reveal.to(
+                        revealLayer,
+                        {
+                            autoAlpha: 1,
+                            filter:
+                                "blur(0px) brightness(1)",
+                            duration: 2.8,
+                            ease: "power3.out",
+                        },
+                        media ? "<" : 0,
+                    );
                 }
 
                 if (light) {
@@ -349,8 +475,6 @@ export default function JournalEntryMotion() {
                         currentMedia,
                         {
                             scale: 1.085,
-                            filter:
-                                "blur(9px) brightness(0.48)",
                             ease: "none",
                         },
                         0,
@@ -431,16 +555,10 @@ export default function JournalEntryMotion() {
                     preEcho.fromTo(
                         nextMedia,
                         {
-                            autoAlpha: 0,
                             scale: 1.075,
-                            filter:
-                                "blur(18px) brightness(0.38)",
                         },
                         {
-                            autoAlpha: 0.32,
                             scale: 1.055,
-                            filter:
-                                "blur(10px) brightness(0.58)",
                             ease: "none",
                         },
                         0,

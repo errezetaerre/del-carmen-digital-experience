@@ -1,6 +1,6 @@
 # Project Memory
 
-Version: 1.7
+Version: 1.8
 
 Document ID:
 
@@ -32,7 +32,7 @@ Del Carmen Digital Experience
 
 Last Updated:
 
-2026-09-08
+2026-10-05
 
 ------------------------------------------------------------------------
 
@@ -1792,3 +1792,356 @@ The canonical Newsletter documents are:
 - `newsletter-specification.md` v1.0
 - `newsletter-wireframe.md` v1.0
 - `newsletter-implementation.md` v1.0
+
+
+------------------------------------------------------------------------
+
+## Decision 043
+
+Category
+
+Collections / Artwork Series Architecture
+
+Status
+
+Approved / Implemented / Canonical
+
+Date
+
+2026-10-05
+
+Dependencies
+
+- collection-specification.md v1.0
+- artwork-model.md
+- domain-model.md
+- system-architecture.md
+
+Decision
+
+`ArtworkSeries` is the canonical domain model for coherent bodies of work.
+
+`/collections` is the public editorial discovery index for ArtworkSeries.
+
+`/series/[slug]` is the detailed curatorial experience for an individual ArtworkSeries.
+
+The visitor-facing term `Collection` may be used editorially without introducing a parallel `Collection` domain or persistence model.
+
+The current Phase 1 relationship remains optional `Artwork.seriesId`.
+
+A future many-to-many Artwork ↔ ArtworkSeries relationship remains part of the possible architectural evolution and should be introduced when a real curatorial requirement justifies it.
+
+The existing `coverArtworkId` should be evaluated first when a representative artwork is required before introducing another representative identifier.
+
+Artistic lifecycle and publication lifecycle remain conceptually separate.
+
+Reasoning
+
+The implemented Collections and Series experiences now establish a clear canonical boundary between artistic identity, curatorial grouping and visitor-facing terminology.
+
+This decision records the current approved implementation without removing the project's capacity to evolve the relationship model in later phases.
+
+Impact
+
+Future Collections and Series work must preserve this domain distinction unless a later approved architectural decision evolves it.
+
+------------------------------------------------------------------------
+
+## Decision 044
+
+Category
+
+Shared Kinetic Carousel
+
+Status
+
+Approved / Implemented / Canonical
+
+Date
+
+2026-10-05
+
+Dependencies
+
+- collection-specification.md v1.0
+- repository-structure.md
+- visual-language.md
+
+Decision
+
+The shared horizontal kinetic carousel is owned by:
+
+`src/shared/ui/kinetic-carousel/`
+
+Canonical files:
+
+- `KineticCarousel.tsx`
+- `useKineticCarousel.ts`
+- `index.ts`
+
+Collections Works Preview preserves its editorial composition for one to four artworks and uses the shared KineticCarousel for five or more works.
+
+Series Gallery also uses the shared KineticCarousel when the artwork set exceeds its standard gallery capacity.
+
+The approved carousel interaction preserves normal thumbnail clicks by delaying drag ownership until the movement threshold is crossed.
+
+The current fixed item-width solution is canonical for the approved implementation.
+
+Reasoning
+
+Collections and Series demonstrated genuine cross-experience reuse, justifying a shared interaction primitive while preserving local editorial rules.
+
+Impact
+
+Equivalent horizontal artwork browsing should reuse this shared primitive unless a later requirement justifies a different interaction system.
+
+This does not prevent future evolution of the shared carousel when new approved requirements emerge.
+
+------------------------------------------------------------------------
+
+## Decision 045
+
+Category
+
+Contextual Artwork Lightbox
+
+Status
+
+Approved / Implemented / Canonical
+
+Date
+
+2026-10-05
+
+Dependencies
+
+- collection-specification.md v1.0
+- artwork-model.md
+
+Decision
+
+Del Carmen uses one shared Artwork Lightbox with contextual behavior rather than separate competing lightbox implementations.
+
+In Series context:
+
+- close returns to the Series experience;
+- dots and previous/next navigation represent the current Series;
+- contemplative artwork information may be shown;
+- `Explore in detail` opens `/artworks/[slug]` while preserving the originating Series context.
+
+Artwork Detail reached from Series preserves that context through the `series` query parameter.
+
+Artwork Detail reached independently uses the broader applicable Artwork/archive context.
+
+The lightbox renders through a document-level portal so its visual and interaction layer is not clipped by ancestor layout or transform contexts.
+
+Reasoning
+
+Context belongs to the visitor journey rather than to duplicate Artwork entities or duplicate lightbox systems.
+
+Impact
+
+Future artwork-preview surfaces should reuse the shared lightbox when their requirements fit this model.
+
+The interaction may evolve later through approved requirements without changing Artwork identity.
+
+------------------------------------------------------------------------
+
+## Decision 046
+
+Category
+
+Artwork Detail Kinetic Navigation
+
+Status
+
+Approved / Implemented / Canonical
+
+Date
+
+2026-10-05
+
+Decision
+
+`/artworks/[slug]` uses a kinetic whole-scene horizontal navigation experience.
+
+Previous, current and next Artwork Detail scenes physically coexist in a three-panel track when those neighbors exist.
+
+Horizontal interaction moves the complete artwork scene rather than only a thumbnail or isolated image.
+
+Context determines the navigation set:
+
+- Series context navigates within the originating Series.
+- Independent/archive context navigates within the applicable broader artwork set.
+
+Vertical page scrolling remains natural.
+
+Fullscreen artwork viewing remains isolated from kinetic scene navigation.
+
+Supported navigation inputs are:
+
+- trackpad horizontal gesture;
+- pointer drag / touch swipe;
+- keyboard left/right arrows.
+
+The Back action and persistent interaction hint remain outside the animated horizontal track.
+
+The Back action uses the existing shared `LinkButton` `goldUnderline` treatment.
+
+Reasoning
+
+Artwork Detail should feel like moving physically between works while preserving the contemplative page composition and current curatorial context.
+
+Impact
+
+The three-scene kinetic model is canonical for the current Artwork Detail implementation.
+
+Future phases may extend the artwork experience, but should evolve from this approved behavior rather than accidentally replacing it during unrelated work.
+
+------------------------------------------------------------------------
+
+## Decision 047
+
+Category
+
+Artwork Detail Input Physics
+
+Status
+
+Approved / Implemented / Canonical
+
+Date
+
+2026-10-05
+
+Decision
+
+Artwork Detail kinetic interaction follows direct-manipulation physics.
+
+The artwork must feel as though it has weight.
+
+Pointer drag and trackpad wheel are separate input sessions and must not compete for ownership.
+
+During a horizontal trackpad gesture, the rendered track follows the gesture directly.
+
+Release behavior preserves trajectory and momentum.
+
+It must not introduce an artificial stop, pause or second acceleration before landing on the neighboring artwork.
+
+One physical trackpad burst may navigate at most one artwork.
+
+The inertial tail of that burst must not trigger a second route transition after the next Artwork Detail scene becomes current.
+
+Edge behavior is symmetrical:
+
+- at the first artwork, a backward gesture meets resistance and settles back to the first artwork;
+- at the last artwork, a forward gesture meets resistance and settles back to the last artwork;
+- between artworks, both directions navigate normally.
+
+Invalid edge gestures must never be reinterpreted as gestures toward the only available neighbor.
+
+Reasoning
+
+The visitor's physical gesture must remain the source of motion.
+
+Impact
+
+Future tuning and future experiential phases may evolve the system, but current refinements must preserve direct response, momentum continuity, one-navigation-per-gesture protection and symmetric edge semantics unless an explicit later decision changes them.
+
+------------------------------------------------------------------------
+
+## Decision 048
+
+Category
+
+Artwork Detail Interaction Onboarding
+
+Status
+
+Approved / Implemented
+
+Date
+
+2026-10-05
+
+Decision
+
+`SWIPE TO EXPLORE` / `SWIPE / DRAG TO EXPLORE` is interaction onboarding rather than artwork-specific content.
+
+Before the visitor demonstrates horizontal interaction, the transient reminder may recur.
+
+After a real horizontal interaction through trackpad, drag/swipe or keyboard navigation, the reminder is considered learned for the current document session and must not reappear merely because client-side Artwork Detail navigation remounts the route.
+
+A real browser refresh starts a new document session and may present the onboarding again.
+
+This current implementation does not require `localStorage` or `sessionStorage`.
+
+The persistent top interaction copy remains passive and visually secondary.
+
+Reasoning
+
+Repeated onboarding on every artwork competes with contemplation.
+
+Impact
+
+Artwork-specific client route changes must not reset learned onboarding state in the current implementation.
+
+Future onboarding strategy may evolve if later phases introduce materially different interaction models.
+
+------------------------------------------------------------------------
+
+## Decision 049
+
+Category
+
+Canonical Module Stability
+
+Status
+
+Approved
+
+Date
+
+2026-10-05
+
+Decision
+
+The following interaction systems are considered closed/canonical for the current Phase 1 implementation unless a verified bug, accessibility defect or explicitly approved experience revision requires change:
+
+- responsive Collection Hero behavior;
+- Collections Works Preview behavior;
+- shared KineticCarousel core behavior;
+- Series Gallery kinetic integration;
+- contextual Artwork Lightbox flow;
+- Artwork Detail three-scene kinetic navigation;
+- Artwork Detail trackpad/pointer ownership and approved edge semantics.
+
+Local non-semantic values may still be refined when necessary.
+
+Closed/canonical means stable for the current approved phase. It does not mean the system can never evolve in later roadmap phases.
+
+Reasoning
+
+These systems have completed their current iterative implementation and visual/interaction QA.
+
+Impact
+
+Current work should build on these systems rather than repeatedly redesigning them.
+
+Future roadmap requirements may extend or supersede them through an explicit approved decision.
+
+------------------------------------------------------------------------
+
+# Audit Note — 2026-10-05
+
+This v1.8 update uses a conservative documentation audit.
+
+The complete supplied v1.7 decision body through Decision 042 is preserved rather than rewritten or condensed.
+
+Decisions 043–049 are appended to record the subsequently approved Collections, ArtworkSeries, KineticCarousel, contextual Artwork Lightbox and Artwork Detail kinetic implementation.
+
+Existing future-facing decisions remain part of the project. A capability is not removed merely because it is not implemented yet.
+
+Future architecture and roadmap content should be classified by decision status and implementation status, then adjusted as the project advances.
+
+Formatting or encoding anomalies already present in the supplied v1.7 source were intentionally not used as justification to reconstruct or delete decision content during this pass.

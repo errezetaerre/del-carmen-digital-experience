@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-26
+2026-10-05
 
 ---
 
@@ -99,7 +99,6 @@ Artwork
 │   ├── primary
 │   ├── heroPortrait?
 │   ├── heroLandscape?
-│   ├── collection?
 │   └── thumbnail?
 │
 ├── quote?
@@ -435,7 +434,6 @@ images
 ├── primary
 ├── heroPortrait?
 ├── heroLandscape?
-├── collection?
 └── thumbnail?
 ```
 
@@ -473,23 +471,15 @@ Hero Landscape is independent from Hero Portrait.
 
 If the Primary representation already works correctly in landscape, a separate Hero Landscape asset is not required.
 
-## collection
-
-Optional.
-
-Editorial representation prepared specifically for curated Collection / Selected Works presentation surfaces.
-
-It may use a different crop, framing or atmospheric treatment from the canonical Primary image when the Home composition requires it.
-
-Collection media must never replace Primary in Artwork Detail or other canonical artwork-viewing contexts.
-
 ## thumbnail
 
 Optional.
 
-Optimized representation for compact archive, gallery or discovery contexts where the artwork itself should remain clearly recognizable.
+Optimized representation for compact gallery or collection contexts.
 
-Thumbnail is distinct from Collection editorial media. It must not be substituted for Primary in Artwork Detail.
+Initially, Featured Collection may use Primary when no Thumbnail exists.
+
+A dedicated Thumbnail may be introduced later when a specific artwork requires a different crop, framing or optimization.
 
 ---
 
@@ -509,11 +499,7 @@ Hero Landscape
 Featured Work
 → primary
 
-Home Selected Works / Collection Artwork
-→ collection if available
-→ otherwise primary
-
-Artwork Archive / compact gallery
+Featured Collection
 → thumbnail if available
 → otherwise primary
 
@@ -635,8 +621,6 @@ ArtworkSeries
 ├── description?
 ├── statement?
 ├── coverArtworkId
-├── images?
-│   └── featured?
 ├── status
 ├── yearStart?
 └── yearEnd?
@@ -696,23 +680,7 @@ The series does not require a duplicate cover image by default.
 
 The cover may use the selected Artwork's appropriate public image representation.
 
-When a real curatorial requirement exists, ArtworkSeries may own dedicated editorial media independently from the media of its member Artworks.
-
-The current canonical optional role is:
-
-```text
-images.featured
-```
-
-`featured` is used for editorial presentation of the series itself, including the Home Featured Collection scene. It does not become the Primary image of `coverArtworkId` and must not alter any member Artwork record.
-
-Fallback behavior:
-
-```text
-Series Featured Collection
-→ series.images.featured if available
-→ otherwise coverArtworkId appropriate public representation
-```
+Dedicated series-specific media may be introduced later if a real curatorial requirement appears.
 
 ---
 
@@ -975,9 +943,9 @@ When an entry references an ArtworkSeries:
 type: series
 ```
 
-presentation resolves the ArtworkSeries.
+presentation resolves the ArtworkSeries and its `coverArtworkId`.
 
-The system uses `series.images.featured` when available. Otherwise it resolves `coverArtworkId` and uses the cover Artwork's appropriate public image representation.
+The system may then use the cover Artwork's appropriate public image representation.
 
 Series metadata must be resolved from ArtworkSeries rather than duplicated in HomeCuration.
 
@@ -1065,6 +1033,7 @@ The following concepts are intentionally not part of the initial canonical Artwo
 • conservation metadata
 • focal point / crop metadata
 • photographer / image credit metadata
+• dedicated series media
 • print configuration
 • edition configuration
 • auction configuration
@@ -1209,3 +1178,130 @@ Home curation determines editorial placement.
 Commerce determines transaction.
 
 These responsibilities must remain separate so Del Carmen Digital Experience can grow without compromising the integrity of the artwork domain.
+
+
+---
+
+# Artwork Model Evolution Update — 2026-10-05
+
+This section extends the supplied v1.0 Artwork Model without deleting or compressing its original domain definitions, commerce separation or future evolution.
+
+The original v1.0 body remains preserved above as the historical canonical domain contract.
+
+## ArtworkSeries / Collections Clarification
+
+Subsequent approved architecture establishes `ArtworkSeries` as the canonical body-of-work model.
+
+`/collections` is the editorial discovery experience for ArtworkSeries.
+
+`/series/[slug]` is the detailed curatorial experience for one ArtworkSeries.
+
+Visitor-facing `Collection` remains valid editorial terminology and does not require a parallel canonical persistence model.
+
+The earlier section `Series vs Curatorial Collection` remains historically useful: a genuinely different future curatorial grouping that combines unrelated artworks may still justify another model when a real requirement exists. The current `/collections` experience does not itself create that requirement.
+
+## HomeCuration Clarification
+
+The original v1.0 rule allowing Featured Collection entries to reference either Artwork or ArtworkSeries is superseded for the current approved Home architecture.
+
+Current canonical Home responsibility is:
+
+```text
+Hero → Artwork
+Featured Artwork → Artwork
+Featured Collection → ArtworkSeries
+Selected Works → Artwork records
+```
+
+This update changes the current Home presentation contract; it does not change Artwork identity.
+
+HomeCuration continues to store references rather than duplicated artwork metadata.
+
+## Current Series Relationship and Future Evolution
+
+The current Phase 1 relationship remains `Artwork.seriesId?`.
+
+This one optional relationship must not be migrated merely to satisfy a hypothetical future model.
+
+However, the approved future direction does not assume that one Artwork must belong to only one curatorial body forever.
+
+A future many-to-many Artwork ↔ ArtworkSeries relationship remains available when a real curatorial requirement justifies it. Any future relationship model may also carry series-specific ordering or emphasis.
+
+This is an evolution of persistence/relationship design, not a redefinition of Artwork identity.
+
+## Artistic Lifecycle vs Publication Lifecycle
+
+Series artistic lifecycle and editorial publication lifecycle are conceptually separate.
+
+An ArtworkSeries may be artistically ongoing while editorially published.
+
+The current implementation's existing `yearStart`, `yearEnd`, status semantics and publication metadata should evolve deliberately rather than through breaking renames made solely for conceptual purity.
+
+## Artwork Detail Navigation Context
+
+Artwork Detail now supports contextual navigation.
+
+A visitor entering from a Series may navigate with a URL such as:
+
+`/artworks/[slug]?series=[series-slug]`
+
+The `series` query parameter preserves visitor journey context. It does not create another Artwork identity, duplicate Artwork metadata or establish a new persistence relationship.
+
+Independent Artwork Detail continues to use the applicable broader Artwork/archive context.
+
+## Presentation State Is Not Domain State
+
+The following implemented concerns remain outside the canonical Artwork entity:
+
+• Artwork Lightbox mode
+• current carousel position
+• kinetic track position
+• pointer / wheel ownership
+• momentum state
+• onboarding state
+• responsive scene composition
+• fullscreen UI state
+
+These are presentation or interaction concerns and must not be persisted into Artwork merely because they affect how an Artwork is experienced.
+
+## Contextual Artwork Lightbox and Kinetic Artwork Detail
+
+The shared Artwork Lightbox consumes canonical Artwork data and adapts navigation behavior to visitor context.
+
+Series context may provide close back to Series, pagination/dots, previous/next within the current Series, contemplative information and `Explore in detail` while preserving Series context.
+
+Independent context uses the applicable broader Artwork sequence.
+
+The current `/artworks/[slug]` presentation also supports whole-scene horizontal navigation among previous/current/next artworks when neighbors exist.
+
+These are experience-layer implementations over canonical Artwork records. Their gesture physics, edge resistance and navigation ownership do not belong in the Artwork persistence model.
+
+The governing experience principle is:
+
+`The artwork must feel as though it has weight.`
+
+Future experience phases may evolve this presentation without redefining Artwork identity.
+
+## Commerce Boundary Preservation
+
+The original Artwork vs Product separation remains fully valid.
+
+Original artwork availability and price remain Artwork-domain concerns as defined above.
+
+Prints, editions, reproductions, variants, orders, payments, shipping and other transactional structures remain future commerce concerns and must reference Artwork rather than redefine it.
+
+## Future Domain Preservation
+
+The original model's intentionally deferred capabilities remain deferred rather than cancelled, including richer date structures, dimensional depth when required, specialized image representations, richer editorial/story structures, curatorial relationship models, Product/print/edition persistence, Prisma/database implementation, API contracts, CMS schemas, persistence and migration strategy.
+
+These should be introduced when their real domain requirement becomes concrete.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 Artwork Model body is preserved above, apart from Version and Last Updated metadata.
+
+The earlier Featured Collection rule is not silently deleted; it is explicitly superseded for the current Home architecture by the later approved ArtworkSeries-only Featured Collection responsibility.
+
+No future commerce or domain capability has been removed because it is not implemented today.

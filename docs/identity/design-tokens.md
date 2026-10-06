@@ -1,6 +1,6 @@
 # Design Tokens
 
-Version: 1.2
+Version: 1.3
 
 Document ID:
 DOC-DT
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-08-14
+2026-10-05
 
 ---
 
@@ -1349,6 +1349,238 @@ If an element competes with the artwork, remove it.
 If a repeated visual decision exists, systematize it.
 
 If a value belongs only to a deliberate composition, allow it to remain local.
+
+---
+
+Del Carmen Digital Experience
+
+Painting the Eternal Essence Within
+
+
+---
+
+# Design Token Evolution Update — 2026-10-05
+
+This section extends the supplied v1.2 Design Tokens without deleting, compressing or replacing its canonical token system.
+
+The original v1.2 body remains preserved above as the approved visual-system foundation.
+
+---
+
+# Global Tokens vs Local Interaction Physics
+
+The existing three-level responsibility model remains authoritative:
+
+Global Design Tokens
+
+↓
+
+Shared UI and Layout Primitives
+
+↓
+
+Scene-Specific Composition
+
+Subsequent Phase 1 kinetic work reinforces rather than changes this model.
+
+A value should become a global token only when it represents a recurring visual or interaction rule whose meaning is genuinely shared across the platform.
+
+A value should remain local when it exists to tune the physical behavior, composition or responsive needs of one approved experience.
+
+Therefore, current kinetic implementation values such as:
+
+• drag activation thresholds
+• wheel ownership thresholds
+• velocity multipliers
+• momentum coefficients
+• resistance factors
+• scene travel distances
+• snap/settle calculations
+• fixed carousel item width
+• gesture-session timing
+• edge-physics constants
+
+must not automatically become global Design Tokens.
+
+They may remain local to the relevant shared primitive or experience implementation.
+
+If a later cross-platform pattern demonstrates that one of these values has stable global semantic meaning, it may then be promoted through an explicit design-system decision.
+
+---
+
+# Shared Primitive Does Not Automatically Mean Global Token
+
+A reusable component may contain implementation-specific values without every value becoming part of the global token system.
+
+Current example:
+
+`src/shared/ui/kinetic-carousel/`
+
+is a shared UI primitive.
+
+Its reusable mechanics are shared.
+
+Its internal physical constants remain implementation details unless they acquire broader design-system meaning.
+
+This distinction prevents token proliferation while preserving genuine reuse.
+
+---
+
+# KineticCarousel Current Phase 1 Note
+
+The current KineticCarousel uses an approved fixed artwork item width of `186px` in the relevant composition to prevent unintended partial/sliver visibility.
+
+That value is canonical for the current implementation.
+
+It is not promoted to a global Design Token by this document.
+
+Its scope remains local to the KineticCarousel implementation unless a later repeated global requirement justifies systematization.
+
+---
+
+# Motion Tokens and Direct Manipulation
+
+The existing global motion durations remain valid for conventional interface feedback and atmospheric transitions:
+
+• `--duration-fast`
+• `--duration-medium`
+• `--duration-slow`
+
+Direct manipulation is a different class of interaction.
+
+While a visitor is actively dragging, swiping or using a horizontal trackpad gesture, motion may follow input continuously rather than being governed by a fixed duration token.
+
+Release momentum and physically coherent settling may also require local calculations rather than one of the global duration tokens.
+
+This does not invalidate the existing Motion Durations.
+
+It clarifies their scope.
+
+---
+
+# Specialized Easing and Physical Continuity
+
+The existing preferred global easing remains `ease-out`.
+
+The original rule already permits specialized easing for approved artistic animation.
+
+Current kinetic experiences may therefore use gesture-derived movement, momentum or specialized settling behavior when necessary to preserve physical continuity.
+
+Such behavior should not be converted into a new global easing token until it demonstrates stable reuse and semantic value across multiple independent experiences.
+
+---
+
+# Scroll Clarification
+
+The existing Scroll principles remain authoritative:
+
+• continuous and contemplative experience
+• no forced scroll
+• no mandatory snap
+• no interaction should prevent natural user control
+
+Horizontal artwork exploration does not replace natural vertical scrolling.
+
+A kinetic experience may temporarily interpret a deliberate horizontal gesture while preserving ordinary vertical page movement.
+
+The interface should avoid accidental gesture capture that makes normal scrolling feel blocked.
+
+---
+
+# Reduced Motion Clarification
+
+The existing reduced-motion requirement remains mandatory.
+
+Kinetic or immersive interactions must preserve navigation and orientation when motion is reduced.
+
+Reduced-motion behavior may replace continuous kinetic travel with effectively immediate or substantially reduced transitions while retaining the same destination and contextual meaning.
+
+No kinetic experience may require full motion in order to remain usable.
+
+---
+
+# Artwork Integrity in Kinetic Experiences
+
+The existing Artwork Integrity rules remain authoritative.
+
+Kinetic presentation must not justify:
+
+• aggressive artwork cropping
+• rounded artwork treatment
+• decorative frames that compete with the work
+• distortion of original proportions
+
+Movement changes how the visitor navigates the artwork.
+
+It does not change the requirement to respect the artwork itself.
+
+---
+
+# Responsive Composition Remains Local Where Appropriate
+
+The current responsive Collections, Series and Artwork Detail experiences include breakpoint-specific artistic composition.
+
+Their exact artwork scales, offsets, hero media positions, overlay geometry and spatial relationships may remain local when they are unique to that scene.
+
+The global `Container`, page gutters, typography, color and semantic spacing system should still be consumed whenever those global rules apply.
+
+A deliberate immersive composition may use the `full` Container strategy or intentionally break outside the standard Container when the approved experience requires it.
+
+---
+
+# Current Shared Implementation Authority
+
+The original implementation authority remains:
+
+`src/app/globals.css`
+
+for canonical global visual tokens, and:
+
+`src/shared/layout/container/`
+
+for shared layout behavior.
+
+Subsequent shared UI infrastructure includes:
+
+`src/shared/ui/kinetic-carousel/`
+
+This location owns reusable kinetic-carousel behavior, not global brand tokens.
+
+A local value should not be moved into `globals.css` merely because it appears in a shared component.
+
+Promotion into the global token layer requires semantic justification.
+
+---
+
+# Future Design-System Evolution
+
+Future modules such as Virtual Museum, Marketplace, Academy, Community, Collector experiences, immersive exhibitions and mobile experiences must inherit the global visual system where its decisions remain relevant.
+
+They may also introduce new local compositional or interaction requirements.
+
+New tokens should be introduced when those requirements reveal genuinely recurring global semantics.
+
+The current Phase 1 token set must not be treated as permanently exhaustive.
+
+Likewise, future requirements must not be used to create speculative tokens before a real recurring pattern exists.
+
+---
+
+# Audit Note
+
+Version 1.3 uses the conservative documentation method.
+
+The complete supplied v1.2 Design Tokens body is preserved above, apart from Version and Last Updated metadata.
+
+No existing color, typography, layout, spacing, motion, accessibility, responsive or future-light-surface rule has been removed.
+
+No local kinetic constant has been promoted to the global token system merely because it is part of an approved interaction.
+
+This update clarifies scope and preserves the original principle:
+
+`If a repeated visual decision exists, systematize it.`
+
+`If a value belongs only to a deliberate composition, allow it to remain local.`
 
 ---
 

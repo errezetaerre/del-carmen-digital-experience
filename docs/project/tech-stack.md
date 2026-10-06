@@ -1,9 +1,9 @@
-# Project Roadmap
+# Tech Stack
 
 Version: 1.0
 
 Document ID:
-DOC-RM
+DOC-TS
 
 Project:
 Del Carmen Digital Experience
@@ -12,361 +12,445 @@ Parent Brand:
 Rō Visual
 
 Document Type:
-Planning
+Technical / Technology Baseline
 
 Authority Level:
-Highest
+High
 
 Status:
-🟢 Approved
+🟢 Approved — Reconstructed Canonical Baseline
 
 Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-07-08
+2026-10-05
 
 ---
 
-# Vision
+# Reconstruction Notice
 
-Build the platform progressively while maintaining a production-ready architecture from day one.
+This document is a formally reconstructed Tech Stack document.
 
-Each phase delivers a complete, usable milestone.
+The original file named `tech-stack.md` in the supplied documentation archive is not a valid Tech Stack source. Its content identifies itself as `Project Roadmap`, `DOC-RM`.
 
-The project grows through evolution, never through rewrites.
+This v1.0 reconstruction therefore does **not** claim to reproduce the lost original wording.
 
----
+It establishes a new canonical Tech Stack baseline from surviving authoritative project documentation and verified implementation records.
 
-# Phase 0
+Primary reconstruction sources:
 
-FOUNDATION
+- Project Memory
+- System Architecture
+- Folder Architecture
+- Repository Structure
+- Implementation Roadmap
+- approved implementation documents
+- surviving project handoff documentation
 
-Status
-
-✅ COMPLETE
-
-Deliverables
-
-Brand Philosophy
-
-Design Tokens
-
-Project Manifesto
-
-Project Memory
-
-Tech Stack
-
-Folder Architecture
-
-Home Specification
-
-Home Wireframe
-
-AI Framework
-
-Documentation System
+Where a technology is planned but not currently implemented, that distinction is explicit.
 
 ---
 
-# Phase 1
+# Purpose
 
-MVP
+This document defines the technology baseline for Del Carmen Digital Experience.
 
-Goal
+It separates:
 
-Launch the first public version.
+1. technologies currently implemented and canonical;
+2. Phase 1 infrastructure currently used by specific completed modules;
+3. approved/planned architectural technologies for future phases;
+4. technologies that remain conditional and should not be materialized prematurely.
 
-Deliverables
-
-Homepage
-
-Navigation
-
-Artwork Gallery
-
-Artwork Details
-
-Artist Page
-
-About
-
-Journal
-
-Contact
-
-Newsletter
-
-Responsive Design
-
-SEO
-
-Deployment on Vercel
-
-Target
-
-Public Release v1.0
+The stack must support the artistic experience without becoming the experience itself.
 
 ---
 
-# Phase 2
+# TS-01 Technology Governance
 
-Collectors Platform
+- Current implementation and future architecture are different statuses.
+- `Not yet implemented` does not mean `removed`.
+- A planned technology must not be described as current production infrastructure.
+- A current technology must not become permanently immutable merely because it is canonical today.
+- New infrastructure should be introduced when a demonstrated requirement exists.
+- Existing approved modules should not be redesigned merely to adopt a newer technology.
+- Shared abstractions should emerge from genuine reuse.
+- Technology remains subordinate to artwork, accessibility, performance and maintainability.
 
-Goal
+Canonical principle:
 
-Begin building relationships with collectors.
-
-Deliverables
-
-Collector Registration
-
-Authentication
-
-Artwork Certificates
-
-Private Collection Dashboard
-
-Favorites
-
-Inquiry History
-
-Email Notifications
+> Visitors should remember the artwork, not the software.
 
 ---
 
-# Phase 3
+# TS-02 Current Application Baseline
 
-Content Platform
+Status:
+🟢 Implemented / Canonical
 
-Goal
+Core application stack:
 
-Position Del Carmen internationally.
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- App Router
+- Node.js runtime
+- ESLint
+- `src/`-based architecture
+- `@/*` path alias
+- Git
+- Vercel deployment target
 
-Deliverables
+Current project records specifically verify Next.js 16.2.12 and React 19.2.4 in the Phase 1 development baseline.
 
-Journal
+Build command:
 
-Stories
+`next build --webpack`
 
-Creative Process
-
-Articles
-
-Interviews
-
-Exhibitions
-
-Search
-
-Categories
-
----
-
-# Phase 4
-
-Administration
-
-Goal
-
-Manage the platform efficiently.
-
-Deliverables
-
-CMS
-
-Artwork Management
-
-Journal Management
-
-Media Library
-
-Orders
-
-Collectors
-
-Analytics
-
-Settings
+The project uses a modular, domain-oriented architecture rather than a page-only organization.
 
 ---
 
-# Phase 5
+# TS-03 Rendering and Application Architecture
 
-Marketplace
+Status:
+🟢 Current + 🟡 Planned Extension
 
-Goal
+Current Next.js responsibilities include:
 
-Sell more than original paintings.
+- App Router routing
+- layouts
+- page composition
+- React Server Components where appropriate
+- client components where browser interaction is required
+- API Routes for server endpoints
+- static prerendering where appropriate
 
-Deliverables
+Planned application architecture also preserves:
 
-Prints
+- Server Actions where appropriate
+- application/service orchestration
+- repository boundaries when persistence requires them
+- separation between presentation, domain, infrastructure and persistence responsibilities
 
-Limited Editions
-
-Shopping Cart
-
-Payments
-
-Invoices
-
-Shipping
-
-Order Tracking
-
-Wishlist
+The UI must not become directly coupled to future database infrastructure.
 
 ---
 
-# Phase 6
+# TS-04 Styling and Design System
 
-Virtual Museum
+Status:
+🟢 Implemented / Canonical
 
-Goal
+Primary styling technology:
 
-Create immersive artistic experiences.
+- Tailwind CSS
 
-Deliverables
+Canonical visual authority remains:
 
-3D Museum
+`globals.css`
 
-Interactive Navigation
+Current shared layout includes:
 
-Curated Rooms
+`src/shared/layout/container/Container.tsx`
 
-Audio Narratives
-
-Special Exhibitions
-
----
-
-# Phase 7
-
-Academy
-
-Goal
-
-Teach through art.
-
-Deliverables
-
-Courses
-
-Lessons
-
-Videos
-
-Downloads
-
-Certificates
-
-Student Dashboard
+Scene-specific artistic composition values remain local when they are not genuine global design tokens.
 
 ---
 
-# Phase 8
+# TS-05 Motion and Interaction
 
-Artist Community
+Status:
+🟢 Implemented / Canonical where used
 
-Goal
+Primary advanced motion technology:
 
-Support emerging artists.
+- GSAP
 
-Deliverables
+Current Phase 1 also contains custom React/browser interaction architecture, including:
 
-Artist Profiles
+`src/shared/ui/kinetic-carousel/`
 
-Applications
+with:
 
-Portfolios
+- `KineticCarousel.tsx`
+- `useKineticCarousel.ts`
+- `index.ts`
 
-Events
+Artwork Detail uses custom pointer, wheel/trackpad, keyboard and momentum behavior.
 
-Mentorship
+These systems do not justify adding another animation framework without demonstrated need.
 
-Subscriptions
+Canonical physical interaction principle:
 
----
+`The artwork must feel as though it has weight.`
 
-# Phase 9
-
-Rō Visual Lab
-
-Goal
-
-Present digital innovation services.
-
-Deliverables
-
-Studio
-
-Case Studies
-
-Services
-
-Research
-
-Experiments
-
-Technology
-
-AI Projects
+Reduced-motion accessibility remains mandatory.
 
 ---
 
-# Phase 10
+# TS-06 Current Phase 1 Service Infrastructure
 
-Living Ecosystem
+Status:
+🟢 Implemented for specific Phase 1 domains
 
-Goal
+## Resend
 
-Connect every platform into one experience.
+Current use:
 
-Deliverables
+- Contact email delivery
+- Newsletter email/confirmation flows where documented
 
-Unified Authentication
+Contact uses the visitor email as `replyTo`.
 
-Shared Dashboard
+The development sender `Del Carmen <onboarding@resend.dev>` is temporary and is not the final production sender.
 
-Recommendations
+## Upstash Redis
 
-Cross-platform Search
+Current use includes:
 
-AI Assistant
+- Contact rate limiting
+- Newsletter rate limiting
+- Newsletter v1.0 persistence/source-of-truth responsibilities
 
-International Expansion
+Newsletter preserves double opt-in semantics, hashed confirmation-token lookup, expiration, unsubscribe and resubscription lifecycle.
 
----
-
-# Success Metrics
-
-Visitor Experience
-
-Average session duration
-
-Artwork exploration
-
-Collector inquiries
-
-Newsletter subscriptions
-
-Artwork sales
-
-Community growth
-
-Platform performance
-
-Accessibility
+These Phase 1 provider choices may evolve through an explicitly approved migration.
 
 ---
 
-# Long-Term Vision
+# TS-07 Database and ORM
 
-Del Carmen Digital Experience is designed to become an internationally recognized digital destination where art, technology and human experience coexist in harmony.
+Status:
+🟡 Planned / Future Architecture — Not Yet General Platform Baseline
 
-The project is built to evolve for decades while preserving its original vision.
+Planned relational database:
+
+- PostgreSQL
+
+Planned ORM:
+
+- Prisma
+
+These technologies remain part of the documented architecture for future persistence-backed platform capabilities.
+
+They are **not** described as the current general persistence layer for the public Phase 1 experience.
+
+Future persistence-backed flows may include:
+
+```text
+Application / Service
+        ↓
+Repository
+        ↓
+Prisma
+        ↓
+PostgreSQL
+```
+
+Implementation should occur when real domain requirements justify it.
+
+---
+
+# TS-08 Authentication
+
+Status:
+🟡 Planned / Future Architecture
+
+Planned authentication technology:
+
+- Auth.js / NextAuth
+
+Authentication is intended for future capabilities that require identity, authorization or account ownership, potentially including Collector, Marketplace, Community, Academy, administration and account-oriented experiences.
+
+It should not be materialized before those requirements become real.
+
+---
+
+# TS-09 Media and Storage
+
+Status:
+🟡 Planned / Evolving Architecture
+
+Documented future artwork-oriented media storage:
+
+- Cloudinary
+
+The broader architecture preserves future storage/CDN responsibilities where appropriate for documents, generated assets and public media.
+
+Current local/public asset workflows remain valid until an approved migration occurs.
+
+Cloudinary must not be described as current production storage merely because it is part of planned architecture.
+
+---
+
+# TS-10 Deployment and Version Control
+
+Status:
+🟢 Canonical Direction
+
+Deployment platform:
+
+- Vercel
+
+Version control:
+
+- Git
+- GitHub
+
+The architecture preserves automatic deployment / CI-CD direction.
+
+Environment-specific secrets remain outside the repository.
+
+---
+
+# TS-11 Security
+
+Status:
+🟢 Current Principle / Evolving Implementation
+
+Security responsibilities include:
+
+- environment-variable protection
+- input validation
+- rate limiting
+- secure server endpoints
+- authentication and authorization when account systems arrive
+- database protection when persistence is introduced
+- media/storage security
+- dependency review
+- appropriate production DNS/email authentication
+
+Current Contact and Newsletter implementations already establish server-side validation and abuse-protection patterns.
+
+---
+
+# TS-12 Observability
+
+Status:
+🟡 Future / Planned
+
+The architecture preserves future observability responsibilities for:
+
+- errors
+- performance
+- user behavior
+- server health
+- security events
+
+Potential categories include analytics, logging, monitoring and error tracking.
+
+No specific observability vendor is made canonical by this reconstruction because the surviving authoritative sources do not establish one.
+
+---
+
+# TS-13 CMS and Administration
+
+Status:
+🟡 Planned / Future Architecture
+
+The architecture preserves:
+
+- custom Admin Panel as the initial planned administration direction;
+- future Headless CMS if demonstrated requirements justify it.
+
+This does not mean a CMS must be implemented during Phase 1.
+
+---
+
+# TS-14 Future Platform Capabilities
+
+Status:
+🟡 Planned / Roadmap-Dependent
+
+The technology architecture must remain capable of supporting future Del Carmen ecosystem modules, including:
+
+- Marketplace
+- Virtual Museum
+- Academy
+- Community
+- Collector experiences / Collector Circle
+- immersive experiences
+- digital exhibitions
+- artist residency capabilities
+- licensing
+- archive
+- richer CMS/Admin workflows
+
+Their existence does not require all supporting infrastructure to be installed today.
+
+Technology choices may be refined when their roadmap phase begins.
+
+---
+
+# TS-15 Technology Status Matrix
+
+| Technology / Capability | Current Status | Role |
+|---|---|---|
+| Next.js 16 | Implemented / Canonical | Application framework |
+| React 19 | Implemented / Canonical | UI runtime |
+| TypeScript | Implemented / Canonical | Type system |
+| Tailwind CSS | Implemented / Canonical | Styling |
+| App Router | Implemented / Canonical | Routing/application composition |
+| Node.js | Implemented / Canonical runtime direction | Server/runtime |
+| ESLint | Implemented / Canonical | Code quality |
+| GSAP | Implemented where approved | Advanced artistic motion |
+| Custom kinetic interaction | Implemented / Canonical where approved | Direct artwork navigation |
+| Resend | Implemented Phase 1 | Contact/Newsletter email |
+| Upstash Redis | Implemented Phase 1 | Rate limiting + Newsletter v1.0 persistence |
+| Vercel | Canonical deployment target | Deployment |
+| Git / GitHub | Canonical | Version control |
+| PostgreSQL | Planned | Future relational persistence |
+| Prisma | Planned | Future ORM |
+| Auth.js / NextAuth | Planned | Future authentication |
+| Cloudinary | Planned | Future artwork-oriented media storage |
+| Custom Admin | Planned | Future administration |
+| Headless CMS | Conditional future | Possible later content infrastructure |
+| Observability stack | Planned / provider undecided | Monitoring and analytics |
+
+---
+
+# TS-16 Relationship to Other Documents
+
+This document defines **which technologies belong to the current or planned stack and their status**.
+
+`system-architecture.md` defines how system responsibilities collaborate.
+
+`repository-structure.md` and `folder-architecture.md` define where responsibilities belong.
+
+`domain-model.md` defines canonical business concepts.
+
+`implementation-roadmap.md` and `roadmap.md` define sequencing.
+
+`project-memory.md` records canonical decisions and project evolution.
+
+When these documents evolve, Tech Stack should be updated rather than silently allowing implementation and documentation to diverge.
+
+---
+
+# TS-17 Reconstruction Governance
+
+This document is a **new canonical reconstruction**, not a recovered historical original.
+
+The invalid archive file previously named `tech-stack.md` remains a source-integrity record until the final cleaned documentation package is assembled.
+
+For the cleaned package:
+
+- this reconstructed document becomes canonical `project/tech-stack.md`;
+- the misnamed DOC-RM duplicate must not overwrite it;
+- the source-integrity audit may be retained in an audit/history area if historical traceability is desired.
+
+Future changes should increment this document normally from v1.0.
+
+---
+
+# Final Principle
+
+Technology exists to preserve, reveal and extend the artistic experience.
+
+The stack should be powerful enough to support the long-term Del Carmen ecosystem while remaining quiet enough for the artwork to remain the protagonist.
 
 ---
 

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import {
     usePathname,
@@ -13,7 +9,7 @@ import {
 
 import type { Artwork } from "@/domains/artworks";
 import { ArtworkLightbox } from "@/shared/ui/artwork";
-import { InteractionHint } from "@/shared/ui/interaction-hint";
+import { KineticCarousel } from "@/shared/ui/kinetic-carousel";
 
 import CollectionArtwork from "@/domains/home/sections/collection/CollectionArtwork";
 
@@ -30,17 +26,6 @@ export default function SeriesGallery({
 }: SeriesGalleryProps) {
     const router = useRouter();
     const pathname = usePathname();
-
-    const carouselRef =
-        useRef<HTMLDivElement>(null);
-
-    const settleTimeoutRef =
-        useRef<ReturnType<typeof setTimeout> | null>(
-            null,
-        );
-
-    const [carouselHintDismissed, setCarouselHintDismissed] =
-        useState(false);
 
     const getArtworkIndex = (
         artworkSlug?: string,
@@ -110,100 +95,6 @@ export default function SeriesGallery({
                 scroll: false,
             },
         );
-    };
-
-    const dismissCarouselHint = () => {
-        setCarouselHintDismissed(true);
-    };
-
-    const settleCarousel = () => {
-        const carousel =
-            carouselRef.current;
-
-        if (!carousel) {
-            return;
-        }
-
-        if (settleTimeoutRef.current) {
-            clearTimeout(
-                settleTimeoutRef.current,
-            );
-        }
-
-        settleTimeoutRef.current =
-            setTimeout(() => {
-                const cards =
-                    Array.from(
-                        carousel.children,
-                    ).filter(
-                        (element) =>
-                            element instanceof HTMLElement &&
-                            element.dataset.carouselItem ===
-                            "true",
-                    ) as HTMLElement[];
-
-                if (!cards.length) {
-                    return;
-                }
-
-                const currentScroll =
-                    carousel.scrollLeft;
-
-                const nearestCard =
-                    cards.reduce(
-                        (nearest, card) => {
-                            const nearestDistance =
-                                Math.abs(
-                                    nearest.offsetLeft -
-                                    currentScroll,
-                                );
-
-                            const cardDistance =
-                                Math.abs(
-                                    card.offsetLeft -
-                                    currentScroll,
-                                );
-
-                            return cardDistance <
-                                nearestDistance
-                                ? card
-                                : nearest;
-                        },
-                        cards[0],
-                    );
-
-                carousel.scrollTo({
-                    left: nearestCard.offsetLeft,
-                    behavior: "smooth",
-                });
-            }, 440);
-    };
-
-    const handleCarouselScroll = (
-        direction: "previous" | "next",
-    ) => {
-        const carousel =
-            carouselRef.current;
-
-        if (!carousel) {
-            return;
-        }
-
-        dismissCarouselHint();
-
-        const scrollAmount =
-            Math.min(
-                carousel.clientWidth * 0.7,
-                696,
-            );
-
-        carousel.scrollBy({
-            left:
-                direction === "next"
-                    ? scrollAmount
-                    : -scrollAmount,
-            behavior: "smooth",
-        });
     };
 
     const mobileColumns =
@@ -281,7 +172,7 @@ export default function SeriesGallery({
 
             {/*
              * ------------------------------------------------
-             * DESKTOP CAROUSEL
+             * DESKTOP KINETIC CAROUSEL
              * ------------------------------------------------
              *
              * Activated only when the Series contains
@@ -298,54 +189,41 @@ export default function SeriesGallery({
                         lg:block
                     "
                 >
-                    <div
-                        ref={carouselRef}
-                        onScroll={() => {
-                            dismissCarouselHint();
-                            settleCarousel();
-                        }}
-                        className="
-                            flex
+                    <KineticCarousel
+                        itemCount={artworks.length}
+                        viewportClassName="
                             w-full
-                            snap-x
-                            snap-mandatory
-                            gap-5
-                            overflow-x-auto
-                            scroll-smooth
                             px-[max(2rem,calc((100%-1136px)/2))]
-
+                        "
+                        trackClassName="
+                            gap-5
                             xl:gap-8
-
-                            [scrollbar-width:none]
-                            [&::-webkit-scrollbar]:hidden
+                        "
+                        previousLabel="Previous artworks"
+                        nextLabel="Next artworks"
+                        previousButtonClassName="
+                            left-6
+                            top-[40%]
+                        "
+                        nextButtonClassName="
+                            right-6
+                            top-[40%]
                         "
                     >
-                        <InteractionHint
-                            active={useDesktopCarousel}
-                            dismissed={carouselHintDismissed}
-                            label="Scroll to explore"
-                        />
-
                         {artworks.map(
                             (
                                 artwork,
                                 index,
                             ) => (
                                 <div
-                                    key={
-                                        artwork.id
-                                    }
-                                    data-carousel-item="true"
+                                    key={artwork.id}
                                     className="
                                         w-[260px]
                                         shrink-0
-                                        snap-start
                                     "
                                 >
                                     <CollectionArtwork
-                                        artwork={
-                                            artwork
-                                        }
+                                        artwork={artwork}
                                         presentation="series"
                                         onOpen={() =>
                                             handleOpen(
@@ -357,72 +235,7 @@ export default function SeriesGallery({
                                 </div>
                             ),
                         )}
-                    </div>
-
-                    <div
-                        className="
-                            mt-8
-                            flex
-                            items-center
-                            justify-center
-                            gap-8
-                        "
-                    >
-                        <button
-                            type="button"
-                            onClick={() =>
-                                handleCarouselScroll(
-                                    "previous",
-                                )
-                            }
-                            className="
-                                font-sans
-                                text-[10px]
-                                uppercase
-                                tracking-[0.24em]
-                                text-white/45
-                                transition-colors
-                                duration-300
-
-                                hover:text-brand-gold
-                            "
-                            aria-label="Previous artworks"
-                        >
-                            ← Previous
-                        </button>
-
-                        <span
-                            className="
-                                h-px
-                                w-10
-                                bg-white/15
-                            "
-                            aria-hidden="true"
-                        />
-
-                        <button
-                            type="button"
-                            onClick={() =>
-                                handleCarouselScroll(
-                                    "next",
-                                )
-                            }
-                            className="
-                                font-sans
-                                text-[10px]
-                                uppercase
-                                tracking-[0.24em]
-                                text-white/45
-                                transition-colors
-                                duration-300
-
-                                hover:text-brand-gold
-                            "
-                            aria-label="Next artworks"
-                        >
-                            Next →
-                        </button>
-                    </div>
+                    </KineticCarousel>
                 </div>
             )}
 

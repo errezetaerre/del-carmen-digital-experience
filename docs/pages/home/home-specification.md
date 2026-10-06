@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Specification
 
-Version: 1.4
+Version: 1.5
 
 Document ID: DOC-HS
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-08-26
+Last Updated: 2026-10-05
 
 ------------------------------------------------------------------------
 
@@ -1372,3 +1372,117 @@ canonical.
 
 **\*\*Del Carmen Digital Experience --- Every approved decision becomes
 part of the living system.\*\***
+
+
+------------------------------------------------------------------------
+
+# 29. Home Documentation Evolution Update — 2026-10-05
+
+This section extends the supplied v1.4 Home Specification without deleting, compressing or replacing its approved Home behavior, implementation-status distinctions or future direction.
+
+The original v1.4 body remains preserved above.
+
+## 29.1 Canonical Home Sequence
+
+The current approved Home sequence remains:
+
+Hero
+
+→ Featured Artwork
+
+→ Artist Statement
+
+→ Featured Collection
+
+→ Selected Works
+
+→ Journal Preview
+
+→ Invitation
+
+→ Footer
+
+This update does not shorten or replace that sequence.
+
+## 29.2 Featured Collection Domain Responsibility
+
+The current canonical Featured Collection responsibility is:
+
+`Featured Collection → ArtworkSeries`
+
+The Home Featured Collection is an editorial threshold into a broader body of work.
+
+It should therefore resolve an `ArtworkSeries`, not an individual Artwork pretending to be a collection.
+
+This confirms the later direction already present in the v1.4 specification.
+
+Where older Home documentation permitted a Featured Collection entry to reference either an Artwork or an ArtworkSeries, that earlier rule is now explicitly superseded for the current approved Home architecture.
+
+The historical wording remains preserved in its source document for traceability.
+
+This supersession does not prohibit a future curatorial module from introducing a genuinely different grouping model if a real domain requirement later justifies it.
+
+## 29.3 HomeCuration Responsibilities
+
+Current Home curation responsibilities are:
+
+• Hero → Artwork
+• Featured Artwork → Artwork
+• Featured Collection → ArtworkSeries
+• Selected Works → curated Artwork records
+
+Home placement remains curatorial rather than an intrinsic property of Artwork.
+
+HomeCuration should continue to store references rather than duplicate Artwork or ArtworkSeries metadata.
+
+## 29.4 Featured Collection Media
+
+Dedicated series editorial media remains the preferred visual source for Featured Collection when available.
+
+The current canonical role remains:
+
+`series.images.featured`
+
+When dedicated series media is unavailable, `coverArtworkId` remains the first fallback mechanism to evaluate.
+
+Dedicated Series media belongs to ArtworkSeries.
+
+It must not replace the Primary or Thumbnail representation of a member Artwork.
+
+## 29.5 Selected Works Boundary
+
+Selected Works remains independent from Featured Collection.
+
+Featured Collection introduces one ArtworkSeries.
+
+Selected Works presents individually curated Artwork records.
+
+Selected Works is not the complete archive and does not inherit the membership of the Featured Collection merely because both appear on Home.
+
+## 29.6 Motion and Kinetic Scope
+
+The broader Del Carmen motion vocabulary may inform Home through restrained atmospheric reveal, materialization, spatial drift, luminous accent, portal transition and stillness.
+
+However, current KineticCarousel and Artwork Detail kinetic mechanics must not be copied into Home merely because they are canonical elsewhere.
+
+Home motion remains subordinate to the narrative of each scene.
+
+The Home must not become a motion showcase.
+
+## 29.7 Future Home Evolution Preserved
+
+Approved Direction / Planned behavior already documented in this specification remains part of the Home's future direction unless explicitly superseded.
+
+Not-yet-implemented behavior must not be removed solely because the current Phase 1 implementation does not require it.
+
+Future Home evolution may extend motion, curation, navigation, content or platform integration while preserving the artwork-first experience.
+
+## 29.8 Audit Note
+
+Version 1.5 uses the conservative documentation method.
+
+The complete supplied v1.4 Home Specification body is preserved above, apart from Version, Last Updated and the corresponding Canonical Status version reference.
+
+No approved/planned Home capability has been removed because it is not implemented today.
+
+The update primarily formalizes the current `Featured Collection → ArtworkSeries` responsibility and its relationship to HomeCuration, Selected Works and Series editorial media.

@@ -1,7 +1,7 @@
 # Artist Page --- Implementation Architecture
 
 **Document ID:** DOC-ARTIST-IMPL\
-**Version:** 1.1\
+**Version:** 1.2\
 **Status:** 🟢 Approved / Complete / Frozen\
 **Project:** Del Carmen Digital Experience\
 **Brand:** Del Carmen --- Fine Art by Rō Visual\
@@ -1238,3 +1238,138 @@ Artist Page v1.0 implementation.
 
 Material architectural or experiential changes require an explicit
 revision and a new document version.
+
+
+------------------------------------------------------------------------
+
+# 20. Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete Artist Page Implementation
+Architecture v1.1 above.
+
+The module remains **Approved / Complete / Frozen**.
+
+## 20.1 Canonical Completion State
+
+Artist Page v1.0 is complete.
+
+Canonical route:
+
+`/artist`
+
+Canonical scenes:
+
+```text
+01 Artist Hero
+02 The Artist
+03 Artistic Philosophy
+04 The Practice
+05 The Journey
+06 The Work
+```
+
+The implementation remains the authority for the completed Artist
+module.
+
+## 20.2 Final Journey Implementation
+
+The final desktop Journey implementation uses a pinned GSAP timeline and
+a peripheral vertical Journey Navigator.
+
+The Navigator:
+
+- represents five approved milestones;
+- uses Primary Gold for active state;
+- synchronizes bidirectionally with scroll;
+- supports direct click navigation;
+- settles to real stable milestone positions after scrolling stops;
+- uses restrained pointer-proximity magnification;
+- keeps rail and date labels outside the primary editorial copy column;
+- is desktop-only.
+
+Tablet and mobile preserve natural document flow.
+
+## 20.3 Architectural Boundary
+
+The Journey Navigator remains local to Artist.
+
+It does not establish a generalized:
+
+- timeline engine;
+- milestone domain model;
+- dock-navigation system;
+- carousel system;
+- media framework.
+
+Artist-specific components should remain local until genuine
+cross-domain reuse exists.
+
+This protects the project from premature abstraction without prohibiting
+future extraction when real reuse appears.
+
+## 20.4 Application-Shell Responsibilities
+
+Global Navigation remains owned by the application shell.
+
+The Artist route maps to the existing About navigation state rather than
+creating a separate global navigation item.
+
+The shared Footer remains located under:
+
+`src/shared/layout/footer/`
+
+and may be composed by page/domain experiences rather than being forced
+globally.
+
+## 20.5 Motion Contract
+
+Artist narrative motion remains restrained and scene-specific.
+
+GSAP remains appropriate for the approved browser-driven motion.
+
+Required narrative information must not depend on a timer that can
+complete while the visitor is elsewhere.
+
+Reduced-motion accessibility remains mandatory.
+
+Hydration-safe initialization remains mandatory.
+
+Continuous Journey Media movement remains acceptable because it does not
+control access to required narrative information.
+
+## 20.6 Persistence and Future Infrastructure
+
+Artist v1.0 remains an editorial domain and does not currently require
+persistence infrastructure.
+
+That current implementation decision does not prohibit future Artist
+capabilities from using CMS, database, richer media infrastructure or
+other platform services if a later demonstrated requirement justifies
+them.
+
+The rule is:
+
+`do not implement speculative infrastructure prematurely`
+
+not:
+
+`delete future architectural possibilities from the project`.
+
+## 20.7 Freeze Governance
+
+Artist should not be redesigned during Phase 1 unless required by a
+verified bug, accessibility defect, production issue or explicitly
+approved experience revision.
+
+A future approved revision may supersede specific implementation
+decisions while preserving this v1.0 completion record.
+
+## 20.8 Audit Note
+
+Version 1.2 uses the conservative documentation method.
+
+The complete supplied v1.1 implementation document is preserved above
+apart from the Version metadata.
+
+No implementation architecture, completed behavior or future technical
+possibility has been removed because it is not needed by Artist v1.0.

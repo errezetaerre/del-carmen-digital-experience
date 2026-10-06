@@ -1,6 +1,6 @@
 # Project Overview
 
-Version: 1.1
+Version: 1.2
 
 Document ID:\
 DOC-PO
@@ -214,3 +214,117 @@ foundation.
 
 Del Carmen Digital Experience\
 *Painting the Eternal Essence Within*
+
+
+---
+
+# Project Overview Evolution Update — 2026-10-05
+
+This section extends the complete approved Project Overview v1.1 above.
+
+DOC-PO remains **Medium Authority / Approved**.
+
+## Current Interpretation
+
+Del Carmen Digital Experience remains an evolving digital ecosystem rather than a conventional portfolio.
+
+The original Vision, Mission and Development Principles remain valid.
+
+The project has progressed substantially beyond the implementation snapshot recorded in v1.1.
+
+This addendum records that evolution without deleting the earlier historical state.
+
+## Documentation Evolution
+
+The current documentation system now includes established areas for:
+
+- architecture and governance;
+- identity;
+- experience;
+- domains;
+- page-level specifications and implementation;
+- project memory and roadmap.
+
+The exact physical documentation tree is governed by the current repository/documentation package rather than the older illustrative tree in this Overview.
+
+The older tree remains preserved as historical context.
+
+## Current Phase
+
+The project remains in:
+
+`Phase 1 — MVP`
+
+The current documentation focus is source-of-truth reconciliation after substantial Phase 1 implementation advances.
+
+This does not cancel remaining QA, production, deployment or roadmap work.
+
+## Current Experience Advances
+
+Since the v1.1 snapshot, approved implementation has advanced through:
+
+- Collections discovery for ArtworkSeries;
+- Series detail experiences;
+- shared KineticCarousel;
+- contextual Artwork Lightbox;
+- Series-aware Artwork Detail navigation;
+- three-scene kinetic Artwork Detail navigation;
+- direct trackpad/pointer interaction with momentum continuity;
+- symmetric edge resistance;
+- current-document Artwork Detail onboarding behavior;
+- Journal implementation advances beyond the supplied documentation package.
+
+The current canonical domain relationship is:
+
+`ArtworkSeries` = canonical body-of-work model
+
+`/collections` = editorial discovery experience
+
+`/series/[slug]` = ArtworkSeries detail
+
+Visitor-facing `Collection` remains valid editorial terminology.
+
+## Completed / Frozen Phase 1 Areas
+
+The documentation records completed/frozen Phase 1 experiences including:
+
+- Artist;
+- About;
+- Contact;
+- Newsletter.
+
+Frozen protects approved work while still allowing verified bug fixes, accessibility corrections, production requirements or explicitly approved revisions.
+
+## Documentation Status Nuance
+
+A document listed historically as `Completed` in an Overview is not automatically promoted to Approved if its own canonical metadata says Draft or In Progress.
+
+For example, foundational and architectural documents retain their own explicit status unless a later approved decision changes it.
+
+This prevents summary documents from silently overriding source-document governance.
+
+## Journal Reconciliation
+
+Journal implementation has progressed beyond the supplied canonical documentation package.
+
+The absence of a dedicated Journal specification in that package must not be interpreted as cancellation or nonexistence.
+
+Journal remains a documentation reconciliation item.
+
+## Future Platform Direction
+
+The long-term ecosystem remains preserved.
+
+Future capabilities documented elsewhere — including Collector experiences, CMS/Admin, Marketplace, Virtual Museum, Academy, Community, Rō Visual Lab and unified ecosystem capabilities — remain part of the project's planned evolution unless explicitly superseded.
+
+Not implemented does not mean removed.
+
+## Audit Note
+
+Version 1.2 uses the conservative documentation method.
+
+The complete supplied v1.1 Overview is preserved above apart from Version metadata.
+
+Historical project-state statements remain visible.
+
+Later implementation is recorded as evolution rather than rewriting the earlier snapshot.

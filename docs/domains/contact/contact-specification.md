@@ -1,6 +1,6 @@
 # Contact Specification
 
-Version: 1.0
+Version: 1.1
 
 Document ID: DOC-CON-SPEC
 
@@ -98,3 +98,91 @@ Submitting Contact does not subscribe a visitor to marketing or editorial update
 ## Status
 
 Contact v1.0 is complete, approved and frozen.
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete Contact Specification v1.0 above.
+
+Contact remains **Approved / Complete / Frozen** at the project level.
+
+## Canonical Experience
+
+Public route:
+
+`/contact`
+
+The experience remains one restrained editorial Contact scene followed by the shared Footer.
+
+The four required visitor-facing fields remain:
+
+- Name
+- Email
+- I’m writing about
+- Message
+
+Canonical subject categories remain:
+
+- Artworks
+- Collaboration
+- General
+
+The contextual subject explanation remains inline and does not become a modal or secondary navigation system.
+
+## Interaction States
+
+The canonical states remain:
+
+- `idle`
+- `submitting`
+- `success`
+- `error`
+- `rateLimited`
+
+Editing after success, error or rate-limited feedback returns the form to its normal state.
+
+## Contact / Newsletter Boundary
+
+Contact remains a private conversation channel.
+
+A Contact submission must not implicitly subscribe the visitor to Newsletter or any future marketing/editorial communication.
+
+Newsletter remains a separate permission-based experience.
+
+Future account, collector, commerce or CRM capabilities must preserve this consent boundary unless a later approved specification explicitly changes the model.
+
+## Public Correspondence Address
+
+The displayed address remains provisionally:
+
+`rolando@delcarmen.art`
+
+The supplied v1.0 specification states that it is display-only until final email infrastructure exists.
+
+This audit does not promote it to an active `mailto:` destination.
+
+Final domain and mailbox activation remain Production QA responsibilities.
+
+## Motion and Accessibility
+
+The form remains one functional unit for entrance motion.
+
+Motion must not delay required functionality or depend on elapsed time while the visitor is elsewhere.
+
+Explicit labels, autocomplete behavior, accessible subject feedback, honeypot keyboard exclusion and reduced-motion behavior remain part of the approved experience.
+
+## Freeze Governance
+
+Contact should not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires a change.
+
+Frozen protects the approved experience but does not cancel deferred production work or future explicitly approved evolution.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 specification is preserved above apart from Version metadata.
+
+No approved field, subject category, state, accessibility requirement, consent boundary or deferred production responsibility has been removed.

@@ -1,6 +1,6 @@
 # Home Moodboard
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-HM
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-07-08
+2026-10-05
 
 ---
 
@@ -350,6 +350,301 @@ The interface disappears.
 The artwork remains.
 
 The visitor leaves carrying an emotion rather than remembering a website.
+
+---
+
+Del Carmen Digital Experience
+
+Painting the Eternal Essence Within
+
+---
+
+# Home Moodboard Evolution Update — 2026-10-05
+
+This section extends the supplied v1.0 Home Moodboard without deleting, compressing or converting its exploratory creative direction into approved specification.
+
+The document remains:
+
+`Status: ⚪ Draft`
+
+Its purpose is still inspirational and atmospheric.
+
+Approved implementation authority remains with the later canonical documents such as Visual Language, Design Tokens, Experience Principles, Home Specification, Home Wireframe and Home Art Direction.
+
+---
+
+# Status Interpretation
+
+The original HM-01 through HM-10 sections remain Draft.
+
+Some of their ideas were later validated and formalized elsewhere.
+
+That later validation does not retroactively convert every sentence in this Moodboard into a canonical implementation rule.
+
+The Moodboard should therefore be read as:
+
+• creative origin and reference;
+• evidence of intended emotional direction;
+• a source of ideas that may later become canonical;
+• not a substitute for approved specification or token documents.
+
+Where a later approved document conflicts with a Moodboard detail, the later approved document governs implementation while the Moodboard remains preserved for creative traceability.
+
+---
+
+# Emotional Direction — Still Valid
+
+The following original intentions remain strongly aligned with the later approved Del Carmen language:
+
+• silence
+• humanity
+• beauty
+• reflection
+• timelessness
+• presence
+• contemplation
+• invitation rather than pressure
+• artwork as protagonist
+• interface receding from attention
+
+These concepts now appear in more authoritative approved documents.
+
+Their presence here remains useful as the creative origin of that direction.
+
+---
+
+# Visual Narrative Evolution
+
+The original Moodboard describes:
+
+```text
+Arrival
+→ Contemplation
+→ Discovery
+→ Connection
+→ Invitation
+```
+
+This remains a valid emotional abstraction.
+
+The current approved Home architecture expresses that journey through a more detailed scene sequence:
+
+```text
+Hero
+→ Featured Artwork
+→ Artist Statement
+→ Featured Collection
+→ Selected Works
+→ Journal Preview
+→ Invitation
+→ Footer
+```
+
+The two structures operate at different levels.
+
+The Moodboard sequence describes emotional progression.
+
+The approved Home documents define actual scene architecture.
+
+---
+
+# Color Direction and Canonical Tokens
+
+The original Moodboard names Smoke White, soft warm gray, Antique Gold, Deep Charcoal, Warm Ivory, Soft Stone and Muted Bronze.
+
+These names remain creative references.
+
+Exact canonical colors, naming and implementation values are governed by DOC-DT — Design Tokens.
+
+The Moodboard must not override current token definitions.
+
+The deeper principle remains valid:
+
+Color must never dominate the artwork.
+
+---
+
+# Typography Direction and Canonical Typography
+
+The original typography mood remains valid as creative intent:
+
+• elegance
+• calm
+• breathing space
+• editorial quality
+• museum-level sophistication
+• effortless reading
+
+Exact font families, sizes, weights, tracking, line-height and responsive behavior are governed by Design Tokens and approved page specifications.
+
+The Moodboard describes mood, not implementation values.
+
+---
+
+# Spatial Composition Evolution
+
+The original preference for large spacing, low density, balanced asymmetry and visual silence remains aligned with current art direction.
+
+However, the statement that each block occupies nearly an entire viewport should remain a Moodboard preference rather than a universal implementation requirement.
+
+Current approved Home Specification and Home Wireframe govern actual scene dimensions and responsive composition.
+
+The deeper intent is preserved:
+
+The interface breathes.
+
+---
+
+# Artwork Representation
+
+The original Photography Direction establishes a strong fidelity principle:
+
+• neutral color
+• no artificial saturation
+• no dramatic filters
+• no exaggerated HDR
+• authentic texture
+• discreet framing
+
+This remains compatible with current Artwork Integrity principles.
+
+Where atmospheric presentation surrounds an artwork, the artwork itself should still preserve visual integrity and original proportions.
+
+Atmosphere may interpret the environment.
+
+It should not falsify the artwork.
+
+---
+
+# Motion Mood Evolution
+
+The original motion direction remains useful but is no longer exhaustive.
+
+The early preference for gentle fades, soft upward movement, restrained parallax, slow image reveal and smooth transitions reflects the initial Home exploration.
+
+Subsequent approved visual language expanded the motion vocabulary to include:
+
+• Stillness
+• Atmospheric Reveal
+• Materialization
+• Spatial Drift
+• Luminous Accent
+• Portal Transition
+
+These later concepts do not invalidate the original Moodboard.
+
+They represent its evolution into a more mature motion language.
+
+The original phrase:
+
+`Animation exists only to support contemplation.`
+
+remains a useful creative test.
+
+Motion should not be slow merely for the sake of slowness.
+
+Direct interaction may respond immediately when responsiveness better serves natural physical continuity.
+
+---
+
+# Emotional Journey Evolution
+
+The original emotional journey:
+
+```text
+Curiosity
+→ Calm
+→ Reflection
+→ Connection
+→ Inspiration
+→ Desire to continue exploring
+```
+
+remains compatible with the current Home experience.
+
+The approved Home structure may create additional intermediate emotional states, but it should not pressure the visitor into conversion.
+
+Calls to action should continue to emerge after sufficient context and trust.
+
+---
+
+# Inspirations — Reference, Not Imitation
+
+The original inspirations remain valid as creative references:
+
+• high-end museum websites
+• luxury editorial magazines
+• fine-art exhibition catalogues
+• minimal architecture
+• Japanese spatial harmony
+• quiet luxury
+• classical painting galleries
+• timeless print design
+
+These references should guide qualities rather than produce stylistic imitation.
+
+Del Carmen must remain its own visual identity.
+
+The later approved Visual Language governs that identity.
+
+---
+
+# Relationship With Current Canonical Documents
+
+The Moodboard should now be interpreted beneath the following approved authorities:
+
+```text
+Experience Principles
+→ experiential philosophy
+
+Visual Language
+→ canonical visual intent
+
+Design Tokens
+→ canonical visual-system implementation values
+
+Home Specification
+→ Home content and behavior
+
+Home Wireframe
+→ Home spatial architecture
+
+Home Art Direction
+→ Home composition, atmosphere, rhythm and emotional intention
+
+Home Moodboard
+→ exploratory creative reference
+```
+
+This hierarchy preserves the Moodboard without allowing an early Draft idea to override a later approved decision.
+
+---
+
+# Future Creative Use
+
+The Moodboard may continue evolving as a creative exploration document.
+
+New references, atmospheric studies, visual comparisons or sensory directions may be added while they are still under exploration.
+
+They should remain clearly marked Draft until explicitly approved and promoted into the appropriate canonical document.
+
+A future idea does not need to be deleted simply because it has not yet been approved.
+
+Likewise, a Draft idea must not silently become implementation authority merely because it appears in this document.
+
+---
+
+# Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 Home Moodboard body is preserved above, apart from Version and Last Updated metadata.
+
+Its High authority classification and Draft status are preserved.
+
+No original inspiration, emotional direction, color reference, typography mood, spatial preference, photography principle, motion reference or emotional journey has been removed.
+
+The appended material clarifies which ideas remain creative reference and how later approved documents govern implementation.
 
 ---
 

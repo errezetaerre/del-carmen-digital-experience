@@ -1,7 +1,7 @@
 # Artist Page Specification
 
 **Document ID:** DOC-ARTIST-SPEC\
-**Version:** 1.2\
+**Version:** 1.3\
 **Status:** 🟢 Approved\
 **Project:** Del Carmen Digital Experience\
 **Brand:** Del Carmen --- Fine Art by Rō Visual\
@@ -1109,3 +1109,136 @@ and technical implementation details are defined separately.
 Future changes to the narrative structure or experience principles
 should be reflected through a new document version rather than silently
 altering this specification.
+
+
+------------------------------------------------------------------------
+
+# 18. Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete approved Artist Page Specification
+v1.2 above and records later canonical completion decisions without
+redesigning the frozen Artist experience.
+
+## 18.1 Freeze Status
+
+Artist Page v1.0 is **Approved / Complete / Frozen** at the project level.
+
+The canonical public route remains:
+
+`/artist`
+
+The approved experience contains six scenes:
+
+1. Artist Hero
+2. The Artist
+3. Artistic Philosophy
+4. The Practice
+5. The Journey
+6. The Work
+
+This audit does not alter their narrative purpose, content hierarchy or
+approved responsive behavior.
+
+## 18.2 Artist and About Remain Distinct
+
+The Artist Page owns the human, artistic and biographical experience of
+Del Carmen.
+
+The separate `/about` route owns the institutional identity and purpose
+of Del Carmen Digital Experience.
+
+Future documentation must not merge these responsibilities merely
+because the application navigation may map `/artist` to the existing
+About navigation state.
+
+Navigation state is presentation behavior, not domain ownership.
+
+## 18.3 Journey — Final Approved Experience
+
+The final approved desktop Journey experience uses a pinned GSAP
+timeline with a peripheral vertical Journey Navigator representing the
+five approved milestones.
+
+The Journey Navigator:
+
+- uses Primary Gold for the active milestone;
+- supports bidirectional scroll synchronization;
+- supports direct click navigation;
+- snaps to real stable milestone positions after scrolling stops;
+- uses restrained pointer-proximity magnification;
+- places its rail and date labels outside the primary editorial copy
+  column;
+- remains desktop-only.
+
+Tablet and mobile preserve natural document flow.
+
+These details document the completed implementation and do not create a
+generalized platform timeline pattern.
+
+## 18.4 Locality of the Journey Pattern
+
+The Journey Navigator remains Artist-local.
+
+Its existence does not require:
+
+- a global timeline domain;
+- a generalized milestone model;
+- a shared dock-navigation framework;
+- reuse in Home, About, Collections, Journal or future experiences.
+
+A future experience may reuse or extract the pattern only if genuine
+cross-domain requirements emerge.
+
+## 18.5 Shared and Local Responsibilities
+
+Global Navigation remains owned by the application shell.
+
+The shared Footer may be composed by the Artist experience without being
+forced globally.
+
+The shared Container remains the standard editorial alignment authority,
+while approved Artist compositions such as Journey Media may intentionally
+escape it.
+
+Practice Media and Journey Media remain Artist-local responsibilities
+unless later reuse justifies abstraction.
+
+## 18.6 Motion and Accessibility
+
+Artist motion remains restrained, narrative and scene-specific.
+
+Required narrative disclosure must remain driven by initial presentation
+or physical scroll position rather than elapsed time while the visitor is
+elsewhere.
+
+Reduced-motion accessibility remains mandatory.
+
+Continuous movement may remain where it does not control access to
+required narrative information.
+
+## 18.7 Future Evolution
+
+Frozen means protected, not permanently incapable of evolution.
+
+Artist should not be redesigned during Phase 1 unless a verified bug,
+accessibility defect, production issue or explicitly approved experience
+revision requires a change.
+
+Future media, CMS, richer biography, exhibition history, interactive
+studio material or other Artist capabilities may be considered when a
+real product requirement exists.
+
+Their future possibility is not cancelled by the current v1.0 freeze.
+
+## 18.8 Audit Note
+
+Version 1.3 uses the conservative documentation method.
+
+The complete supplied v1.2 specification is preserved above apart from
+the Version metadata.
+
+No approved Artist scene, narrative responsibility, responsive rule or
+future possibility has been removed.
+
+The addendum records the later project-level completion/freeze decision
+and the final approved Journey behavior without reopening the module.

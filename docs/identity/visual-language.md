@@ -3,7 +3,7 @@
 Painting the Eternal Essence Within
 
 Version:
-1.3
+1.4
 
 Document ID:
 DOC-VL
@@ -27,7 +27,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-09-19
+2026-10-05
 
 ---
 
@@ -1171,7 +1171,7 @@ The visitor should remember the art before remembering the interface.
 
 # Canonical Status
 
-This document represents the approved visual language of Del Carmen Digital Experience as of Version 1.3.
+This document represents the approved visual language of Del Carmen Digital Experience as of Version 1.4.
 
 Future modifications must be explicitly approved before becoming canonical.
 
@@ -1181,3 +1181,261 @@ Del Carmen Digital Experience
 
 Painting the Eternal Essence Within
 
+
+
+---
+
+# Visual Language Evolution Update — 2026-10-05
+
+This section extends the supplied v1.3 Visual Language without deleting, compressing or replacing its approved visual philosophy.
+
+The original visual language above remains the canonical foundation.
+
+---
+
+# Motion Vocabulary
+
+Subsequent Phase 1 work has clarified a reusable motion vocabulary for Del Carmen.
+
+These terms describe visual and experiential intent rather than fixed technical recipes.
+
+## Stillness
+
+Stillness is an active visual state.
+
+It creates space for observation, reading, contemplation and emotional pause.
+
+A scene does not require motion merely because motion is technically available.
+
+Stillness should remain one of the defining materials of the Del Carmen experience.
+
+## Atmospheric Reveal
+
+An element may emerge through light, opacity, atmosphere or restrained spatial change rather than appearing abruptly.
+
+The reveal should feel like perception becoming clearer, not like interface decoration.
+
+## Materialization
+
+Artwork, text or environmental elements may acquire presence progressively.
+
+Materialization should suggest arrival into the visual world rather than a conventional UI entrance animation.
+
+It must remain subordinate to the content being revealed.
+
+## Spatial Drift
+
+Very subtle environmental movement may create depth and continuity when appropriate.
+
+Spatial Drift should feel atmospheric rather than mechanically animated.
+
+It must never produce constant visual restlessness.
+
+## Luminous Accent
+
+Light, gold, bronze or controlled glow may briefly reinforce significance, interaction or transition.
+
+A Luminous Accent remains scarce and subordinate.
+
+It should never turn the visual language into neon, spectacle or generic technological aesthetics.
+
+## Portal Transition
+
+A transition may behave as passage between connected artistic spaces rather than as a conventional page replacement.
+
+Portal Transition is appropriate when the visitor is conceptually moving into another artwork, Series, exhibition or immersive environment.
+
+It should preserve orientation and narrative continuity.
+
+It does not require literal portal imagery.
+
+---
+
+# Museum / Rest and Portal / Movement
+
+The Del Carmen visual rhythm may alternate between two complementary conditions.
+
+Museum / Rest
+
+A quiet state in which artwork, typography, atmosphere and negative space support contemplation.
+
+Portal / Movement
+
+A transitional state in which spatial motion helps the visitor cross into another connected experience.
+
+Neither state should dominate continuously.
+
+The emotional strength comes from contrast.
+
+Movement gains meaning because stillness exists around it.
+
+---
+
+# Artwork Has Weight
+
+Current Artwork Detail exploration introduces an important visual-physical principle:
+
+`The artwork must feel as though it has weight.`
+
+The artwork should not behave like a disposable card or weightless application panel.
+
+When a visitor directly moves between artworks, the scene may communicate mass through coherent spatial movement, resistance and momentum.
+
+This principle does not require literal 3D simulation.
+
+It describes perceived presence.
+
+The interface should disappear behind that sensation.
+
+---
+
+# Contextual Continuity
+
+The same Artwork may be encountered through different journeys without acquiring a different visual identity.
+
+A visitor arriving from an Artwork Series may retain the atmosphere and navigational context of that Series.
+
+A visitor arriving independently may experience a broader archive context.
+
+The artwork remains canonical.
+
+The surrounding visual system adapts quietly to the visitor's path.
+
+---
+
+# Kinetic Navigation and Visual Restraint
+
+Horizontal kinetic navigation is currently used where it reinforces spatial relationship between artworks.
+
+It should not become a universal visual motif applied to every page.
+
+The presence of a shared KineticCarousel does not mean every collection of content should move.
+
+Use kinetic presentation when movement improves discovery, continuity or comprehension.
+
+Use still composition when movement adds no meaningful value.
+
+The interface must never become a demonstration of motion technology.
+
+---
+
+# Series Atmosphere — Current Implementation and Future Direction
+
+The existing Series Atmosphere rules remain valid.
+
+The current approved Phase 1 implementation uses one artwork-derived atmospheric image per Series.
+
+This favors visual stillness in the present experience.
+
+The previously documented possibility of gradual atmospheric rotation among multiple suitable Series artworks remains available for future evolution.
+
+It has not been cancelled.
+
+Any future rotation must continue to feel like environmental evolution rather than slideshow behavior.
+
+---
+
+# Artwork Detail Interface Visibility
+
+Artwork Detail deepens the existing Interface Visibility principle.
+
+Controls, Back navigation and interaction guidance should remain available enough to preserve orientation while visually receding behind the artwork.
+
+Interaction guidance may be more visible before the visitor learns the gesture and quieter afterward.
+
+Fullscreen viewing may further reduce interface presence.
+
+The objective remains:
+
+not the absence of interface,
+
+but the absence of interface awareness.
+
+---
+
+# Responsive Kinetic Language
+
+The same spatial idea may be expressed differently across desktop, tablet and mobile.
+
+Desktop may emphasize trackpad and pointer-driven spatial continuity.
+
+Mobile may emphasize direct touch/swipe behavior.
+
+Tablet may combine characteristics of both.
+
+The emotional hierarchy should remain consistent even when interaction mechanics adapt.
+
+Responsive behavior should preserve:
+
+• artwork dominance
+• orientation
+• context
+• contemplation
+• directness
+• visual integrity
+
+It should not force identical mechanics merely for technical uniformity.
+
+---
+
+# Relationship With Design Tokens
+
+This Visual Language continues to define visual intent.
+
+DOC-DT continues to govern canonical global implementation tokens.
+
+The motion vocabulary defined here does not create automatic new tokens.
+
+Exact thresholds, widths, velocity factors, momentum calculations, easing details and scene-specific offsets remain implementation concerns unless repeated use establishes genuine global semantic meaning.
+
+Visual language should describe what an experience should communicate.
+
+Design Tokens should systematize genuinely recurring implementation decisions.
+
+The two documents should remain aligned without collapsing into one another.
+
+---
+
+# Future Visual Evolution
+
+The existing Evolution section remains fully valid.
+
+Virtual exhibitions, Collector experiences, Auctions, Marketplace, Journal, Academy, Immersive environments, Community experiences and other future modules may introduce new spatial and interactive expressions.
+
+They must remain recognizable as part of the Del Carmen universe.
+
+Future immersive technology may become more visually present than it is in the current Phase 1 website.
+
+Even then:
+
+Art remains the protagonist.
+
+Technology remains purposeful.
+
+Motion remains meaningful.
+
+Atmosphere remains restrained.
+
+The visual identity remains Del Carmen.
+
+Future modules may extend the vocabulary defined here when a real experience requires it.
+
+They should not be forced to reproduce the current KineticCarousel or Artwork Detail mechanics merely because those systems are canonical for Phase 1.
+
+---
+
+# Audit Note
+
+Version 1.4 uses the conservative documentation method.
+
+The complete supplied v1.3 Visual Language body is preserved above, apart from Version, Last Updated and the corresponding Canonical Status version reference.
+
+No original visual principle, Series rule, commercial direction, responsive principle or future experience has been removed.
+
+The appended material formalizes the motion vocabulary that emerged from subsequent approved implementation while preserving the document's role as visual intent rather than technical specification.
+
+---
+
+Del Carmen Digital Experience
+
+Painting the Eternal Essence Within

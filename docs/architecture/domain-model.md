@@ -1,5 +1,5 @@
 architecture/domain-model.md
-Version: 1.1
+Version: 1.2
 Document ID: DOC-DM
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,7 +7,7 @@ Document Type: Technical
 Authority Level: Highest
 Status: 🟢 Approved
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-09-19
+Last Updated: 2026-10-05
  
 1. Objective
 This document defines the business domains of Del Carmen Digital Experience.
@@ -347,3 +347,96 @@ The Domain Model is considered successful when:
  
 End of Document
 
+
+
+------------------------------------------------------------------------
+
+# Domain Model Evolution Update — 2026-10-05
+
+This section extends the supplied v1.1 Domain Model without deleting, compressing or replacing its existing domain definitions or future evolution.
+
+The original domain model above remains preserved as the architectural foundation recorded on 2026-09-19.
+
+## Current Phase 1 Clarifications
+
+The following distinctions are now implemented and approved:
+
+- `Artwork` remains the canonical individual artistic work.
+- `ArtworkSeries` remains the canonical coherent body-of-work model.
+- `/collections` is the editorial discovery experience for ArtworkSeries.
+- `/series/[slug]` is the detailed curatorial experience for an ArtworkSeries.
+- visitor-facing `Collection` remains editorial terminology and does not create a parallel canonical persistence model.
+- optional `Artwork.seriesId` remains the current Phase 1 relationship.
+- `coverArtworkId` remains the first representative-artwork mechanism to evaluate before another identifier is introduced.
+- artistic lifecycle and publication lifecycle remain conceptually separate.
+
+The future possibility of many-to-many Artwork ↔ ArtworkSeries membership remains preserved and should be introduced when a real curatorial requirement justifies it.
+
+## Home Curation Clarification
+
+For the current approved Home architecture:
+
+- Hero references Artwork.
+- Featured Artwork references Artwork.
+- Featured Collection references ArtworkSeries.
+- Selected Works presents individual Artwork records.
+
+This clarification does not remove the broader HomeCuration concept or prevent future curation capabilities from evolving.
+
+## Navigation Context Is Not Domain Identity
+
+Series-aware Artwork navigation now preserves the visitor's curatorial context into Artwork Detail.
+
+Example:
+
+`/artworks/[slug]?series=[series-slug]`
+
+The `series` query parameter represents navigation/presentation context.
+
+It does not create another Artwork entity, another ArtworkSeries entity or another persistence relationship.
+
+Likewise, the following current interaction states remain presentation concerns rather than business-domain entities:
+
+- contextual lightbox mode;
+- carousel position;
+- kinetic scene position;
+- trackpad / pointer interaction state;
+- interaction onboarding state;
+- responsive hero composition;
+- atmospheric presentation state.
+
+## Shared Interaction Systems Are Not New Business Domains
+
+The current implementation includes shared interaction infrastructure such as:
+
+`src/shared/ui/kinetic-carousel/`
+
+with:
+
+- `KineticCarousel.tsx`
+- `useKineticCarousel.ts`
+- `index.ts`
+
+KineticCarousel is a reusable UI primitive. It does not create a `Carousel` business domain.
+
+The contextual Artwork Lightbox and Artwork Detail kinetic navigation likewise consume canonical Artwork / ArtworkSeries data without creating duplicate business entities.
+
+## Future Evolution Preservation
+
+The future evolution already defined in this Domain Model remains valid.
+
+Multiple artists, multiple languages, AI-assisted curation, Collector portal, international shipping, Museum expansion, mobile applications, Public API, CMS integration and other future capabilities are not removed because they are not part of the current Phase 1 implementation.
+
+Future requirements may extend schemas, relationships, services and implementation details while preserving the canonical domain language.
+
+The purpose of domain stability is to avoid unnecessary conceptual duplication, not to prohibit justified future evolution.
+
+## Audit Note
+
+This v1.2 update uses the conservative documentation method.
+
+The complete supplied v1.1 Domain Model body is preserved above, apart from version and Last Updated metadata.
+
+No existing domain, future capability or future architectural evolution has been deleted.
+
+The appended update records subsequent Phase 1 decisions while preserving the original long-term domain direction.

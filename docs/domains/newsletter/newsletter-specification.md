@@ -1,5 +1,5 @@
 # Newsletter Specification
-Version: 1.0
+Version: 1.1
 Document ID: DOC-NEWS-SPEC
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -53,3 +53,110 @@ Production build: Next.js 16.2.12 / webpack; compilation and TypeScript successf
 
 # Status
 Newsletter v1.0 is Approved / Complete / Frozen. Reopen only for a verified bug, accessibility defect, production issue or explicitly approved experience revision.
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete Newsletter Specification v1.0 above.
+
+Newsletter remains **Approved / Complete / Frozen** at the project level.
+
+## Canonical Public Surface
+
+Newsletter remains integrated into:
+
+`Home → Invitation / Newsletter`
+
+Newsletter does not introduce a standalone `/newsletter` page in v1.0.
+
+Email remains the only required public subscriber field.
+
+## Consent Boundary
+
+Newsletter is the canonical permission-based subscription experience.
+
+It remains distinct from Contact.
+
+A Contact submission must never subscribe a visitor implicitly.
+
+Future Collector, account, marketplace, CRM, community or other platform capabilities must preserve explicit subscription consent unless a later approved specification deliberately changes the model.
+
+## Double Opt-In
+
+Double opt-in remains mandatory.
+
+The approved lifecycle begins with a pending subscription request and requires confirmation before the subscriber becomes active.
+
+Confirmation tokens:
+
+- expire after 24 hours;
+- use hashed lookup storage;
+- are invalidated when superseded by a newer pending confirmation token.
+
+## Subscriber Lifecycle
+
+The validated lifecycle remains:
+
+```text
+Subscribe
+→ Pending
+→ Confirm
+→ Active
+→ Unsubscribe
+→ Unsubscribed
+→ Resubscribe
+→ Pending
+→ Confirm
+→ Active
+```
+
+Unsubscribe and later resubscription are therefore intentional parts of the domain rather than exceptional failure states.
+
+## Canonical Endpoints
+
+The canonical server endpoints remain:
+
+`POST /api/newsletter`
+
+`GET /api/newsletter/confirm`
+
+`GET /api/newsletter/unsubscribe`
+
+## Source of Truth
+
+Upstash Redis remains the canonical v1.0 source of truth.
+
+Active subscribers remain represented by subscriber records and membership in:
+
+`newsletter:subscribers`
+
+This Phase 1 implementation choice does not prohibit a later approved persistence migration.
+
+A future migration must preserve consent state and lifecycle semantics.
+
+## Protection
+
+Newsletter continues to require:
+
+- server-side validation;
+- email normalization;
+- honeypot protection;
+- rate limiting.
+
+The canonical rate limit remains five requests per ten minutes per resolved client IP.
+
+## Freeze Governance
+
+Newsletter should not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires a change.
+
+Frozen does not cancel Production QA responsibilities or prohibit a later explicitly approved infrastructure migration.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 specification is preserved above apart from Version metadata.
+
+No consent rule, lifecycle state, endpoint, source-of-truth decision, protection requirement or future possibility has been removed.

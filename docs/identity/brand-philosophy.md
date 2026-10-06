@@ -1,6 +1,6 @@
 # Brand Philosophy
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-BP
@@ -1311,3 +1311,92 @@ DOC-PM
 
 DOC-SA
 ---
+
+
+---
+
+# Brand Philosophy Evolution Update — 2026-10-05
+
+This section extends the supplied v1.0 Brand Philosophy without deleting, condensing or silently approving its original draft material.
+
+The original document remains **Highest Authority / Draft**.
+
+Individual chapters that are marked `In Review`, `Draft` or another non-approved state retain that state unless a separate explicit project decision approves them.
+
+## Status Interpretation
+
+The Master Index has historically listed `brand-philosophy.md` as part of the Identity documentation set.
+
+That index presence does not, by itself, convert the internal `⚪ Draft` status of DOC-BP into `Approved`.
+
+For conservative governance, the document's own explicit status remains authoritative until an approved revision changes it.
+
+## Long-Term Direction — Preserved
+
+The original philosophy explicitly defines Del Carmen as a long-term artistic ecosystem rather than a temporary portfolio.
+
+Its principles of timelessness, contemplation, humanity, authenticity, legacy and technological restraint remain foundational directions under development.
+
+The statement that technology should expand the experience without replacing humanity remains compatible with the current platform evolution.
+
+Future capabilities such as richer digital exhibitions, Virtual Museum, Marketplace, Academy, Community, Collector experiences, immersive environments and other approved/planned platform directions are not contradicted merely because they are not described as implemented in this foundational draft.
+
+They must continue to inherit the brand philosophy as it is refined and approved.
+
+## Art and Technology
+
+Current interactive systems may use sophisticated motion, direct manipulation and spatial behavior.
+
+Their technical sophistication must remain subordinate to the artwork and human experience.
+
+The current interaction principle:
+
+`The artwork must feel as though it has weight.`
+
+is compatible with the Brand Philosophy when it supports presence, contemplation and material perception rather than technological spectacle.
+
+This phrase is an implementation/experience principle and is not promoted here into a new foundational Brand Philosophy chapter.
+
+## Collections Terminology
+
+The original philosophy may use the word `collection` in an artistic/editorial sense.
+
+Current domain architecture uses `ArtworkSeries` as the canonical model for coherent bodies of work, while `Collection` remains valid visitor-facing/editorial terminology.
+
+This architectural distinction does not alter the philosophical meaning of an artistic body of work.
+
+## Identity Governance
+
+DOC-BP remains the highest identity authority by design.
+
+However, because v1.0 remains Draft, unresolved chapters must not silently override later approved implementation-specific documents where the philosophy has not yet reached an explicit approved decision.
+
+Conflicts should be surfaced and resolved through an explicit Brand Philosophy revision rather than silently rewriting either source.
+
+## Future Evolution
+
+Brand Philosophy is expected to mature as Del Carmen itself matures.
+
+A later approved version may refine wording, chapter status, applications or philosophical concepts while preserving historical traceability.
+
+Future evolution should follow:
+
+`PRESERVE → EXTEND → UPDATE → SUPERSEDE`
+
+Removal should be exceptional and justified.
+
+Unimplemented future vision must not be deleted merely because the current platform has not reached it.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 body is preserved above apart from Version metadata.
+
+The original `⚪ Draft` document status is preserved.
+
+Internal chapter statuses are preserved.
+
+No draft concept is silently promoted to Approved.
+
+No long-term artistic or technological direction is removed because it is not currently implemented.

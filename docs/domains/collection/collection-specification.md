@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.0
+Version: 1.1
 
 Document ID: DOC-COL-SPEC
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-19
+Last Updated: 2026-10-05
 
 ---
 
@@ -501,3 +501,159 @@ The current responsive Collection Hero system, Collections discovery behavior, d
 
 Deferred capabilities remain explicitly deferred where identified in this document and should not be interpreted as missing requirements for the approved Phase 1 experience.
 
+
+
+---
+
+# Collections / Series Evolution Update — 2026-10-05
+
+This section extends the supplied v1.0 Collections Specification without deleting, compressing or replacing its approved Phase 1 rules or deferred future direction.
+
+The original v1.0 specification remains preserved above.
+
+## Canonical Domain and Route Boundary
+
+`ArtworkSeries` remains the canonical body-of-work domain model.
+
+`/collections` remains the editorial discovery index for ArtworkSeries.
+
+`/series/[slug]` remains the detailed curatorial ArtworkSeries experience.
+
+Visitor-facing `Collection` remains editorial terminology. No parallel canonical `Collection` persistence model is required for the current experience.
+
+## Chronology Naming
+
+The specification's conceptual `startYear` / `endYear` language maps to the current implementation's `yearStart` / `yearEnd`.
+
+The current implementation names remain valid. No breaking rename is required solely for conceptual purity.
+
+## Current Series Atmosphere
+
+The v1.0 specification permits either one suitable Series artwork or subtle timed rotation among multiple Series artworks.
+
+The current approved Phase 1 implementation uses one artwork-derived atmosphere image per Series.
+
+This is the current implementation choice, not a cancellation of the specification's future ability to evolve toward rotation when a later curatorial requirement justifies it.
+
+## Shared KineticCarousel
+
+For the current approved Phase 1 implementation, the generic carousel responsibility described in v1.0 is fulfilled by the shared KineticCarousel.
+
+Canonical shared location:
+
+`src/shared/ui/kinetic-carousel/`
+
+Files:
+
+• `KineticCarousel.tsx`
+• `useKineticCarousel.ts`
+• `index.ts`
+
+Collections Works Preview behavior:
+
+• one to four artworks preserve the restrained editorial composition;
+• a single artwork remains centered;
+• five or more artworks use the shared KineticCarousel.
+
+Series Gallery also uses the shared KineticCarousel when its artwork count exceeds the standard gallery capacity.
+
+The shared primitive owns reusable kinetic mechanics. Collections and Series retain their own editorial composition and presentation responsibilities.
+
+## KineticCarousel Interaction Integrity
+
+The current implementation preserves artwork click behavior by delaying drag ownership until pointer movement crosses the interaction threshold.
+
+The current fixed item-width implementation is canonical for Phase 1 because it resolved partial/sliver visibility in the approved composition.
+
+These are current implementation decisions and may evolve in a later phase if new requirements justify change.
+
+## Contextual Artwork Lightbox
+
+The v1.0 contextual Artwork Navigation direction is now implemented through one shared Artwork Lightbox.
+
+In Series context, close returns to the Series experience; dots represent the current Series; previous/next remain within the current Series; contemplative artwork information may be displayed; and `Explore in detail` preserves Series context.
+
+Independent context uses the applicable broader artwork sequence.
+
+The lightbox uses a document-level portal to preserve correct overlay behavior independently of ancestor transforms/layout.
+
+## Artwork Detail Context Continuity
+
+The Series journey may continue through:
+
+```text
+/collections
+→ /series/[slug]?artwork=[artwork-slug]
+→ Artwork Lightbox
+→ /artworks/[artwork-slug]?series=[series-slug]
+```
+
+This context is navigational/presentational. It does not create duplicate Artwork or ArtworkSeries entities.
+
+## Artwork Detail Kinetic Navigation
+
+The current Artwork Detail experience supports whole-scene horizontal kinetic navigation.
+
+Previous/current/next artwork scenes coexist in the interaction track when their corresponding neighbors exist.
+
+Series context determines a Series-local navigation set. Independent entry uses the applicable broader Artwork/archive set.
+
+Supported inputs include horizontal trackpad gesture, pointer drag/touch swipe and keyboard left/right arrows. Vertical scrolling remains natural. Fullscreen viewing remains isolated from scene navigation.
+
+The governing physical principle is:
+
+`The artwork must feel as though it has weight.`
+
+Approved current behavior includes direct gesture response, continuous release trajectory/momentum, one-navigation-per-trackpad-burst protection and symmetric edge resistance.
+
+These interaction mechanics extend the Series exploration experience without becoming Series domain data.
+
+## Interaction Onboarding
+
+The Artwork Detail swipe/drag hint is interaction onboarding, not Series or Artwork content.
+
+After a real horizontal interaction, it is learned for the current browser document and remains learned across client-side artwork navigation.
+
+A browser refresh may present it again. No persistent browser storage is required by the current implementation.
+
+## Future Relationship Direction Preserved
+
+The v1.0 future relationship direction remains valid.
+
+The current optional `Artwork.seriesId` relationship remains sufficient for Phase 1.
+
+A future many-to-many Artwork ↔ ArtworkSeries relationship, including curatorial ordering or emphasis, remains possible when a real requirement justifies it.
+
+No premature migration is required.
+
+`coverArtworkId` remains the existing representative-artwork mechanism to evaluate before introducing another representative identifier.
+
+## Deferred Capabilities Preserved
+
+The deferred capabilities documented in v1.0 remain part of the specification's future direction, including richer Exhibition History, contextual `NOW EXHIBITING` enrichment, future `visualIdentity` API evolution, future Highlight/recognition behavior, possible atmosphere rotation, future relationship evolution and later global SEO integration.
+
+Their deferred status does not mean they have been removed.
+
+## Canonical Stability
+
+The following are stable/canonical for the current Phase 1 Collections / Series experience:
+
+• responsive Collection Hero behavior
+• Collections Works Preview
+• shared KineticCarousel core
+• Series Gallery kinetic integration
+• contextual Artwork Lightbox
+• Artwork Detail Series-context continuity
+• Artwork Detail three-scene kinetic navigation and approved edge semantics
+
+Stable/canonical applies to the current approved phase. Future roadmap phases may extend or supersede these systems through an explicit approved decision.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 Collections Specification body is preserved above, apart from Version and Last Updated metadata.
+
+No deferred exhibition, visual-identity, highlight, relationship, atmosphere, SEO or other future capability has been removed.
+
+The update records subsequent implementation while preserving both the approved Phase 1 specification and its deliberate future evolution.

@@ -1,6 +1,6 @@
 # Contact Implementation
 
-Version: 1.0
+Version: 1.1
 
 Document ID: DOC-CON-IMP
 
@@ -153,3 +153,160 @@ No forced npm audit remediation should be performed during Phase 1 without revie
 ## Freeze Rule
 
 Contact v1.0 is complete, approved and frozen. It should be reopened only for a verified bug, accessibility defect, production issue or explicitly approved experience revision.
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete Contact Implementation v1.0 above.
+
+The module remains **Approved / Complete / Frozen**.
+
+## Canonical Runtime Boundary
+
+Public page:
+
+`src/app/contact/page.tsx`
+
+Server endpoint:
+
+`src/app/api/contact/route.ts`
+
+Public URL:
+
+`/contact`
+
+Server URL:
+
+`/api/contact`
+
+The public Contact page remains statically prerenderable while submission processing remains isolated in the dynamic server route.
+
+## Canonical Form and Validation
+
+Visitor-facing payload:
+
+- name
+- email
+- subject
+- message
+
+Bot-detection honeypot:
+
+`contactField`
+
+Canonical subject values:
+
+- `artworks`
+- `collaboration`
+- `general`
+
+Canonical server limits remain:
+
+- name: maximum 100 characters
+- email: maximum 254 characters
+- subject: approved membership
+- message: maximum 5000 characters
+
+The server remains responsible for normalization and validation.
+
+## Delivery
+
+Resend remains the canonical Phase 1 Contact delivery provider.
+
+The visitor email remains assigned to `replyTo`.
+
+The supplied v1.0 implementation records real delivery and Reply-To behavior as verified.
+
+Current development sender:
+
+`Del Carmen <onboarding@resend.dev>`
+
+This sender remains temporary development infrastructure.
+
+It must not be reclassified as the final production sender.
+
+## Abuse Protection
+
+The canonical Phase 1 protection remains:
+
+- server-side validation;
+- `contactField` honeypot;
+- Upstash Redis rate limiting.
+
+Canonical limiter:
+
+`Ratelimit.slidingWindow(5, "10 m")`
+
+The project completion decision describes this as five requests per ten minutes per resolved client IP.
+
+HTTP 429 continues to map to the approved rate-limited client state.
+
+## Secrets
+
+The documented environment variables remain server-side responsibilities:
+
+- `RESEND_API_KEY`
+- `CONTACT_EMAIL_TO`
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+
+Secrets must never be committed to the repository.
+
+## Production Validation Record
+
+The supplied implementation records the 2026-09-07 production build as successful:
+
+```text
+Next.js 16.2.12 (webpack)
+Compiled successfully
+TypeScript completed successfully
+Static generation: 51/51
+/contact        Static
+/api/contact    Dynamic server route
+```
+
+This remains a historical validation record.
+
+It is not a claim that every future build automatically has the same result.
+
+## Deferred Production QA — Preserved
+
+The following remain explicitly deferred rather than evidence of incomplete Contact v1.0:
+
+- final `.art` versus `.com` domain decision;
+- public correspondence mailbox creation and verification;
+- activation of the public `mailto:` destination;
+- replacement of the Resend onboarding sender;
+- DNS sender authentication, including SPF/DKIM/DMARC as required;
+- end-to-end production delivery testing;
+- controlled npm security review.
+
+These items must not be deleted merely because Contact itself is frozen.
+
+The supplied implementation also states that forced npm audit remediation should not be performed during Phase 1 without reviewing dependency impact.
+
+## Future Infrastructure
+
+Resend and Upstash are canonical Phase 1 implementation choices.
+
+Their current use does not prohibit a later explicitly approved provider or infrastructure migration.
+
+Likewise, future CRM, collector or account integrations must not silently couple Contact submissions to Newsletter or marketing consent.
+
+Any such evolution requires an explicit data/consent decision.
+
+## Freeze Governance
+
+Contact should be reopened only for a verified bug, accessibility defect, production issue or explicitly approved experience revision.
+
+Deferred Production QA does not constitute a redesign of the Contact experience.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 implementation document is preserved above apart from Version metadata.
+
+No implemented delivery, validation, abuse-protection or deferred production responsibility has been removed because it is not yet production-final.

@@ -1,6 +1,6 @@
 # Folder Architecture
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-FA
@@ -679,3 +679,128 @@ A developer should experience the same clarity that a visitor feels when explori
 Del Carmen Digital Experience
 
 Painting the Eternal Essence Within
+
+
+---
+
+# Folder Architecture Evolution Update — 2026-10-05
+
+This section extends the complete approved Folder Architecture v1.0 above.
+
+DOC-FA remains **High Authority / Approved**.
+
+## Architectural Intent vs Physical Materialization
+
+The original folder tree expresses intended responsibility boundaries and long-term architecture.
+
+Not every documented directory must already exist physically in the current Phase 1 repository.
+
+A planned folder is not obsolete merely because its corresponding infrastructure has not yet been materialized.
+
+Conversely, a folder should not be created only to make the repository resemble this document before a real responsibility exists.
+
+## Current Confirmed Shared Structure
+
+Current approved implementation includes shared UI/layout responsibilities such as:
+
+`src/shared/layout/container/Container.tsx`
+
+and:
+
+```text
+src/shared/ui/kinetic-carousel/
+├── KineticCarousel.tsx
+├── useKineticCarousel.ts
+└── index.ts
+```
+
+KineticCarousel is shared because genuine cross-domain reuse exists.
+
+Its extraction does not imply that all interaction mechanics should become shared systems.
+
+## Collections / ArtworkSeries Boundary
+
+`src/domains/collections/` may own the visitor-facing discovery/presentation experience for ArtworkSeries.
+
+It does not establish a parallel `Collection` persistence domain.
+
+Canonical domain model:
+
+`ArtworkSeries`
+
+Canonical public routes:
+
+`/collections`
+
+`/series/[slug]`
+
+`/artworks/[slug]`
+
+The route and presentation vocabulary may differ from persistence vocabulary without duplicating the business model.
+
+## Future Directories — Preserved
+
+The original future domains remain architectural direction:
+
+- museum;
+- academy;
+- marketplace;
+- community.
+
+Likewise, users, authentication, orders, dashboard, application services and infrastructure responsibilities remain valid future/planned responsibilities where supported by the broader roadmap.
+
+They must not be deleted from documentation merely because Phase 1 has not materialized them.
+
+## Infrastructure and Application Layers
+
+The documented `infrastructure/` and `application/` responsibilities remain long-term architecture.
+
+They should materialize when actual external providers, persistence, use cases or orchestration responsibilities justify them.
+
+This preserves both principles:
+
+`future architecture is not cancelled`
+
+and
+
+`speculative folders are not created prematurely`.
+
+## Domain Structure Examples
+
+The original full domain subfolder example remains a capability template, not a requirement that every domain contain every folder.
+
+A domain should materialize only the responsibilities it actually owns.
+
+For example, a presentation-only domain need not invent repositories, controllers or validators simply to match the example tree.
+
+## Shared Governance
+
+A component belongs in `shared/` when genuine reuse and business neutrality are demonstrated.
+
+A component used by one domain remains local unless a real reuse requirement emerges.
+
+This is consistent with the original rule and current governance against premature abstraction.
+
+## Current Presentation State
+
+Query parameters, lightbox context, kinetic navigation state and onboarding state are presentation/navigation concerns.
+
+Their existence does not create new business domains or persistence models.
+
+## Future Evolution
+
+Folder Architecture may evolve as the ecosystem grows.
+
+Future PostgreSQL/Prisma persistence, authentication, storage, CMS/Admin, Marketplace, Virtual Museum, Academy, Community and other planned capabilities may materialize the responsibilities already anticipated here.
+
+Structural evolution should extend the architecture before replacing it and preserve traceability when an approved change supersedes an earlier folder decision.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 Folder Architecture is preserved above apart from Version metadata.
+
+No future domain or infrastructure responsibility is removed because it is not currently materialized.
+
+No unneeded folder is declared mandatory merely because it appears in the long-term architecture.

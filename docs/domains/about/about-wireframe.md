@@ -1,6 +1,6 @@
 # About Wireframe
 
-Version: 1.0
+Version: 1.1
 
 Document ID: DOC-AW
 
@@ -214,3 +214,74 @@ It is composed locally by About but remains owned by shared layout infrastructur
 # Canonical Status
 
 This wireframe describes the completed About v1.0 experience and is frozen together with the implementation.
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete approved About Wireframe v1.0 above.
+
+The wireframe remains **Approved / Complete / Frozen**.
+
+## Canonical Spatial Sequence
+
+The approved sequence remains:
+
+```text
+Hero / The Encounter
+→ Essence
+→ Ecosystem
+→ Continue
+→ Shared Footer
+```
+
+No scene is added, removed, merged or reordered by this audit.
+
+## Hero / The Encounter
+
+The Hero remains the spatial owner of The Encounter media.
+
+The poster is the current implemented fallback.
+
+The future final film replaces the media layer rather than becoming a new standalone section.
+
+The wireframe therefore remains valid before and after final-film integration.
+
+## Responsive Preservation
+
+The approved mobile portrait experience retains sequential Hero disclosure and the complete Continue semantic sequence:
+
+```text
+Heading
+→ Discover the Artist
+→ Explore the Artworks
+```
+
+Tablet, desktop and landscape retain their approved cinematic/editorial compositions.
+
+Responsive adaptation may change geometry without changing narrative ownership.
+
+## About / Artist Boundary
+
+The About wireframe remains institutional.
+
+It must not absorb the Artist biography simply because `/artist` may share a navigation state with About.
+
+`/artist` remains the dedicated Artist experience.
+
+## Freeze Governance
+
+The spatial architecture is protected during Phase 1.
+
+Changes require a verified defect, accessibility correction, production constraint or explicitly approved About experience revision.
+
+Integration of the already-planned final The Encounter film is not, by itself, a reason to redesign the wireframe.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 wireframe is preserved above apart from Version metadata.
+
+The planned audiovisual master remains part of the approved direction and is not treated as obsolete merely because the poster is currently implemented.

@@ -1,6 +1,6 @@
 # About Specification
 
-Version: 1.0
+Version: 1.1
 
 Document ID: DOC-AS
 
@@ -284,3 +284,102 @@ Future changes require one of:
 - explicitly approved experience revision
 
 The final audiovisual master for The Encounter remains a planned media replacement and does not reopen the approved About page architecture.
+
+
+---
+
+# Conservative Audit Addendum — 2026-10-05
+
+This addendum preserves the complete approved About Specification v1.0 above.
+
+About remains **Approved / Complete / Frozen**.
+
+## Canonical Experience
+
+The canonical route remains:
+
+`/about`
+
+The institutional narrative remains:
+
+```text
+01 Hero / The Encounter
+02 Essence
+03 Ecosystem
+04 Continue
+05 Shared Footer
+```
+
+About remains institutional rather than biographical.
+
+The Artist biography remains owned by:
+
+`/artist`
+
+## The Encounter Media Boundary
+
+The Encounter belongs inside the Hero as the audiovisual layer of the existing About architecture.
+
+The current canonical implemented fallback remains:
+
+`public/about/film/the_encounter_poster.png`
+
+The final audiovisual master remains planned.
+
+Replacing the poster with the approved final film does not require redesigning the About information architecture.
+
+The media layer may evolve while the scene responsibility remains stable.
+
+## Ecosystem Relationship
+
+The approved relationship remains:
+
+`Rō Visual → Del Carmen / Rō Visual Lab`
+
+This audit does not expand, rename or reinterpret those entities beyond the supplied About documentation.
+
+## Continue
+
+The Continue scene retains two canonical paths:
+
+`/artist`
+
+and
+
+`/artworks`
+
+The approved mobile portrait semantic order remains:
+
+```text
+Heading
+→ Discover the Artist path
+→ Explore the Artworks path
+```
+
+## Motion and Accessibility
+
+About motion remains scene-specific.
+
+Required narrative disclosure is driven by initial scene presentation or physical scroll position rather than elapsed time while the visitor is elsewhere.
+
+Ordinary scroll reveals remain non-scrubbed and run once.
+
+Reduced-motion accessibility remains mandatory.
+
+Tablet, desktop and landscape preserve their approved cinematic/editorial compositions.
+
+## Freeze Governance
+
+About should not be redesigned during Phase 1 unless a verified bug, accessibility defect, production issue or explicitly approved experience revision requires a change.
+
+Frozen protects the approved experience.
+
+It does not cancel the planned final audiovisual master or prohibit later explicitly approved evolution.
+
+## Audit Note
+
+Version 1.1 uses the conservative documentation method.
+
+The complete supplied v1.0 specification is preserved above apart from Version metadata.
+
+No approved scene, route, ecosystem relationship, responsive behavior or planned media direction has been removed.
