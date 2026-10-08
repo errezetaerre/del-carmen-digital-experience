@@ -6,7 +6,9 @@ import { useKineticCarousel } from "./useKineticCarousel";
 interface KineticCarouselProps {
     children: ReactNode;
     itemCount: number;
-    viewportProps?: Omit<HTMLAttributes<HTMLDivElement>, "children" | "className">;
+    viewportProps?: Omit<HTMLAttributes<HTMLDivElement>, "children" | "className"> & {
+        [key: `data-${string}`]: string | number | boolean | undefined;
+    };
     viewportClassName?: string;
     trackClassName?: string;
     previousLabel?: string;
