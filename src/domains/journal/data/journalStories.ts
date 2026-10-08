@@ -1,4 +1,3 @@
-
 import type { JournalStory } from "../types";
 
 export const JOURNAL_STORIES: JournalStory[] = [
@@ -44,6 +43,65 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 title: "Perhaps remembering is another way of illuminating.",
                 text:
                     "Not to reconstruct what has vanished, but to recognize the trace it has left behind.",
+            },
+        ],
+    },
+
+    {
+        slug: "inside-the-studio",
+
+        scenes: [
+            {
+                id: "the-studio",
+                layout: "immersive",
+                media: {
+                    type: "image",
+                    src: "/images/journal/inside-the-studio-01.png",
+                },
+                eyebrow: "I — The Studio",
+                title: "Before a painting begins, there is a place waiting for it.",
+                text:
+                    "The studio is quiet before the first gesture. Light enters, objects remain where they were left, and an empty canvas holds no answers yet. For a moment, everything exists only as possibility.",
+            },
+
+            {
+                id: "the-ritual",
+                layout: "split-right",
+                media: {
+                    type: "image",
+                    src: "/images/journal/inside-the-studio-02.png",
+                },
+                eyebrow: "II — The Ritual",
+                title: "Creation often begins with ordinary gestures.",
+                text:
+                    "Preparing the palette. Choosing a brush. Mixing color. Adjusting the light. These small repetitions are not separate from painting; they are part of the ritual that allows attention to settle and the work to begin.",
+            },
+
+            {
+                id: "the-conversation",
+                layout: "split-left",
+                media: {
+                    type: "image",
+                    src: "/images/journal/inside-the-studio-03.png",
+                },
+                eyebrow: "III — The Conversation",
+                title: "At some point, the painting begins to answer back.",
+                text:
+                    "I step closer, then farther away. I change something, wait, observe and return. Painting becomes less an act of imposing an image and more a conversation with something slowly revealing its own presence.",
+            },
+
+            {
+                id: "what-remains",
+                layout: "centered",
+                media: {
+                    type: "video",
+                    src: "/videos/journal/DelCarmen_Digital_Experience_the_studio.mp4",
+                    poster: "/images/journal/inside-the-studio-01.png",
+                },
+                eyebrow: "IV — What Remains",
+                title: "The work stops. The studio remembers.",
+                text:
+                    "Paint remains on the palette. Brushes carry traces of color. The canvas is no longer what it was that morning, and neither is the person who stood before it. Tomorrow the conversation will begin again.",
             },
         ],
     },
