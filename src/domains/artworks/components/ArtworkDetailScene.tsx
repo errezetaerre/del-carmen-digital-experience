@@ -46,6 +46,10 @@ export default function ArtworkDetailScene({
     nextArtwork,
     navigationQuery,
 }: ArtworkDetailSceneProps) {
+    const artbookParams = new URLSearchParams(navigationQuery);
+    artbookParams.set("experience", "glass");
+    const artbookHref = `/artworks/${artwork.slug}?${artbookParams.toString()}`;
+
     const techniqueLabel =
         `${formatLabel(artwork.medium)} on ${formatLabel(artwork.support)}`;
 
@@ -105,6 +109,7 @@ export default function ArtworkDetailScene({
                             lg:translate-y-0
                         "
                     >
+                        <div className="flex flex-wrap items-center justify-between gap-4">
                         <p
                             className="
                                 font-sans
@@ -117,6 +122,16 @@ export default function ArtworkDetailScene({
                         >
                             {authorshipLabel}
                         </p>
+
+                            <Link
+                                href={artbookHref}
+                                data-artwork-kinetic-ignore
+                                aria-label={`Open ${artwork.title} in Glass Artbook`}
+                                className="font-sans text-[9px] uppercase tracking-[0.20em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60"
+                            >
+                                Open Artbook ↗
+                            </Link>
+                        </div>
 
                         <h1
                             className="

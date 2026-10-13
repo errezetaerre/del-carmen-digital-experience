@@ -8,6 +8,7 @@ import {
 } from "@/domains/artworks";
 
 import ArtworkDetailKineticExperience from "@/domains/artworks/components/ArtworkDetailKineticExperience";
+import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
 
 interface ArtworkPageProps {
@@ -20,6 +21,7 @@ interface ArtworkPageProps {
         year?: string;
         medium?: string;
         series?: string;
+        experience?: string;
     }>;
 }
 
@@ -40,6 +42,7 @@ export default async function ArtworkPage({
         year,
         medium,
         series: seriesSlug,
+        experience,
     } = await searchParams;
 
     const artwork = getArtworkBySlug(slug);
@@ -212,6 +215,18 @@ export default async function ArtworkPage({
 
     const nextHref =
         createArtworkHref(nextArtwork);
+
+    if (experience === "glass") {
+        return (
+            <ArtworkGlassArtbook
+                artworks={currentIndex >= 0 ? navigationArtworks : [artwork]}
+                initialArtworkId={artwork.id}
+                navigationQuery={navigationQuery}
+                backHref={backHref}
+                backLabel={backLabel}
+            />
+        );
+    }
 
     const previousScene = previousArtwork ? (
         <ArtworkDetailScene

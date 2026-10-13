@@ -31,6 +31,8 @@ import type {
 
 interface ArtworkDetailViewerProps {
     artwork: Artwork;
+    triggerOnly?: boolean;
+    portalTarget?: HTMLElement | null;
 }
 
 
@@ -59,6 +61,8 @@ interface PanPosition {
 
 export default function ArtworkDetailViewer({
     artwork,
+    triggerOnly = false,
+    portalTarget,
 }: ArtworkDetailViewerProps) {
 
 
@@ -1309,6 +1313,123 @@ export default function ArtworkDetailViewer({
 
 
 
+            {triggerOnly ? (
+                <button
+
+                    type="button"
+
+                    aria-label={`Expand ${artwork.title}`}
+
+                    onClick={() =>
+
+                        openZoomViewer(
+
+                            MIN_ZOOM,
+
+                        )
+
+                    }
+
+                    className="
+
+                        absolute
+
+                        right-2
+
+                        top-2
+
+                        z-30
+
+                        flex
+
+                        h-10
+
+                        w-10
+
+                        items-center
+
+                        justify-center
+
+                        rounded-full
+
+                        border
+
+                        border-white/10
+
+                        bg-black/25
+
+                        text-white/55
+
+                        backdrop-blur-md
+
+                        transition-all
+
+                        duration-300
+
+
+
+                        hover:border-brand-gold/35
+
+                        hover:bg-black/40
+
+                        hover:text-brand-gold
+
+
+
+                        focus-visible:outline-none
+
+                        focus-visible:ring-1
+
+                        focus-visible:ring-brand-gold/60
+
+
+
+                        md:right-4
+
+                        md:top-4
+
+                    "
+
+                >
+
+                    <svg
+
+                        viewBox="0 0 24 24"
+
+                        aria-hidden="true"
+
+                        className="
+
+                            h-[15px]
+
+                            w-[15px]
+
+                        "
+
+                        fill="none"
+
+                        stroke="currentColor"
+
+                        strokeWidth="1.4"
+
+                        strokeLinecap="round"
+
+                        strokeLinejoin="round"
+
+                    >
+
+                        <path d="M8 3H3v5" />
+
+                        <path d="M16 3h5v5" />
+
+                        <path d="M8 21H3v-5" />
+
+                        <path d="M16 21h5v-5" />
+
+                    </svg>
+
+                </button>
+            ) : (
             <div
 
                 className="
@@ -1661,8 +1782,7 @@ export default function ArtworkDetailViewer({
                 </div>
 
             </div>
-
-
+            )}
 
             {/* ====================================================
 
@@ -2405,7 +2525,7 @@ export default function ArtworkDetailViewer({
                     )}
 
                 </div>,
-                document.body,
+                portalTarget ?? document.body,
             )}
 
         </>

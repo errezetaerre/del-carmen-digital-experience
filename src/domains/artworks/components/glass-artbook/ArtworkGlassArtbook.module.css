@@ -1,0 +1,111 @@
+.experience {
+    box-sizing: border-box;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    isolation: isolate;
+    display: grid;
+    padding: clamp(3.5rem, 13.5vh, 9rem) clamp(1.25rem, 4.5vw, 6rem) clamp(1rem, 5.5vh, 4rem);
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+}
+.exit { position: absolute; z-index: 40; right: clamp(1.25rem, 3vw, 3rem); top: clamp(1rem, 3vh, 2rem); display: flex; align-items: center; gap: .65rem; padding: .5rem; }
+.exit span { font-size: 1.2rem; font-weight: 300; }
+.root {
+    position: relative;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: clamp(1rem, 3vh, 2.5rem);
+    width: 100%;
+    max-width: 1800px;
+    min-height: 0;
+    margin: auto;
+    height: 100%;
+    color: inherit;
+    background: transparent;
+    --optical-strength: .60;
+    --glass-outer-radius: 14px;
+    --glass-inner-radius: 2px;
+}
+.root :global(*) { box-sizing: border-box; }
+.root :global(.scene) { position: relative; height: 100%; min-height: 0; border: 0; background: transparent; overflow: visible; touch-action: pan-y; user-select: none; }
+.root :global(.stage) { position: relative; width: 100%; height: 100%; perspective: 1040px; perspective-origin: var(--glass-hinge, 50%) 50%; overflow: visible; }
+.root :global(.book) { position: relative; display: grid; height: 100%; grid-template-columns: minmax(0, 1.65fr) minmax(320px, 1fr); gap: 4px; transform-style: preserve-3d; overflow: visible; }
+.root :global(.leaf) { position: relative; min-width: 0; min-height: 0; overflow: visible; }
+.root :global(.left) { transform-origin: right center; }
+.root :global(.right) { transform-origin: left center; }
+.root :global(.face-content) { position: relative; z-index: 1; display: block; height: 100%; }
+.root :global([data-kind="info"] > .face-content) { z-index: 3; }
+.root :global(.art) { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; min-height: 0; height: 100%; padding: 8% 2.2%; border: 0; background: transparent; }
+.root :global(.art::before), .root :global(.art::after) { content: none; }
+.root :global(.art .ga-image) { max-height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.1); transform-origin: center; }
+.root :global(.info) { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; min-width: 0; max-width: none; height: 100%; padding: clamp(1rem, 3vh, 2.5rem) clamp(1.5rem, 4.6vw, 4.875rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgb(201 154 91 / .25) transparent; pointer-events: auto; }
+.root :global(.info > *) { flex-shrink: 0; }
+.root :global(.info > :first-child) { margin-top: auto; }
+.root :global(.info > :last-child) { margin-bottom: auto; }
+.root :global(.info h2) { margin-top: clamp(.75rem, 2vh, 1.25rem); }
+.root :global(.info .ga-quote) { margin-top: clamp(1rem, 2.5vh, 1.5rem); }
+.root :global(.info .ga-metadata) { margin-top: 0; }
+.root :global(.info .ga-description) { margin-top: clamp(1.25rem, 3vh, 2.5rem); }
+.root :global(.ga-categories) { display: flex; flex-wrap: wrap; margin-top: clamp(1.25rem, 3vh, 2.5rem); }
+.root :global(.material-gl) { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; background: transparent; }
+.root :global([data-side="1"] .material-gl) { border-radius: 1px 13px 13px 1px; }
+.root :global([data-side="-1"] .material-gl) { border-radius: 13px 1px 1px 13px; }
+.root :global(.glass-rim) { position: absolute; inset: 0; z-index: 5; pointer-events: none; overflow: visible; }
+.root :global(.glass-rim svg) { display: block; width: 100%; height: 100%; overflow: visible; }
+.root :global(.turn) { position: absolute; top: 0; width: 0; height: 100%; z-index: 8; transform-origin: 0 center; transform-style: preserve-3d; will-change: transform; pointer-events: none; }
+.root :global(.face) { position: absolute; top: 0; height: 100%; overflow: visible; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: transparent; }
+.root :global(.front) { transform: translateZ(2px); }
+.root :global(.back) { transform: rotateY(180deg) translateZ(2px); }
+.root :global(.hinge) { position: absolute; left: var(--glass-hinge, 50%); top: 0; bottom: 0; z-index: 6; width: 1px; background: linear-gradient(transparent, #a7794359 18%, #e1bb8080 50%, #a7794359 82%, transparent); pointer-events: none; }
+.root :global(.rule) { position: relative; flex: none; width: min(100%, 320px); height: 1px; margin: clamp(1.25rem, 3vh, 2rem) 0; background: none; opacity: calc(.28 + var(--optical-strength) * 1.20); }
+.root :global(.rule svg) { position: absolute; left: 0; top: -32px; width: 100%; height: 64px; overflow: visible; pointer-events: none; }
+.root :global(.ga-artwork-actions) { position: absolute; top: 8%; left: 0; z-index: 12; width: var(--glass-art-width, 100%); pointer-events: none; }
+.root :global(.ga-artwork-actions button) { pointer-events: auto; }
+.root :global(.turning .ga-artwork-actions), .root[data-phase="opening"] :global(.ga-artwork-actions) { visibility: hidden; }
+.root :global(.controls) { position: relative; z-index: 30; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(.75rem, 2vw, 2rem); min-height: 3.5rem; }
+.root :global(.controls button) { display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; min-width: 0; min-height: 44px; background: transparent; border: 0; padding: .5rem 0; cursor: pointer; }
+.root :global(.controls .next-control) { align-items: flex-end; text-align: right; }
+.root :global(.controls button:disabled) { opacity: .30; cursor: default; }
+.root :global(.controls button:focus-visible) { outline: 1px solid currentColor; outline-offset: 4px; }
+.root :global(.nav-label) { flex: none; }
+.root :global(.nav-title) { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: .01em; text-transform: none; font-size: 1rem; font-weight: 300; color: rgb(255 255 255 / .50); transition: color 180ms ease; }
+.root :global(.controls button:not(:disabled):is(:hover, :focus-visible) .nav-title) { color: rgb(255 255 255 / 1); }
+.root :global(.controls button:disabled:hover) { color: rgb(255 255 255 / .60); }
+.root :global(.control-center) { display: flex; flex-direction: column; align-items: center; gap: .45rem; min-width: 0; }
+.root :global(.guide-dock) { opacity: 0; white-space: nowrap; }
+.root[data-guide="learned"] :global(.guide-dock) { opacity: 1; }
+.root :global(.guide-bubble) { position: absolute; z-index: 20; display: flex; align-items: center; gap: 1rem; left: 50%; top: 42%; transform: translate(-50%, -50%); border: 1px solid rgb(255 255 255 / .08); border-radius: 999px; padding: .75rem 1.25rem; background: rgb(0 0 0 / .30); backdrop-filter: blur(12px); white-space: nowrap; pointer-events: none; }
+.root :global(.guide-arrow) { font-size: 1.2rem; color: rgb(255 255 255 / .40); }
+.root :global(.guide-narrow) { display: none; }
+.root[data-phase="opening"] :global(.left) { will-change: transform; }
+.root[data-phase="opening"] :global(.guide-bubble) { visibility: hidden; }
+.root[data-renderer="fallback"] :global(.material-gl) { display: none; }
+@media (max-width: 1023px) {
+    .experience { padding-top: 3.5rem; padding-bottom: max(.75rem, env(safe-area-inset-bottom)); }
+    .root { gap: 1rem; }
+    .root :global(.scene) { overflow-y: auto; overscroll-behavior: contain; }
+    .root :global(.stage), .root :global(.book) { height: auto; }
+    .root :global(.book) { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+    .root :global(.art) { height: auto; min-height: 42svh; padding: 1.5rem 1rem; }
+    .root :global(.art .ga-image) { max-height: 58svh; }
+    .root :global(.info) { height: auto; overflow: visible; padding: 1.5rem; }
+    .root :global(.turn), .root :global(.hinge) { display: none !important; }
+    .root :global(.guide-bubble) { max-width: calc(100% - 1rem); gap: .6rem; padding: .65rem .85rem; }
+    .root :global(.guide-text) { font-size: 8px; letter-spacing: .13em; }
+    .root :global(.guide-wide) { display: none; }
+    .root :global(.guide-narrow) { display: inline; }
+    .root :global(.controls button) { flex-direction: column; align-items: flex-start; gap: .25rem; }
+    .root :global(.controls .next-control) { align-items: flex-end; }
+    .root :global(.nav-title) { max-width: 28vw; font-size: .8rem; }
+    .root :global(.guide-dock) { font-size: 7px; letter-spacing: .04em; }
+}
+@media (min-width: 1024px) {
+    .root :global(.scene) { cursor: grab; }
+    .root :global(.scene:active) { cursor: grabbing; }
+}
+@media (min-width: 1024px) and (max-height: 650px) {
+    .root :global(.art) { padding: 1rem 2.2%; }
+}
+@media (prefers-reduced-motion: reduce) { .root :global(.turn), .root :global(.left) { will-change: auto; } }
