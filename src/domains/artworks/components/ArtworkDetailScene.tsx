@@ -1,4 +1,5 @@
 import Link from "next/link";
+import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 
 import type { Artwork } from "@/domains/artworks";
 import ArtworkDetailViewer from "@/domains/artworks/components/ArtworkDetailViewer";
@@ -127,10 +128,11 @@ export default function ArtworkDetailScene({
                                 href={artbookHref}
                                 data-artwork-kinetic-ignore
                                 aria-label={`Open ${artwork.title} in Glass Artbook`}
-                                className="font-sans text-[9px] uppercase tracking-[0.20em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60"
+                                className={`${glassStyles.entryLink} font-sans text-[9px] uppercase tracking-[0.20em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`}
                             >
                                 Open Artbook ↗
                             </Link>
+                            <span className={`${glassStyles.orientationHint} font-sans text-[9px] uppercase tracking-[0.20em] text-white/35`}>Artbook in landscape</span>
                         </div>
 
                         <h1

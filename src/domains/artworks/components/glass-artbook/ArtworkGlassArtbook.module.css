@@ -5,6 +5,7 @@
     z-index: 10000;
     isolation: isolate;
     display: grid;
+    grid-template-rows: minmax(0, 1fr);
     padding: clamp(3.5rem, 13.5vh, 9rem) clamp(1.25rem, 4.5vw, 6rem) clamp(1rem, 5.5vh, 4rem);
     height: 100vh;
     height: 100dvh;
@@ -12,6 +13,12 @@
 }
 .exit { position: absolute; z-index: 40; right: clamp(1.25rem, 3vw, 3rem); top: clamp(1rem, 3vh, 2rem); display: flex; align-items: center; gap: .65rem; padding: .5rem; }
 .exit span { font-size: 1.2rem; font-weight: 300; }
+.entryLink { display: none; }
+.orientationHint { display: inline; }
+@media (min-width:1024px) and (hover:hover) and (pointer:fine), (min-width:640px) and (min-height:300px) and (orientation:landscape) {
+    .entryLink { display: inline; }
+    .orientationHint { display: none; }
+}
 .root {
     position: relative;
     display: grid;
@@ -40,7 +47,7 @@
 .root :global(.art) { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; min-height: 0; height: 100%; padding: 8% 2.2%; border: 0; background: transparent; }
 .root :global(.art::before), .root :global(.art::after) { content: none; }
 .root :global(.art .ga-image) { max-height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.1); transform-origin: center; }
-.root :global(.info) { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; min-width: 0; max-width: none; height: 100%; padding: clamp(1rem, 3vh, 2.5rem) clamp(1.5rem, 4.6vw, 4.875rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgb(201 154 91 / .25) transparent; pointer-events: auto; }
+.root :global(.info) { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; min-width: 0; min-height: 0; max-width: none; height: 100%; padding: clamp(1rem, 3vh, 2.5rem) clamp(1.5rem, 4.6vw, 4.875rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgb(201 154 91 / .25) transparent; pointer-events: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; user-select: text; }
 .root :global(.info > *) { flex-shrink: 0; }
 .root :global(.info > :first-child) { margin-top: auto; }
 .root :global(.info > :last-child) { margin-bottom: auto; }
@@ -82,7 +89,7 @@
 .root[data-phase="opening"] :global(.left) { will-change: transform; }
 .root[data-phase="opening"] :global(.guide-bubble) { visibility: hidden; }
 .root[data-renderer="fallback"] :global(.material-gl) { display: none; }
-@media (max-width: 1023px) {
+@media (max-width: 1023px) and (orientation:portrait), (pointer:coarse) and (orientation:portrait), (max-width: 639px), (max-width: 1023px) and (max-height: 299px) {
     .experience { padding-top: 3.5rem; padding-bottom: max(.75rem, env(safe-area-inset-bottom)); }
     .root { gap: 1rem; }
     .root :global(.scene) { overflow-y: auto; overscroll-behavior: contain; }
@@ -100,6 +107,34 @@
     .root :global(.controls .next-control) { align-items: flex-end; }
     .root :global(.nav-title) { max-width: 28vw; font-size: .8rem; }
     .root :global(.guide-dock) { font-size: 7px; letter-spacing: .04em; }
+}
+@media (pointer:coarse) and (orientation:landscape) {
+    .experience { padding: max(3.5rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(.75rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); }
+    .root { gap: 1rem; }
+    .root :global(.art) { touch-action: none; }
+}
+@media (min-width:640px) and (max-width:1023px) and (min-height:300px) and (orientation:landscape), (pointer:coarse) and (min-width:640px) and (min-height:300px) and (max-height:600px) and (orientation:landscape) {
+    .experience { padding: max(2.75rem, env(safe-area-inset-top)) max(.875rem, env(safe-area-inset-right)) max(.5rem, env(safe-area-inset-bottom)) max(.875rem, env(safe-area-inset-left)); }
+    .exit { top: max(.25rem, env(safe-area-inset-top)); right: max(.75rem, env(safe-area-inset-right)); }
+    .root { gap: .5rem; }
+    .root :global(.book) { grid-template-columns: minmax(0, 1.65fr) minmax(210px, 1fr); }
+    .root :global(.art) { padding: .75rem 2.2%; }
+    .root :global(.info) { padding: .75rem 1.25rem; }
+    .root :global(.info small) { font-size: 8px; letter-spacing: .12em; }
+    .root :global(.info h2) { font-size: clamp(1.375rem, 3vw, 1.875rem); line-height: 1.08; margin-top: .5rem; }
+    .root :global(.info .ga-quote) { font-size: .8125rem; line-height: 1.5; margin-top: .75rem; }
+    .root :global(.info .ga-metadata) { font-size: .75rem; line-height: 1.5; gap: .375rem 1rem; }
+    .root :global(.info .ga-description) { font-size: .8125rem; line-height: 1.6; margin-top: .875rem; }
+    .root :global(.ga-categories) { font-size: 8px; margin-top: .875rem; }
+    .root :global(.rule) { margin: .875rem 0; }
+    .root :global(.controls) { min-height: 44px; gap: .5rem; }
+    .root :global(.controls button) { padding: .25rem 0; gap: .15rem; }
+    .root :global(.nav-label) { font-size: 8px; letter-spacing: .16em; }
+    .root :global(.nav-title) { max-width: 26vw; font-size: .75rem; }
+    .root :global(.control-center) { gap: .2rem; }
+    .root :global(.guide-dock) { font-size: 7px; letter-spacing: .04em; }
+    .root :global(.guide-bubble) { gap: .6rem; padding: .6rem .8rem; }
+    .root :global(.guide-text) { font-size: 8px; letter-spacing: .12em; }
 }
 @media (min-width: 1024px) {
     .root :global(.scene) { cursor: grab; }

@@ -9,6 +9,7 @@ import {
 
 import ArtworkDetailKineticExperience from "@/domains/artworks/components/ArtworkDetailKineticExperience";
 import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
+import ArtworkDetailResponsiveEntry from "@/domains/artworks/components/ArtworkDetailResponsiveEntry";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
 
 interface ArtworkPageProps {
@@ -194,6 +195,13 @@ export default async function ArtworkPage({
         ? `Back to ${activeSeries.title}`
         : "Back to artworks";
 
+    const detailParams = new URLSearchParams(navigationQuery);
+    if (experience === "standard") detailParams.set("experience", "standard");
+    const detailNavigationQuery = detailParams.toString();
+    const glassParams = new URLSearchParams(navigationQuery);
+    glassParams.set("experience", "glass");
+    const glassHref = `/artworks/${artwork.slug}?${glassParams.toString()}`;
+
     const createArtworkHref = (
         targetArtwork:
             | (typeof navigationArtworks)[number]
@@ -204,8 +212,8 @@ export default async function ArtworkPage({
         }
 
         return `/artworks/${targetArtwork.slug}${
-            navigationQuery
-                ? `?${navigationQuery}`
+            detailNavigationQuery
+                ? `?${detailNavigationQuery}`
                 : ""
         }`;
     };
@@ -235,7 +243,7 @@ export default async function ArtworkPage({
                 previousPreviousArtwork
             }
             nextArtwork={artwork}
-            navigationQuery={navigationQuery}
+            navigationQuery={detailNavigationQuery}
         />
     ) : undefined;
 
@@ -244,7 +252,7 @@ export default async function ArtworkPage({
             artwork={artwork}
             previousArtwork={previousArtwork}
             nextArtwork={nextArtwork}
-            navigationQuery={navigationQuery}
+            navigationQuery={detailNavigationQuery}
             priority
         />
     );
@@ -254,19 +262,21 @@ export default async function ArtworkPage({
             artwork={nextArtwork}
             previousArtwork={artwork}
             nextArtwork={nextNextArtwork}
-            navigationQuery={navigationQuery}
+            navigationQuery={detailNavigationQuery}
         />
     ) : undefined;
 
     return (
-        <ArtworkDetailKineticExperience
-            previousScene={previousScene}
-            currentScene={currentScene}
-            nextScene={nextScene}
-            previousHref={previousHref}
-            nextHref={nextHref}
-            backHref={backHref}
-            backLabel={backLabel}
-        />
+        <ArtworkDetailResponsiveEntry glassHref={glassHref} enabled={experience !== "standard"}>
+            <ArtworkDetailKineticExperience
+                previousScene={previousScene}
+                currentScene={currentScene}
+                nextScene={nextScene}
+                previousHref={previousHref}
+                nextHref={nextHref}
+                backHref={backHref}
+                backLabel={backLabel}
+            />
+        </ArtworkDetailResponsiveEntry>
     );
 }

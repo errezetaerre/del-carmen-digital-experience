@@ -182,6 +182,7 @@ export default function CollectionGallery({
 
             {interaction === "lightbox" && (
                 <ArtworkLightbox
+                    presentation="glass"
                     artworks={artworks}
                     initialIndex={
                         selectedIndex ?? 0

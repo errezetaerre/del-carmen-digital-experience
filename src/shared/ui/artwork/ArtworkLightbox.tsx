@@ -5,11 +5,15 @@ import Link from "next/link";
 
 import {
     useEffect,
+    useId,
     useRef,
     useState,
 } from "react";
 
 import type { Artwork } from "@/domains/artworks/model";
+import styles from "./ArtworkLightbox.module.css";
+import GlassArtworkFrame from "./GlassArtworkFrame";
+import { glassSeparatorMarkup } from "./glassAccents";
 import { InteractionHint } from "@/shared/ui/interaction-hint";
 
 interface ArtworkLightboxProps {
@@ -23,6 +27,7 @@ interface ArtworkLightboxProps {
 
     detailsCtaLabel?: string;
     detailsQuery?: string;
+    presentation?: "standard" | "glass";
 }
 
 type Point = {
@@ -63,6 +68,7 @@ export default function ArtworkLightbox({
 
     detailsCtaLabel = "View details",
     detailsQuery,
+    presentation = "standard",
 }: ArtworkLightboxProps) {
     /* =========================================================
        STATE
@@ -73,6 +79,15 @@ export default function ArtworkLightbox({
 
     const [swipeHintDismissed, setSwipeHintDismissed] =
         useState(false);
+
+    const isGlass = presentation === "glass";
+    const instanceId = `artwork${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
+    const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+    const [descriptionOverflows, setDescriptionOverflows] = useState(false);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
+    const descriptionButtonRef = useRef<HTMLButtonElement>(null);
+    const descriptionExpandedRef = useRef(false);
+    descriptionExpandedRef.current = descriptionExpanded;
 
     /* =========================================================
        REFS
@@ -134,6 +149,29 @@ export default function ArtworkLightbox({
             : ""
         }`
         : "/artworks";
+
+    useEffect(() => {
+        setDescriptionExpanded(false);
+        const text = descriptionRef.current;
+        if (!isOpen || !isGlass || !text) {
+            setDescriptionOverflows(false);
+            return;
+        }
+        let disposed = false;
+        const measure = () => {
+            if (!disposed) setDescriptionOverflows(text.clientHeight === 0 ? Boolean(artwork?.description?.trim()) : text.scrollHeight > text.clientHeight + 1);
+        };
+        const observer = new ResizeObserver(measure);
+        observer.observe(text);
+        measure();
+        document.fonts?.ready.then(measure);
+        document.fonts?.addEventListener("loadingdone", measure);
+        return () => {
+            disposed = true;
+            observer.disconnect();
+            document.fonts?.removeEventListener("loadingdone", measure);
+        };
+    }, [isOpen, isGlass, artwork?.id, artwork?.description]);
 
     /* =========================================================
        HELPERS
@@ -357,6 +395,15 @@ export default function ArtworkLightbox({
         const handleKeyDown = (
             event: KeyboardEvent,
         ) => {
+            if (isGlass && event.key === "Escape" && descriptionExpandedRef.current) {
+                event.preventDefault();
+                setDescriptionExpanded(false);
+                descriptionButtonRef.current?.focus();
+                return;
+            }
+            if (isGlass && event.target instanceof HTMLElement && event.target.closest("[data-lightbox-native-scroll]")) {
+                return;
+            }
             if (
                 event.key ===
                 "Escape"
@@ -405,6 +452,7 @@ export default function ArtworkLightbox({
         isOpen,
         onClose,
         total,
+        isGlass,
     ]);
 
     /* =========================================================
@@ -868,9 +916,11 @@ export default function ArtworkLightbox({
        RENDER
        ========================================================= */
 
+    const Panel = isGlass ? GlassArtworkFrame : "div";
+
     return createPortal(
         <div
-            className="fixed inset-0 z-[100] overflow-hidden bg-[#030303] text-white"
+            className={isGlass ? styles.dialog : "fixed inset-0 z-[100] overflow-hidden bg-[#030303] text-white"}
             role="dialog"
             aria-modal="true"
             aria-label={`Artwork viewer — ${artwork.title}`}
@@ -955,69 +1005,69 @@ export default function ArtworkLightbox({
 
             {/* Viewer */}
             <div
-                className="relative z-20 flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-3 md:px-20 md:py-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-3 [@media(orientation:landscape)_and_(max-height:600px)]:py-2"
+                className={isGlass ? styles.viewer : "relative z-20 flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-3 md:px-20 md:py-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-3 [@media(orientation:landscape)_and_(max-height:600px)]:py-2"}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerCancel}
                 onClick={handleBackdropClick}
             >
-                <div
-                    className="
-                        relative
-                        flex
-                        h-[calc(100svh-24px)]
-                        w-full
-                        max-w-[1040px]
-                        flex-col
-
-                        lg:translate-x-[1.5vw]
-
-                        md:h-[min(90vh,900px)]
-
-                        [@media(orientation:landscape)_and_(max-height:600px)]:h-[calc(100svh-16px)]
-                        [@media(orientation:landscape)_and_(max-height:600px)]:max-w-none
-                        [@media(orientation:landscape)_and_(max-height:600px)]:translate-x-0
-                    "
+                <Panel data-lightbox-content={isGlass ? "true" : undefined}
+                    className={isGlass ? styles.panelLayout : "relative flex h-[calc(100svh-24px)] w-full max-w-[1040px] flex-col lg:translate-x-[1.5vw] md:h-[min(90vh,900px)] [@media(orientation:landscape)_and_(max-height:600px)]:h-[calc(100svh-16px)] [@media(orientation:landscape)_and_(max-height:600px)]:max-w-none [@media(orientation:landscape)_and_(max-height:600px)]:translate-x-0"}
                 >
                     {/* Artwork stage */}
-                    <div className="relative flex min-h-0 flex-1 items-center justify-center px-7 pb-2 pt-12 md:px-10 md:pb-3 md:pt-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-12 [@media(orientation:landscape)_and_(max-height:600px)]:pb-1 [@media(orientation:landscape)_and_(max-height:600px)]:pt-3">
+                    <div className={isGlass ? styles.artworkStage : "relative flex min-h-0 flex-1 items-center justify-center px-7 pb-2 pt-12 md:px-10 md:pb-3 md:pt-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-12 [@media(orientation:landscape)_and_(max-height:600px)]:pb-1 [@media(orientation:landscape)_and_(max-height:600px)]:pt-3"}>
                         {/* Glow belongs to the artwork, not the canvas */}
                         <div
                             aria-hidden
-                            className="pointer-events-none fixed left-1/2 top-1/2 h-[78%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(198,151,79,0.16)_0%,rgba(198,151,79,0.07)_36%,transparent_72%)] blur-[28px] [@media(orientation:landscape)_and_(max-height:600px)]:h-[94%] [@media(orientation:landscape)_and_(max-height:600px)]:w-[88%]"
+                            className={isGlass ? styles.artworkAura : "pointer-events-none fixed left-1/2 top-1/2 h-[78%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(198,151,79,0.16)_0%,rgba(198,151,79,0.07)_36%,transparent_72%)] blur-[28px] [@media(orientation:landscape)_and_(max-height:600px)]:h-[94%] [@media(orientation:landscape)_and_(max-height:600px)]:w-[88%]"}
                         />
 
                         {/* Zoomable artwork — no visible frame/border */}
-                        <div className="relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center">
+                        <div className={isGlass ? styles.imageWrapper : "relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center"}>
 
                             <div
                                 ref={zoomLayerRef}
                                 data-lightbox-content="true"
-                                className="relative flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"
+                                className={isGlass ? styles.zoomViewport : "relative flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"}
                             >
                                 <img
                                     key={artwork.id}
                                     src={primaryImage.src}
                                     alt={primaryImage.alt}
                                     draggable={false}
-                                    className="relative z-10 h-full max-h-full w-full max-w-full translate-x-[5.5vw] select-none object-contain"
+                                    className={isGlass ? styles.primaryImage : "relative z-10 h-full max-h-full w-full max-w-full translate-x-[5.5vw] select-none object-contain"}
                                 />
 
                                 {/* Subtle image-only integration */}
                                 <div
                                     aria-hidden
-                                    className="pointer-events-none fixed inset-0 z-20 shadow-[inset_0_0_42px_10px_rgba(0,0,0,0.28)]"
+                                    className={isGlass ? styles.imageShade : "pointer-events-none fixed inset-0 z-20 shadow-[inset_0_0_42px_10px_rgba(0,0,0,0.28)]"}
                                 />
 
                                 {/* Image-only moving reflection */}
                                 <div
                                     aria-hidden
-                                    className="artwork-glass-reflection pointer-events-none fi  xed -left-[30%] -top-[20%] z-30 h-[140%] w-[24%] rotate-[14deg] bg-gradient-to-r from-transparent via-white/[0.045] to-transparent blur-[10px]"
+                                    className={isGlass ? styles.imageReflection : "artwork-glass-reflection pointer-events-none fi xed -left-[30%] -top-[20%] z-30 h-[140%] w-[24%] rotate-[14deg] bg-gradient-to-r from-transparent via-white/[0.045] to-transparent blur-[10px]"}
                                 />
                             </div>
                         </div>
 
+
+                        {isGlass && descriptionExpanded && (
+                            <div
+                                id={`${instanceId}-description`}
+                                className={styles.readingPanel}
+                                role="region"
+                                aria-label={`Description of ${artwork.title}`}
+                                tabIndex={0}
+                                data-lightbox-native-scroll
+                                onPointerDown={(event) => event.stopPropagation()}
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                <p className="font-sans text-sm font-light leading-7 text-white/75">{artwork.description}</p>
+                            </div>
+                        )}
 
                         {/* Ephemeral touch guidance — shared interaction language */}
                         <InteractionHint
@@ -1031,7 +1081,7 @@ export default function ArtworkLightbox({
                     {/* Position dots */}
                     {total > 1 && (
                         <div
-                            className="relative z-40 flex h-5 shrink-0 items-center justify-center gap-2 md:h-6 [@media(orientation:landscape)_and_(max-height:600px)]:h-4"
+                            className={isGlass ? styles.positionDots : "relative z-40 flex h-5 shrink-0 items-center justify-center gap-2 md:h-6 [@media(orientation:landscape)_and_(max-height:600px)]:h-4"}
                             aria-label={`Artwork ${currentIndex + 1} of ${total}`}
                         >
                             {artworks.map((item, index) => {
@@ -1067,7 +1117,7 @@ export default function ArtworkLightbox({
                     {/* Information panel */}
                     <div
                         data-lightbox-content="true"
-                        className="relative z-30 w-full shrink-0 px-5 pb-4 pt-3 text-center md:px-10 md:pb-5 md:pt-4 [@media(orientation:landscape)_and_(max-height:600px)]:h-[92px] [@media(orientation:landscape)_and_(max-height:600px)]:px-6 [@media(orientation:landscape)_and_(max-height:600px)]:pb-2 [@media(orientation:landscape)_and_(max-height:600px)]:pt-1"
+                        className={isGlass ? styles.caption : "relative z-30 w-full shrink-0 px-5 pb-4 pt-3 text-center md:px-10 md:pb-5 md:pt-4 [@media(orientation:landscape)_and_(max-height:600px)]:h-[92px] [@media(orientation:landscape)_and_(max-height:600px)]:px-6 [@media(orientation:landscape)_and_(max-height:600px)]:pb-2 [@media(orientation:landscape)_and_(max-height:600px)]:pt-1"}
                     >
                         <p className="font-sans text-[10px] font-medium uppercase tracking-[0.30em] text-brand-gold/90 md:text-xs [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]">
                             {artwork.year}
@@ -1085,39 +1135,39 @@ export default function ArtworkLightbox({
                             </span>
                         </div>
 
-                        <div aria-hidden className="mx-auto mt-3 h-px w-16 bg-gradient-to-r from-transparent via-brand-gold/45 to-transparent [@media(orientation:landscape)_and_(max-height:600px)]:mt-1" />
+                        {isGlass ? <div aria-hidden className={styles.separator} dangerouslySetInnerHTML={{ __html: glassSeparatorMarkup(instanceId + "-separator") }} /> : <div aria-hidden className="mx-auto mt-3 h-px w-16 bg-gradient-to-r from-transparent via-brand-gold/45 to-transparent [@media(orientation:landscape)_and_(max-height:600px)]:mt-1" />}
 
-                        <div className="mx-auto mt-3 max-w-xl [@media(orientation:landscape)_and_(max-height:600px)]:hidden">
+                        {isGlass ? (
+                            <div className={styles.descriptionSlot}>
+                                <p ref={descriptionRef} className={`${styles.descriptionPreview} font-sans text-sm font-light leading-6 text-white/45`} aria-hidden={descriptionExpanded || undefined}>
+                                    {artwork.description}
+                                </p>
+                                {(descriptionOverflows || descriptionExpanded) && (
+                                    <button
+                                        ref={descriptionButtonRef}
+                                        type="button"
+                                        aria-expanded={descriptionExpanded}
+                                        aria-controls={descriptionExpanded ? `${instanceId}-description` : undefined}
+                                        className={`${styles.readButton} font-sans text-[9px] uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-brand-gold`}
+                                        onPointerDown={(event) => event.stopPropagation()}
+                                        onClick={() => { dismissSwipeHint(); setDescriptionExpanded((expanded) => !expanded); }}
+                                    >
+                                        {descriptionExpanded ? "Read less ↓" : "Read more ↑"}
+                                    </button>
+                                )}
+                            </div>
+                        ) : (<div className="mx-auto mt-3 max-w-xl [@media(orientation:landscape)_and_(max-height:600px)]:hidden">
                             {artwork.description && (
                                 <p className="font-sans text-sm font-light leading-6 text-white/45">
                                     {artwork.description}
                                 </p>
                             )}
-                        </div>
+                        </div>)}
 
                         {/* Contextual artwork actions */}
                         {showDetailsCta && (
                             <div
-                                className="
-                                    mt-4
-                                    flex
-                                    w-full
-                                    items-center
-                                    justify-center
-                                    gap-4
-                                    whitespace-nowrap
-
-                                    md:mt-5
-                                    md:gap-7
-
-                                    [@media(orientation:landscape)_and_(max-height:600px)]:absolute
-                                    [@media(orientation:landscape)_and_(max-height:600px)]:bottom-1
-                                    [@media(orientation:landscape)_and_(max-height:600px)]:left-1/2
-                                    [@media(orientation:landscape)_and_(max-height:600px)]:mt-0
-                                    [@media(orientation:landscape)_and_(max-height:600px)]:w-auto
-                                    [@media(orientation:landscape)_and_(max-height:600px)]:-translate-x-1/2
-                                    [@media(orientation:landscape)_and_(max-height:600px)]:gap-4
-                                "
+                                className={isGlass ? styles.actions : "mt-4 flex w-full items-center justify-center gap-4 whitespace-nowrap md:mt-5 md:gap-7 [@media(orientation:landscape)_and_(max-height:600px)]:absolute [@media(orientation:landscape)_and_(max-height:600px)]:bottom-1 [@media(orientation:landscape)_and_(max-height:600px)]:left-1/2 [@media(orientation:landscape)_and_(max-height:600px)]:mt-0 [@media(orientation:landscape)_and_(max-height:600px)]:w-auto [@media(orientation:landscape)_and_(max-height:600px)]:-translate-x-1/2 [@media(orientation:landscape)_and_(max-height:600px)]:gap-4"}
                             >
                                 <Link
                                     href={detailsHref}
@@ -1202,7 +1252,7 @@ export default function ArtworkLightbox({
                             </div>
                         )}
                     </div>
-                </div>
+                </Panel>
             </div>
 
             <style>{`

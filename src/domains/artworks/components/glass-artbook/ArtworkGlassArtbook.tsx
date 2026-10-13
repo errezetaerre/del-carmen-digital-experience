@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
 import ArtworkDetailViewer from "../ArtworkDetailViewer";
-import { createGlassArtbook } from "./runtime.mjs";
+import { createGlassArtbook, GLASS_BOOK_QUERY } from "./runtime.mjs";
 import type { ArtworkGlassArtbookProps, GlassArtbookController } from "./types";
 import styles from "./ArtworkGlassArtbook.module.css";
 
@@ -25,6 +25,7 @@ export default function ArtworkGlassArtbook({
     const onNavigateRef = useRef<(artwork: Artwork) => void>(() => {});
     const dataKey = useMemo(() => JSON.stringify(artworks), [artworks]);
     const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
+    const [bookEligible, setBookEligible] = useState<boolean | null>(null);
     const [actionsHost, setActionsHost] = useState<HTMLElement | null>(null);
     const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(
         () => artworks.find((item) => item.id === initialArtworkId) ?? artworks[0] ?? null,
@@ -32,11 +33,43 @@ export default function ArtworkGlassArtbook({
     const standardHref = selectedArtwork
         ? `/artworks/${selectedArtwork.slug}${navigationQuery ? `?${navigationQuery}` : ""}`
         : "/artworks";
+    const exitQuery = new URLSearchParams(navigationQuery);
+    exitQuery.set("experience", "standard");
+    const exitHref = selectedArtwork
+        ? `/artworks/${selectedArtwork.slug}?${exitQuery.toString()}`
+        : "/artworks";
 
     useEffect(() => { setPortalHost(document.body); }, []);
 
     useEffect(() => {
-        if (!portalHost) return;
+        const viewport = window.matchMedia(GLASS_BOOK_QUERY);
+        let pendingDialog: MutationObserver | null = null;
+        const update = () => {
+            if (!viewport.matches && document.querySelector('[role="dialog"][aria-modal="true"]')) {
+                if (!pendingDialog) {
+                    pendingDialog = new MutationObserver(update);
+                    pendingDialog.observe(document.body, { childList: true, subtree: true });
+                }
+                return;
+            }
+            pendingDialog?.disconnect();
+            pendingDialog = null;
+            setBookEligible(viewport.matches);
+        };
+        update();
+        viewport.addEventListener("change", update);
+        return () => {
+            viewport.removeEventListener("change", update);
+            pendingDialog?.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (bookEligible === false) router.replace(standardHref, { scroll: false });
+    }, [bookEligible, router, standardHref]);
+
+    useEffect(() => {
+        if (!portalHost || !bookEligible) return;
         const previousOverflow = document.documentElement.style.overflow;
         document.documentElement.style.overflow = "hidden";
         const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -50,7 +83,7 @@ export default function ArtworkGlassArtbook({
             siblings.forEach(({ node, inert }) => { node.inert = inert; });
             if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
         };
-    }, [portalHost]);
+    }, [portalHost, bookEligible]);
 
     useEffect(() => {
         onNavigateRef.current = (artwork) => {
@@ -64,7 +97,7 @@ export default function ArtworkGlassArtbook({
     useEffect(() => {
         const host = hostRef.current;
         const items: Artwork[] = JSON.parse(dataKey);
-        if (!portalHost || !host || !items.length) return;
+        if (!portalHost || !bookEligible || !host || !items.length) return;
         const controller = createGlassArtbook(host, {
             artworks: items,
             initialArtworkId: initialIdRef.current,
@@ -74,8 +107,8 @@ export default function ArtworkGlassArtbook({
         });
         controllerRef.current = controller;
         setActionsHost(host.querySelector<HTMLElement>("[data-glass-artwork-actions]"));
-        return () => { controller.dispose(); controllerRef.current = null; };
-    }, [dataKey, instanceId, portalHost]);
+        return () => { controller.dispose(); controllerRef.current = null; setActionsHost(null); };
+    }, [dataKey, instanceId, portalHost, bookEligible]);
 
     useEffect(() => {
         if (!pathname?.startsWith("/artworks/")) return;
@@ -90,21 +123,22 @@ export default function ArtworkGlassArtbook({
     }, [pathname, dataKey, artworks]);
 
     useEffect(() => {
-        if (!portalHost) return;
+        if (!portalHost || !bookEligible) return;
         const onKeyDown = (event: KeyboardEvent) => {
             if (event.key !== "Escape" || document.querySelector('[role="dialog"][aria-modal="true"]')) return;
             event.preventDefault();
-            router.push(standardHref, { scroll: false });
+            router.push(exitHref, { scroll: false });
         };
         document.addEventListener("keydown", onKeyDown);
         return () => { document.removeEventListener("keydown", onKeyDown); };
-    }, [portalHost, router, standardHref]);
+    }, [portalHost, bookEligible, router, exitHref]);
 
     if (!selectedArtwork) return null;
-    if (!portalHost) {
+    if (!portalHost || !bookEligible) {
         return (
             <main className="min-h-screen bg-surface-deep text-white">
                 <h1 className="sr-only">{selectedArtwork.title}</h1>
+                {bookEligible === false && <Link href={standardHref} className="block px-6 py-12 font-sans text-sm text-white/60">Continue in standard view →</Link>}
                 <noscript><a href={standardHref}>Open {selectedArtwork.title} in standard view</a></noscript>
             </main>
         );
@@ -112,7 +146,7 @@ export default function ArtworkGlassArtbook({
 
     return createPortal(
         <main ref={experienceRef} className={`${styles.experience} bg-surface-deep text-white`} aria-label="Immersive Glass Artbook">
-            <Link href={standardHref} className={`${styles.exit} font-sans text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`} aria-label="Exit Artbook and return to standard view">
+            <Link href={exitHref} className={`${styles.exit} font-sans text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`} aria-label="Exit Artbook and return to standard view">
                 Exit <span aria-hidden="true">×</span>
             </Link>
             <h1 className="sr-only">{selectedArtwork.title}</h1>

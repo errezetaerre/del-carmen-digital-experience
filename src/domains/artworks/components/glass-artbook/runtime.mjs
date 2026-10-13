@@ -7,12 +7,15 @@ let wheelMomentumUnlockTimer=null;
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function formatLabel(value){return value.replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}
 
+export const GLASS_BOOK_QUERY='(min-width:1024px) and (hover:hover) and (pointer:fine), (min-width:640px) and (min-height:300px) and (orientation:landscape)';
+export const GLASS_BOOK_AUTO_QUERY='(pointer:coarse) and (min-width:640px) and (min-height:300px) and (orientation:landscape)';
+
 export function createGlassArtbook(root,options){
  if(!options.artworks.length)throw Error('Glass Artbook requires an artwork');
  const instance=options.instanceId.replace(/[^a-zA-Z0-9_-]/g,'');
  if(!instance)throw Error('Glass Artbook requires a stable instance identifier');
  const nativeDocument=window.document;
- const wideLayout=matchMedia('(min-width:1024px)');
+ const wideLayout=matchMedia(GLASS_BOOK_QUERY);
  const resources=new Set(),assets=new Map(),cleanups=[];
  let entrancePlaying=false;
  let disposed=false,frameId=0,pendingPointer=null,wheelActive=false,wheelTimer=null,edgeTimer=null;
@@ -48,9 +51,20 @@ export function createGlassArtbook(root,options){
   edgeTimer=window.setTimeout(clearEdge,160);
  }
  function clearEdge(){stage.style.transition='transform 180ms ease-out';stage.style.transform='none';edgeTimer=null;}
+ function dropPointerCapture(id){
+  if(id==null||id<0)return;
+  try{if(scene.hasPointerCapture(id))scene.releasePointerCapture(id);}catch{}
+ }
  function onPointerDown(event){
+  if(event.isPrimary===false){
+   onPointerCancel({pointerId:drag?.id??pendingPointer?.id});
+   return;
+  }
   if(!wideLayout.matches||inputBlocked()||wheelActive||event.button!==0||event.target.closest('button,a,input,textarea,select,[contenteditable]'))return;
-  if(animating){down(event);return;}
+  if(drag||pendingPointer)return;
+  // Mouse regrabs stay immediate. A touch must establish horizontal intent,
+  // including while a leaf is settling, so vertical reading remains native.
+  if(animating&&event.pointerType!=='touch'){down(event);return;}
   pendingPointer={event,x:event.clientX,y:event.clientY,id:event.pointerId};
  }
  function onPointerMove(event){
@@ -58,21 +72,36 @@ export function createGlassArtbook(root,options){
    const dx=event.clientX-pendingPointer.x,dy=event.clientY-pendingPointer.y;
    if(Math.max(Math.abs(dx),Math.abs(dy))<8)return;
    if(Math.abs(dx)<Math.abs(dy)*1.05){pendingPointer=null;return;}
-   const rect=stage.getBoundingClientRect(),dir=pendingPointer.x>=rect.left+baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5?1:-1;
-   if(index+dir<0||index+dir>=works.length){showEdge(dir,dx);return;}
-   down(pendingPointer.event);pendingPointer=null;
+   const rect=stage.getBoundingClientRect();
+   const dir=event.pointerType==='touch'?(dx<0?1:-1):(pendingPointer.x>=rect.left+baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5?1:-1);
+   if(!animating&&(index+dir<0||index+dir>=works.length)){showEdge(dir,dx);pendingPointer=null;return;}
+   const start=pendingPointer.event;pendingPointer=null;
+   down(start,dir);
   }
   move(event);
  }
  function onPointerRelease(event){
-  pendingPointer=null;clearEdge();
-  if(inputBlocked()){
-   if(drag&&drag.id===event.pointerId){drag=null;goal=0;velocity=0;settling=true;animating=true;}
-   return;
-  }
-  release(event);
+  if(disposed)return;
+  if(pendingPointer?.id===event.pointerId)pendingPointer=null;
+  clearEdge();
+  if(inputBlocked())onPointerCancel(event);else release(event);
+  dropPointerCapture(event.pointerId);
  }
- function clearPendingPointer(){pendingPointer=null;}
+ function onPointerCancel(event){
+  if(disposed)return;
+  if(pendingPointer?.id===event.pointerId)pendingPointer=null;
+  if(!drag||drag.id!==event.pointerId)return;
+  const id=drag.id;drag=null;
+  goal=angle>90?180:0;velocity=0;settling=true;animating=true;
+  dropPointerCapture(id);
+  if(reducedMotion.matches){angle=goal;finish();}else render();
+ }
+ function onInputBlur(){
+  if(wheelActive)finishWheel();
+  pendingPointer=null;
+  if(drag)onPointerCancel({pointerId:drag.id});
+ }
+ function onVisibilityChange(){if(nativeDocument.hidden)onInputBlur();}
  function lockWheel(){
   wheelMomentumLocked=true;
   if(wheelMomentumUnlockTimer!==null)window.clearTimeout(wheelMomentumUnlockTimer);
@@ -352,8 +381,9 @@ function tick(now){
  }else render();
  requestAnimationFrame(tick);
 }
-function down(e){
+function down(e,requestedDirection){
  if(inputBlocked()||drag||e.button!==0)return;
+ try{scene.setPointerCapture(e.pointerId);}catch{return;}
  prepareInteraction();
  const rect=stage.getBoundingClientRect();
  const relative=(e.clientX-rect.left)/rect.width;
@@ -363,13 +393,13 @@ function down(e){
    settling=false;velocity=0;
    drag={id:e.pointerId,startX:e.clientX,startAngle:angle,lastT:performance.now(),v:0,dir:direction};
  }else{
-   const dir=e.clientX>=rect.left+baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5?1:-1;
+   const dir=requestedDirection??(e.clientX>=rect.left+baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5?1:-1);
    if(index+dir<0||index+dir>=works.length)return;
    prepareInteraction();configure(dir);turn.style.display='block';turn.style.visibility='visible';
    angle=0;velocity=0;goal=0;settling=false;animating=true;
    drag={id:e.pointerId,startX:e.clientX,startAngle:0,lastT:performance.now(),v:0,dir};
  }
- scene.setPointerCapture(e.pointerId);render();
+ render();
 }
 function move(e){
  if(!drag||e.pointerId!==drag.id)return;
@@ -398,7 +428,7 @@ function release(e){
 }
 
 scene.addEventListener('pointerdown',onPointerDown);scene.addEventListener('pointermove',onPointerMove);
-scene.addEventListener('pointerup',onPointerRelease);scene.addEventListener('pointercancel',onPointerRelease);
+scene.addEventListener('pointerup',onPointerRelease);scene.addEventListener('pointercancel',onPointerCancel);scene.addEventListener('lostpointercapture',onPointerCancel);
 $('#next').onclick=()=>navigate(1);$('#prev').onclick=()=>navigate(-1);
 document.addEventListener('keydown',e=>{
  if(e.target.closest('input,textarea,select,[contenteditable]'))return;
@@ -716,10 +746,15 @@ idle();requestAnimationFrame(tick);
  const approvedFinish=finish;
  finish=function(){const before=index;approvedFinish();if(index!==before){preload();options.onNavigate?.(works[index]);}};
  scene.addEventListener('wheel',onWheel,{passive:false});
- nativeDocument.addEventListener('pointerup',clearPendingPointer);nativeDocument.addEventListener('pointercancel',clearPendingPointer);
- cleanups.push(()=>{nativeDocument.removeEventListener('pointerup',clearPendingPointer);nativeDocument.removeEventListener('pointercancel',clearPendingPointer);});
+ nativeDocument.addEventListener('pointerup',onPointerRelease);nativeDocument.addEventListener('pointercancel',onPointerCancel);
+ window.addEventListener('blur',onInputBlur);nativeDocument.addEventListener('visibilitychange',onVisibilityChange);
+ cleanups.push(()=>{
+  nativeDocument.removeEventListener('pointerup',onPointerRelease);nativeDocument.removeEventListener('pointercancel',onPointerCancel);
+  window.removeEventListener('blur',onInputBlur);nativeDocument.removeEventListener('visibilitychange',onVisibilityChange);
+  for(const [type,listener] of [['pointerdown',onPointerDown],['pointermove',onPointerMove],['pointerup',onPointerRelease],['pointercancel',onPointerCancel],['lostpointercapture',onPointerCancel]])scene.removeEventListener(type,listener);
+ });
  function onLayoutChange(){
-  if(!wideLayout.matches&&transition){drag=null;pendingPointer=null;wheelActive=false;
+  if(!wideLayout.matches&&transition){const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;wheelActive=false;
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;goal=angle>90?180:0;angle=goal;finish();}
   if(entrancePlaying)finishEntrance();if(guideSealing){guideTween?.kill();finishGuide();}clearPreview(true);updateGuideCopy();positionGuide();
   render();
@@ -747,9 +782,10 @@ idle();requestAnimationFrame(tick);
    const target=works.findIndex(work=>work.id===id);if(target<0||target===index)return;
    if(entrancePlaying)finishEntrance();clearPreview(true);
    if(wheelActive){wheelActive=false;if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;lockWheel();}
-   drag=null;pendingPointer=null;settling=false;animating=false;clearEdge();index=target;idle();preload();
+   const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;settling=false;animating=false;clearEdge();index=target;idle();preload();
   },
   dispose(){
+   const pointerId=drag?.id;drag=null;pendingPointer=null;dropPointerCapture(pointerId);
    disposed=true;disposeExperience();window.cancelAnimationFrame(frameId);observer.disconnect();
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);if(edgeTimer!==null)window.clearTimeout(edgeTimer);
    for(const cleanup of cleanups)cleanup();scene.removeEventListener('wheel',onWheel);
