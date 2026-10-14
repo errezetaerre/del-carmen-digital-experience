@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { LinkButton } from "@/shared/ui/button";
+import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 
 interface ArtworkDetailKineticExperienceProps {
     previousScene?: ReactNode;
@@ -62,6 +63,14 @@ export default function ArtworkDetailKineticExperience({
     backLabel,
 }: ArtworkDetailKineticExperienceProps) {
     const router = useRouter();
+    const [nativePortrait, setNativePortrait] = useState(false);
+    useEffect(() => {
+        const viewport = window.matchMedia("(pointer:coarse) and (orientation:portrait)");
+        const update = () => setNativePortrait(viewport.matches);
+        update();
+        viewport.addEventListener("change", update);
+        return () => viewport.removeEventListener("change", update);
+    }, []);
 
     const viewportRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
@@ -830,12 +839,15 @@ export default function ArtworkDetailKineticExperience({
         lastTimeRef.current = performance.now();
         velocityRef.current = 0;
 
-        try {
-            event.currentTarget.setPointerCapture(
-                event.pointerId,
-            );
-        } catch {
-            // Pointer capture may not be available.
+        // Native touch panning owns the vertical axis; mouse regrab stays immediate.
+        if (event.pointerType === "mouse") {
+            try {
+                event.currentTarget.setPointerCapture(
+                    event.pointerId,
+                );
+            } catch {
+                // Pointer capture may not be available.
+            }
         }
     }
 
@@ -870,10 +882,14 @@ export default function ArtworkDetailKineticExperience({
                 draggingRef.current = false;
                 pointerIdRef.current = null;
                 inputModeRef.current = "idle";
+                try {
+                    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+                } catch {}
                 return;
             }
 
             horizontalDragRef.current = true;
+            try { event.currentTarget.setPointerCapture(event.pointerId); } catch {}
             sealOnboardingHint();
         }
 
@@ -937,6 +953,12 @@ export default function ArtworkDetailKineticExperience({
             }
         } catch {
             // Ignore pointer-capture cleanup failures.
+        }
+
+        if (event.type === "pointercancel") {
+            horizontalDragRef.current = false;
+            resetToCurrent();
+            return;
         }
 
         if (!horizontalDragRef.current) {
@@ -1003,20 +1025,23 @@ export default function ArtworkDetailKineticExperience({
     return (
         <div
             ref={viewportRef}
-            className="
+            data-lenis-prevent={nativePortrait || undefined}
+            data-artwork-native-scroll={nativePortrait || undefined}
+            className={`
+                ${glassStyles.standardViewport}
                 relative
                 w-full
                 overflow-x-hidden
                 overscroll-x-contain
                 touch-pan-y
-            "
+            `}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={finishPointer}
             onPointerCancel={finishPointer}
         >
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-40">
-                <div className="mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between px-6 pt-10 md:px-10 md:pt-20 lg:px-12 lg:pt-28">
+            <div className={`${glassStyles.standardToolbar} pointer-events-none absolute inset-x-0 top-0 z-40`}>
+                <div className={`${glassStyles.standardToolbarRow} mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between px-6 pt-10 md:px-10 md:pt-20 lg:px-12 lg:pt-28`}>
                     <LinkButton
                         href={backHref}
                         variant="goldUnderline"

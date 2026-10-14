@@ -62,11 +62,12 @@ export default function ArtworkDetailScene({
 
     return (
         <main
-            className="
+            className={`
+                ${glassStyles.standardScene}
                 min-h-screen
                 bg-surface-deep
                 text-white
-            "
+            `}
         >
             <Container
                 size="wide"
@@ -79,6 +80,7 @@ export default function ArtworkDetailScene({
                 "
             >
                 <div
+                    data-artwork-detail-layout
                     className="
                         mt-7
                         grid
@@ -93,13 +95,14 @@ export default function ArtworkDetailScene({
                         lg:gap-20
                     "
                 >
-                    <div>
+                    <div data-artwork-detail-image>
                         <ArtworkDetailViewer
                             artwork={artwork}
                         />
                     </div>
 
                     <div
+                        data-artwork-detail-info
                         className="
                             max-w-xl
                             -translate-y-1

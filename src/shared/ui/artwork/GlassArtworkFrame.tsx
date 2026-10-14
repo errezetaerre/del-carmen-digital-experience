@@ -7,7 +7,7 @@ import styles from "./ArtworkLightbox.module.css";
 export default function GlassArtworkFrame({ children, className = "", ...props }: HTMLAttributes<HTMLDivElement>) {
     const frameRef = useRef<HTMLDivElement>(null);
     const instanceId = `frame${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
-    const [size, setSize] = useState({ width: 960, height: 820 });
+    const [size, setSize] = useState({ width: 624, height: 940 });
     useLayoutEffect(() => {
         const frame = frameRef.current;
         if (!frame) return;

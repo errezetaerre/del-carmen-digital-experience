@@ -88,6 +88,7 @@ export default function ArtworkLightbox({
     const descriptionButtonRef = useRef<HTMLButtonElement>(null);
     const descriptionExpandedRef = useRef(false);
     descriptionExpandedRef.current = descriptionExpanded;
+    const swipeAxisRef = useRef<"pending" | "horizontal" | "vertical">("pending");
 
     /* =========================================================
        REFS
@@ -288,6 +289,8 @@ export default function ArtworkLightbox({
 
         panYRef.current =
             safePan.y;
+
+        if (isGlass) layer.style.touchAction = safeScale <= SNAP_SCALE ? "pan-y" : "none";
 
         layer.style.transition =
             animate
@@ -545,6 +548,7 @@ export default function ArtworkLightbox({
             return;
         }
 
+        if (isGlass && (event.target as HTMLElement).closest("[data-lightbox-native-scroll]")) return;
         dismissSwipeHint();
 
         const pointers =
@@ -559,9 +563,9 @@ export default function ArtworkLightbox({
         );
 
         try {
-            event.currentTarget.setPointerCapture(
-                event.pointerId,
-            );
+            if (!isGlass || scaleRef.current > SNAP_SCALE || pointers.size >= 2) {
+                for (const id of pointers.keys()) event.currentTarget.setPointerCapture(id);
+            }
         } catch {
             // Pointer capture may not be available.
         }
@@ -569,6 +573,7 @@ export default function ArtworkLightbox({
         if (
             pointers.size === 1
         ) {
+            swipeAxisRef.current = "pending";
             hadMultiTouchRef.current =
                 false;
 
@@ -666,6 +671,24 @@ export default function ArtworkLightbox({
                 y: event.clientY,
             },
         );
+
+        if (isGlass && pointers.size === 1 && scaleRef.current <= SNAP_SCALE && swipeStartRef.current) {
+            const dx = event.clientX - swipeStartRef.current.x;
+            const dy = event.clientY - swipeStartRef.current.y;
+            if (swipeAxisRef.current === "pending") {
+                if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
+                if (Math.abs(dx) < Math.abs(dy) * 1.05) {
+                    swipeAxisRef.current = "vertical";
+                    swipeStartRef.current = null;
+                    panGestureRef.current = null;
+                    pointers.delete(event.pointerId);
+                    try { event.currentTarget.releasePointerCapture(event.pointerId); } catch {}
+                    return;
+                }
+                swipeAxisRef.current = "horizontal";
+                try { event.currentTarget.setPointerCapture(event.pointerId); } catch {}
+            }
+        }
 
         /* Pinch */
 
@@ -921,6 +944,7 @@ export default function ArtworkLightbox({
     return createPortal(
         <div
             className={isGlass ? styles.dialog : "fixed inset-0 z-[100] overflow-hidden bg-[#030303] text-white"}
+            data-lenis-prevent={isGlass || undefined}
             role="dialog"
             aria-modal="true"
             aria-label={`Artwork viewer — ${artwork.title}`}
@@ -942,7 +966,7 @@ export default function ArtworkLightbox({
             </div>
 
             {/* Counter — inset from viewport edges */}
-            <div className="fixed left-7 top-7 z-[140] font-sans text-[10px] uppercase tracking-[0.22em] text-white/35 md:left-10 md:top-9">
+            <div className={isGlass ? `${styles.counter} fixed left-7 top-7 z-[140] font-sans text-[10px] uppercase tracking-[0.22em] text-white/35 md:left-10 md:top-9` : "fixed left-7 top-7 z-[140] font-sans text-[10px] uppercase tracking-[0.22em] text-white/35 md:left-10 md:top-9"}>
                 {String(currentIndex + 1).padStart(2, "0")}
                 {" / "}
                 {String(total).padStart(2, "0")}
@@ -955,26 +979,7 @@ export default function ArtworkLightbox({
                 onClick={onClose}
                 onPointerDown={(event) => event.stopPropagation()}
                 aria-label="Close artwork viewer"
-                className="
-                    fixed right-4 top-4 z-[150]
-                    flex h-11 w-11 items-center justify-center
-                    rounded-full
-                    border border-transparent
-                    font-sans text-[32px] font-light leading-none
-                    text-white/75
-                    transition-all duration-300
-
-                    hover:border-brand-gold/35
-                    hover:bg-brand-gold/[0.06]
-                    hover:text-brand-gold
-
-                    focus-visible:border-brand-gold/35
-                    focus-visible:bg-brand-gold/[0.06]
-                    focus-visible:text-brand-gold
-                    focus-visible:outline-none
-
-                    md:right-8 md:top-6
-                "
+                className={isGlass ? `${styles.closeControl} fixed right-4 top-4 z-[150] flex h-11 w-11 items-center justify-center rounded-full border border-transparent font-sans text-[32px] font-light leading-none text-white/75 transition-all duration-300 hover:border-brand-gold/35 hover:bg-brand-gold/[0.06] hover:text-brand-gold focus-visible:border-brand-gold/35 focus-visible:bg-brand-gold/[0.06] focus-visible:text-brand-gold focus-visible:outline-none md:right-8 md:top-6` : "fixed right-4 top-4 z-[150] flex h-11 w-11 items-center justify-center rounded-full border border-transparent font-sans text-[32px] font-light leading-none text-white/75 transition-all duration-300 hover:border-brand-gold/35 hover:bg-brand-gold/[0.06] hover:text-brand-gold focus-visible:border-brand-gold/35 focus-visible:bg-brand-gold/[0.06] focus-visible:text-brand-gold focus-visible:outline-none md:right-8 md:top-6"}
             >
                 ×
             </button>
@@ -1006,6 +1011,8 @@ export default function ArtworkLightbox({
             {/* Viewer */}
             <div
                 className={isGlass ? styles.viewer : "relative z-20 flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-3 md:px-20 md:py-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-3 [@media(orientation:landscape)_and_(max-height:600px)]:py-2"}
+                data-lenis-prevent={isGlass || undefined}
+                data-lightbox-scroll-viewport={isGlass || undefined}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}

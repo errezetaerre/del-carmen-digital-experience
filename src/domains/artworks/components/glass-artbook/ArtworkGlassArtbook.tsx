@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
 import ArtworkDetailViewer from "../ArtworkDetailViewer";
+import { deferAutomaticArtbookEntry } from "../ArtworkDetailResponsiveEntry";
 import { createGlassArtbook, GLASS_BOOK_QUERY } from "./runtime.mjs";
 import type { ArtworkGlassArtbookProps, GlassArtbookController } from "./types";
 import styles from "./ArtworkGlassArtbook.module.css";
@@ -33,10 +34,10 @@ export default function ArtworkGlassArtbook({
     const standardHref = selectedArtwork
         ? `/artworks/${selectedArtwork.slug}${navigationQuery ? `?${navigationQuery}` : ""}`
         : "/artworks";
-    const exitQuery = new URLSearchParams(navigationQuery);
-    exitQuery.set("experience", "standard");
-    const exitHref = selectedArtwork
-        ? `/artworks/${selectedArtwork.slug}?${exitQuery.toString()}`
+    const glassQuery = new URLSearchParams(navigationQuery);
+    glassQuery.set("experience", "glass");
+    const glassHref = selectedArtwork
+        ? `/artworks/${selectedArtwork.slug}?${glassQuery.toString()}`
         : "/artworks";
 
     useEffect(() => { setPortalHost(document.body); }, []);
@@ -127,11 +128,12 @@ export default function ArtworkGlassArtbook({
         const onKeyDown = (event: KeyboardEvent) => {
             if (event.key !== "Escape" || document.querySelector('[role="dialog"][aria-modal="true"]')) return;
             event.preventDefault();
-            router.push(exitHref, { scroll: false });
+            deferAutomaticArtbookEntry(glassHref);
+            router.push(standardHref, { scroll: false });
         };
         document.addEventListener("keydown", onKeyDown);
         return () => { document.removeEventListener("keydown", onKeyDown); };
-    }, [portalHost, bookEligible, router, exitHref]);
+    }, [portalHost, bookEligible, router, standardHref, glassHref]);
 
     if (!selectedArtwork) return null;
     if (!portalHost || !bookEligible) {
@@ -145,12 +147,14 @@ export default function ArtworkGlassArtbook({
     }
 
     return createPortal(
-        <main ref={experienceRef} className={`${styles.experience} bg-surface-deep text-white`} aria-label="Immersive Glass Artbook">
-            <Link href={exitHref} className={`${styles.exit} font-sans text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`} aria-label="Exit Artbook and return to standard view">
+        <main ref={experienceRef} className={`${styles.experience} bg-surface-deep text-white`} data-lenis-prevent aria-label="Immersive Glass Artbook">
+            <Link href={standardHref} onClick={(event) => { if (!event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) deferAutomaticArtbookEntry(glassHref); }} className={`${styles.exit} font-sans text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`} aria-label="Exit Artbook and return to standard view">
                 Exit <span aria-hidden="true">×</span>
             </Link>
             <h1 className="sr-only">{selectedArtwork.title}</h1>
-            <div ref={hostRef} className={`${styles.root} font-sans`} aria-label="Glass Artbook artwork viewer" />
+            <div className={styles.bookViewport} data-lenis-prevent>
+                <div ref={hostRef} className={`${styles.root} font-sans`} aria-label="Glass Artbook artwork viewer" />
+            </div>
             {actionsHost && experienceRef.current && createPortal(
                 <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly portalTarget={experienceRef.current} />,
                 actionsHost,

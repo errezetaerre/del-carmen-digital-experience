@@ -195,9 +195,6 @@ export default async function ArtworkPage({
         ? `Back to ${activeSeries.title}`
         : "Back to artworks";
 
-    const detailParams = new URLSearchParams(navigationQuery);
-    if (experience === "standard") detailParams.set("experience", "standard");
-    const detailNavigationQuery = detailParams.toString();
     const glassParams = new URLSearchParams(navigationQuery);
     glassParams.set("experience", "glass");
     const glassHref = `/artworks/${artwork.slug}?${glassParams.toString()}`;
@@ -212,8 +209,8 @@ export default async function ArtworkPage({
         }
 
         return `/artworks/${targetArtwork.slug}${
-            detailNavigationQuery
-                ? `?${detailNavigationQuery}`
+            navigationQuery
+                ? `?${navigationQuery}`
                 : ""
         }`;
     };
@@ -243,7 +240,7 @@ export default async function ArtworkPage({
                 previousPreviousArtwork
             }
             nextArtwork={artwork}
-            navigationQuery={detailNavigationQuery}
+            navigationQuery={navigationQuery}
         />
     ) : undefined;
 
@@ -252,7 +249,7 @@ export default async function ArtworkPage({
             artwork={artwork}
             previousArtwork={previousArtwork}
             nextArtwork={nextArtwork}
-            navigationQuery={detailNavigationQuery}
+            navigationQuery={navigationQuery}
             priority
         />
     );
@@ -262,12 +259,12 @@ export default async function ArtworkPage({
             artwork={nextArtwork}
             previousArtwork={artwork}
             nextArtwork={nextNextArtwork}
-            navigationQuery={detailNavigationQuery}
+            navigationQuery={navigationQuery}
         />
     ) : undefined;
 
     return (
-        <ArtworkDetailResponsiveEntry glassHref={glassHref} enabled={experience !== "standard"}>
+        <ArtworkDetailResponsiveEntry glassHref={glassHref} enabled>
             <ArtworkDetailKineticExperience
                 previousScene={previousScene}
                 currentScene={currentScene}

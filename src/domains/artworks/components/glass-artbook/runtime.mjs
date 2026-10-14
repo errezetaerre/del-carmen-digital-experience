@@ -1,6 +1,5 @@
 // The approved 11B-23 engine, adapted to real Artwork data and primary media.
 // Deliberately local to the experimental artwork-detail view.
-let artbookGuideLearnedInCurrentDocument=false;
 let wheelMomentumLocked=false;
 let wheelMomentumUnlockTimer=null;
 
@@ -298,7 +297,8 @@ function syncOcclusion(){
  left.style.clipPath='none';right.style.clipPath='none';
  if(!transition||!wideLayout.matches)return;
  // Hide only the underlying copy covered by the projected moving face.
- // The turning image itself remains full size and is never clipped by a frame.
+ // CSS masks content to its own physical leaf. The moving sheet itself keeps
+ // its full size and may project beyond the book or viewport.
  const face=angle<90?front:back,state=faceStates.get(face);
  const theta=(direction===1?-angle:angle)*Math.PI/180;
  const hinge=baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5;
@@ -622,7 +622,7 @@ const motion=options.motion;
 const preview={left:0,right:0};
 const guide=$('#guide'),guideText=$('#guideText'),guideDock=$('#guideDock');
 let entranceTween=null,guideTween=null,hoverTween=null,guideTimer=null;
-let guideLearned=artbookGuideLearnedInCurrentDocument,guideSealing=false;
+let guideLearned=false,guideSealing=false;
 let pausedForImage=false,navigationIndex=-1,entranceWaiting=false,entranceDeadline=0;
 let viewportSignature=[baseLeft.clientWidth,baseLeft.clientHeight,baseRight.clientWidth].join(':');
 root.dataset.guide=guideLearned?'learned':'reminding';
@@ -649,9 +649,10 @@ function positionGuide(){
  else{guide.style.left=values.left+'px';guide.style.top=values.top+'px';}
 }
 function pulseGuide(){
- if(disposed||guideLearned||guideSealing)return;
- if(!entrancePlaying&&!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]')&&!reducedMotion.matches&&motion){
-  guideTween=motion.to(guide,{opacity:.32,duration:.70,yoyo:true,repeat:1,ease:'sine.inOut',overwrite:true});
+ if(disposed)return;
+ if(!guideSealing&&!entrancePlaying&&!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]')&&!reducedMotion.matches&&motion){
+  const target=guideLearned?guideDock:guide;
+  guideTween=motion.to(target,{opacity:.32,duration:.70,yoyo:true,repeat:1,ease:'sine.inOut',overwrite:true});
  }
  guideTimer=window.setTimeout(pulseGuide,5000);
 }
@@ -662,8 +663,8 @@ function finishGuide(){
 }
 function learnGuide(){
  if(guideLearned||guideSealing)return;
- artbookGuideLearnedInCurrentDocument=true;
  if(guideTimer!==null)window.clearTimeout(guideTimer);guideTimer=null;
+ guideTimer=window.setTimeout(pulseGuide,5000);
  guideTween?.kill();guideTween=null;
  positionGuide();guideSealing=true;root.dataset.guide='sealing';
  if(!motion||reducedMotion.matches){finishGuide();return;}
@@ -721,8 +722,7 @@ function startExperience(){
   preview.left=66;drawEntrance();
   entranceDeadline=performance.now()+2500;progressEntrance(performance.now());
  }else finishEntrance();
- if(guideLearned){guide.style.visibility='hidden';guideDock.style.opacity='1';}
- else{positionGuide();guideTimer=window.setTimeout(pulseGuide,5000);}
+ positionGuide();guideTimer=window.setTimeout(pulseGuide,5000);
 }
 function synchronizeMotionPause(){
  const pause=!!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]');
