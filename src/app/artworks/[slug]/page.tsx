@@ -9,7 +9,6 @@ import {
 
 import ArtworkDetailKineticExperience from "@/domains/artworks/components/ArtworkDetailKineticExperience";
 import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
-import ArtworkDetailResponsiveEntry from "@/domains/artworks/components/ArtworkDetailResponsiveEntry";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
 
 interface ArtworkPageProps {
@@ -195,10 +194,6 @@ export default async function ArtworkPage({
         ? `Back to ${activeSeries.title}`
         : "Back to artworks";
 
-    const glassParams = new URLSearchParams(navigationQuery);
-    glassParams.set("experience", "glass");
-    const glassHref = `/artworks/${artwork.slug}?${glassParams.toString()}`;
-
     const createArtworkHref = (
         targetArtwork:
             | (typeof navigationArtworks)[number]
@@ -264,16 +259,14 @@ export default async function ArtworkPage({
     ) : undefined;
 
     return (
-        <ArtworkDetailResponsiveEntry glassHref={glassHref} enabled>
-            <ArtworkDetailKineticExperience
-                previousScene={previousScene}
-                currentScene={currentScene}
-                nextScene={nextScene}
-                previousHref={previousHref}
-                nextHref={nextHref}
-                backHref={backHref}
-                backLabel={backLabel}
-            />
-        </ArtworkDetailResponsiveEntry>
+        <ArtworkDetailKineticExperience
+            previousScene={previousScene}
+            currentScene={currentScene}
+            nextScene={nextScene}
+            previousHref={previousHref}
+            nextHref={nextHref}
+            backHref={backHref}
+            backLabel={backLabel}
+        />
     );
 }

@@ -7,7 +7,6 @@ function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&am
 function formatLabel(value){return value.replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}
 
 export const GLASS_BOOK_QUERY='(min-width:1024px) and (hover:hover) and (pointer:fine), (min-width:640px) and (min-height:300px) and (orientation:landscape)';
-export const GLASS_BOOK_AUTO_QUERY='(pointer:coarse) and (min-width:640px) and (min-height:300px) and (orientation:landscape)';
 
 export function createGlassArtbook(root,options){
  if(!options.artworks.length)throw Error('Glass Artbook requires an artwork');
@@ -96,6 +95,7 @@ export function createGlassArtbook(root,options){
   if(reducedMotion.matches){angle=goal;finish();}else render();
  }
  function onInputBlur(){
+  clearRequestedNavigation();
   if(wheelActive)finishWheel();
   pendingPointer=null;
   if(drag)onPointerCancel({pointerId:drag.id});
@@ -346,6 +346,24 @@ function idle(){
  assignFace(front,'info',index,1);assignFace(back,'art',Math.min(index+1,works.length-1),-1);
  render();
 }
+// Button/key bursts retain one bounded destination, never an image-load queue.
+let requestedIndex=null,rapidNavigation=false;
+function clearRequestedNavigation(){requestedIndex=null;rapidNavigation=false;}
+function requestNavigation(dir){
+ if(disposed||inputBlocked()||drag||wheelActive||pendingPointer||(dir!==1&&dir!==-1))return;
+ const destination=requestedIndex??(transition&&goal===180?transition.to:index);
+ const target=Math.max(0,Math.min(works.length-1,destination+dir));
+ if(target===destination)return;
+ requestedIndex=target;
+ if(animating)rapidNavigation=true;
+ else navigate(Math.sign(target-index));
+}
+function continueRequestedNavigation(){
+ if(requestedIndex===null)return;
+ if(disposed||!wideLayout.matches||inputBlocked()||index===requestedIndex){clearRequestedNavigation();return;}
+ navigate(Math.sign(requestedIndex-index));
+}
+
 function navigate(dir){
  if(inputBlocked()||drag||animating||index+dir<0||index+dir>=works.length)return;
  prepareInteraction();configure(dir);turn.style.display='block';turn.style.visibility='visible';
@@ -370,7 +388,7 @@ function tick(now){
  if(settling&&!drag){
    // A faster natural response keeps the original damping ratio and
    // directional character. Release velocity and direct dragging stay intact.
-   const settlePace=1.5;
+   const settlePace=rapidNavigation?2.1:1.5;
    const stiffness=(direction===1?230:130)*settlePace*settlePace;
    const damping=(direction===1?24:20)*settlePace;
    const acceleration=(goal-angle)*stiffness-velocity*damping;
@@ -384,6 +402,7 @@ function tick(now){
 function down(e,requestedDirection){
  if(inputBlocked()||drag||e.button!==0)return;
  try{scene.setPointerCapture(e.pointerId);}catch{return;}
+ clearRequestedNavigation();
  prepareInteraction();
  const rect=stage.getBoundingClientRect();
  const relative=(e.clientX-rect.left)/rect.width;
@@ -429,11 +448,11 @@ function release(e){
 
 scene.addEventListener('pointerdown',onPointerDown);scene.addEventListener('pointermove',onPointerMove);
 scene.addEventListener('pointerup',onPointerRelease);scene.addEventListener('pointercancel',onPointerCancel);scene.addEventListener('lostpointercapture',onPointerCancel);
-$('#next').onclick=()=>navigate(1);$('#prev').onclick=()=>navigate(-1);
+$('#next').onclick=()=>requestNavigation(1);$('#prev').onclick=()=>requestNavigation(-1);
 document.addEventListener('keydown',e=>{
  if(e.target.closest('input,textarea,select,[contenteditable]'))return;
- if(e.key==='ArrowRight'){e.preventDefault();navigate(1)}
- if(e.key==='ArrowLeft'){e.preventDefault();navigate(-1)}
+ if(e.key==='ArrowRight'){e.preventDefault();requestNavigation(1)}
+ if(e.key==='ArrowLeft'){e.preventDefault();requestNavigation(-1)}
 });
 $('#optical').oninput=e=>{document.documentElement.style.setProperty('--optical-strength',(e.target.value/100).toFixed(2));$('#opticalValue').textContent=e.target.value+'%'};$('#cornerOptical').oninput=e=>{$('#cornerValue').textContent=e.target.value+'%'};$('#persp').oninput=e=>{stage.style.perspective=e.target.value+'px';$('#perspValue').textContent=e.target.value+' px'}
 
@@ -731,7 +750,7 @@ function synchronizeMotionPause(){
  for(const animation of [entranceTween,guideTween,hoverTween]){
   if(pause)animation?.pause();else animation?.resume();
  }
- if(pause)clearPreview(true);
+ if(pause){clearRequestedNavigation();clearPreview(true);}
 }
 function disposeExperience(){
  entranceTween?.kill();guideTween?.kill();hoverTween?.kill();
@@ -744,7 +763,7 @@ scene.addEventListener('pointerleave',()=>clearPreview());
 idle();requestAnimationFrame(tick);
 
  const approvedFinish=finish;
- finish=function(){const before=index;approvedFinish();if(index!==before){preload();options.onNavigate?.(works[index]);}};
+ finish=function(){const before=index;approvedFinish();if(index!==before){preload();options.onNavigate?.(works[index]);}continueRequestedNavigation();};
  scene.addEventListener('wheel',onWheel,{passive:false});
  nativeDocument.addEventListener('pointerup',onPointerRelease);nativeDocument.addEventListener('pointercancel',onPointerCancel);
  window.addEventListener('blur',onInputBlur);nativeDocument.addEventListener('visibilitychange',onVisibilityChange);
@@ -754,6 +773,7 @@ idle();requestAnimationFrame(tick);
   for(const [type,listener] of [['pointerdown',onPointerDown],['pointermove',onPointerMove],['pointerup',onPointerRelease],['pointercancel',onPointerCancel],['lostpointercapture',onPointerCancel]])scene.removeEventListener(type,listener);
  });
  function onLayoutChange(){
+  clearRequestedNavigation();
   if(!wideLayout.matches&&transition){const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;wheelActive=false;
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;goal=angle>90?180:0;angle=goal;finish();}
   if(entrancePlaying)finishEntrance();if(guideSealing){guideTween?.kill();finishGuide();}clearPreview(true);updateGuideCopy();positionGuide();
@@ -777,14 +797,16 @@ idle();requestAnimationFrame(tick);
  };
  preload();startExperience();
  return {
-  navigate(dir){if(!inputBlocked())navigate(dir);},
+  navigate(dir){requestNavigation(dir);},
   select(id){
    const target=works.findIndex(work=>work.id===id);if(target<0||target===index)return;
+   clearRequestedNavigation();
    if(entrancePlaying)finishEntrance();clearPreview(true);
    if(wheelActive){wheelActive=false;if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;lockWheel();}
    const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;settling=false;animating=false;clearEdge();index=target;idle();preload();
   },
   dispose(){
+   clearRequestedNavigation();
    const pointerId=drag?.id;drag=null;pendingPointer=null;dropPointerCapture(pointerId);
    disposed=true;disposeExperience();window.cancelAnimationFrame(frameId);observer.disconnect();
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);if(edgeTimer!==null)window.clearTimeout(edgeTimer);
