@@ -3,18 +3,9 @@ import { createHash, randomBytes } from "crypto";
 import { NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
 
-const redis = Redis.fromEnv();
+import { confirmSubscription } from "@/domains/newsletter/server/subscriberLifecycle";
 
-type NewsletterSubscriber = {
-    email: string;
-    requestedAt: string;
-    confirmedAt: string | null;
-    unsubscribedAt?: string | null;
-    source: string;
-    status: "pending" | "active" | "unsubscribed";
-    unsubscribeTokenHash?: string;
-    confirmationTokenHash?: string;
-};
+const redis = Redis.fromEnv();
 
 function hashToken(token: string) {
     return createHash("sha256")
@@ -62,120 +53,19 @@ export async function GET(request: Request) {
     }
 
     const tokenHash = hashToken(token);
-
-    const confirmationKey =
-        `newsletter:confirmation:${tokenHash}`;
-
-    /*
-     * ======================================================
-     * 02 — RESOLVE TOKEN
-     * ======================================================
-     */
-
-    const email =
-        await redis.get<string>(confirmationKey);
-
-    if (!email) {
-        return redirectToResult(request, "invalid");
-    }
-
-    const subscriberKey =
-        `newsletter:subscriber:${email}`;
-
-    const subscriber =
-        await redis.get<NewsletterSubscriber>(
-            subscriberKey,
-        );
-
-    if (!subscriber) {
-        await redis.del(confirmationKey);
-
-        return redirectToResult(request, "invalid");
-    }
-
-    /*
-     * ======================================================
-     * 03 — CREATE UNSUBSCRIBE TOKEN
-     * ======================================================
-     */
-
-    const unsubscribeToken =
-        randomBytes(32).toString("hex");
-
-    const unsubscribeTokenHash =
-        hashToken(unsubscribeToken);
-
-    const unsubscribeKey =
-        `newsletter:unsubscribe:${unsubscribeTokenHash}`;
-
-    /*
-     * ======================================================
-     * 04 — ACTIVATE SUBSCRIBER
-     * ======================================================
-     */
-
-    const activeSubscriber: NewsletterSubscriber = {
-        ...subscriber,
-        status: "active",
-        confirmedAt: new Date().toISOString(),
-        unsubscribedAt: null,
-        unsubscribeTokenHash,
-        confirmationTokenHash: undefined,
-    };
+    const unsubscribeToken = randomBytes(32).toString("hex");
 
     try {
-        await redis.set(
-            subscriberKey,
-            activeSubscriber,
+        const confirmed = await confirmSubscription(
+            redis,
+            tokenHash,
+            hashToken(unsubscribeToken),
+            new Date().toISOString(),
         );
 
-        await redis.set(
-            unsubscribeKey,
-            email,
-        );
-
-        await redis.sadd(
-            "newsletter:subscribers",
-            email,
-        );
-
-        /*
-         * Confirmation token is one-time only.
-         */
-
-        await redis.del(confirmationKey);
+        return redirectToResult(request, confirmed ? "success" : "invalid");
     } catch (error) {
-        console.error(
-            "Newsletter confirmation error:",
-            error,
-        );
-
+        console.error("Newsletter confirmation error:", error);
         return redirectToResult(request, "invalid");
     }
-
-    /*
-     * ======================================================
-     * DEVELOPMENT ONLY
-     *
-     * Allows us to test unsubscribe locally.
-     * We will remove this after testing.
-     * ======================================================
-     */
-
-    // if (process.env.NODE_ENV === "development") {
-    //     console.log(
-    //         "Newsletter unsubscribe test URL:",
-    //         `${getBaseUrl(request)}` +
-    //         `/api/newsletter/unsubscribe?token=` +
-    //         unsubscribeToken,
-    //     );
-    // }
-
-    /*
-     * ======================================================
-     * 05 — RETURN TO HOME
-     * ======================================================
-     */
-
-    return redirectToResult(request, "success");
 }

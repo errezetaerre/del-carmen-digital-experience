@@ -9,6 +9,9 @@ import {
 import { useSearchParams } from "next/navigation";
 
 import { Button } from "@/shared/ui/button";
+import { formPrivacy } from "@/config/formPrivacy";
+import FormPrivacyNotice from "@/shared/ui/forms/FormPrivacyNotice";
+import PrivacyConsentField from "@/shared/ui/forms/PrivacyConsentField";
 
 type NewsletterStatus =
     | "idle"
@@ -27,6 +30,8 @@ export default function NewsletterForm() {
 
     const [email, setEmail] = useState("");
     const [contactField, setContactField] = useState("");
+    const [consent, setConsent] = useState(false);
+    const [consentError, setConsentError] = useState<string>();
     const [status, setStatus] =
         useState<NewsletterStatus>("idle");
 
@@ -94,6 +99,12 @@ export default function NewsletterForm() {
             return;
         }
 
+        if (!consent) {
+            setConsentError("Please give your consent before requesting a subscription.");
+            return;
+        }
+
+        setConsentError(undefined);
         setStatus("submitting");
 
         try {
@@ -109,6 +120,8 @@ export default function NewsletterForm() {
                         email,
                         contactField,
                         source: "home",
+                        consent,
+                        consentVersion: formPrivacy.version,
                     }),
                 },
             );
@@ -124,11 +137,23 @@ export default function NewsletterForm() {
             }
 
             if (!response.ok) {
+                const result = await response.json().catch(() => null);
+
+                if (result?.code === "consent_required" || result?.code === "consent_outdated") {
+                    setConsentError(result.code === "consent_outdated"
+                        ? "Please reload this page, review the current privacy notice and give your consent again."
+                        : "Please give your consent before requesting a subscription.");
+                    setConsent(false);
+                    setStatus("idle");
+                    return;
+                }
+
                 setStatus("error");
                 return;
             }
 
             setEmail("");
+            setConsent(false);
             setStatus("pendingConfirmation");
         } catch {
             setStatus("error");
@@ -171,18 +196,11 @@ export default function NewsletterForm() {
                 />
             </div>
 
-            <div
-                className="
-                    mx-auto
-                    flex
-                    w-full
-                    max-w-xl
-                    flex-col
-                    gap-5
-                    sm:flex-row
-                    sm:items-end
-                "
-            >
+            <div className="mx-auto mb-6 max-w-xl text-left">
+                <FormPrivacyNotice form="newsletter" id="newsletter-privacy-notice" />
+            </div>
+
+            <div className="mx-auto grid w-full max-w-xl gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
                 <div className="min-w-0 flex-1 text-left">
                     <label
                         htmlFor="newsletter-email"
@@ -238,11 +256,26 @@ export default function NewsletterForm() {
                     />
                 </div>
 
+                <div className="text-left sm:col-span-2 sm:row-start-2">
+                    <PrivacyConsentField
+                        form="newsletter"
+                        noticeId="newsletter-privacy-notice"
+                        checked={consent}
+                        disabled={isSubmitting}
+                        error={consentError}
+                        onChange={(checked) => {
+                            setConsent(checked);
+                            setConsentError(undefined);
+                            clearFeedback();
+                        }}
+                    />
+                </div>
+
                 <Button
                     type="submit"
                     variant="outline"
                     disabled={isSubmitting}
-                    className="group shrink-0 gap-5"
+                    className="group shrink-0 gap-5 sm:col-start-2 sm:row-start-1"
                 >
                     <span>
                         {isSubmitting

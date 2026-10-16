@@ -1,11 +1,17 @@
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
-import { JOURNAL_ENTRIES } from "@/domains/journal";
+import { getJournalEntries } from "@/domains/journal";
 
 import JournalPreviewMotion from "./JournalPreviewMotion";
 
 
 export default function JournalPreview() {
+  const entries = getJournalEntries().slice(0, 4);
+
+  if (entries.length === 0) {
+    return null;
+  }
+
   return (
     <section
       id="journal"
@@ -77,7 +83,7 @@ export default function JournalPreview() {
             [@media(orientation:landscape)_and_(max-height:600px)]:!space-y-20
           "
         >
-          {JOURNAL_ENTRIES.slice(0, 4).map((entry, index) => (
+          {entries.map((entry, index) => (
             <article
               data-journal-entry
 

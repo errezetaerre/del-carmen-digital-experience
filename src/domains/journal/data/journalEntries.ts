@@ -1,5 +1,8 @@
 import type { JournalEntry } from "../types";
+import { getJournalStoryBySlug } from "./journalStories";
 
+// Keep the complete editorial catalogue, including entries awaiting a story.
+// Public surfaces use getJournalEntries() so every linked detail can render.
 export const JOURNAL_ENTRIES: JournalEntry[] = [
     {
         slug: "the-art-of-remembering",
@@ -85,13 +88,16 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
 ];
 
 export function getJournalEntries() {
-    return JOURNAL_ENTRIES;
+    return JOURNAL_ENTRIES.filter((entry) => {
+        const story = getJournalStoryBySlug(entry.slug);
+        return Boolean(story && story.scenes.length > 0);
+    });
 }
 
 export function getJournalEntryBySlug(
     slug: string,
 ): JournalEntry | undefined {
-    return JOURNAL_ENTRIES.find(
+    return getJournalEntries().find(
         (entry) => entry.slug === slug,
     );
 }
@@ -99,7 +105,8 @@ export function getJournalEntryBySlug(
 export function getAdjacentJournalEntries(
     slug: string,
 ) {
-    const index = JOURNAL_ENTRIES.findIndex(
+    const entries = getJournalEntries();
+    const index = entries.findIndex(
         (entry) => entry.slug === slug,
     );
 
@@ -113,12 +120,12 @@ export function getAdjacentJournalEntries(
     return {
         previous:
             index > 0
-                ? JOURNAL_ENTRIES[index - 1]
+                ? entries[index - 1]
                 : undefined,
 
         next:
-            index < JOURNAL_ENTRIES.length - 1
-                ? JOURNAL_ENTRIES[index + 1]
+            index < entries.length - 1
+                ? entries[index + 1]
                 : undefined,
     };
 }

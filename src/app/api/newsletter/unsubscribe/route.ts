@@ -3,17 +3,9 @@ import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
 
-const redis = Redis.fromEnv();
+import { unsubscribeSubscription } from "@/domains/newsletter/server/subscriberLifecycle";
 
-type NewsletterSubscriber = {
-    email: string;
-    requestedAt: string;
-    confirmedAt: string | null;
-    unsubscribedAt?: string | null;
-    source: string;
-    status: "pending" | "active" | "unsubscribed";
-    unsubscribeTokenHash?: string;
-};
+const redis = Redis.fromEnv();
 
 function hashToken(token: string) {
     return createHash("sha256")
@@ -65,86 +57,19 @@ export async function GET(request: Request) {
         );
     }
 
-    const tokenHash = hashToken(token);
-
-    const unsubscribeKey =
-        `newsletter:unsubscribe:${tokenHash}`;
-
-    /*
-     * ======================================================
-     * 02 — RESOLVE TOKEN
-     * ======================================================
-     */
-
-    const email =
-        await redis.get<string>(unsubscribeKey);
-
-    if (!email) {
-        return redirectToResult(
-            request,
-            "invalid-unsubscribe",
-        );
-    }
-
-    const subscriberKey =
-        `newsletter:subscriber:${email}`;
-
-    const subscriber =
-        await redis.get<NewsletterSubscriber>(
-            subscriberKey,
-        );
-
-    if (!subscriber) {
-        await redis.del(unsubscribeKey);
-
-        return redirectToResult(
-            request,
-            "invalid-unsubscribe",
-        );
-    }
-
-    /*
-     * ======================================================
-     * 03 — UNSUBSCRIBE
-     * ======================================================
-     */
-
-    const unsubscribedSubscriber: NewsletterSubscriber = {
-        ...subscriber,
-        status: "unsubscribed",
-        unsubscribedAt: new Date().toISOString(),
-    };
-
     try {
-        await redis.set(
-            subscriberKey,
-            unsubscribedSubscriber,
-        );
-
-        await redis.srem(
-            "newsletter:subscribers",
-            email,
-        );
-
-        /*
-         * Unsubscribe token is one-time only.
-         */
-
-        await redis.del(unsubscribeKey);
-    } catch (error) {
-        console.error(
-            "Newsletter unsubscribe error:",
-            error,
+        const unsubscribed = await unsubscribeSubscription(
+            redis,
+            hashToken(token),
+            new Date().toISOString(),
         );
 
         return redirectToResult(
             request,
-            "invalid-unsubscribe",
+            unsubscribed ? "unsubscribed" : "invalid-unsubscribe",
         );
+    } catch (error) {
+        console.error("Newsletter unsubscribe error:", error);
+        return redirectToResult(request, "invalid-unsubscribe");
     }
-
-    return redirectToResult(
-        request,
-        "unsubscribed",
-    );
 }

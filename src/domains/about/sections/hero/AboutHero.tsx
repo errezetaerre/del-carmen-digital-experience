@@ -64,15 +64,25 @@ export default function AboutHero() {
                     </div>
                 </div>
             </Container>
-            {/* Centered film control */}
+            {/* Film availability — enable playback when the final film is integrated. */}
             <div className="about-hero-film-cta pointer-events-none absolute left-[50%] top-[82%] z-30 -translate-x-1/2 -translate-y-1/2 md:left-[72%] md:top-[50%]">
                 <button
                     type="button"
-                    aria-label="Play The Encounter film"
-                    className="pointer-events-auto group flex h-20 w-20 items-center justify-center rounded-full border border-amber-200/55 bg-black/25 backdrop-blur-sm transition duration-500 hover:scale-105 hover:border-amber-200 hover:bg-black/45 md:h-24 md:w-24"
+                    disabled
+                    aria-label="The Encounter film"
+                    aria-describedby="about-hero-film-status"
+                    className="flex h-20 w-20 cursor-default items-center justify-center rounded-full border border-amber-200/30 bg-black/25 backdrop-blur-sm md:h-24 md:w-24"
                 >
-                    <span className="ml-1 block h-0 w-0 border-b-[8px] border-l-[13px] border-t-[8px] border-b-transparent border-l-stone-100 border-t-transparent transition-colors group-hover:border-l-amber-100" />
+                    <span aria-hidden="true" className="ml-1 block h-0 w-0 border-b-[8px] border-l-[13px] border-t-[8px] border-b-transparent border-l-stone-100/60 border-t-transparent" />
                 </button>
+                <p
+                    id="about-hero-film-status"
+                    className="absolute left-1/2 top-full mt-3 w-max -translate-x-1/2 whitespace-nowrap font-sans text-[9px] uppercase leading-5 tracking-[0.18em] text-stone-300 md:text-[10px]"
+                >
+                    The Encounter
+                    <span aria-hidden="true"> · </span>
+                    <span className="text-brand-gold/80">Coming soon</span>
+                </p>
             </div>
 
             <AboutHeroMotion />

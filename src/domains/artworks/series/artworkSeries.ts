@@ -55,7 +55,7 @@ export const artworkSeries: ArtworkSeries[] = [
             "A study of presence, silence, and the emotional character of light.",
         statement:
             "This collection explores the relationship between the human figure, atmosphere, and contemplative space.",
-        coverArtworkId: "artwork-id-here",
+        coverArtworkId: "epifania_nupcial",
         hero: {
             layout: {
                 mobile: { media: "portrait", content: "top" },
@@ -93,7 +93,7 @@ export const artworkSeries: ArtworkSeries[] = [
             "A contemplative series exploring the invisible treasures we gather within: wisdom, faith, self-knowledge and the quiet transformation of the soul.",
         statement:
             "The Inner Treasury explores the idea that our most profound treasures are not the things we possess, but those we gradually discover within ourselves. Through symbolic objects, intimate spaces, light, silence and ritual, the series transforms the visible world into a language of interior experience. Chests, books, candles, sacred figures and reflective surfaces appear not simply as objects, but as thresholds—each suggesting something concealed, remembered, learned or waiting to be revealed. At the heart of the collection lies a journey from seeking to recognizing. Knowledge may open one door, faith another; silence invites contemplation, while light becomes a metaphor for consciousness. Some mysteries remain sealed until we are ready to encounter them. The works do not attempt to prescribe a spiritual path. Instead, they create spaces for stillness and personal interpretation, where the material and the intangible quietly coexist. Ultimately, The Inner Treasury proposes that the greatest discovery is not hidden somewhere beyond us. It is the moment in which the seeker turns inward and recognizes what has been there all along: the soul encountering itself.",
-        coverArtworkId: "artwork-id-here",
+        coverArtworkId: "el_baul_de_los_tesoros",
         hero: {
             layout: {
                 mobile: { media: "portrait", content: "top" },
@@ -132,7 +132,7 @@ export const artworkSeries: ArtworkSeries[] = [
             "Studies in intimacy, before the hand creates, the eye must learn to see.",
         statement:
             "The Discipline of Seeing brings together works created throughout my academic training in the atelier. More than technical exercises, they represent a sustained practice of observation—a process of learning to recognize proportion, structure, anatomy, light and the subtle relationships that give form its presence.",
-        coverArtworkId: "artwork-id-here",
+        coverArtworkId: "el_carnero",
         hero: {
             layout: {
                 mobile: { media: "portrait", content: "bottom" },

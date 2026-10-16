@@ -1,4 +1,4 @@
-Version: 1.2
+Version: 1.6
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-05
+2026-10-15
 
 ---
 
@@ -394,3 +394,94 @@ No planned folder responsibility, future integration layer or architectural grow
 The update records current Phase 1 structures and the shared KineticCarousel while preserving the approved long-term repository architecture.
 
 End of Evolution Update
+
+
+------------------------------------------------------------------------
+
+Legal Information Routes — 2026-10-15
+
+Status: route implementation and draft copy prepared for review. This addition does not establish final legal approval or production readiness of the notices.
+
+The existing Footer links `/privacy` and `/terms` now have corresponding informational pages. Their shared page composition lives in one App Router route group:
+
+```text
+src/app/(legal)/
+├── layout.tsx
+├── privacy/
+│   └── page.tsx
+└── terms/
+    └── page.tsx
+```
+
+The route-group name is not part of the public URL. There is no competing `src/app/privacy/page.tsx` or `src/app/terms/page.tsx` in the supplied source.
+
+The group layout reuses the existing Container and Footer and inherits the global Navigation from the root layout. It owns the shared reading measure, typography, navigation links and draft search-engine metadata. Both pages remain Server Components with static editorial copy and page-specific titles/descriptions.
+
+This is route composition, not a new business domain, shared framework or persistence model. The draft privacy notice describes the observed Contact/Newsletter flows; Terms concerns browsing, enquiries and permission requests. No API, form submission, consent capture, subscriber persistence or commerce behavior changes in this patch.
+
+Both pages visibly identify themselves as drafts. The group requests `noindex` while review is pending; this is not access control and the pages remain reachable through the Footer and direct URLs. Remove that draft state only after operator details, data-handling decisions and legal text are confirmed.
+
+Before finalising the notices, confirm at least:
+
+• the responsible person's or entity's legal identity and notification address;
+• an operational public contact channel;
+• retention and deletion arrangements for enquiries, subscribers, security data and service-provider copies;
+• actual hosting, processing regions and any integrations outside the supplied `src`;
+• presentation of privacy information and the appropriate consent procedure before form submission;
+• sale, commission, reproduction, shipping and return conditions when purchasing is implemented.
+
+The applicable personal-data framework should be checked against Costa Rica's Law 8968, especially its prior-information and consent requirements. Reference text consulted: [Ley 8968, Poder Judicial](https://cij.poder-judicial.go.cr/index.php/component/phocadownload/category/5-proteccion-de-datos?download=21%3Aley-8968-proteccin-de-la-persona-frente-al-tratamiento-de-sus-datos-personales). This technical delivery does not certify legal compliance or replace legal review.
+
+Provider references consulted for the draft's review record:
+
+• [Resend Privacy Policy](https://resend.com/legal/privacy-policy)
+• [Resend Data Processing Addendum](https://resend.com/legal/dpa)
+• [Upstash Privacy Policy](https://upstash.com/trust/privacy.pdf)
+
+The source shows an important retention distinction: confirmation links expire after 24 hours, but subscriber records have no corresponding automatic expiry. Unsubscribe removes the active-set membership and stores the updated subscriber status; it does not delete the subscriber record. The draft therefore makes no automatic-erasure promise.
+
+Validation evaluates the actual Footer links, legal layout/page JSX, heading/description associations, internal routes, draft metadata and source-file preservation. Full Next.js compilation, Tailwind rendering, responsive visual review, assistive-technology behavior, deployed services and final legal wording remain to be checked in the complete project.
+
+
+Public Responsible-Person Details — 2026-10-15
+
+Rolando authorised use of his current notification address and `errezetaerre@gmail.com` as the temporary public email. The notices identify Rolando Rojas Zapata as an individual; Del Carmen and Rō Visual remain the artistic/commercial identities and do not become a newly registered company through this change.
+
+The public details are centralised in `src/config/legal.ts`, exported as `legalContact`. Privacy, Terms and the direct-correspondence link in Contact consume that configuration. Brand naming continues to come from `src/config/brand.ts`. The supplied notification address is stored once in the legal configuration, so a move or email migration can be reflected across the consumers by updating that file.
+
+This configuration contains public contact information, not credentials or delivery secrets. The Contact API continues to require `CONTACT_EMAIL_TO` in its runtime environment; displaying an address in the website does not change that environment variable. Sender-domain verification remains a separate email-service configuration task.
+
+The previously listed identity/address/public-contact items are now populated in the draft notices. Retention, deletion arrangements, actual processing regions, informed-consent procedures and final legal review remain pending. The draft labels and `noindex` metadata therefore remain in place.
+
+The update adds one configuration file and modifies three existing source files: both legal pages and the ContactForm public email display/link. Relative to the first legal-page working snapshot, the other 207 existing source files remain byte-identical. No Contact/Newsletter API behavior or Glass Artbook, Journal, Series or About behavior changes.
+
+------------------------------------------------------------------------
+
+Approved Retention Lifecycle — 2026-10-15
+
+The existing Newsletter API routes retain HTTP ownership and delegate state transitions to:
+
+`src/domains/newsletter/server/subscriberLifecycle.ts`
+
+This small server-only-by-usage module belongs to the existing Newsletter domain. It coordinates the existing subscriber keys, token lookups and active set with atomic Lua operations through the existing Redis SDK. Pending records and current confirmation lookups expire after 24 hours; a minimal unsubscribe record expires after 30 days; active records and their valid unsubscribe lookups remain persistent until an explicit lifecycle action. No new business domain, client API, scheduler, Redis namespace or dependency is added.
+
+The shared operational guide is:
+
+`docs/architecture/data-retention-operations.md`
+
+It records the approved Contact inbox procedure (12 months), active-subscription annual review, targeted personal-data requests, historical-data inventory requirements and staging verification. The patch does not connect to personal email or production persistence, migrate historical records, send campaigns or replace a full-project build. The existing legal route group retains draft labels and `noindex`; Privacy copy now reflects the approved policy for final review after enforcement and the remaining production/consent checks.
+
+------------------------------------------------------------------------
+
+Form Privacy and Consent — 2026-10-15
+
+`src/config/formPrivacy.ts` owns the public notice revision, form-specific purpose/wording and handling summaries. It contains no secrets. The existing `legal.ts` remains the single source of responsible identity, notification address and public email; brand naming remains in `brand.ts`.
+
+Two small shared presentation components serve the existing Contact and Newsletter forms:
+
+- `src/shared/ui/forms/FormPrivacyNotice.tsx`: prior information, Privacy link and native expandable detail.
+- `src/shared/ui/forms/PrivacyConsentField.tsx`: required checkbox, label, notice association and inline error.
+
+The forms retain ownership of state and submission. Each existing API validates explicit consent and the current revision independently. Contact keeps the declaration with its delivered message. The existing Newsletter server helper keeps it in pending/active records, with the approved lifecycle and expiry rules. No new business domain, persistence service, global modal, cookie manager or framework is introduced.
+
+The revision archive, compatibility behavior and production limits are recorded in `docs/architecture/form-privacy-consent.md`. The existing retention operations guide is updated for consent evidence. Legal notices retain draft labels and `noindex` while installation, historical-data handling, provider checks and final review are pending.

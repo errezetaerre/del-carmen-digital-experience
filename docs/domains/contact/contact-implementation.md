@@ -1,6 +1,6 @@
 # Contact Implementation
 
-Version: 1.1
+Version: 1.6
 
 Document ID: DOC-CON-IMP
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved / Complete / Frozen
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-07
+Last Updated: 2026-10-16
 
 ---
 
@@ -310,3 +310,74 @@ Version 1.1 uses the conservative documentation method.
 The complete supplied v1.0 implementation document is preserved above apart from Version metadata.
 
 No implemented delivery, validation, abuse-protection or deferred production responsibility has been removed because it is not yet production-final.
+
+---
+
+## Public Correspondence Email — 2026-10-15
+
+Rolando approved `errezetaerre@gmail.com` as the temporary public contact while the domain and domain-based email are being prepared.
+
+`ContactForm.tsx` now reads the email from `legalContact` in `src/config/legal.ts`. The existing direct-correspondence text becomes a `mailto:` link with a visible focus style. The same configuration supplies the contact details in Privacy and Terms; those pages remain drafts pending the remaining content/data-handling review.
+
+Form fields, validation, submission behavior, status feedback, Resend calls, honeypot and rate limiting are unchanged. The displayed correspondence email and the API recipient are separate configurations. In the complete application, set or verify `CONTACT_EMAIL_TO=errezetaerre@gmail.com` to direct form deliveries to that inbox. This patch does not edit the deployment environment or send a test email.
+
+The authorised residential notification address is used by the legal notices; ContactForm displays only the public email. The legal configuration is public data and contains no credentials.
+
+For a later domain-email migration, update the public email in `src/config/legal.ts` and separately review the API recipient and verified sender configuration. For a move, update the address in the legal configuration.
+
+---
+
+## Contact Retention Proposal and Rate-Limit Analytics — 2026-10-15
+
+**Historical proposal.** The 12-month period has since been confirmed. See the approved operational procedure below. Contact inbox retention remains a manual responsibility.
+
+The delivered Contact endpoint changes only `analytics: true` to `analytics: false` in its Upstash Ratelimit configuration. The limiter remains in place; validation, message delivery, honeypot and response paths retain their source. Existing provider analytics/logs are not deleted by changing that flag.
+
+Proposed operational policy, pending review: keep an ordinary enquiry with no continuing transaction or dispute for at most **12 months after the last substantive exchange or closure**, then delete the project correspondence that is no longer needed. Review closed enquiry threads periodically so this is an actual process rather than an unenforced statement.
+
+The source sends messages through Resend to a configured inbox; it does not create a Contact-message database. A future Redis cleanup cannot remove that inbox correspondence. Targeted review/deletion in the receiving mailbox and checks on provider copies are separate operational tasks. This delivery neither connects to the personal Gmail account nor deletes any message.
+
+Contract, sale, accounting or dispute material requires its own justified retention analysis and is outside the proposed ordinary-enquiry rule. Do not apply a blanket mailbox purge or reuse this proposed period as a legal deadline for those records. Individual data requests must be handled independently of the routine enquiry-review schedule.
+
+The related Newsletter proposal and implementation constraints are recorded in `docs/domains/newsletter/newsletter-implementation.md`, section “Data Minimisation and Retention Proposal”. No 12-month automatic deletion or final privacy-policy promise is introduced by this patch.
+
+---
+
+## Approved Contact Retention Procedure — 2026-10-15
+
+Rolando confirmed **12 months after the last substantive exchange or closure, as applicable**, for ordinary closed enquiries without a continuing transaction or dispute. This supersedes the pending-review status of the historical proposal above. The source still sends Contact messages to the configured inbox and does not store a Contact-message database.
+
+Implementation is therefore operational: review project enquiry threads, distinguish open/transaction/accounting/dispute matters, and delete eligible closed correspondence when its period ends. Do not apply this rule to the entire personal Gmail inbox or assume it deletes provider-held copies. No Gmail access, message deletion, inbox filter or scheduled automation is introduced by this source delivery.
+
+The owner procedure, treatment of dates and exceptions, individual requests and production checks are documented in `docs/architecture/data-retention-operations.md`. Privacy's draft now states the approved period. The existing Contact endpoint and form remain byte-identical to the preceding patch, including `analytics: false`, validation, rate limiting and delivery configuration.
+
+Newsletter's newly approved automated retention is implemented separately in its three lifecycle routes and shared server helper. Contact enquiries remain independent of newsletter subscriptions and consent. Existing historical newsletter data requires a separate inventory before any migration. Production delivery, provider retention, prior information/consent and final legal publication review remain outstanding.
+
+---
+
+## Prior Information and Explicit Consent — 2026-10-15
+
+The approved continuation adds prior information and a purpose-specific, initially unchecked consent field to Contact. It reopens only this form/data-handling scope; the Contact page composition, existing enquiry categories and delivery provider remain in place.
+
+`FormPrivacyNotice` appears before the visible data fields. It identifies the responsible person, explains the enquiry purpose and required fields, links to Privacy in a new tab and offers native expandable details covering recipients, handling, refusal, retention, rights and the responsible address. The public identity/address/email continue to come from `src/config/legal.ts`. `PrivacyConsentField` uses a native required checkbox with an associated label, notice and inline error. All four visible enquiry fields are marked required; Contact retains its custom validation flow.
+
+The frontend posts `consent: true` and `consentVersion`. The API independently requires the boolean `true` and the exact current revision from `src/config/formPrivacy.ts`; missing consent and outdated revisions return 400 with `consent_required` or `consent_outdated`. Neither rejection sends an enquiry or subscribes the address. The existing antiabuse limiter still runs first, with optional analytics disabled; the honeypot retains its fake-success behavior.
+
+The delivered enquiry email now includes the exact consent statement, purpose, notice revision, server-recorded UTC request time and Contact source. No separate Contact database, IP/agent audit trail, automatic reply or newsletter enrolment is added. The consent record shares the correspondence's ordinary retention procedure; it is not copied into an indefinite separate archive. Server time records receipt of the declaration, not an independently measured browser click or verified identity.
+
+On successful submission the checkbox resets to unchecked. Errors preserve the entered information. A stale-notice error asks for a reload and new consent; it does not silently label an older notice as current. Submitting disables the new field and keeps repeated-submit protection. Malformed/nonobject JSON now returns 400 rather than falling into the generic Contact server-error path.
+
+The wording revision and implementation/test record are in `docs/architecture/form-privacy-consent.md`. Contact/Newsletter UI and API files must be installed together. This source work does not verify live delivery, actual provider settings, final legal sufficiency or production readiness of the draft notices.
+
+
+---
+
+## Persistent Submission Feedback — 2026-10-16
+
+The prior implementation placed Contact feedback below the action row and cleared success after five seconds. Success now appears above the action row, remains until editing begins and changes the disabled submit button to “Message sent”. Editing any existing visible field or the consent choice returns the form to its normal action state. Error and rate-limit feedback use the same visible region and preserve retry behavior.
+
+The feedback region uses `role="status"`, polite live announcements and atomic content. A success effect requests native `scrollIntoView({ block: "nearest" })` so the acknowledgement can be brought into view without moving keyboard focus. The timeout is removed. The acknowledgement still depends on a successful API response; it is not a claim that the final mailbox received or read the email.
+
+Only `ContactForm.tsx` changes in source. The Contact API, email body/consent evidence, Newsletter lifecycle, notice revision and all other modules retain their bytes. No visitor acknowledgement email or extra provider call is added.
+
+The 17 existing isolated consent/submission scenarios pass with the updated component and current success wording. All 210 code files parse. The other 214 source files are byte-identical to the preceding consent patch. These checks use the previously documented stand-ins; browser rendering, native scrolling, real provider delivery and full-project build/typecheck remain to be verified in the complete application.

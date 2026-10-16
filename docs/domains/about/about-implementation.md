@@ -1,6 +1,6 @@
 # About Implementation
 
-Version: 1.1
+Version: 1.2
 
 Document ID: DOC-AI
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved / Complete / Frozen
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-09-07
+Last Updated: 2026-10-15
 
 ---
 
@@ -119,7 +119,7 @@ The poster is rendered as full-bleed background media.
 
 The future final film must be replaceable without changing the surrounding scene architecture.
 
-The Play control is independent HTML/CSS UI.
+The circular film control is independent HTML/CSS UI. While the final film remains pending, it is natively disabled and accompanied by visible availability text; see the 2026-10-15 addendum below.
 
 It must not be embedded into the poster image.
 
@@ -309,7 +309,7 @@ Implemented / required:
 
 - reduced-motion support
 - visible static fallback
-- accessible Play label
+- accessible film label, native disabled state while unavailable and visible availability text
 - textual meaning outside audiovisual media
 - no essential information communicated solely by animation
 
@@ -413,3 +413,21 @@ Version 1.1 uses the conservative documentation method.
 The complete supplied v1.0 implementation document is preserved above apart from Version metadata.
 
 Implemented behavior and planned media are kept as distinct statuses rather than treating one as evidence that the other no longer belongs to the project.
+
+---
+
+# Film Availability Correction — 2026-10-15
+
+Patch status: prepared for verification in the full application. The approved About architecture and its motion contract remain the baseline.
+
+The supplied Hero showed a Play button with an accessible playback label and hover response, but no playback action. The final audiovisual master is still documented as planned. This correction communicates that state until real playback is integrated.
+
+`AboutHero.tsx` retains the poster, circular control geometry, responsive positions and `.about-hero-film-cta` animation target. The button now uses native `disabled` semantics and the accessible name `The Encounter film`. `aria-describedby` references the visible text `The Encounter · Coming soon`. The triangle is decorative through `aria-hidden="true"`.
+
+The unavailable control has no hover response or pointer-event override. The new single-line label is positioned below the circle without changing the control wrapper's dimensions or animation origin. The About Hero motion source and all other source files remain unchanged.
+
+The component remains server-renderable. This state introduces no playback JavaScript, video URL, modal, extra About scene or new data model. When the approved master becomes available, integrate actual accessible playback within the existing Hero media responsibility before enabling the control and replacing its availability text.
+
+Source verification evaluates the actual Hero JSX with Next/Image and presentation stand-ins. It checks the disabled control, accessible description association, visible availability text, preserved poster and identical content outside the film-control wrapper. The modified file parses without syntax errors. All other 206 source files remain byte-identical to the approved Series-portadas working snapshot, including all GSAP motion, Journal and Glass Artbook.
+
+Full Next.js build, browser, assistive-technology and responsive visual checks remain pending in the complete project. Root configuration, dependencies and `public/` were not supplied. The existing approved responsive QA records above describe the baseline and do not claim visual approval of this added label.

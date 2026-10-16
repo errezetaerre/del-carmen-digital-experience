@@ -4,6 +4,8 @@ import { Resend } from "resend";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
+import { formPrivacy } from "@/config/formPrivacy";
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const redis = Redis.fromEnv();
@@ -11,7 +13,7 @@ const redis = Redis.fromEnv();
 const ratelimit = new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(5, "10 m"),
-    analytics: true,
+    analytics: false,
     prefix: "del-carmen:contact",
 });
 
@@ -23,6 +25,8 @@ type ContactPayload = {
     subject?: unknown;
     message?: unknown;
     contactField?: unknown;
+    consent?: unknown;
+    consentVersion?: unknown;
 };
 
 export async function POST(request: Request) {
@@ -54,7 +58,17 @@ export async function POST(request: Request) {
             );
         }
 
-        const body = (await request.json()) as ContactPayload;
+        let body: ContactPayload;
+
+        try {
+            const parsed: unknown = await request.json();
+            if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+                return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+            }
+            body = parsed as ContactPayload;
+        } catch {
+            return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+        }
 
         const name =
             typeof body.name === "string" ? body.name.trim() : "";
@@ -114,6 +128,22 @@ export async function POST(request: Request) {
             );
         }
 
+        if (body.consent !== true) {
+            return NextResponse.json(
+                { error: "Consent is required to send this enquiry.", code: "consent_required" },
+                { status: 400 },
+            );
+        }
+
+        if (body.consentVersion !== formPrivacy.version) {
+            return NextResponse.json(
+                { error: "Please reload the form and review the current privacy notice.", code: "consent_outdated" },
+                { status: 400 },
+            );
+        }
+
+        const consentAcceptedAt = new Date().toISOString();
+
         if (!process.env.CONTACT_EMAIL_TO) {
             console.error("CONTACT_EMAIL_TO is not configured.");
 
@@ -141,6 +171,13 @@ export async function POST(request: Request) {
                 `Subject: ${subjectLabel}`,
                 "",
                 message,
+                "",
+                "--- Consent record ---",
+                `Statement: ${formPrivacy.contact.consentLabel}`,
+                `Purpose: ${formPrivacy.contact.purpose}`,
+                `Notice version: ${formPrivacy.version}`,
+                `Accepted at (server UTC): ${consentAcceptedAt}`,
+                "Source: Contact form /contact",
             ].join("\n"),
         });
 

@@ -5,6 +5,13 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { Resend } from "resend";
 
+import { formPrivacy } from "@/config/formPrivacy";
+
+import {
+    cleanFailedSubscriptionRequest,
+    requestPendingSubscription,
+} from "@/domains/newsletter/server/subscriberLifecycle";
+
 const redis = Redis.fromEnv();
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -12,29 +19,18 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const ratelimit = new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(5, "10 m"),
-    analytics: true,
+    analytics: false,
     prefix: "del-carmen:newsletter",
 });
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const CONFIRMATION_TTL_SECONDS = 60 * 60 * 24;
-
 type NewsletterRequestBody = {
     email?: unknown;
     contactField?: unknown;
     source?: unknown;
-};
-
-type NewsletterSubscriber = {
-    email: string;
-    requestedAt: string;
-    confirmedAt: string | null;
-    unsubscribedAt?: string | null;
-    source: string;
-    status: "pending" | "active" | "unsubscribed";
-    confirmationTokenHash?: string;
-    unsubscribeTokenHash?: string;
+    consent?: unknown;
+    consentVersion?: unknown;
 };
 
 function hashToken(token: string) {
@@ -99,6 +95,9 @@ export async function POST(request: Request) {
 
     try {
         body = await request.json();
+        if (!body || typeof body !== "object" || Array.isArray(body)) {
+            return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+        }
     } catch {
         return NextResponse.json(
             {
@@ -164,105 +163,50 @@ export async function POST(request: Request) {
         );
     }
 
-    const subscriberKey =
-        `newsletter:subscriber:${email}`;
-
     /*
      * ======================================================
-     * 05 — EXISTING SUBSCRIBER
+     * 05 — CREATE PENDING REQUEST ATOMICALLY
      * ======================================================
      */
 
-    const existingSubscriber =
-        await redis.get<NewsletterSubscriber>(
-            subscriberKey,
-        );
-
-    if (existingSubscriber?.status === "active") {
+    if (body.consent !== true) {
         return NextResponse.json(
-            {
-                error: "Already subscribed.",
-            },
-            {
-                status: 409,
-            },
+            { error: "Consent is required to request a subscription.", code: "consent_required" },
+            { status: 400 },
         );
     }
 
-    /*
-     * ======================================================
-     * 06 — CONFIRMATION TOKEN
-     * ======================================================
-     */
+    if (body.consentVersion !== formPrivacy.version) {
+        return NextResponse.json(
+            { error: "Please reload the form and review the current privacy notice.", code: "consent_outdated" },
+            { status: 400 },
+        );
+    }
 
-    const token =
-        randomBytes(32).toString("hex");
-
-    const tokenHash =
-        hashToken(token);
-
-    const confirmationKey =
-        `newsletter:confirmation:${tokenHash}`;
-
-    const requestedAt =
-        new Date().toISOString();
-
-    const subscriber: NewsletterSubscriber = {
-        email,
-        requestedAt,
-        confirmedAt: null,
-        unsubscribedAt: null,
-        source,
-        status: "pending",
-        confirmationTokenHash: tokenHash,
-    };
-
-    /*
-     * ======================================================
-     * 07 — PERSIST PENDING SUBSCRIBER
-     * ======================================================
-     */
+    const token = randomBytes(32).toString("hex");
+    const tokenHash = hashToken(token);
 
     try {
-        /*
-         * If this address already has a pending
-         * confirmation, invalidate the old token.
-         */
+        const status = await requestPendingSubscription(
+            redis,
+            email,
+            source,
+            tokenHash,
+            new Date().toISOString(),
+        );
 
-        if (
-            existingSubscriber?.status === "pending" &&
-            existingSubscriber.confirmationTokenHash
-        ) {
-            await redis.del(
-                `newsletter:confirmation:${existingSubscriber.confirmationTokenHash}`,
+        if (status === "active") {
+            return NextResponse.json(
+                { error: "Already subscribed." },
+                { status: 409 },
             );
         }
-
-        await redis.set(
-            subscriberKey,
-            subscriber,
-        );
-
-        await redis.set(
-            confirmationKey,
-            email,
-            {
-                ex: CONFIRMATION_TTL_SECONDS,
-            },
-        );
     } catch (error) {
-        console.error(
-            "Newsletter persistence error:",
-            error,
-        );
+        console.error("Newsletter persistence error:", error);
 
         return NextResponse.json(
-            {
-                error: "Unable to subscribe.",
-            },
-            {
-                status: 500,
-            },
+            { error: "Unable to subscribe." },
+            { status: 500 },
         );
     }
 
@@ -399,14 +343,16 @@ export async function POST(request: Request) {
         );
 
         /*
-         * Don't leave an unusable pending record if
-         * confirmation delivery fails.
+         * Remove only this failed request; a later request
+         * or a confirmed subscription must survive.
          */
 
-        await Promise.allSettled([
-            redis.del(subscriberKey),
-            redis.del(confirmationKey),
-        ]);
+        try {
+            await cleanFailedSubscriptionRequest(redis, email, tokenHash);
+        } catch (cleanupError) {
+            // Both pending keys still have a 24-hour maximum lifetime.
+            console.error("Newsletter failed-request cleanup error:", cleanupError);
+        }
 
         return NextResponse.json(
             {

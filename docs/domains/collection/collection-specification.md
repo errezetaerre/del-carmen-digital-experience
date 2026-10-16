@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.1
+Version: 1.2
 
 Document ID: DOC-COL-SPEC
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-05
+Last Updated: 2026-10-15
 
 ---
 
@@ -657,3 +657,30 @@ The complete supplied v1.0 Collections Specification body is preserved above, ap
 No deferred exhibition, visual-identity, highlight, relationship, atmosphere, SEO or other future capability has been removed.
 
 The update records subsequent implementation while preserving both the approved Phase 1 specification and its deliberate future evolution.
+
+---
+
+## Representative Artwork References — 2026-10-15
+
+Status: data correction prepared; verification in the complete application remains pending. The approved Phase 1 experience above is preserved.
+
+Three series in the supplied catalogue used the unresolved placeholder `artwork-id-here` for `coverArtworkId`. Because Home's `getFeaturedCollection()` requires a valid cover Artwork, selecting one of those series in Home curation returned no section data.
+
+The existing representative-artwork field now resolves as follows:
+
+| ArtworkSeries | Representative Artwork | `coverArtworkId` |
+| --- | --- | --- |
+| Yasemi | Yasemi I | `yasemi_i` — existing selection retained |
+| Epifanias | Epifanía Nupcial | `epifania_nupcial` |
+| The Inner Treasury | El Baúl de los Tesoros | `el_baul_de_los_tesoros` |
+| The Discipline of Seeing | El Carnero | `el_carnero` |
+
+Each representative Artwork exists in the canonical catalogue and belongs to its corresponding series through `Artwork.seriesId`. These selections complete the missing references; future curatorial changes remain editable through the same field.
+
+Home curation still selects Yasemi. Changing `coverArtworkId` does not select a different Featured Collection or establish an Artwork's availability for sale.
+
+The Home visual keeps its existing precedence: `series.images.featured`, then cover Artwork thumbnail, then cover Artwork primary image. Responsive Collection Hero media, series chronology, lifecycle status, statements, gallery ordering and all interaction mechanics retain their supplied values.
+
+Verification evaluated the actual Artwork lookup helpers, series helpers, `getFeaturedCollection()` and the Home Collection component's JSX output with React/Next presentation stand-ins. All four series return section data, resolve their own cover, preserve their counts and produce links to their corresponding `/series/[slug]` route. Yasemi's JSX output is identical before and after the correction. Only `src/domains/artworks/series/artworkSeries.ts` changes within `src`; the other 206 source files remain byte-identical to the approved Journal working snapshot.
+
+This does not establish a full Next.js build, browser/device check or physical media-file verification. Project-root configuration, dependencies and `public/` were not supplied. Those checks remain for the complete application.

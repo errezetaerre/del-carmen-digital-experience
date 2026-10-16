@@ -1,5 +1,5 @@
 # Newsletter Implementation
-Version: 1.1
+Version: 1.4
 Document ID: DOC-NEWS-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,7 +7,7 @@ Document Type: Technical Implementation
 Authority Level: High
 Status: 🟢 Approved / Complete / Frozen
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-09-08
+Last Updated: 2026-10-15
 
 ---
 
@@ -206,3 +206,118 @@ Version 1.1 uses the conservative documentation method.
 The complete supplied v1.0 implementation document is preserved above apart from Version metadata.
 
 No implemented consent, lifecycle, security, persistence or Production QA responsibility has been removed because it may evolve later.
+
+---
+
+## Data Minimisation and Retention Proposal — 2026-10-15
+
+**Historical proposal.** Rolando subsequently confirmed these periods. The implementation and current operational status are recorded in the approved-retention addendum below; statements here about expiry not yet being implemented describe the earlier patch.
+
+### Implemented in the patch
+
+`POST /api/newsletter` now configures Upstash Ratelimit with `analytics: false`. The optional identifier-based analytics history is disabled. The five-requests-per-ten-minutes limiter, IP-based identifier, prefix, response headers and lifecycle handlers retain their source. The Contact endpoint receives the same configuration change.
+
+This does not purge analytics already collected, remove rate-limit counters or change provider/hosting logs. Account-specific retention must be verified in production. Reference: [Upstash Ratelimit features](https://upstash.com/docs/redis/sdks/ratelimit-ts/features#analytics--dashboard).
+
+### Proposed policy — not implemented or represented as a live promise
+
+These are proposed operational limits for review, not durations prescribed by law.
+
+| Record | Proposed retention | Purpose and handling |
+| --- | --- | --- |
+| Unconfirmed request | 24 hours from the latest valid request | Align the pending subscriber record with its confirmation-link expiry. |
+| Active subscriber | While the confirmed subscription and its purpose remain active; review necessity at least annually | Keep the active-set membership, necessary consent dates and a usable unsubscribe mechanism. No tracking pixel or email-open history is required by this proposal. |
+| Unsubscribed record | At most 30 days after unsubscribe | Retain only the minimum record needed to verify and resolve unsubscribe incidents, then delete it. The need for this short follow-up period must be confirmed before adoption. |
+| A valid deletion request | Handle separately from scheduled retention | Do not delay a rights request until a routine retention deadline. |
+
+Unsubscribe must stop inclusion in the active audience immediately. The proposed 30-day follow-up must never keep an address eligible for sending. A fresh, explicit confirmation is required to reactivate a subscription after withdrawal.
+
+Costa Rica's Law 8968 requires removing data that no longer serves its purpose. Article 7 sets a five-business-day period for resolving the relevant personal-data requests. These requirements inform the review; the proposed 24-hour/30-day operational limits do not replace individual rights or establish compliance by themselves. [Reference text](https://www.tse.go.cr/pdf/normativa/leydeprotecciondelapersona.pdf).
+
+### Requirements before implementing expiry
+
+- Apply pending expiry only while the record is still pending. An old request must not expire or delete a subsequently confirmed subscriber.
+- Confirmation and unsubscribe must update the subscriber record, lookup tokens and active-set membership consistently. A resubscription must not inherit an old unsubscribe expiry.
+- Do not give an active subscriber record or its valid unsubscribe lookup the pending-record TTL.
+- Handle existing pending/unsubscribed records through a separately reviewed migration with an inventory/dry run. Approval of a future retention policy does not authorise deleting existing live data indiscriminately.
+- Expiring a subscriber key must not leave its email in the active set or leave unmanaged token lookups. Use a bounded, consistent cleanup design rather than a blanket Redis flush.
+- Verify the installed Redis SDK and runtime before selecting atomic operations or a scheduled mechanism. No runtime packages/configurations were supplied with the source snapshot.
+
+The delivered patch introduces no new expiry, cleanup job or deletion operation. Existing confirmed subscribers and the confirmation/unsubscribe handlers remain unchanged. Privacy keeps its current draft wording until the policy and enforcement are complete.
+
+### Providers and manual requests
+
+Redis expiry cannot delete delivered email from Gmail or copies held by Resend. Resend documents account/plan-dependent retention; verify the actual account and applicable processing terms before promising a provider-wide deletion date. [Resend security information](https://resend.com/security).
+
+Requests arrive at the public correspondence address in `src/config/legal.ts`. Record receipt, verify identity proportionately, identify the relevant data and resolve the request under the applicable rules. Keep only the minimum evidence needed for that handling, with a separately justified retention decision.
+
+Production verification must include legitimate confirmation/resubscription races, blocked requests, successful form delivery, provider retention and rights-request handling. This document records a review proposal, not a deployment or live-data deletion.
+
+---
+
+## Approved Retention Implementation — 2026-10-15
+
+Rolando confirmed the proposed periods. This addendum supersedes the historical proposal's pending-approval and no-expiry status. It describes delivered source, not an installed production change or a live-data cleanup.
+
+### Current lifecycle ownership
+
+The three existing API routes delegate persistence transitions to `src/domains/newsletter/server/subscriberLifecycle.ts`. It uses the existing `@upstash/redis` dependency and `eval(script, keys, args)`; no scheduler, new provider, environment secret or additional package is introduced. All accessed keys are passed through the EVAL keys array.
+
+| Transition | Subscriber record | Lookup and audience handling |
+| --- | --- | --- |
+| New/repeated valid request, unless already active | Pending record: 86,400 seconds from the new request | New confirmation lookup: 86,400 seconds. Remove any stale active-set membership. |
+| Confirm current pending token | Active record: persistent, with no pending TTL | Consume the current confirmation lookup; create persistent unsubscribe lookup; add active-set membership. |
+| Unsubscribe with the current active token | Minimal record: `email`, `status`, `unsubscribedAt`; TTL 2,592,000 seconds | Remove active-set membership immediately and consume the unsubscribe lookup in the same atomic operation. |
+| Resubscribe after unsubscribe | New pending record: 24 hours, replacing the former 30-day TTL | Require fresh confirmation; successful activation removes the pending expiry again. |
+| Confirmation delivery fails | Delete only the matching pending request | Remove only that request's confirmation lookup. A newer request, active subscriber or subsequent unsubscribe record must survive. If cleanup fails, pending keys still expire within 24 hours. |
+
+A replaced confirmation lookup remains only until its original 24-hour expiry. It cannot activate a subscriber once the stored confirmation hash changes. This bounded choice avoids reading one version of a subscriber and deleting a later request's keys. No orphaned active-set membership is created by pending expiry: pending records are excluded from the audience before the request completes.
+
+Confirmation and unsubscribe recheck lookup ownership, stored status and the current token hash inside the write operation. A read that becomes stale between the initial lookup and EVAL cannot reactivate or withdraw a different subscription. Stored subscriber identity and audience key type are checked before the lifecycle writes. Redis script atomicity does not provide rollback for arbitrary runtime failures; production SDK/service validation remains required.
+
+The existing key names and existing active-subscriber token fields are retained. The confirmation email template, sender configuration, validation, rate-limit policy and Home result redirects remain unchanged. `analytics: false` remains configured on both forms. API lookup failures now follow the existing error/invalid-result paths instead of leaving an unhandled read outside the lifecycle try/catch.
+
+### Operational and historical-data limits
+
+- Active records and valid unsubscribe lookups deliberately have no automatic expiry; necessity is reviewed annually by the operator.
+- Contact's 12-month rule is a manual inbox process. Redis cannot delete received mail or provider copies.
+- Existing pending/unsubscribed records without a TTL are not silently migrated. Inventory and a dry run are required before a separate targeted migration. New transitions apply the approved limits when this patch is installed.
+- The current source has no campaign-sending implementation. Confirmation generates an unsubscribe token, but future outgoing newsletter delivery still needs a working recipient-specific unsubscribe mechanism. This patch does not claim campaign sending is production-ready or add a new mail flow.
+- Individual deletion requests follow their own process rather than waiting for the 24-hour/30-day schedule.
+
+The owner's concrete procedures and pre-publication checklist are in `docs/architecture/data-retention-operations.md`. Privacy now describes the approved periods, while keeping its draft label and the legal layout's `noindex` until production enforcement, prior information/consent, provider checks and the remaining review are complete.
+
+### Validation of this patch
+
+Twenty-two isolated regression scenarios execute the actual compiled TypeScript handlers/helper and their Lua scripts, with Lua 5.4 and a deterministic Redis-command/expiry model. Next response handling, Resend and Ratelimit are stand-ins; no external account is contacted. Coverage includes expiry boundaries, fresh and stale tokens, resubscription, competing requests/confirmations, interrupted delivery, cleanup failure, malformed stored state, active-set consistency, rate limiting and preserved redirects/template.
+
+All 207 supplied TypeScript/TSX/MTS/MJS source files parse successfully. Relative to the preceding retention-proposal snapshot, four existing source files change and one helper is added; the other 207 source files are byte-identical, including the approved visual modules. This does not replace a full build/typecheck, installed-SDK integration check or a staging run against real Redis. The root project configuration and dependencies were not provided.
+
+Technical references: [Upstash EVAL](https://upstash.com/docs/redis/sdks/ts/commands/scripts/eval), [Upstash serialization](https://upstash.com/docs/redis/sdks/ts/advanced), [Redis SET expiry semantics](https://redis.io/docs/latest/commands/set/), [Redis scripting atomicity](https://redis.io/docs/latest/develop/programmability/).
+
+---
+
+## Prior Information and Newsletter Consent — 2026-10-15
+
+The Newsletter form now provides prior information before the email field and an initially unchecked, required consent checkbox specifically for artwork, exhibition and studio emails. Its disclosure uses the same responsible-person configuration as Contact/Privacy; the consent purpose remains separate from enquiry handling. The email/Subscribe row is retained on wider screens, while the native form follows email → consent → submit order on smaller screens.
+
+The POST body adds `consent` and `consentVersion`. The API requires `consent === true` and the exact current notice revision before generating a token, writing subscriber data or sending a confirmation. Missing consent returns `consent_required`; an absent/old revision returns `consent_outdated`, both with HTTP 400. A rejected attempt leaves an existing pending request untouched. Rate limiting remains before body parsing and honeypot handling remains before the consent gate.
+
+The server helper adds this object to new pending records:
+
+```ts
+consent: {
+    noticeVersion: formPrivacy.version,
+    purpose: formPrivacy.newsletter.purpose,
+    statement: formPrivacy.newsletter.consentLabel,
+    acceptedAt: requestedAt,
+}
+```
+
+The timestamp is set by the server and identifies receipt of the declaration; client timestamps/purposes do not replace it. Lua confirmation preserves this evidence and records `confirmedAt` separately. Checking the box never activates a subscription by itself. The 24-hour pending TTL, persistent active/unsubscribe lookup behavior, atomic race protection and 30-day minimal unsubscribe TTL are unchanged. The unsubscribe transition still reduces the record to `email`, `status` and `unsubscribedAt`; it does not retain the consent object indefinitely after withdrawal.
+
+Existing subscriptions and previously issued confirmation links are not assigned a fictional checkbox record. Their confirmation behavior is retained; legacy evidence must be reviewed separately during the historical-data inventory. This delivery does not send a reconfirmation campaign, backfill consent, delete live records or add a campaign sender.
+
+The frontend blocks missing consent before fetch even if native validation is bypassed. Success clears the checkbox; stale-version responses preserve the email and request a reload/new choice. Generic failures retain user input for retry. Existing Home result feedback and the confirmation email template retain their behavior/content.
+
+See `docs/architecture/form-privacy-consent.md` for revision wording, validation and operational limits. The form, shared components/configuration, API and helper must be installed together. Full project compilation, provider delivery, live unsubscribe distribution and final publication checks remain outstanding.

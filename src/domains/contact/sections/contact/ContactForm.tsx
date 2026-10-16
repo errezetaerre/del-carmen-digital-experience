@@ -1,8 +1,12 @@
 "use client";
 
 import { Button } from "@/shared/ui/button";
+import { legalContact } from "@/config/legal";
+import { formPrivacy } from "@/config/formPrivacy";
+import FormPrivacyNotice from "@/shared/ui/forms/FormPrivacyNotice";
+import PrivacyConsentField from "@/shared/ui/forms/PrivacyConsentField";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 type FormStatus =
     | "idle"
@@ -18,7 +22,7 @@ type FormData = {
     message: string;
 };
 
-type FormErrors = Partial<Record<keyof FormData, string>>;
+type FormErrors = Partial<Record<keyof FormData | "consent", string>>;
 
 const INITIAL_FORM: FormData = {
     name: "",
@@ -53,20 +57,14 @@ export default function ContactForm() {
     const [errors, setErrors] = useState<FormErrors>({});
     const [status, setStatus] = useState<FormStatus>("idle");
     const [contactField, setContactField] = useState("");
+    const [consent, setConsent] = useState(false);
     const [subjectPreview, setSubjectPreview] = useState<string | null>(null);
+    const feedbackRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (status !== "success") {
-            return;
+        if (status === "success") {
+            feedbackRef.current?.scrollIntoView({ block: "nearest" });
         }
-
-        const timeout = window.setTimeout(() => {
-            setStatus("idle");
-        }, 5000);
-
-        return () => {
-            window.clearTimeout(timeout);
-        };
     }, [status]);
 
     function updateField(field: keyof FormData, value: string) {
@@ -116,6 +114,10 @@ export default function ContactForm() {
             nextErrors.message = "Please enter your message.";
         }
 
+        if (!consent) {
+            nextErrors.consent = "Please give your consent before sending this enquiry.";
+        }
+
         setErrors(nextErrors);
 
         return Object.keys(nextErrors).length === 0;
@@ -123,6 +125,8 @@ export default function ContactForm() {
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (status === "submitting") return;
 
         if (!validateForm()) {
             return;
@@ -143,6 +147,8 @@ export default function ContactForm() {
                 body: JSON.stringify({
                     ...formData,
                     contactField,
+                    consent,
+                    consentVersion: formPrivacy.version,
                 }),
             });
 
@@ -152,13 +158,28 @@ export default function ContactForm() {
             }
 
             if (!response.ok) {
+                const result = await response.json().catch(() => null);
+
+                if (result?.code === "consent_required" || result?.code === "consent_outdated") {
+                    setErrors((current) => ({
+                        ...current,
+                        consent: result.code === "consent_outdated"
+                            ? "Please reload this page, review the current privacy notice and give your consent again."
+                            : "Please give your consent before sending this enquiry.",
+                    }));
+                    setConsent(false);
+                    setStatus("idle");
+                    return;
+                }
+
                 throw new Error("Request failed.");
             }
 
 
             setStatus("success");
             setFormData(INITIAL_FORM);
-            setContactField("")
+            setContactField("");
+            setConsent(false);
             setErrors({});
         } catch (error) {
             console.error("Contact form error:", error);
@@ -195,6 +216,10 @@ export default function ContactForm() {
                 />
             </div>
 
+            <div className="mb-8">
+                <FormPrivacyNotice form="contact" id="contact-privacy-notice" />
+            </div>
+
             <div className="space-y-7">
                 {/* Name */}
                 <div>
@@ -212,6 +237,7 @@ export default function ContactForm() {
                     <input
                         id="name"
                         name="name"
+                        required
                         type="text"
                         autoComplete="name"
                         value={formData.name}
@@ -262,6 +288,7 @@ export default function ContactForm() {
                     <input
                         id="email"
                         name="email"
+                        required
                         type="email"
                         autoComplete="email"
                         value={formData.email}
@@ -331,6 +358,7 @@ export default function ContactForm() {
                                     <input
                                         type="radio"
                                         name="subject"
+                                        required
                                         value={option.value}
                                         checked={isSelected}
                                         onChange={(event) => {
@@ -425,6 +453,7 @@ export default function ContactForm() {
                     <textarea
                         id="message"
                         name="message"
+                        required
                         rows={3}
                         value={formData.message}
                         onChange={(event) =>
@@ -460,6 +489,48 @@ export default function ContactForm() {
                 </div>
             </div>
 
+            <div className="mt-6 mb-4">
+                <PrivacyConsentField
+                    form="contact"
+                    noticeId="contact-privacy-notice"
+                    checked={consent}
+                    disabled={isSubmitting}
+                    error={errors.consent}
+                    onChange={(checked) => {
+                        setConsent(checked);
+                        setErrors((current) => ({ ...current, consent: undefined }));
+                        setStatus("idle");
+                    }}
+                />
+            </div>
+
+            {/* Feedback stays visible until the visitor starts another enquiry. */}
+            <div
+                ref={feedbackRef}
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="font-sans text-sm leading-6"
+            >
+                {status === "success" && (
+                    <p className="mb-6 border-l border-brand-gold/50 pl-4 text-success">
+                        Thank you. Your message has been sent successfully.
+                    </p>
+                )}
+
+                {status === "rateLimited" && (
+                    <p className="mb-6 text-error">
+                        Too many messages have been sent. Please wait a few minutes before trying again.
+                    </p>
+                )}
+
+                {status === "error" && (
+                    <p className="mb-6 text-error">
+                        Your message could not be sent. Please try again.
+                    </p>
+                )}
+            </div>
+
             {/* Action */}
             <div
                 className="
@@ -472,14 +543,14 @@ export default function ContactForm() {
                 <Button
                     type="submit"
                     variant="outline"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || status === "success"}
                     className="group gap-5"
                 >
                     <span>
-                        {isSubmitting ? "Sending..." : "Send message"}
+                        {isSubmitting ? "Sending..." : status === "success" ? "Message sent" : "Send message"}
                     </span>
 
-                    {!isSubmitting && (
+                    {!isSubmitting && status !== "success" && (
                         <span
                             aria-hidden="true"
                             className="transition-transform duration-300 group-hover:translate-x-1"
@@ -492,34 +563,13 @@ export default function ContactForm() {
                 <div className="font-sans text-xs leading-5 text-stone-600">
                     <p>For direct correspondence</p>
                     <p className="mt-1 text-stone-400">
-                        rolando@delcarmen.art
+                        <a href={`mailto:${legalContact.email}`} className="transition-colors hover:text-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold">
+                            {legalContact.email}
+                        </a>
                     </p>
                 </div>
             </div>
 
-            {/* Form feedback */}
-            <div
-                aria-live="polite"
-                className="min-h-8 pt-5 font-sans text-sm"
-            >
-                {status === "success" && (
-                    <p className="text-success">
-                        Thank you. Your message has been received.
-                    </p>
-                )}
-
-                {status === "rateLimited" && (
-                    <p className="text-error">
-                        Too many messages have been sent. Please wait a few minutes before trying again.
-                    </p>
-                )}
-
-                {status === "error" && (
-                    <p className="text-error">
-                        Your message could not be sent. Please try again.
-                    </p>
-                )}
-            </div>
         </form>
     );
 }
