@@ -4,6 +4,8 @@ import { useRef } from "react";
 import gsap from "gsap";
 
 import type { Artwork } from "@/domains/artworks";
+import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
 
@@ -40,6 +42,7 @@ export default function CollectionArtwork({
       artwork.images.primary;
 
   const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
+  const presentationInfo = getArtworkPresentation(artwork);
 
   const animateIn = () => {
     if (
@@ -198,10 +201,13 @@ export default function CollectionArtwork({
         type="button"
         onClick={onOpen}
         className="block w-full text-left"
-        aria-label={`View ${artwork.title}`}
+        aria-label={`View ${artwork.title}${presentationInfo.badges.length ? ` — ${presentationInfo.badges.map((badge) => badge.label).join(", ")}` : ""}`}
       >
         <CollectionArtworkFrame>
           <div className="relative aspect-[4/5] overflow-hidden bg-black">
+            <div className="pointer-events-none absolute inset-x-3 top-3 z-20">
+              <ArtworkBadges artwork={artwork} className="justify-end" />
+            </div>
             <img
               src={displayImage.src}
               alt={displayImage.alt}
@@ -236,7 +242,7 @@ export default function CollectionArtwork({
               {/* Estado inicial */}
               <div ref={initialRef}>
                 <p className="mb-2 text-[9px] uppercase tracking-[0.3em] text-brand-gold">
-                  {artwork.year}
+                  {presentationInfo.yearLabel}
                 </p>
 
                 <h3 className="font-serif text-lg font-light leading-tight text-white">
@@ -289,7 +295,7 @@ export default function CollectionArtwork({
                   className="mt-4 flex items-center justify-between"
                 >
                   <span className="text-[9px] uppercase tracking-[0.3em] text-brand-gold">
-                    {artwork.year}
+                    {presentationInfo.yearLabel}
                   </span>
 
                   <span className="text-[9px] uppercase tracking-[0.25em] text-brand-gold">

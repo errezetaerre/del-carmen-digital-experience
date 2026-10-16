@@ -1,4 +1,6 @@
 import Link from "next/link";
+import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import { getArtworkPresentation } from "../presentation/getArtworkPresentation";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 
 import type { Artwork } from "@/domains/artworks";
@@ -54,8 +56,8 @@ export default function ArtworkDetailScene({
     const techniqueLabel =
         `${formatLabel(artwork.medium)} on ${formatLabel(artwork.support)}`;
 
-    const availabilityLabel =
-        formatLabel(artwork.availability);
+    const presentation = getArtworkPresentation(artwork);
+    const availabilityLabel = presentation.statusLabel;
 
     const authorshipLabel =
         formatAuthorship(artwork.authorship);
@@ -154,6 +156,11 @@ export default function ArtworkDetailScene({
                             {artwork.title}
                         </h1>
 
+                        <ArtworkBadges artwork={artwork} detailed className="mt-5" />
+                        {presentation.previewLabel && (
+                            <p className="mt-3 font-sans text-xs text-white/50">{presentation.previewLabel}</p>
+                        )}
+
                         {artwork.quote && (
                             <p
                                 className="
@@ -195,7 +202,7 @@ export default function ArtworkDetailScene({
                             "
                         >
                             <dt className="text-white/35">
-                                Year
+                                {artwork.creationStatus === "completed" ? "Year" : "Planned year"}
                             </dt>
                             <dd className="text-white/75">
                                 {artwork.year}

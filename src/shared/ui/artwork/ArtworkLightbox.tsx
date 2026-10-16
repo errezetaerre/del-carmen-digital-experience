@@ -12,6 +12,8 @@ import {
 
 import type { Artwork } from "@/domains/artworks/model";
 import styles from "./ArtworkLightbox.module.css";
+import ArtworkBadges from "./ArtworkBadges";
+import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 import GlassArtworkFrame from "./GlassArtworkFrame";
 import { glassSeparatorMarkup } from "./glassAccents";
 import { InteractionHint } from "@/shared/ui/interaction-hint";
@@ -1032,6 +1034,10 @@ export default function ArtworkLightbox({
 
                         {/* Zoomable artwork — no visible frame/border */}
                         <div className={isGlass ? styles.imageWrapper : "relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center"}>
+                            <div className="pointer-events-none absolute inset-x-3 top-3 z-40 flex justify-end" data-lightbox-content="true">
+                                <ArtworkBadges artwork={artwork} className="max-w-full justify-end" />
+                            </div>
+
 
                             <div
                                 ref={zoomLayerRef}
@@ -1127,7 +1133,7 @@ export default function ArtworkLightbox({
                         className={isGlass ? styles.caption : "relative z-30 w-full shrink-0 px-5 pb-4 pt-3 text-center md:px-10 md:pb-5 md:pt-4 [@media(orientation:landscape)_and_(max-height:600px)]:h-[92px] [@media(orientation:landscape)_and_(max-height:600px)]:px-6 [@media(orientation:landscape)_and_(max-height:600px)]:pb-2 [@media(orientation:landscape)_and_(max-height:600px)]:pt-1"}
                     >
                         <p className="font-sans text-[10px] font-medium uppercase tracking-[0.30em] text-brand-gold/90 md:text-xs [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]">
-                            {artwork.year}
+                            {getArtworkPresentation(artwork).yearLabel}
                         </p>
 
                         <h2 className="mt-1.5 font-display text-2xl font-light leading-[1.05] tracking-[0.01em] md:text-3xl [@media(orientation:landscape)_and_(max-height:600px)]:mt-0.5 [@media(orientation:landscape)_and_(max-height:600px)]:text-lg">

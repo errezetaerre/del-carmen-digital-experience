@@ -25,7 +25,13 @@ export type ArtworkSupport =
 export type ArtworkAvailability =
   | "available"
   | "reserved"
-  | "sold";
+  | "sold"
+  | "unavailable";
+
+export type ArtworkCreationStatus =
+  | "planned"
+  | "in-progress"
+  | "completed";
 
 export type ArtworkCurrency =
   | "USD"
@@ -72,6 +78,8 @@ export interface Artwork {
   title: string;
 
   year: number;
+
+  creationStatus: ArtworkCreationStatus;
 
   authorship: ArtworkAuthorship;
 

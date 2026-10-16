@@ -10,6 +10,8 @@ export const artworks: Artwork[] = [
 
     year: 2025,
 
+    creationStatus: "completed",
+
     authorship: "master-copy",
 
     context: "academic-study",
@@ -61,6 +63,8 @@ export const artworks: Artwork[] = [
     title: "Epifanía Nupcial",
 
     year: 2022,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -125,6 +129,8 @@ export const artworks: Artwork[] = [
 
     year: 2024,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -179,6 +185,8 @@ export const artworks: Artwork[] = [
 
     year: 2019,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -229,6 +237,8 @@ export const artworks: Artwork[] = [
     title: "El Carnero",
 
     year: 2019,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -285,6 +295,8 @@ export const artworks: Artwork[] = [
 
     year: 2022,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -340,6 +352,8 @@ export const artworks: Artwork[] = [
 
     year: 2027,
 
+    creationStatus: "planned",
+
     authorship: "original",
 
     context: "independent",
@@ -364,7 +378,7 @@ export const artworks: Artwork[] = [
     images: {
       primary: {
         src: "/artworks/buda.jpg",
-        alt: "Buda by Rolando Del Carmen",
+        alt: "Buda, planned artwork preview by Rolando Del Carmen",
         width: 1024,
         height: 1168,
       },
@@ -376,7 +390,7 @@ export const artworks: Artwork[] = [
     description:
       "This artwork captures the serene and contemplative essence of Buddha, inviting viewers to reflect on inner peace, mindfulness, and the pursuit of enlightenment.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 12000,
@@ -394,6 +408,8 @@ export const artworks: Artwork[] = [
     title: "Sendero del Sol",
 
     year: 2023,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -452,6 +468,8 @@ export const artworks: Artwork[] = [
 
     year: 2027,
 
+    creationStatus: "planned",
+
     authorship: "original",
 
     context: "independent",
@@ -477,7 +495,7 @@ export const artworks: Artwork[] = [
     images: {
       primary: {
         src: "/artworks/margarita.jpg",
-        alt: "Margarita by Rolando Del Carmen",
+        alt: "Margarita, planned artwork preview by Rolando Del Carmen",
         width: 1200,
         height: 992,
       },
@@ -489,7 +507,7 @@ export const artworks: Artwork[] = [
     description:
       "This artwork captures the serene and contemplative essence of a young girl named Margarita, surrounded by a delicate white flower that symbolizes purity and innocence. The soft lighting and gentle expression on her face evoke a sense of tranquility and grace, inviting viewers to reflect on the simple beauty of childhood and the fleeting moments of life.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 12000,
@@ -505,6 +523,8 @@ export const artworks: Artwork[] = [
     title: "Recordando Mi Puerto",
 
     year: 2027,
+
+    creationStatus: "planned",
 
     authorship: "original",
 
@@ -531,7 +551,7 @@ export const artworks: Artwork[] = [
     images: {
       primary: {
         src: "/artworks/recordando_mi_puerto.jpg",
-        alt: "Recordando Mi Puerto by Rolando Del Carmen",
+        alt: "Recordando Mi Puerto, planned artwork preview by Rolando Del Carmen",
         width: 1312,
         height: 912,
       },
@@ -543,7 +563,7 @@ export const artworks: Artwork[] = [
     description:
       "I remember the innocence of my childhood and the beauty of the simple moments that made me who I am today. Contemplating this scene I find myself immersed in those years, in the smell of the sea and the warmth of the sun on my skin. It is a tribute to those times and to the place that saw me grow.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 12000,
@@ -559,6 +579,8 @@ export const artworks: Artwork[] = [
     title: "La Mujer Del Bosque",
 
     year: 2027,
+
+    creationStatus: "planned",
 
     authorship: "original",
 
@@ -586,7 +608,7 @@ export const artworks: Artwork[] = [
     images: {
       primary: {
         src: "/artworks/la_mujer_del_bosque.jpg",
-        alt: "La Mujer Del Bosque by Rolando Del Carmen",
+        alt: "La Mujer Del Bosque, planned artwork preview by Rolando Del Carmen",
         width: 896,
         height: 1344,
       },
@@ -598,7 +620,7 @@ export const artworks: Artwork[] = [
     description:
       "A representation of the strength, wisdom, and beauty of nature. Her presence brings a sense of peace and tranquility to those who contemplate her.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 6000,
@@ -614,6 +636,8 @@ export const artworks: Artwork[] = [
     title: "Rosa Rojita",
 
     year: 2024,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -664,6 +688,8 @@ export const artworks: Artwork[] = [
     title: "Yasemi I",
 
     year: 2026,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -731,6 +757,8 @@ export const artworks: Artwork[] = [
 
     year: 2026,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -782,6 +810,8 @@ export const artworks: Artwork[] = [
     title: "Yasemi III",
 
     year: 2026,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -835,6 +865,8 @@ export const artworks: Artwork[] = [
 
     year: 2026,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -886,6 +918,8 @@ export const artworks: Artwork[] = [
 
     year: 2022,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "commission",
@@ -934,6 +968,8 @@ export const artworks: Artwork[] = [
     title: "Busto de Bevedere - Chercheuse",
 
     year: 2021,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -991,6 +1027,8 @@ export const artworks: Artwork[] = [
 
     year: 2022,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -1046,6 +1084,8 @@ export const artworks: Artwork[] = [
 
     year: 2019,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -1099,6 +1139,8 @@ export const artworks: Artwork[] = [
     title: "Flor del Desierto",
 
     year: 2019,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -1154,6 +1196,8 @@ export const artworks: Artwork[] = [
 
     year: 2022,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "independent",
@@ -1206,6 +1250,8 @@ export const artworks: Artwork[] = [
 
     year: 2020,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "commission",
@@ -1256,6 +1302,8 @@ export const artworks: Artwork[] = [
     title: "La Plancha",
 
     year: 2022,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -1309,6 +1357,8 @@ export const artworks: Artwork[] = [
     title: "El Pie",
 
     year: 2020,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -1367,6 +1417,8 @@ export const artworks: Artwork[] = [
 
     year: 2021,
 
+    creationStatus: "completed",
+
     authorship: "master-copy",
 
     context: "academic-study",
@@ -1420,6 +1472,8 @@ export const artworks: Artwork[] = [
 
     year: 2022,
 
+    creationStatus: "completed",
+
     authorship: "master-copy",
 
     context: "academic-study",
@@ -1471,6 +1525,8 @@ export const artworks: Artwork[] = [
     title: "El Desnudo Masculino",
 
     year: 2017,
+
+    creationStatus: "completed",
 
     authorship: "study-after",
 
@@ -1524,6 +1580,8 @@ export const artworks: Artwork[] = [
 
     year: 2018,
 
+    creationStatus: "completed",
+
     authorship: "master-copy",
 
     context: "academic-study",
@@ -1576,6 +1634,8 @@ export const artworks: Artwork[] = [
     title: "Parthenon",
 
     year: 2017,
+
+    creationStatus: "completed",
 
     authorship: "master-copy",
 
@@ -1632,6 +1692,8 @@ export const artworks: Artwork[] = [
 
     year: 2017,
 
+    creationStatus: "completed",
+
     authorship: "study-after",
 
     context: "academic-study",
@@ -1683,6 +1745,8 @@ export const artworks: Artwork[] = [
     title: "Le Torse du Belvédère",
 
     year: 2018,
+
+    creationStatus: "completed",
 
     authorship: "study-after",
 
@@ -1740,6 +1804,8 @@ export const artworks: Artwork[] = [
 
     year: 2018,
 
+    creationStatus: "completed",
+
     authorship: "study-after",
 
     context: "academic-study",
@@ -1791,6 +1857,8 @@ export const artworks: Artwork[] = [
     title: "La Travesti",
 
     year: 2017,
+
+    creationStatus: "completed",
 
     authorship: "study-after",
 
@@ -1844,6 +1912,8 @@ export const artworks: Artwork[] = [
 
     year: 2017,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "commission",
@@ -1895,6 +1965,8 @@ export const artworks: Artwork[] = [
     title: "Victoria de Samotracia",
 
     year: 2019,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -1950,6 +2022,8 @@ export const artworks: Artwork[] = [
 
     year: 2017,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "commission",
@@ -2003,6 +2077,8 @@ export const artworks: Artwork[] = [
 
     year: 2019,
 
+    creationStatus: "completed",
+
     authorship: "study-after",
 
     context: "academic-study",
@@ -2053,6 +2129,8 @@ export const artworks: Artwork[] = [
     title: "Mama de Luis Alonso",
 
     year: 2022,
+
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -2105,6 +2183,8 @@ export const artworks: Artwork[] = [
 
     year: 2020,
 
+    creationStatus: "completed",
+
     authorship: "study-after",
 
     context: "independent",
@@ -2156,6 +2236,8 @@ export const artworks: Artwork[] = [
     title: "Retrato de Mujer",
 
     year: 2024,
+
+    creationStatus: "completed",
 
     authorship: "master-copy",
 
@@ -2211,6 +2293,8 @@ export const artworks: Artwork[] = [
 
     year: 2025,
 
+    creationStatus: "completed",
+
     authorship: "master-copy",
 
     context: "academic-study",
@@ -2264,6 +2348,8 @@ export const artworks: Artwork[] = [
     title: "Psyché de Náples",
 
     year: 2017,
+
+    creationStatus: "completed",
 
     authorship: "study-after",
 
@@ -2319,6 +2405,8 @@ export const artworks: Artwork[] = [
 
     year: 2021,
 
+    creationStatus: "completed",
+
     authorship: "original",
 
     context: "commission",
@@ -2370,6 +2458,8 @@ export const artworks: Artwork[] = [
     title: "Gatito",
 
     year: 2021,
+
+    creationStatus: "completed",
 
     authorship: "study-after",
 

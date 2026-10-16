@@ -1,5 +1,6 @@
 import type gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
+import type { ArtworkPresentation } from "../../presentation/getArtworkPresentation";
 
 export interface ArtworkGlassArtbookProps {
     artworks: Artwork[];
@@ -14,6 +15,7 @@ export interface GlassArtbookOptions {
     initialArtworkId: string;
     instanceId: string;
     motion?: typeof gsap;
+    getPresentation?: (artwork: Artwork) => ArtworkPresentation;
     onNavigate?: (artwork: Artwork) => void;
 }
 

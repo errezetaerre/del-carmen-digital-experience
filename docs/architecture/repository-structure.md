@@ -1,4 +1,4 @@
-Version: 1.6
+Version: 1.7
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-15
+2026-10-16
 
 ---
 
@@ -485,3 +485,25 @@ Two small shared presentation components serve the existing Contact and Newslett
 The forms retain ownership of state and submission. Each existing API validates explicit consent and the current revision independently. Contact keeps the declaration with its delivered message. The existing Newsletter server helper keeps it in pending/active records, with the approved lifecycle and expiry rules. No new business domain, persistence service, global modal, cookie manager or framework is introduced.
 
 The revision archive, compatibility behavior and production limits are recorded in `docs/architecture/form-privacy-consent.md`. The existing retention operations guide is updated for consent evidence. Legal notices retain draft labels and `noindex` while installation, historical-data handling, provider checks and final review are pending.
+
+
+------------------------------------------------------------------------
+
+Artwork State and Distinctions — 2026-10-16
+
+The existing Artwork model gains required `creationStatus` (`planned`, `in-progress`, `completed`) and the availability vocabulary adds `unavailable`. The catalogue explicitly identifies the four confirmed future works. Year, authorship, dimensions, price and realization remain separate concepts.
+
+Artwork recognition references live in:
+
+- `src/domains/artworks/model/artworkRecognition.ts`;
+- `src/domains/artworks/data/artworkRecognitions.ts`.
+
+They reference existing Artwork IDs and distinguish an award, an honourable mention and a selection. The only seeded recognition comes from the approved Artist Journey narrative; that narrative retains its original source and factual changes should be reviewed in both places.
+
+`src/domains/artworks/presentation/getArtworkPresentation.ts` is a pure derived presentation query. It combines artwork state, recognition references and the existing HomeCuration Featured reference. It does not persist a duplicate Home selection in Artwork or introduce another Collection domain. Its Home dependency is the reference-only curation data file, which has no runtime dependency back on Artwork presentation/components.
+
+`src/shared/ui/artwork/ArtworkBadges.tsx` provides the shared label list. Current Home/Archive/Series cards, Featured Work, the shared lightbox and standard detail use the same query/labels. The Glass Artbook wrapper passes the query to its runtime through `GlassArtbookOptions.getPresentation`; the runtime changes only its information markup. No imports or display rules are injected into the rigid-leaf/shader/input engine.
+
+The canonical implementation record is `docs/domains/artworks/artwork-implementation.md`. The two root integration-review READMEs intentionally removed by Rolando remain removed; this patch does not recreate them or add new review-note documents to the repository.
+
+Existing HomeCuration, ArtworkSeries covers, responsive/standard/glass entry rules, queue/navigation, CSS geometry, reflection/corners and legal/Contact/Newsletter implementation remain unchanged. The earlier successful full-project build reported by Rolando covers the preceding baseline; this new source patch still needs its own complete build and browser/device validation after installation.

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
+import { getArtworkPresentation } from "../../presentation/getArtworkPresentation";
 import ArtworkDetailViewer from "../ArtworkDetailViewer";
 import { createGlassArtbook, GLASS_BOOK_QUERY } from "./runtime.mjs";
 import type { ArtworkGlassArtbookProps, GlassArtbookController } from "./types";
@@ -98,6 +99,7 @@ export default function ArtworkGlassArtbook({
             initialArtworkId: initialIdRef.current,
             instanceId,
             motion: gsap,
+            getPresentation: getArtworkPresentation,
             onNavigate: (artwork) => onNavigateRef.current(artwork),
         });
         controllerRef.current = controller;

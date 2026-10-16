@@ -1,5 +1,7 @@
 "use client";
 
+import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+
 //import { useEffect, useRef } from "react";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
@@ -413,6 +415,8 @@ export default function FeaturedArtwork() {
 
               {artwork.year}
             </p>
+
+            <ArtworkBadges artwork={artwork} detailed className="mt-4 justify-center" />
 
             <div
               aria-hidden

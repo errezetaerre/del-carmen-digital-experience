@@ -1,6 +1,6 @@
 # Artwork Model
 
-Version: 1.1
+Version: 1.2
 
 Document ID:
 DOC-AM
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-05
+2026-10-16
 
 ---
 
@@ -82,6 +82,7 @@ Artwork
 ├── slug
 ├── title
 ├── year
+├── creationStatus
 │
 ├── authorship
 ├── context
@@ -172,11 +173,29 @@ El Misionero
 
 ## year
 
-Year associated with completion of the artwork.
+For a completed artwork, the year is associated with completion. For a planned or in-progress artwork, it is the planned year and must be presented as such.
+
+`creationStatus` explicitly determines the artistic state; a future year does not make a work planned automatically.
 
 Initial implementation uses a single year value.
 
 More complex date ranges may be introduced later if a real requirement appears.
+
+---
+
+# Creation Status
+
+`creationStatus` is required in the current TypeScript catalogue:
+
+```text
+planned
+in-progress
+completed
+```
+
+This describes artistic realisation, separately from authorship, editorial placement and commercial availability. The catalogue records the four confirmed future projects as `planned`; the other records retain their existing completed-work meaning. The catalogue migration is not a new physical-inventory audit.
+
+A planned work may be publicly previewed with `Coming soon` and `Planned for <year>`. In-progress work is labelled accordingly. Preview images must be identified as previews rather than presented as a finished physical painting.
 
 ---
 
@@ -556,9 +575,12 @@ Initial canonical values:
 available
 reserved
 sold
+unavailable
 ```
 
-Availability applies to the original artwork, not to future prints, reproductions or editions.
+`unavailable` indicates that the physical piece is not currently available, without mislabelling it as reserved or sold. Planned and in-progress work cannot be treated as an immediately available completed painting.
+
+Availability applies to the physical artwork, not to future prints, reproductions or editions. It does not change authorship: a hand-painted master copy remains distinguishable from an original-authorship work.
 
 ---
 
@@ -1305,3 +1327,26 @@ The complete supplied v1.0 Artwork Model body is preserved above, apart from Ver
 The earlier Featured Collection rule is not silently deleted; it is explicitly superseded for the current Home architecture by the later approved ArtworkSeries-only Featured Collection responsibility.
 
 No future commerce or domain capability has been removed because it is not implemented today.
+
+
+---
+
+# Implemented State and Recognition Extension — 2026-10-16
+
+This requirement-driven extension supersedes the earlier initial vocabulary where availability had only three values and the catalogue had no realisation state. The remaining classification, HomeCuration and future Product boundaries are preserved.
+
+The four user-confirmed future works are `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque`. They now have `creationStatus: "planned"` and `availability: "unavailable"`. Their existing planned year, dimensions, image paths, authorship and price records are retained. Their primary image alt text identifies a planned artwork preview. The other 41 entries retain the previous completed-work presentation with an explicit `completed` state.
+
+Recognition is a separate reference structure in `model/artworkRecognition.ts` and `data/artworkRecognitions.ts`:
+
+- `id` and `artworkId`;
+- `kind`: `award`, `honourable-mention` or `selection`;
+- `title`, `event` and `year`.
+
+Only the previously documented 2024 Honourable Mention for Sendero del Sol at La No Bienal's fifth edition is published. It comes from the existing approved Artist Journey narrative. A mention is not presented as an award won, and no other award/selection is inferred from exhibition participation or category names.
+
+Featured remains a HomeCuration reference. The presentation query reads `homeCuration.featuredWork.artworkId`; it does not add a conflicting `featured` flag to Artwork. An award, mention, selection and Featured can coexist as independent presentation labels.
+
+`isArtworkAvailable()` is a necessary state check: only `completed` plus `available` returns true. It is not a checkout or purchase authorisation. Future commerce still requires a valid physical-piece/print offer, confirmed price/currency, current stock, delivery and server-side checks. Prices of planned works remain stored; this patch does not publish purchase buttons or infer availability from a positive price.
+
+See `artwork-implementation.md` for the current presentation, installed-file list and validation limits. No Prisma migration, Product/Cart entity, new artwork category or separate Collection domain is introduced.
