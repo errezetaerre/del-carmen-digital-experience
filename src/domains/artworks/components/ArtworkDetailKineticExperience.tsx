@@ -14,6 +14,7 @@ import gsap from "gsap";
 import { LinkButton } from "@/shared/ui/button";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 import sceneStyles from "./ArtworkDetailScene.module.css";
+import { captureStandardNavigation, finishStandardNavigation } from "../presentation/artworkNavigationContinuity";
 
 interface ArtworkDetailKineticExperienceProps {
     previousScene?: ReactNode;
@@ -54,7 +55,7 @@ let artworkOnboardingLearnedInCurrentDocument = false;
 
 type OnboardingPhase = "reminding" | "sealing" | "learned";
 
-// Only the bounded tablet reading pane owns these gestures. Outside that
+// Only the bounded reading pane owns these gestures. Outside that
 // layout, its display:contents wrapper retains the existing scene navigation.
 function isReadingPane(target: EventTarget | null) {
     const pane = (target as HTMLElement | null)?.closest?.<HTMLElement>("[data-artwork-detail-reading]");
@@ -114,6 +115,10 @@ export default function ArtworkDetailKineticExperience({
 
     const hasPrevious = Boolean(previousScene && previousHref);
     const hasNext = Boolean(nextScene && nextHref);
+
+    const releaseTextSelection = useCallback(() => {
+        viewportRef.current?.removeAttribute("data-artwork-dragging");
+    }, []);
 
     const clearOnboardingTimers = useCallback(() => {
         if (onboardingIntervalRef.current !== null) {
@@ -465,6 +470,7 @@ export default function ArtworkDetailKineticExperience({
                 onComplete() {
                     // Navigation timing belongs to the artwork motion itself.
                     // Never hold the route for onboarding decoration.
+                    if (viewportRef.current) captureStandardNavigation(viewportRef.current, href);
                     router.replace(href, { scroll: false });
                 },
             });
@@ -525,7 +531,7 @@ export default function ArtworkDetailKineticExperience({
      * A route change remounts/rebuilds the three-panel window.
      * Reset immediately onto the new Current panel.
      */
-    useEffect(() => {
+    useLayoutEffect(() => {
         /*
          * previousHref / nextHref identify the new three-scene window
          * after App Router has completed the route handoff.
@@ -537,28 +543,45 @@ export default function ArtworkDetailKineticExperience({
         horizontalDragRef.current = false;
         pointerIdRef.current = null;
         inputModeRef.current = "idle";
+        releaseTextSelection();
 
-        const frame = requestAnimationFrame(() => {
-            const width =
-                viewportRef.current?.getBoundingClientRect()
-                    .width ?? window.innerWidth;
-
-            viewportWidthRef.current = Math.max(width, 1);
-            baseXRef.current = hasPrevious
-                ? -viewportWidthRef.current
-                : 0;
-
-            setTrackX(baseXRef.current);
-        });
-
-        return () => cancelAnimationFrame(frame);
+        const viewport = viewportRef.current;
+        const width = viewport?.getBoundingClientRect().width ?? window.innerWidth;
+        viewportWidthRef.current = Math.max(width, 1);
+        baseXRef.current = hasPrevious ? -viewportWidthRef.current : 0;
+        setTrackX(baseXRef.current);
+        return viewport ? finishStandardNavigation(viewport) : undefined;
     }, [
         hasPrevious,
         previousHref,
         nextHref,
         setTrackX,
         clearWheelState,
+        releaseTextSelection,
     ]);
+
+    useEffect(() => {
+        // Prefetch only the two neighbours, never the full catalogue.
+        if (previousHref) router.prefetch(previousHref);
+        if (nextHref) router.prefetch(nextHref);
+    }, [previousHref, nextHref, router]);
+
+    useEffect(() => {
+        const cancelDrag = () => {
+            const viewport = viewportRef.current;
+            const pointerId = pointerIdRef.current;
+            const wasDragging = draggingRef.current;
+            draggingRef.current = false;
+            horizontalDragRef.current = false;
+            pointerIdRef.current = null;
+            inputModeRef.current = "idle";
+            releaseTextSelection();
+            try { if (viewport && pointerId !== null && viewport.hasPointerCapture(pointerId)) viewport.releasePointerCapture(pointerId); } catch {}
+            if (wasDragging) resetToCurrent();
+        };
+        window.addEventListener("blur", cancelDrag);
+        return () => { window.removeEventListener("blur", cancelDrag); cancelDrag(); };
+    }, [releaseTextSelection, resetToCurrent]);
 
     /*
      * Native capture listener is deliberate.
@@ -853,6 +876,9 @@ export default function ArtworkDetailKineticExperience({
         lastTimeRef.current = performance.now();
         velocityRef.current = 0;
 
+        event.currentTarget.setAttribute("data-artwork-dragging", "");
+        if (event.pointerType === "mouse") event.preventDefault();
+
         // Native touch panning owns the vertical axis; mouse regrab stays immediate.
         if (event.pointerType === "mouse") {
             try {
@@ -896,6 +922,7 @@ export default function ArtworkDetailKineticExperience({
                 draggingRef.current = false;
                 pointerIdRef.current = null;
                 inputModeRef.current = "idle";
+                releaseTextSelection();
                 try {
                     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
                 } catch {}
@@ -903,6 +930,8 @@ export default function ArtworkDetailKineticExperience({
             }
 
             horizontalDragRef.current = true;
+            const selection = window.getSelection();
+            if (selection && ((selection.anchorNode && event.currentTarget.contains(selection.anchorNode)) || (selection.focusNode && event.currentTarget.contains(selection.focusNode)))) selection.removeAllRanges();
             try { event.currentTarget.setPointerCapture(event.pointerId); } catch {}
             sealOnboardingHint();
         }
@@ -954,6 +983,7 @@ export default function ArtworkDetailKineticExperience({
         draggingRef.current = false;
         pointerIdRef.current = null;
         inputModeRef.current = "idle";
+        releaseTextSelection();
 
         try {
             if (
@@ -969,7 +999,7 @@ export default function ArtworkDetailKineticExperience({
             // Ignore pointer-capture cleanup failures.
         }
 
-        if (event.type === "pointercancel") {
+        if (event.type === "pointercancel" || event.type === "lostpointercapture") {
             horizontalDragRef.current = false;
             resetToCurrent();
             return;
@@ -1054,6 +1084,12 @@ export default function ArtworkDetailKineticExperience({
             onPointerMove={handlePointerMove}
             onPointerUp={finishPointer}
             onPointerCancel={finishPointer}
+            onLostPointerCapture={finishPointer}
+            onClickCapture={(event) => {
+                if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
+                if (link && !link.hasAttribute("download") && (!link.target || link.target === "_self")) captureStandardNavigation(event.currentTarget, link.href);
+            }}
         >
             <div className={`${glassStyles.standardToolbar} pointer-events-none absolute inset-x-0 top-0 z-40`}>
                 <div className={`${glassStyles.standardToolbarRow} ${sceneStyles.toolbarRow} mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between px-6 pt-10 md:px-10 md:pt-20 lg:px-12 lg:pt-28`}>
@@ -1119,6 +1155,7 @@ export default function ArtworkDetailKineticExperience({
                 {panels.map((panel) => (
                     <div
                         key={panel.key}
+                        data-artwork-kinetic-panel={panel.key}
                         className="
                             w-screen
                             shrink-0

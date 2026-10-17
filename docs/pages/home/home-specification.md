@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Specification
 
-Version: 1.5
+Version: 1.6
 
 Document ID: DOC-HS
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-05
+Last Updated: 2026-10-17
 
 ------------------------------------------------------------------------
 
@@ -1486,3 +1486,16 @@ The complete supplied v1.4 Home Specification body is preserved above, apart fro
 No approved/planned Home capability has been removed because it is not implemented today.
 
 The update primarily formalizes the current `Featured Collection → ArtworkSeries` responsibility and its relationship to HomeCuration, Selected Works and Series editorial media.
+
+
+------------------------------------------------------------------------
+
+# 30. Opening Artwork Identity — 2026-10-17
+
+The opening artwork has its own **Cover Artwork** marker. This identifies its role in the Home composition, independently of Featured Artwork, Featured Collection, awards, completion and sales availability.
+
+`HomeCuration.hero.artworkId` remains the sole reference for this choice. The current opening painting is Epifanía Nupcial, recorded in 2022; the marker does not claim it is the latest work. A future most-recent-work feature requires a deliberate editorial/date rule rather than relabelling the cover.
+
+The label sits above the painting title within the existing artwork information panel, aligned left. Its small uppercase Geist typography, warm bronze gradient and contained icon halo use the shared Halo identity. An open-book vector distinguishes the cover from the Featured star. There is no added ribbon background, badge button or new information panel.
+
+The marker is mounted once outside the existing responsive content variants, covering mobile portrait, mobile landscape, tablet and desktop without repeating in the same view. The approved painting composition, title/copy styles, existing frame, curatorial choice and Hero motion remain intact.

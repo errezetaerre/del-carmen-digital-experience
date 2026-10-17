@@ -15,6 +15,7 @@
 .exit span { font-size: 1.2rem; font-weight: 300; }
 .bookViewport { display: contents; }
 .loadingPanel { position: absolute; inset: 0; z-index: 35; display: grid; place-items: center; padding: 4rem 1.5rem; background: rgb(9 9 8 / .88); }
+.loadingPanel.turnLoading { inset: auto; left: 50%; bottom: max(.75rem, env(safe-area-inset-bottom)); transform: translateX(-50%); max-width: calc(100% - 2rem); padding: .65rem 1rem; }
 .loadError { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; text-align: center; }
 .loadError button, .loadError a { min-height: 44px; display: inline-flex; align-items: center; }
 .entryLink { display: none; }

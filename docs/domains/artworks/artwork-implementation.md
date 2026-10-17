@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.9
+Version: 1.10
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -126,15 +126,15 @@ The automatic entry shows Opening Artbook while routing with replace rather than
 
 `src/app/artworks/[slug]/loading.tsx` supplies the route fallback. The Glass wrapper displays Opening Artbook during client initialisation and Preparing Artbook while the runtime prepares the selected spread. The initial root remains laid out but invisible so masks, font discovery, canvas dimensions and local insignia alignment are prepared at their real sizes. The resource overlay ends before the approved opening animation, keeping that animation visible.
 
-`GlassArtbookOptions.onLoadStateChange` reports loading/ready/error with the intended Artwork ID. The runtime verifies load events, nonzero natural dimensions and `HTMLImageElement.decode()` for the primary asset and displayed images, then awaits the current `document.fonts.ready` after layout discovery. Browsers without decode retain the load/dimension check. The former 2.5-second forced opening is removed. Ready or broken cached images are distinguished explicitly. The book wrapper makes only the book host inert while loading or in error, with polite status feedback; Exit remains available above the loading panel.
+`GlassArtbookOptions.onLoadStateChange` reports loading/ready/error with the intended Artwork ID and preparation kind: entrance, turn or selection. The native tree is prepared in a layout effect and marked invisible before it is populated, so a ready wrapper cannot paint a rebuilt tree before its readiness gate. The runtime verifies load events, nonzero natural dimensions and `HTMLImageElement.decode()` for the primary asset and displayed images, then awaits the current `document.fonts.ready` after layout discovery. Browsers without decode retain the load/dimension check. The former 2.5-second forced opening is removed. Ready or broken cached images are distinguished explicitly. The book wrapper makes only the book host inert while loading or in error, with polite status feedback; Exit remains available above the loading panel.
 
-Only current and adjacent assets are preloaded and retained. Adjacent downloads run in parallel without holding a ready selected spread or downloading all 45 images. If a requested incoming image is not decoded, the current spread stays intact under Loading artwork and its requested turn continues once that image is ready. A pending drag/wheel request becomes a normal turn after loading, without retaining a released pointer. Existing ready-image dragging and fast button navigation keep their approved physics.
+Only current and adjacent assets are preloaded and retained. Adjacent downloads run in parallel without holding a ready selected spread or downloading all 45 images. If a requested incoming image is not decoded, the current spread stays visible with a compact Loading artwork notice and its requested turn continues once that image is ready. A turn failure uses the same compact notice with Retry and Standard actions, rather than covering an already-ready painting. Entrance and direct undecoded selection retain the complete blocking preparation panel. A pending drag/wheel request becomes a normal turn after loading, without retaining a released pointer. Existing ready-image dragging and fast button navigation keep their approved physics.
 
 An image error, decode error or 30-second resource timeout exposes This artwork could not finish loading, Try again and an explicit Standard alternative; it never forces an incomplete spread open. Retry rebuilds the failed image job and resumes the same intended preparation. Replaced selections and disposal invalidate prior continuations; cleanup removes image listeners and resource timers. Window blur cancels an unstarted pending turn while retaining the current spread. No artificial minimum delay or fake progress is added, and prefetched links can still open immediately.
 
 The framework APIs used here are documented in [Next useLinkStatus](https://nextjs.org/docs/app/api-reference/functions/use-link-status), [Next loading convention](https://nextjs.org/docs/app/api-reference/file-conventions/loading) and [React useTransition](https://react.dev/reference/react/useTransition). Resource readiness uses [HTMLImageElement.decode](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decode), [complete](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/complete) and [Document.fonts](https://developer.mozilla.org/en-US/docs/Web/API/Document/fonts). No dependency update is required by this patch.
 
-## Standard tablet landscape composition
+## Standard desktop and tablet landscape composition
 
 The project owner approved the preceding landscape-entry/loading patch and requested that Glass remain untouched during this Standard-only adjustment. During that Standard-only adjustment, all six Glass Artbook files, its entry/loading route and viewport policy, catalogue and shared artwork UI stayed byte-identical to the preceding approved snapshot. The Standard layout remains approved; the subsequent catalogue and shared-thumbnail changes are described below.
 
@@ -148,11 +148,11 @@ The supplied iPad Pro landscape references show the same issue with La Mechuda a
 
 The sheet uses three grid rows with a zero-minimum flexible middle row. It no longer centres itself according to the total text height. The header and footer belong to the outer sheet, outside the scrollport. Changing the artwork keys the reading region by Artwork ID and starts the new reading area at the beginning. Internal scrolling does not move the site navigation, Back link, title or previous/next controls.
 
-The bounded composition applies in landscape at least 960px wide and 600px high: widths through 1366px include tablet-sized emulation regardless of primary pointer; larger touch tablets qualify through `any-pointer: coarse`. Portrait, compact phone landscape, insufficient height and larger fine-pointer desktop viewports retain the existing Standard flow. Outside the bounded composition the added header/reading wrappers use display:contents to preserve that flow.
+The bounded composition applies in landscape at least 960px wide and 600px high, including desktop. Desktop viewports with hover and a fine primary pointer also qualify at least 1024px wide and 480px high; shorter qualifying desktop viewports reduce outer spacing rather than type size. The information column retains a maximum width of 28rem. Touch portrait, compact phone landscape and insufficient-size viewports retain their existing Standard flow. Outside this composition the header/reading wrappers use display:contents.
 
 The image keeps its aspect ratio, intrinsic sizing, asset, zoom action, typography and Halo treatment. Its existing viewer is bounded by the available left-column height; distinguished works reserve 48px beneath the stage for the insignia. No image is recropped, replaced with a 9:16/16:9 variant or forcibly enlarged. Tablet portrait imagery is unchanged. The separate image-size observation can be assessed later against actual public assets in the complete application.
 
-A one-pixel bronze divider sits in the gap between image and information. Its opacity peaks at .22 and fades at both ends. It has no pointer interaction, glow, frame or overlap with the painting. The original image/info column weighting remains 1.35/.65 with a minimum 300px information column; the gap scales with the tablet viewport.
+A one-pixel bronze divider sits in the gap between image and information. Its opacity peaks at .42 and fades at both ends, making the quiet bronze line perceptible on desktop as well as tablet. It has no pointer interaction, glow, frame or overlap with the painting. The original image/info column weighting remains 1.35/.65 with a minimum 300px information column; the gap scales with the tablet viewport.
 
 The Standard kinetic input guard checks the reading pane's actual computed overflow. While that pane is bounded, its mouse/touch, wheel and keyboard input remain native rather than starting an artwork swipe. Outside this layout the original pointer/arrow response remains available. The pane is keyboard-focusable, labelled with the artwork title, has a quiet focus outline and carries data-lenis-prevent. Approved gesture physics, swipe reminders, URL mode/context and image expansion remain unchanged.
 
@@ -166,43 +166,39 @@ Series remains the navigation scope: its dots and previous/next iterate only the
 
 This rule replaces the earlier thumbnail-only distinction tap action. Interactive below-image ribbons keep their existing details, ticker, pause control and event isolation in Home/Standard/lightbox/Glass. Linked Collections previews remain a single link with their existing passive hover treatment. No permanent badge box, altered Halo palette, frame size or changed Coming Soon placement is introduced.
 
+## Standard gesture and route continuity
+
+A scene-owned pointer gesture sets a temporary selection lock on the kinetic viewport. Mouse down prevents native drag selection, and committed horizontal movement clears only selection belonging to that viewport. Native reading panes, links, controls and non-primary mouse buttons retain their own input. Vertical touch intent, release, cancellation, lost capture, blur, route replacement and unmount release the lock.
+
+`artworkNavigationContinuity.ts` preserves the already-visible Standard scene while App Router resolves the destination. The kinetic engine captures its landed neighbour immediately before route replacement; an ordinary Previous/Next click captures the current view before navigation. Only the two neighbouring routes are prefetched. Modified clicks, downloads, external targets, archive links and Open Artbook keep their normal behaviour.
+
+The bridge is a short-lived inert visual copy outside React, with aria-hidden, duplicate IDs removed and reading/native scroll offsets preserved. It is not a second interactive viewer. The route fallback displays a compact status over this retained view instead of replacing it with a blank Loading screen. The destination resets its track in a layout effect, then releases the copy after its displayed images and fonts settle. Cached images do not require another load event; failed images hand control to the destination rather than leaving the old scene indefinitely. Superseded jobs cannot remove a newer copy. History departure, viewport resize, page exit, a different route and a 30-second fail-safe dispose it and its listeners. This fail-safe only removes the temporary copy; it does not mark a failed image or book resource ready.
+
+Initial route visits still use the full route loading fallback. The landscape entry query, explicit Standard choice, filtered/Series navigation context and Glass physics are retained.
+
+## Home cover identity
+
+Home labels the opening painting **Cover Artwork**, using an open-book symbol and the established small uppercase Halo bronze typography. It appears once above the title inside the existing artwork information panel, aligned left, across all existing responsive variants. The marker follows `homeCuration.hero.artworkId` through the local `CoverArtworkBadge` component. It is distinct from Featured Work, Featured Collection and recorded awards.
+
+The current hero is Epifanía Nupcial, recorded in 2022, while completed catalogue works exist in later years. Cover Artwork therefore describes the actual curatorial role without asserting Latest or Most Recent. Neither the artwork model nor completion, price, recognition or sale state changes.
+
 ## Installation
 
-This patch builds on the approved Standard tablet layout and landscape-entry/loading updates. It contains five changed source files, the complete unchanged six-file Glass module for safe directory imports, and four canonical documents:
-
-- `src/domains/artworks/data/artworks.ts`
-- `src/domains/artworks/series/components/SeriesGallery.tsx`
-- `src/domains/home/sections/collection/CollectionArtwork.tsx`
-- `src/shared/ui/artwork/ArtworkBadges.tsx`
-- `src/shared/ui/artwork/ArtworkBadges.module.css`
-- `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.tsx`
-- `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.module.css`
-- `src/domains/artworks/components/glass-artbook/index.ts`
-- `src/domains/artworks/components/glass-artbook/runtime.mjs`
-- `src/domains/artworks/components/glass-artbook/runtime.d.mts`
-- `src/domains/artworks/components/glass-artbook/types.ts`
-- `docs/domains/artworks/artwork-model.md`
-- `docs/domains/artworks/artwork-implementation.md`
-- `docs/domains/collection/collection-specification.md`
-- `docs/architecture/repository-structure.md`
-
-The archive has 15 entries. The catalogue file is exactly the supplied updated file; the Glass files preserve the approved bytes. Merge files into the existing repository rather than replacing whole directories. No integration-review README, dependency, environment variable or generated preview is added.
+The UX update builds on the approved Series/Home viewer, complete-thumbnail action and latest owner-supplied catalogue. Merge the patch into the existing repository rather than replacing directories. The archive includes the complete six-file Glass module, including its unchanged barrel and declaration, and the existing canonical documentation; no integration-review README, package, environment variable or generated preview is added.
 
 From the actual project root:
 
 ```sh
-unzip -o "$HOME/Downloads/Del_Carmen_Series_Viewer_y_Thumbnails_2026-10-17.zip" -d .
+unzip -o "$HOME/Downloads/Del_Carmen_Artwork_UX_2026-10-17.zip" -d .
 npm run build
 ```
 
 ## Validation and remaining verification
 
-Fifteen focused checks pass against the compiled actual source. They verify exact adoption of the supplied catalogue and the six intended state-field differences, the seven planned previews and availability guards, Series/Home shared-viewer presentation, valid/invalid scoped deep links and Close, thumbnail selection URL, a single artwork action for all 45 cards, symbol/label/detail click propagation, hover/focus expansion, busy-card guarding and planned technical rollover. Award/selection examples exist only as removed test fixtures; no additional recognition is published.
+Twenty-nine focused compiled-source checks pass. They cover curatorial cover semantics and responsive placement, existing technical fields and Standard URLs, mouse-selection ownership and cancellation, neighbour prefetch and route-capture order, compact versus initial loading, real image/decode/font readiness, recoverable failure/retry, stale job cleanup, scroll/ID/accessibility handling of the visual bridge and destination release.
 
-The shared viewer is also checked for its Series-scoped detail link, four Yasemi position dots and Next/Previous cycling only through those four records, including Coming Soon for Yasemi II–IV. Collections links retain their existing single passive action. The non-passive Ribbon rendering, controls and interaction body remain unchanged; badge CSS differs only by the expanded-thumbnail underline rule.
+All 225 TS/TSX/MTS/MJS files parse and all 401 local imports resolve. The exact 45-record owner-supplied catalogue retains 38 completed and seven planned works. The shared lightbox, Coming Soon, interactive Halo ribbons, Series membership, landscape-entry policy, page-local insignia ownership, native shader/material, turn/spring physics and optical intensities retain their approved source. The new Book state metadata and loading presentation change resource feedback only.
 
-All 223 TS/TSX/MTS/MJS files parse, and all 393 local imports resolve. The complete Glass module, approved Standard/tablet layout, responsive entry/loading, full ArtworkLightbox engine/style, Coming Soon treatment, image highlights, curation, recognition records, frame motion and CollectionHeroMotion remain unchanged. The earlier 62 book/entry checks and ten Standard checks remain validation records for their approved underlying implementation, rather than new browser tests for this patch.
+Checks use local React/Next/DOM stand-ins. They are not a full project TypeScript check, production Next build, browser layout/hit test or physical-device review. Root configuration, project dependencies and public assets were not supplied; run the full build in the actual repository and verify visually there.
 
-Compiled-source checks use local React/Next/DOM stand-ins, including a simulated click bubble. They are not a full TypeScript project check, production Next build, real-browser hit test/layout or physical-device review. Root configuration, project dependencies and public assets were not supplied; complete build and visual verification belong in the actual repository.
-
-Compare Home with `/series/yasemi?artwork=yasemi-i` and `/series/yasemi?artwork=yasemi-iii` in portrait/landscape at phone, tablet and desktop sizes. Confirm the same glass viewer, mask, scrolling and controls; Series-only paging/Close/detail context; and Coming Soon for the three pending Yasemi works. On Home/Archive/Series, click the expanded thumbnail symbol, label and recognition detail as well as the painting; each should open that work once. Retain keyboard focus/activation, pending-route guards, full planned-card rollover, interactive below-image ribbons and the approved Standard/Glass book journeys.
+Check Home cover identity across phone/tablet/desktop orientations; desktop Standard footer visibility and the quiet divider; long-versus-short technical copy with native middle scrolling; horizontal mouse dragging without selected text; and a fast/cache-hit versus cold/slow route transition. In Glass, test first opening, an unloaded incoming artwork, an image error and retry. Confirm that incoming waits keep the existing spread visible and that the approved book movement/material and Exit remain intact.

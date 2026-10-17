@@ -1,4 +1,5 @@
 import type { ArtworkProps } from "@/domains/artworks/components/types";
+import CoverArtworkBadge from "./CoverArtworkBadge";
 
 export default function ArtworkInfo({
   artwork,
@@ -50,6 +51,8 @@ export default function ArtworkInfo({
           [@media(orientation:landscape)_and_(max-height:600px)]:!py-4
         "
       >
+        <CoverArtworkBadge artworkId={artwork.id} />
+
         {/* ===================================================
             MOBILE PORTRAIT
            =================================================== */}

@@ -25,6 +25,7 @@ export interface GlassArtbookOptions {
 export interface GlassArtbookLoadState {
     status: "loading" | "ready" | "error";
     artworkId: string;
+    kind: "entrance" | "turn" | "selection";
 }
 
 export interface GlassArtbookController {

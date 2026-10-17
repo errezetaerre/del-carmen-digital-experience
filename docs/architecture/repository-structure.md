@@ -1,4 +1,4 @@
-Version: 1.16
+Version: 1.17
 
 Document ID:
 DOC-RS
@@ -551,3 +551,16 @@ This is presentation layout, not a new Artwork field, domain, global layout serv
 `src/domains/artworks/data/artworks.ts` adopts the latest complete owner-supplied file. The current catalogue has 45 works: 38 completed and seven planned. Yasemi II–IV are planned/unavailable with their supplied 2026 year; this state is explicit and independent of date or stored price. Data/model/implementation documents remain the canonical reference; no separate inventory list or Collection domain is added.
 
 `SeriesGallery` selects the existing shared ArtworkLightbox glass presentation used by Home, retaining its own Series dataset and route context. `CollectionArtwork` owns one main button covering the painting and descriptive thumbnail insignia. `ArtworkBadges` extends only its passive thumbnail expansion marker and corresponding underline; interactive Ribbon ownership remains separate and unchanged. No new component, navigation service, dependency, book engine or Standard layout is introduced by this update.
+
+
+### Artwork UX, Cover Identity and Route Continuity — 2026-10-17
+
+`src/domains/home/sections/hero/CoverArtworkBadge.tsx` derives the Home cover marker from the existing HomeCuration reference. Hero ArtworkInfo mounts it once above its responsive title variants. The shared `artworkHaloSymbols.ts` adds an open-book presentation symbol; it is not an Artwork recognition kind or Featured flag. Existing badge styles own the warm Halo palette and compact type.
+
+`ArtworkDetailScene.module.css` extends the bounded Standard sheet to desktop as well as tablet landscape. The middle information scrolls independently of the header/footer, the information column retains its 28rem maximum and the one-pixel bronze divider lives in the column gap. Its temporary drag-selection rule belongs only to active kinetic scene gestures.
+
+`src/domains/artworks/presentation/artworkNavigationContinuity.ts` owns a temporary inert DOM view during a Standard route handoff. ArtworkDetailKineticExperience captures the already-visible scene before route dispatch and resets new geometry before paint. The detail route fallback reads this local navigation state to show compact waiting feedback. Displayed-image/font settlement and departure/timeout cleanup remove the visual copy. It does not become a parallel viewer, global application navigation service, domain datum or persistence layer.
+
+The Glass module reports preparation kind alongside status and artwork ID. Entrance/direct-selection waits remain blocking; an incoming turn retains the ready spread with a compact notice. Native construction establishes the gate before paint. Shader, geometry, page-bound Halo portals and physical interaction remain owned by the existing engine. The complete six-file book module remains the installation unit.
+
+The catalogue, Home/Series shared lightbox, Coming Soon, actual recognition records, mode-entry policy and future commerce/EN–ES/database responsibilities retain their established authority. Build and browser/device verification limits are recorded in the canonical artwork implementation document.

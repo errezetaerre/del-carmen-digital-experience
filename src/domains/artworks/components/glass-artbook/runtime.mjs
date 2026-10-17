@@ -13,6 +13,7 @@ export function createGlassArtbook(root,options){
  const instance=options.instanceId.replace(/[^a-zA-Z0-9_-]/g,'');
  if(!instance)throw Error('Glass Artbook requires a stable instance identifier');
  const nativeDocument=window.document;
+ root.dataset.phase='loading';
  const wideLayout=matchMedia(GLASS_BOOK_QUERY);
  const resources=new Set(),assets=new Map(),imageLoads=new Set(),imageJobs=new WeakMap(),cleanups=[];
  let entrancePlaying=false;
@@ -71,11 +72,11 @@ export function createGlassArtbook(root,options){
   asset.promise=asset.job.promise.then(ready=>{asset.status=ready?'ready':'error';return ready;});
   return asset;
  }
- function publishLoadState(status,artworkIndex=index){
+ function publishLoadState(status,artworkIndex=index,kind='selection'){
   mediaLoading=status!=='ready';root.dataset.loadState=status;
-  const artworkId=works[artworkIndex].id,signature=status+':'+artworkId;
+  const artworkId=works[artworkIndex].id,signature=status+':'+artworkId+':'+kind;
   if(signature===loadSignature)return;
-  loadSignature=signature;options.onLoadStateChange?.({status,artworkId});
+  loadSignature=signature;options.onLoadStateChange?.({status,artworkId,kind});
  }
  function cancelPreparation(){
   if(loadRequest?.timer!=null)window.clearTimeout(loadRequest.timer);
@@ -84,7 +85,7 @@ export function createGlassArtbook(root,options){
  function prepareArtwork(artworkIndex,continueWith,kind){
   cancelPreparation();
   const request={artworkIndex,continueWith,kind,timer:null,failed:false};
-  loadRequest=request;publishLoadState('loading',artworkIndex);
+  loadRequest=request;publishLoadState('loading',artworkIndex,kind);
   const asset=getPrimaryAsset(works[artworkIndex]);
   // The displayed elements also need decoding, rather than only a preloader.
   // Adjacent assets are preloaded independently and never delay this spread.
@@ -95,7 +96,7 @@ export function createGlassArtbook(root,options){
   const fail=()=>{
    if(disposed||loadRequest!==request||request.failed)return;
    request.failed=true;window.clearTimeout(request.timer);
-   publishLoadState('error',artworkIndex);
+   publishLoadState('error',artworkIndex,kind);
   };
   request.timer=window.setTimeout(fail,30000);
   // Force font/layout discovery before taking the current FontFaceSet.ready.
@@ -105,7 +106,7 @@ export function createGlassArtbook(root,options){
     if(disposed||loadRequest!==request||request.failed)return;
     if(results.some(ready=>!ready)){fail();return;}
     window.clearTimeout(request.timer);loadRequest=null;
-    render();publishLoadState('ready',artworkIndex);continueWith();
+    render();publishLoadState('ready',artworkIndex,kind);continueWith();
    },fail);
  }
  function ensureTurnReady(dir){
@@ -961,8 +962,11 @@ idle();requestAnimationFrame(tick);
    if(entrancePlaying)finishEntrance();clearPreview(true);
    if(wheelActive){wheelActive=false;if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;lockWheel();}
    const wasLoading=mediaLoading;
-   const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;settling=false;animating=false;clearEdge();index=target;idle();preload();
-   if(wasLoading||getPrimaryAsset(works[index]).status!=='ready')prepareArtwork(index,()=>{root.dataset.phase='open';render();positionGuide();},'selection');
+   const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;settling=false;animating=false;clearEdge();index=target;
+   const needsLoading=wasLoading||getPrimaryAsset(works[index]).status!=='ready';
+   if(needsLoading)root.dataset.phase='loading';
+   idle();preload();
+   if(needsLoading)prepareArtwork(index,()=>{root.dataset.phase='open';render();positionGuide();},'selection');
    else publishLoadState('ready');
   },
   retry(){

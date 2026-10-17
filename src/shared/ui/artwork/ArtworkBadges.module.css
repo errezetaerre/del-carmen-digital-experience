@@ -1,6 +1,9 @@
 .root { position: relative; min-width: 0; max-width: 100%; font-family: var(--font-geist-sans), Arial, sans-serif; font-weight: 400; color: #d4b17b; text-align: left; }
 .root *, .root *::before, .root *::after { box-sizing: border-box; }
 .seriesTag { display: inline-flex; align-items: center; gap: 5px; height: 15px; vertical-align: middle; font-size: 10px; line-height: 1.5; }
+.coverTag { display: flex; align-items: center; gap: 5px; min-height: 24px; margin-bottom: 8px; }
+.coverTag .symbol { flex-basis: 24px; width: 24px; height: 24px; }
+.coverTag .symbol svg { width: 18px; height: 18px; }
 .ribbon { display: flex; align-items: center; width: 100%; min-height: 32px; }
 .track { min-width: 0; width: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; overscroll-behavior-x: contain; }
 .track::-webkit-scrollbar { display: none; }

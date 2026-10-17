@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -37,7 +37,7 @@ export default function ArtworkGlassArtbook({
         () => artworks.find((item) => item.id === initialArtworkId) ?? artworks[0] ?? null,
     );
     const [highlightArtworks, setHighlightArtworks] = useState<[Artwork | null, Artwork | null]>([null, null]);
-    const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId });
+    const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId, kind: "entrance" });
     const standardHref = selectedArtwork
         ? artworkExperienceHref(selectedArtwork.slug, navigationQuery, "standard")
         : "/artworks";
@@ -97,10 +97,13 @@ export default function ArtworkGlassArtbook({
         };
     }, [navigationQuery]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const host = hostRef.current;
         const items: Artwork[] = JSON.parse(dataKey);
         if (!portalHost || !bookEligible || !host || !items.length) return;
+        // Establish the gate before a new native tree can paint, including
+        // catalogue/filter rebuilds after this component was already ready.
+        setLoadState({ status: "loading", artworkId: initialIdRef.current, kind: "entrance" });
         const controller = createGlassArtbook(host, {
             artworks: items,
             initialArtworkId: initialIdRef.current,
@@ -166,8 +169,8 @@ export default function ArtworkGlassArtbook({
             <div className={styles.bookViewport} data-lenis-prevent aria-busy={loadState.status === "loading"}>
                 <div ref={hostRef} className={`${styles.root} font-sans`} inert={loadState.status !== "ready"} aria-label="Glass Artbook artwork viewer" />
             </div>
-            {loadState.status !== "ready" && <div className={styles.loadingPanel}>
-                {loadState.status === "loading" ? <ArtworkLoading label={loadState.artworkId === selectedArtwork.id ? "Preparing Artbook…" : "Loading artwork…"} /> : <div className={styles.loadError}>
+            {loadState.status !== "ready" && <div className={`${styles.loadingPanel} ${loadState.kind === "turn" ? styles.turnLoading : ""}`}>
+                {loadState.status === "loading" ? <ArtworkLoading label={loadState.kind === "turn" ? "Loading artwork…" : "Preparing Artbook…"} /> : <div className={styles.loadError}>
                     <p role="alert" className="font-sans text-sm text-white/70">This artwork could not finish loading.</p>
                     <button type="button" onClick={() => controllerRef.current?.retry()} className="font-sans text-[10px] uppercase tracking-[0.2em] text-brand-gold transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60">Try again</button>
                     <Link href={standardHref} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-brand-gold">Continue in standard view →</Link>
