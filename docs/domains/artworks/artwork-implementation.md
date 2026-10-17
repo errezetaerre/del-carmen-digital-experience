@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.7
+Version: 1.9
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -17,7 +17,7 @@ This implementation combines the existing realisation-state foundation with the 
 
 ## Catalogue state and factual boundaries
 
-The 45 records retain their supplied data. Four projects have explicit `planned` / `unavailable` state: `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque`, all planned for 2027. Other entries retain their previous completed-work meaning. This is not an independent physical-inventory audit.
+The current 45-record catalogue adopts the owner-supplied `data/artworks.ts` from 2026-10-17 byte for byte. Seven works have explicit `planned` / `unavailable` state: `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque` retain 2027; `yasemi_ii`, `yasemi_iii` and `yasemi_iv` retain their supplied planned year 2026. Yasemi I remains completed/available. The other 38 records retain their completed-work meaning. Only the six supplied Yasemi state/availability fields differ from the preceding catalogue; all years, copy, dimensions, media paths, classification and prices are retained. This is not an independent physical-inventory audit.
 
 State is explicit; year and positive price never infer completion or purchase availability. Only `completed` plus `available` passes `isArtworkAvailable()`. Future commerce must additionally validate the physical-piece/edition offer, price/currency, stock and delivery on the server.
 
@@ -50,7 +50,7 @@ The only published recognition remains **Sendero del Sol — Honourable Mention,
 
 | Surface | Placement and interaction |
 | --- | --- |
-| Home Selected Works, Archive and Series cards | Existing 4:5 image/title/year/hover composition. Top-right vertical symbols on 40% black; card rollover or keyboard focus reveals labels and details. A badge tap opens its label without opening the artwork. The main artwork action remains a sibling, avoiding nested buttons. |
+| Home Selected Works, Archive and Series cards | Existing 4:5 image/title/year/hover composition. Top-right vertical symbols on 40% black; card rollover or keyboard focus reveals labels and details. The painting, title and entire insignia area belong to one artwork button. Insignias are descriptive inside this action, so clicking a symbol, label or detail opens the artwork rather than a separate badge control. |
 | Collections preview strip | Same insignia family inside the existing linked image. Passive labels expand on link hover/focus. The link retains its single navigation action and the existing strip/hero motion. |
 | Home Featured Work | Below the image, aligned to its painted left edge. Existing metadata remains in place. |
 | Shared lightbox | Below the painted image, outside zoom and aligned to its left edge. Position dots and caption retain their dedicated areas. |
@@ -134,55 +134,75 @@ An image error, decode error or 30-second resource timeout exposes This artwork 
 
 The framework APIs used here are documented in [Next useLinkStatus](https://nextjs.org/docs/app/api-reference/functions/use-link-status), [Next loading convention](https://nextjs.org/docs/app/api-reference/file-conventions/loading) and [React useTransition](https://react.dev/reference/react/useTransition). Resource readiness uses [HTMLImageElement.decode](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decode), [complete](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/complete) and [Document.fonts](https://developer.mozilla.org/en-US/docs/Web/API/Document/fonts). No dependency update is required by this patch.
 
+## Standard tablet landscape composition
+
+The project owner approved the preceding landscape-entry/loading patch and requested that Glass remain untouched during this Standard-only adjustment. During that Standard-only adjustment, all six Glass Artbook files, its entry/loading route and viewport policy, catalogue and shared artwork UI stayed byte-identical to the preceding approved snapshot. The Standard layout remains approved; the subsequent catalogue and shared-thumbnail changes are described below.
+
+The supplied iPad Pro landscape references show the same issue with La Mechuda and L'Aurore: the technical sheet's existing vertical centring makes authorship/title move as quote and description length changes. The new `ArtworkDetailScene.module.css` owns this Standard composition, shared by the scene and its kinetic viewport. It introduces no global typography, domain, data, dependency or book material change.
+
+| Standard sheet region | Behaviour |
+| --- | --- |
+| Header | Authorship and Open Artbook share the top row. The title follows at a fixed top anchor with its existing responsive type, weight and colour. Longer titles wrap naturally rather than shrinking. |
+| Reading region | Preview state, quote, decorative rule, year, medium/support, dimensions, status, description and categories scroll together only when they overflow. The track reserves scrollbar space so the copy width does not shift. |
+| Footer | Previous and Next, with the neighbouring artwork names, remain below the reading pane at the same viewport anchor. First/last/singleton journeys retain their original valid links or empty slots. |
+
+The sheet uses three grid rows with a zero-minimum flexible middle row. It no longer centres itself according to the total text height. The header and footer belong to the outer sheet, outside the scrollport. Changing the artwork keys the reading region by Artwork ID and starts the new reading area at the beginning. Internal scrolling does not move the site navigation, Back link, title or previous/next controls.
+
+The bounded composition applies in landscape at least 960px wide and 600px high: widths through 1366px include tablet-sized emulation regardless of primary pointer; larger touch tablets qualify through `any-pointer: coarse`. Portrait, compact phone landscape, insufficient height and larger fine-pointer desktop viewports retain the existing Standard flow. Outside the bounded composition the added header/reading wrappers use display:contents to preserve that flow.
+
+The image keeps its aspect ratio, intrinsic sizing, asset, zoom action, typography and Halo treatment. Its existing viewer is bounded by the available left-column height; distinguished works reserve 48px beneath the stage for the insignia. No image is recropped, replaced with a 9:16/16:9 variant or forcibly enlarged. Tablet portrait imagery is unchanged. The separate image-size observation can be assessed later against actual public assets in the complete application.
+
+A one-pixel bronze divider sits in the gap between image and information. Its opacity peaks at .22 and fades at both ends. It has no pointer interaction, glow, frame or overlap with the painting. The original image/info column weighting remains 1.35/.65 with a minimum 300px information column; the gap scales with the tablet viewport.
+
+The Standard kinetic input guard checks the reading pane's actual computed overflow. While that pane is bounded, its mouse/touch, wheel and keyboard input remain native rather than starting an artwork swipe. Outside this layout the original pointer/arrow response remains available. The pane is keyboard-focusable, labelled with the artwork title, has a quiet focus outline and carries data-lenis-prevent. Approved gesture physics, swipe reminders, URL mode/context and image expansion remain unchanged.
+
+## Series viewer parity and complete thumbnail action
+
+`SeriesGallery` now selects the same `presentation="glass"` on the shared ArtworkLightbox used by Home. Its image stage/mask, glass frame, warm separator, description expansion, zoom, swipe, keyboard controls and native responsive scrolling use that existing implementation. The shared viewer engine and stylesheet do not change.
+
+Series remains the navigation scope: its dots and previous/next iterate only the supplied Series artworks; a valid `?artwork=<slug>` initializes that Series work; Close removes the query while staying in the Series; Explore in detail carries `series=<slug>` to artwork detail. The global All Works action stays absent in this context. Gallery sizes, grid/carousel thresholds, Series atmosphere and Home entry behaviour are retained.
+
+`CollectionArtwork` keeps one existing main button and puts its descriptive thumbnail insignia inside that button. The button is the overlay's positioned owner, preserving the top-right rail geometry. The passive insignia has no nested button, click interception or pointer hit area; painting, symbol, label and detail therefore reach the same artwork action. The card's existing hover/focus state sets the passive rail's expanded marker, retaining its vertical icon order, full labels, detail, underline and technical rollover. Loading still disables this whole action.
+
+This rule replaces the earlier thumbnail-only distinction tap action. Interactive below-image ribbons keep their existing details, ticker, pause control and event isolation in Home/Standard/lightbox/Glass. Linked Collections previews remain a single link with their existing passive hover treatment. No permanent badge box, altered Halo palette, frame size or changed Coming Soon placement is introduced.
+
 ## Installation
 
-This update contains **20 source files**, including the complete six-file Glass Artbook folder, and three canonical documents:
+This patch builds on the approved Standard tablet layout and landscape-entry/loading updates. It contains five changed source files, the complete unchanged six-file Glass module for safe directory imports, and four canonical documents:
 
-- `src/app/artworks/[slug]/loading.tsx`
-- `src/app/artworks/[slug]/page.tsx`
-- `src/domains/artworks/components/ArtworkDetailResponsiveEntry.module.css`
-- `src/domains/artworks/components/ArtworkDetailResponsiveEntry.tsx`
-- `src/domains/artworks/components/ArtworkDetailScene.tsx`
-- `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.module.css`
-- `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.tsx`
-- `src/domains/artworks/components/glass-artbook/index.ts`
-- `src/domains/artworks/components/glass-artbook/runtime.d.mts`
-- `src/domains/artworks/components/glass-artbook/runtime.mjs`
-- `src/domains/artworks/components/glass-artbook/types.ts`
-- `src/domains/artworks/presentation/artworkExperience.ts`
-- `src/domains/collections/components/CollectionPreviewArtwork.tsx`
+- `src/domains/artworks/data/artworks.ts`
+- `src/domains/artworks/series/components/SeriesGallery.tsx`
 - `src/domains/home/sections/collection/CollectionArtwork.tsx`
-- `src/domains/home/sections/collection/CollectionGallery.tsx`
-- `src/domains/home/sections/featuredArtwork/FeaturedArtwork.tsx`
-- `src/shared/ui/artwork/ArtworkLightbox.tsx`
-- `src/shared/ui/artwork/ArtworkLinkFeedback.tsx`
-- `src/shared/ui/artwork/ArtworkLoading.tsx`
-- `src/shared/ui/artwork/ArtworkNavigationFeedback.module.css`
+- `src/shared/ui/artwork/ArtworkBadges.tsx`
+- `src/shared/ui/artwork/ArtworkBadges.module.css`
+- `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.tsx`
+- `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.module.css`
+- `src/domains/artworks/components/glass-artbook/index.ts`
+- `src/domains/artworks/components/glass-artbook/runtime.mjs`
+- `src/domains/artworks/components/glass-artbook/runtime.d.mts`
+- `src/domains/artworks/components/glass-artbook/types.ts`
+- `docs/domains/artworks/artwork-model.md`
 - `docs/domains/artworks/artwork-implementation.md`
 - `docs/domains/collection/collection-specification.md`
 - `docs/architecture/repository-structure.md`
 
-The update has 23 entries. `index.ts` and `runtime.d.mts` preserve the book's directory import and engine declarations. Merge its files into the existing project; do not replace entire shared folders with a partial folder. No integration-review README, dependency or environment variable is added.
+The archive has 15 entries. The catalogue file is exactly the supplied updated file; the Glass files preserve the approved bytes. Merge files into the existing repository rather than replacing whole directories. No integration-review README, dependency, environment variable or generated preview is added.
 
 From the actual project root:
 
 ```sh
-unzip -o "$HOME/Downloads/Del_Carmen_Artwork_Entrada_Landscape_y_Loading_2026-10-17_v2.zip" -d .
+unzip -o "$HOME/Downloads/Del_Carmen_Series_Viewer_y_Thumbnails_2026-10-17.zip" -d .
 npm run build
 ```
 
 ## Validation and remaining verification
 
-Sixty-two isolated checks pass against the compiled actual source. Entry cases include phone/tablet landscape, fine-pointer emulation, touch tablets with a paired mouse, fresh reloads, portrait/desktop and insufficient-size fallbacks, explicit Standard bypass and rotation without reopening. Resource cases include actual displayed-image and primary-asset decoding, delayed fonts, complete/broken cached images, loads longer than the former 2.5-second deadline, decode rejection, timeout and retry, independent adjacent preloading, incoming-turn gating, stale-selection suppression, disposal cleanup and engines without decode. Wrapper checks retain a usable Exit through loading/error and verify the ready state removes only the overlay and interaction lock. Existing acknowledgement, link pending, mode/context and noscript cases are retained.
+Fifteen focused checks pass against the compiled actual source. They verify exact adoption of the supplied catalogue and the six intended state-field differences, the seven planned previews and availability guards, Series/Home shared-viewer presentation, valid/invalid scoped deep links and Close, thumbnail selection URL, a single artwork action for all 45 cards, symbol/label/detail click propagation, hover/focus expansion, busy-card guarding and planned technical rollover. Award/selection examples exist only as removed test fixtures; no additional recognition is published.
 
-The actual Server Page output is also checked for Featured context across automatic/explicit entry, clean archive Back links and Standard mode on previous/next hrefs and all neighbouring scenes. The retained cases cover the approved badge identities, future-work previews, all-card hover/focus, filtering, image/zoom masks, ticker reading and page-bound insignia ownership/rotation/reversal/reparenting.
+The shared viewer is also checked for its Series-scoped detail link, four Yasemi position dots and Next/Previous cycling only through those four records, including Coming Soon for Yasemi II–IV. Collections links retain their existing single passive action. The non-passive Ribbon rendering, controls and interaction body remain unchanged; badge CSS differs only by the expanded-thumbnail underline rule.
 
-All 223 TS/TSX/MTS/MJS files parse, and all 391 local imports resolve. The runtime changes are readiness/lifecycle guards; the material stylesheet adds loading treatment and extends the approved landscape scrollport to eligible emulation and touch tablets. The shader, rim renderer, page geometry, insignia ownership/alignment/slide, movement/release response and fast-navigation spring/queue remain checked against the approved source. Coming Soon, shared Halo rendering/styles, image highlights, optical accents, CollectionHeroMotion, catalogue/model/recognition records and Home curation remain byte-identical.
+All 223 TS/TSX/MTS/MJS files parse, and all 393 local imports resolve. The complete Glass module, approved Standard/tablet layout, responsive entry/loading, full ArtworkLightbox engine/style, Coming Soon treatment, image highlights, curation, recognition records, frame motion and CollectionHeroMotion remain unchanged. The earlier 62 book/entry checks and ten Standard checks remain validation records for their approved underlying implementation, rather than new browser tests for this patch.
 
-The compiled-code checks use local React/Next/DOM stand-ins; the constructed window markup is independently parsed with an HTML parser. They are not a complete React renderer, TypeScript project check, production Next build, real-browser render or physical-device review. The supplied snapshot has no package/configuration root, installed project dependencies or public assets, so the complete build must run in the real repository:
+Compiled-source checks use local React/Next/DOM stand-ins, including a simulated click bubble. They are not a full TypeScript project check, production Next build, real-browser hit test/layout or physical-device review. Root configuration, project dependencies and public assets were not supplied; complete build and visual verification belong in the actual repository.
 
-```sh
-npm run build
-```
-
-Then review slow and prefetched navigation from Archive thumbnails, Collections previews, Home Featured Work and lightbox detail actions. On phone and tablet landscape, including emulation without touch, check direct unmarked entry and fresh reload, direct glass URLs, Exit followed by Standard reload/navigation, rotation and explicit Open Artbook. With throttled networking confirm the preparation indicator remains until the image and fonts are ready, the opening animation remains visible, and a missing image exposes retry/Standard options. Retain portrait and larger desktop compositions and review keyboard, reduced-motion, scroll, image/zoom masks and the already approved page-bound insignias. Check filtered and Series return journeys as well. Build success does not replace that visual review.
+Compare Home with `/series/yasemi?artwork=yasemi-i` and `/series/yasemi?artwork=yasemi-iii` in portrait/landscape at phone, tablet and desktop sizes. Confirm the same glass viewer, mask, scrolling and controls; Series-only paging/Close/detail context; and Coming Soon for the three pending Yasemi works. On Home/Archive/Series, click the expanded thumbnail symbol, label and recognition detail as well as the painting; each should open that work once. Retain keyboard focus/activation, pending-route guards, full planned-card rollover, interactive below-image ribbons and the approved Standard/Glass book journeys.

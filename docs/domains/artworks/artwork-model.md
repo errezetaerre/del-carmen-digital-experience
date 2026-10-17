@@ -1,6 +1,6 @@
 # Artwork Model
 
-Version: 1.3
+Version: 1.4
 
 Document ID:
 DOC-AM
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-16
+2026-10-17
 
 ---
 
@@ -193,7 +193,7 @@ in-progress
 completed
 ```
 
-This describes artistic realisation, separately from authorship, editorial placement and commercial availability. The catalogue records the four confirmed future projects as `planned`; the other records retain their existing completed-work meaning. The catalogue migration is not a new physical-inventory audit.
+This describes artistic realisation, separately from authorship, editorial placement and commercial availability. The current catalogue records seven owner-confirmed projects as `planned`: the four 2027 projects and Yasemi II, III and IV, whose supplied planned year remains 2026. The other 38 records retain their existing completed-work meaning. The catalogue migration is not a new physical-inventory audit.
 
 A planned work may be publicly previewed with `Coming soon` and `Planned for <year>`. In-progress work is labelled accordingly. Preview images must be identified as previews rather than presented as a finished physical painting.
 
@@ -1335,7 +1335,7 @@ No future commerce or domain capability has been removed because it is not imple
 
 This requirement-driven extension supersedes the earlier initial vocabulary where availability had only three values and the catalogue had no realisation state. The remaining classification, HomeCuration and future Product boundaries are preserved.
 
-The four user-confirmed future works are `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque`. They now have `creationStatus: "planned"` and `availability: "unavailable"`. Their existing planned year, dimensions, image paths, authorship and price records are retained. Their primary image alt text identifies a planned artwork preview. The other 41 entries retain the previous completed-work presentation with an explicit `completed` state.
+The four user-confirmed future works are `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque`. They now have `creationStatus: "planned"` and `availability: "unavailable"`. Their existing planned year, dimensions, image paths, authorship and price records are retained. Their primary image alt text identifies a planned artwork preview. This initially left 41 entries with an explicit `completed` state. The owner subsequently supplied an updated `data/artworks.ts` on 2026-10-17: `yasemi_ii`, `yasemi_iii` and `yasemi_iv` also have `creationStatus: "planned"` and `availability: "unavailable"`. This latest file is the catalogue source of truth, with 45 entries, 38 completed and seven planned. Yasemi I remains completed/available; Yasemi II–IV retain 2026 and all supplied dimensions, media paths, copy and prices. No state is inferred from the year.
 
 Recognition is a separate reference structure in `model/artworkRecognition.ts` and `data/artworkRecognitions.ts`:
 

@@ -1,0 +1,24 @@
+/* Transparent wrappers keep the existing Standard composition elsewhere. */
+.heading, .reading { display: contents; }
+
+@media (orientation: landscape) and (min-width: 960px) and (min-height: 600px) and (max-width: 1366px), (orientation: landscape) and (min-width: 960px) and (min-height: 600px) and (any-pointer: coarse) {
+    .viewport { height: 100vh; height: 100dvh; overflow-y: hidden; }
+    .viewport .toolbarRow { padding-top: max(5.5rem, env(safe-area-inset-top)); }
+    .scene { min-height: 0; height: 100vh; height: 100dvh; }
+    .scene .content { box-sizing: border-box; height: 100%; padding-top: max(9rem, calc(env(safe-area-inset-top) + 8rem)); padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
+    .content .spread { --standard-column-gap: clamp(2rem, 4vw, 5rem); position: relative; height: 100%; min-height: 0; margin-top: 0; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr); align-items: stretch; gap: var(--standard-column-gap); }
+    .spread .image { position: relative; height: 100%; min-height: 0; }
+    .image .imageStage { height: 100%; min-height: 0; margin-bottom: 0; }
+    .image[data-artwork-detail-halo="true"] .imageStage { height: calc(100% - 48px); }
+    .imageStage > :first-child { height: 100%; min-height: 0 !important; }
+    .imageStage img { max-height: 100% !important; max-width: 100% !important; }
+    .spread .sheet { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; align-self: stretch; width: 100%; max-width: none; height: 100%; min-width: 0; min-height: 0; transform: none; translate: none; }
+    .sheet::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(0px - var(--standard-column-gap) / 2); width: 1px; background: linear-gradient(transparent, rgb(162 123 72 / .12) 12%, rgb(201 163 90 / .22) 50%, rgb(162 123 72 / .12) 88%, transparent); pointer-events: none; }
+    .sheet .heading { display: block; min-width: 0; }
+    .heading > div { align-items: flex-start; }
+    .sheet .reading { display: block; min-width: 0; min-height: 0; margin-top: 1.5rem; padding: 0 .75rem .5rem 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; scrollbar-width: thin; scrollbar-color: rgb(201 163 90 / .25) transparent; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+    .reading > :first-child { margin-top: 0; }
+    .reading:focus-visible { outline: 1px solid rgb(201 163 90 / .3); outline-offset: 2px; }
+    .sheet .navigation { margin-top: 1.5rem; padding-top: 1rem; }
+    .navigation a { display: flex; flex-direction: column; justify-content: flex-start; min-height: 44px; }
+}

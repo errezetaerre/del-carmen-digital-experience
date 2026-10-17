@@ -757,7 +757,7 @@ export const artworks: Artwork[] = [
 
     year: 2026,
 
-    creationStatus: "completed",
+    creationStatus: "planned",
 
     authorship: "original",
 
@@ -794,7 +794,7 @@ export const artworks: Artwork[] = [
     description:
       "In this artwork, the colors and shapes merge to create a sense of movement and emotion.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 500,
@@ -811,7 +811,7 @@ export const artworks: Artwork[] = [
 
     year: 2026,
 
-    creationStatus: "completed",
+    creationStatus: "planned",
 
     authorship: "original",
 
@@ -848,7 +848,7 @@ export const artworks: Artwork[] = [
     description:
       "Yasemi, the seed that sleeps in the water and wakes in the air. The piece has three distinct sections: the darkness of the water at the bottom, the light of the air at the top, and the transition zone in between where Yasemi rests.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 500,
@@ -865,7 +865,7 @@ export const artworks: Artwork[] = [
 
     year: 2026,
 
-    creationStatus: "completed",
+    creationStatus: "planned",
 
     authorship: "original",
 
@@ -902,7 +902,7 @@ export const artworks: Artwork[] = [
     description:
       "The seed blooms and becomes a flower, spreading its brilliance day by day. She is in the air, with her colors, her light, her joy, her movement.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 500,

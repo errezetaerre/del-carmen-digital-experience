@@ -30,6 +30,7 @@
 .thumbnail[data-expanded="true"] .copy { opacity: 1; visibility: visible; }
 .thumbnail .label { white-space: normal; }
 .thumbnail .badge::after { left: 14px; right: 7px; bottom: 3px; }
+.thumbnail[data-expanded="true"] .badge::after { opacity: 1; }
 .passive { max-height: 100%; overflow: hidden; pointer-events: none; }
 .passive .symbol { align-self: start; }
 :global(a:hover) .passive, :global(a:focus-visible) .passive { width: 100%; }

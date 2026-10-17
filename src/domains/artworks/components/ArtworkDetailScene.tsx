@@ -3,6 +3,7 @@ import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "../presentation/getArtworkPresentation";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
+import sceneStyles from "./ArtworkDetailScene.module.css";
 
 import type { Artwork } from "@/domains/artworks";
 import ArtworkDetailViewer from "@/domains/artworks/components/ArtworkDetailViewer";
@@ -63,10 +64,13 @@ export default function ArtworkDetailScene({
     const authorshipLabel =
         formatAuthorship(artwork.authorship);
 
+    const hasHighlights = presentation.badges.some((badge) => badge.kind !== "planned" && badge.kind !== "in-progress");
+
     return (
         <main
             className={`
                 ${glassStyles.standardScene}
+                ${sceneStyles.scene}
                 min-h-screen
                 bg-surface-deep
                 text-white
@@ -74,17 +78,19 @@ export default function ArtworkDetailScene({
         >
             <Container
                 size="wide"
-                className="
+                className={`
+                    ${sceneStyles.content}
                     pb-20
                     pt-10
 
                     md:py-20
                     lg:py-28
-                "
+                `}
             >
                 <div
                     data-artwork-detail-layout
-                    className="
+                    className={`
+                        ${sceneStyles.spread}
                         mt-7
                         grid
                         gap-8
@@ -96,10 +102,10 @@ export default function ArtworkDetailScene({
                         lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,0.65fr)]
                         lg:items-center
                         lg:gap-20
-                    "
+                    `}
                 >
-                    <div data-artwork-detail-image>
-                        <ArtworkImageHighlights artwork={artwork}>
+                    <div data-artwork-detail-image data-artwork-detail-halo={hasHighlights || undefined} className={sceneStyles.image}>
+                        <ArtworkImageHighlights artwork={artwork} className={sceneStyles.imageStage}>
                         <ArtworkDetailViewer
                             artwork={artwork}
                         />
@@ -108,7 +114,8 @@ export default function ArtworkDetailScene({
 
                     <div
                         data-artwork-detail-info
-                        className="
+                        className={`
+                            ${sceneStyles.sheet}
                             max-w-xl
                             -translate-y-1
 
@@ -116,8 +123,9 @@ export default function ArtworkDetailScene({
 
                             lg:max-w-md
                             lg:translate-y-0
-                        "
+                        `}
                     >
+                        <header className={sceneStyles.heading}>
                         <div className="flex flex-wrap items-center justify-between gap-4">
                         <p
                             className="
@@ -159,6 +167,9 @@ export default function ArtworkDetailScene({
                         >
                             {artwork.title}
                         </h1>
+                        </header>
+
+                        <div key={artwork.id} className={sceneStyles.reading} data-artwork-detail-reading data-lenis-prevent tabIndex={0} role="region" aria-label={`${artwork.title} — artwork information`}>
 
                         {presentation.previewLabel && (
                             <p className="mt-3 font-sans text-xs text-white/50">{presentation.previewLabel}</p>
@@ -280,10 +291,12 @@ export default function ArtworkDetailScene({
                                 )}
                             </div>
                         )}
+                        </div>
 
                         {(previousArtwork || nextArtwork) && (
                             <div
-                                className="
+                                className={`
+                                    ${sceneStyles.navigation}
                                     mt-14
                                     border-t
                                     border-white/[0.08]
@@ -291,7 +304,7 @@ export default function ArtworkDetailScene({
 
                                     md:mt-16
                                     md:pt-8
-                                "
+                                `}
                             >
                                 <div
                                     className="

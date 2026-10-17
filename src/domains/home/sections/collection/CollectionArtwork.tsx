@@ -212,7 +212,7 @@ export default function CollectionArtwork({
         onClick={() => { if (!loading) onOpen?.(); }}
         disabled={loading}
         aria-busy={loading}
-        className={`block w-full text-left ${feedbackStyles.pressable}`}
+        className={`relative block w-full text-left ${feedbackStyles.pressable}`}
         aria-label={`View ${artwork.title}${presentationInfo.badges.length ? ` — ${presentationInfo.badges.map((badge) => badge.label).join(", ")}` : ""}`}
       >
         <CollectionArtworkFrame>
@@ -315,9 +315,9 @@ export default function CollectionArtwork({
             </div>
           </div>
         </CollectionArtworkFrame>
+        <ArtworkBadges key={artwork.id} artwork={artwork} variant="thumbnail" passive expanded={cardActive} />
       </button>
       {loading && <span className={feedbackStyles.overlay}><ArtworkLoading label="Opening…" /></span>}
-      <ArtworkBadges key={artwork.id} artwork={artwork} variant="thumbnail" expanded={cardActive} />
     </article>
   );
 }

@@ -76,9 +76,9 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
 
     if (!badges.length) return null;
 
-    // A linked thumbnail owns its one navigation action. Its insignia stays
-    // descriptive, so no interactive element is nested inside that link.
-    if (passive) return <div className={`${styles.root} ${styles.thumbnail} ${styles.passive} ${className}`} role="img" aria-label={badges.map((badge) => [badge.label, badge.detail].filter(Boolean).join(": ")).join(". ")}>
+    // The enclosing thumbnail link/button owns the single artwork action.
+    // Descriptive insignias preserve the rollover without nested controls.
+    if (passive) return <div className={`${styles.root} ${styles.thumbnail} ${styles.passive} ${className}`} data-expanded={expanded || undefined} role="img" aria-label={badges.map((badge) => [badge.label, badge.detail].filter(Boolean).join(": ")).join(". ")}>
         <ul className={styles.list}>{badges.map((badge) => <li key={badge.id}><span className={styles.badge}>
             <span className={styles.symbol} dangerouslySetInnerHTML={{ __html: artworkHaloSymbol(badge.kind) }} />
             <span className={styles.copy}><span className={styles.label}>{badge.label}</span>{badge.detail && <span className={styles.detail}>{badge.detail}</span>}</span>

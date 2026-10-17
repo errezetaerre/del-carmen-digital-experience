@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.7
+Version: 1.8
 
 Document ID: DOC-COL-SPEC
 
@@ -702,3 +702,12 @@ All artwork thumbnails, including planned/in-progress works, retain their full t
 Collections preview-strip links now display the shared compact Opening feedback while their Next Link is pending. They keep their single navigation action, existing hover/focus identity, imagery, chronology and CollectionHeroMotion. Fast prefetched navigation can skip this state.
 
 Shared artwork buttons acknowledge a press with a transient outline. Programmatic detail navigation from the Archive marks its selected card busy and exposes Opening feedback; Home and Series lightboxes still open immediately. Lightbox detail links use the same pending underline before entering the detail route. Phone/tablet-landscape automatic detail entry, reload behaviour, selected-spread image/font preparation and the explicit Standard choice are owned by the artwork domain, as documented in `artwork-implementation.md`; they do not change the Collections/ArtworkSeries model or its compositions.
+
+
+## Shared Series/Home Viewer and Thumbnail Action — 2026-10-17
+
+SeriesGallery explicitly uses the shared ArtworkLightbox's glass presentation, matching Home's approved viewer and its responsive masks, description expansion, native scrolling, swipe/zoom and keyboard controls. Series supplies only its own artworks and retains its scoped position dots, previous/next, Close route and Explore in detail link carrying the Series query. Gallery/carousel composition, atmosphere and CollectionHeroMotion are unchanged.
+
+The owner-supplied current catalogue marks Yasemi II, III and IV as planned/unavailable while retaining their 2026 year; Yasemi I remains completed/available. All four remain members of Yasemi and use the shared completed/frosted preview rules according to their explicit status. The Featured Collection reference and cover remain Yasemi/Yasemi I.
+
+Home, Archive and Series cards now place their descriptive Halo rail inside the main artwork button. The whole thumbnail, including expanded symbols, labels and distinction detail, activates that single artwork action. Hover/focus expansion, technical rollover, frame geometry and loading guards remain intact; thumbnail badges no longer consume clicks as separate disclosure buttons. Below-image ribbons retain interactive details/ticker behaviour, and linked Collections previews keep their existing passive single-link treatment.

@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { LinkButton } from "@/shared/ui/button";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
+import sceneStyles from "./ArtworkDetailScene.module.css";
 
 interface ArtworkDetailKineticExperienceProps {
     previousScene?: ReactNode;
@@ -52,6 +53,13 @@ const ONBOARDING_VISIBLE_MS = 2600;
 let artworkOnboardingLearnedInCurrentDocument = false;
 
 type OnboardingPhase = "reminding" | "sealing" | "learned";
+
+// Only the bounded tablet reading pane owns these gestures. Outside that
+// layout, its display:contents wrapper retains the existing scene navigation.
+function isReadingPane(target: EventTarget | null) {
+    const pane = (target as HTMLElement | null)?.closest?.<HTMLElement>("[data-artwork-detail-reading]");
+    return Boolean(pane && getComputedStyle(pane).overflowY === "auto");
+}
 
 export default function ArtworkDetailKineticExperience({
     previousScene,
@@ -564,6 +572,7 @@ export default function ArtworkDetailKineticExperience({
 
         const handleWheel = (event: WheelEvent) => {
             if ((event.target as HTMLElement | null)?.closest("[data-artwork-highlights]")) return;
+            if (isReadingPane(event.target)) return;
             if (
                 inputModeRef.current === "pointer" ||
                 draggingRef.current
@@ -755,6 +764,8 @@ export default function ArtworkDetailKineticExperience({
         const handleKeyDown = (event: KeyboardEvent) => {
             const target = event.target as HTMLElement | null;
 
+            if (isReadingPane(target)) return;
+
             if (
                 target?.closest(
                     "input, textarea, select, button, [contenteditable='true'], [data-artwork-kinetic-ignore]",
@@ -805,6 +816,8 @@ export default function ArtworkDetailKineticExperience({
         }
 
         const target = event.target as HTMLElement;
+
+        if (isReadingPane(target)) return;
 
         if (
             target.closest(
@@ -1030,6 +1043,7 @@ export default function ArtworkDetailKineticExperience({
             data-artwork-native-scroll={nativePortrait || undefined}
             className={`
                 ${glassStyles.standardViewport}
+                ${sceneStyles.viewport}
                 relative
                 w-full
                 overflow-x-hidden
@@ -1042,7 +1056,7 @@ export default function ArtworkDetailKineticExperience({
             onPointerCancel={finishPointer}
         >
             <div className={`${glassStyles.standardToolbar} pointer-events-none absolute inset-x-0 top-0 z-40`}>
-                <div className={`${glassStyles.standardToolbarRow} mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between px-6 pt-10 md:px-10 md:pt-20 lg:px-12 lg:pt-28`}>
+                <div className={`${glassStyles.standardToolbarRow} ${sceneStyles.toolbarRow} mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between px-6 pt-10 md:px-10 md:pt-20 lg:px-12 lg:pt-28`}>
                     <LinkButton
                         href={backHref}
                         variant="goldUnderline"

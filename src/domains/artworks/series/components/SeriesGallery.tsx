@@ -240,6 +240,7 @@ export default function SeriesGallery({
             )}
 
             <ArtworkLightbox
+                presentation="glass"
                 artworks={artworks}
                 initialIndex={
                     selectedIndex ?? 0

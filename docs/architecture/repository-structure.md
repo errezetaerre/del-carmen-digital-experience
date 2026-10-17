@@ -1,4 +1,4 @@
-Version: 1.14
+Version: 1.16
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-16
+2026-10-17
 
 ---
 
@@ -491,7 +491,7 @@ The revision archive, compatibility behavior and production limits are recorded 
 
 Artwork State and Distinctions — 2026-10-16
 
-The existing Artwork model gains required `creationStatus` (`planned`, `in-progress`, `completed`) and the availability vocabulary adds `unavailable`. The catalogue explicitly identifies the four confirmed future works. Year, authorship, dimensions, price and realization remain separate concepts.
+The existing Artwork model gains required `creationStatus` (`planned`, `in-progress`, `completed`) and the availability vocabulary adds `unavailable`. The initial catalogue extension identified four confirmed future works; the latest owner-supplied update identifies seven planned works as recorded in the current catalogue-authority section below. Year, authorship, dimensions, price and realization remain separate concepts.
 
 Artwork recognition references live in:
 
@@ -537,3 +537,17 @@ The Glass Artbook uses two stable insignia portals with separate reveal windows.
 The artwork presentation folder now includes `artworkExperience.ts`, a pure mode-URL helper and phone/tablet-landscape entry query. `ArtworkDetailResponsiveEntry` owns the one-time client viewport check, repeated on a fresh reload. It no longer caps tablet height or requires a coarse primary pointer for viewport widths through 1366px; larger touch tablets use `any-pointer: coarse`. The same query controls first-paint loading and the landscape scrollport. The detail route owns explicit Standard mode on all Standard navigation; the Glass wrapper uses the same URL helper for Exit and fallback. This is navigation state, not another Artwork field or persistence model.
 
 `ArtworkLoading.tsx`, `ArtworkLinkFeedback.tsx` and `ArtworkNavigationFeedback.module.css` extend shared artwork UI with accessible, local waiting feedback. CollectionGallery owns pending state for programmatic detail navigation; linked surfaces use Next Link status. Lightbox selection stays immediate. The detail route's `loading.tsx` owns its route fallback. These resources do not introduce a global navigation service, new domain, dependency or delayed/fake progress. `GlassArtbookOptions.onLoadStateChange` connects local resource preparation to the wrapper loading/error panel. The runtime verifies primary/displayed image load and decoding plus font readiness before opening, independently preloads adjacent works, and waits for an unloaded incoming image before beginning its turn. Recoverable failure/timeout, retry and stale-continuation cleanup belong to the book module; Exit remains outside its interaction lock. Shader, leaf geometry, native insignia ownership and turn physics retain their approved implementation. This adds no global readiness service or dependency.
+
+
+### Standard Artwork Detail Tablet Layout — 2026-10-17
+
+`src/domains/artworks/components/ArtworkDetailScene.module.css` is the local owner of the Standard tablet-landscape sheet. ArtworkDetailScene separates its existing header, middle information and previous/next footer; ArtworkDetailKineticExperience shares only the local viewport/toolbar classes and reading-gesture ownership. The header/footer stay outside the bounded native reading scrollport. The pane is keyed by Artwork ID, while transparent wrappers retain existing flow outside eligible tablet-sized landscape viewports.
+
+This is presentation layout, not a new Artwork field, domain, global layout service or book material. The image/detail divider lives in the existing column gap; unchanged shared artwork UI still owns the painting, zoom and Halo. The complete Glass Artbook, entry/loading policy, catalogue and shared artwork UI retain their approved bytes. Installation and validation limits are recorded in the canonical artwork implementation document.
+
+
+### Catalogue Authority, Series Viewer and Thumbnail Action — 2026-10-17
+
+`src/domains/artworks/data/artworks.ts` adopts the latest complete owner-supplied file. The current catalogue has 45 works: 38 completed and seven planned. Yasemi II–IV are planned/unavailable with their supplied 2026 year; this state is explicit and independent of date or stored price. Data/model/implementation documents remain the canonical reference; no separate inventory list or Collection domain is added.
+
+`SeriesGallery` selects the existing shared ArtworkLightbox glass presentation used by Home, retaining its own Series dataset and route context. `CollectionArtwork` owns one main button covering the painting and descriptive thumbnail insignia. `ArtworkBadges` extends only its passive thumbnail expansion marker and corresponding underline; interactive Ribbon ownership remains separate and unchanged. No new component, navigation service, dependency, book engine or Standard layout is introduced by this update.
