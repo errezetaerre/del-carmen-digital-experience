@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
+import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "../presentation/getArtworkPresentation";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 
@@ -135,9 +136,10 @@ export default function ArtworkDetailScene({
                                 href={artbookHref}
                                 data-artwork-kinetic-ignore
                                 aria-label={`Open ${artwork.title} in Glass Artbook`}
-                                className={`${glassStyles.entryLink} font-sans text-[9px] uppercase tracking-[0.20em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`}
+                                className={`${glassStyles.entryLink} relative font-sans text-[9px] uppercase tracking-[0.20em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`}
                             >
                                 Open Artbook ↗
+                                <ArtworkLinkFeedback label="Opening Artbook…" />
                             </Link>
                             <span className={`${glassStyles.orientationHint} font-sans text-[9px] uppercase tracking-[0.20em] text-white/35`}>Artbook in landscape</span>
                         </div>

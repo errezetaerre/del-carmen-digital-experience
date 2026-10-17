@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.5
+Version: 1.6
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -108,42 +108,70 @@ Both ribbons become inert during a turn; the inactive host remains inert at rest
 
 `/artworks` adds **All works | Featured**, independent of category/year/medium. `featured=true` composes with the existing filters and is retained when entering detail, opening/exiting Glass and returning to the archive. Empty combinations use the existing empty state. All works removes only the Featured constraint; Clear filters resets all archive filters.
 
-The selection is a Home curatorial selection, not a substitute for Award or Honourable Mention. No new category or persisted Featured boolean is introduced. A valid Series context continues to own its own navigation sequence. Standard navigation remains Standard until Open Artbook is explicitly selected.
+The selection is a Home curatorial selection, not a substitute for Award or Honourable Mention. No new category or persisted Featured boolean is introduced. A valid Series context continues to own its own navigation sequence. Initial eligible mobile-landscape entry opens Glass automatically. Once Standard is shown or explicitly chosen through Exit, previous/next navigation carries `experience=standard` and retains Standard until Open Artbook is selected.
+
+## Responsive entry and loading feedback
+
+The page-bound 3D insignia design was visually approved by the project owner on 2026-10-17 before this entry/loading change. The runtime and material stylesheet are byte-identical to that approved version.
+
+`ArtworkDetailResponsiveEntry` now checks the viewport once per entry. An unmarked detail URL opens Glass automatically for coarse-pointer landscape viewports at least 640px wide and 300px high, up to 600px high. This is a subset of the existing book capability and compact landscape layout; desktop, ordinary tablet landscape, portrait and smaller unsupported viewports retain Standard.
+
+The automatic entry shows Opening Artbook while routing with replace rather than adding an extra entry to browser history. CSS hides the initial Standard paint only in the eligible viewport, retains its layout during the initial check, and the opening phase unmounts the hidden kinetic view. There is no orientation-change listener that reopens Glass during reading. A noscript link selects explicit Standard so the automatic-entry fallback does not become a dead end with scripting disabled.
+
+`artworkExperienceHref()` builds the shared mode URL. Exit, Escape and the book's orientation fallback choose `experience=standard`. Every Standard previous/next href and neighbouring scene also carries that value, including swipe navigation. Open Artbook replaces the value with glass. Series/category/year/medium/Featured context is preserved; archive/Series Back links omit the experience marker.
+
+`CollectionGallery` uses a navigation transition to mark the chosen detail thumbnail busy, expose a small Opening status and prevent repeat requests for that same work while pending. Another artwork can still be chosen; the displayed pending state follows the latest target. It clears when navigation settles. Home and Series lightbox selection remain immediate; the shared card also has a transient pressed outline.
+
+`ArtworkLinkFeedback` runs as a descendant of Next Link. Collections preview links show a compact pending overlay; Open Artbook, lightbox detail and Home Featured Work links show a thin loading underline positioned outside text flow. Their labels, frame dimensions and touch ownership stay in place. `ArtworkLoading` supplies English status copy, a warm spinner and polite live announcements. Reduced motion disables both spinner and underline animation. Existing Coming Soon placement and shared Halo rendering/styles are unchanged.
+
+`src/app/artworks/[slug]/loading.tsx` supplies the route fallback. The Glass wrapper also displays Opening Artbook during client initialisation. Indicators follow the actual pending state; there is no fake progress percentage or imposed minimum delay. A prefetched link may skip the pending indicator and show its destination directly.
+
+The framework APIs used here are documented in [Next useLinkStatus](https://nextjs.org/docs/app/api-reference/functions/use-link-status), [Next loading convention](https://nextjs.org/docs/app/api-reference/file-conventions/loading) and [React useTransition](https://react.dev/reference/react/useTransition). No dependency update is required by this patch.
 
 ## Installation
 
-Install this correction on the current Halo/Featured Collection implementation. It contains the **complete six-file Glass Artbook module**:
+This update contains **20 source files**, including the complete six-file Glass Artbook folder, and three canonical documents:
 
+- `src/app/artworks/[slug]/loading.tsx`
+- `src/app/artworks/[slug]/page.tsx`
+- `src/domains/artworks/components/ArtworkDetailResponsiveEntry.module.css`
+- `src/domains/artworks/components/ArtworkDetailResponsiveEntry.tsx`
+- `src/domains/artworks/components/ArtworkDetailScene.tsx`
 - `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.module.css`
 - `src/domains/artworks/components/glass-artbook/ArtworkGlassArtbook.tsx`
 - `src/domains/artworks/components/glass-artbook/index.ts`
 - `src/domains/artworks/components/glass-artbook/runtime.d.mts`
 - `src/domains/artworks/components/glass-artbook/runtime.mjs`
 - `src/domains/artworks/components/glass-artbook/types.ts`
-
-Canonical documents included:
-
+- `src/domains/artworks/presentation/artworkExperience.ts`
+- `src/domains/collections/components/CollectionPreviewArtwork.tsx`
+- `src/domains/home/sections/collection/CollectionArtwork.tsx`
+- `src/domains/home/sections/collection/CollectionGallery.tsx`
+- `src/domains/home/sections/featuredArtwork/FeaturedArtwork.tsx`
+- `src/shared/ui/artwork/ArtworkLightbox.tsx`
+- `src/shared/ui/artwork/ArtworkLinkFeedback.tsx`
+- `src/shared/ui/artwork/ArtworkLoading.tsx`
+- `src/shared/ui/artwork/ArtworkNavigationFeedback.module.css`
 - `docs/domains/artworks/artwork-implementation.md`
+- `docs/domains/collection/collection-specification.md`
 - `docs/architecture/repository-structure.md`
 
-The patch has eight entries. `index.ts` and `runtime.d.mts` preserve the directory import and engine declarations. All non-book source files remain unchanged, including the approved Coming Soon placement. No integration-review README, dependency or environment variable is added.
+The update has 23 entries. `index.ts` and `runtime.d.mts` preserve the book's directory import and engine declarations. Merge its files into the existing project; do not replace entire shared folders with a partial folder. No integration-review README, dependency or environment variable is added.
 
-From the actual project root, merge the ZIP from Downloads:
+From the actual project root:
 
 ```sh
-unzip -o "$HOME/Downloads/Del_Carmen_Glass_Artbook_Insignias_3D_2026-10-17.zip" -d .
+unzip -o "$HOME/Downloads/Del_Carmen_Artwork_Entrada_Mobile_y_Loading_2026-10-17.zip" -d .
 npm run build
 ```
 
-This writes the files at their existing paths and keeps other project files in place.
-
 ## Validation and remaining verification
 
-Forty-one isolated checks pass against the compiled actual source. The motion harness connects the actual face assignment, layout, render and pointer down/move/up/finish functions. It checks physical source/destination ownership in both turn directions, actual leaf rotation, stable portal/window identity, cancellation/completion transfers, held expansion, midpoint reversal, successive navigation, regrabbing, destination readiness and complete clipping of an open detail. Local image-alignment checks reject projected screen rectangles and verify the approved enlargement and leaf-edge clamping. Parsed runtime window markup confirms separate persistent reveal owners.
+Fifty-one isolated checks pass against the compiled actual source. New cases cover coarse-pointer phone-landscape entry, portrait/tablet/desktop and insufficient-size fallbacks, explicit Standard bypass, one-time viewport checks, rotation without reopening, mode/context URLs, thumbnail acknowledgement, duplicate requests, target changes, transition completion, immediate lightbox selection, disabled/busy card status, link pending feedback, accessible route-loading copy, a noscript Standard fallback and the Glass Standard/loading fallback.
 
-The retained checks cover state/recognition integrity, Featured Collection identity, independent Featured filtering and detail/Glass context, card actions and hover/keyboard rollover for every work, passive linked cards, frosted preview output, HTML escaping, disclosure/Escape/focus recovery, ticker controls, image-bound clearance, native wheel ownership and the stationary zoom mask. A complete comparison against the prior approved source verifies that every non-book source file is byte-identical, including Coming Soon, shared Halo rendering/styles and CollectionHeroMotion.
+The actual Server Page output is also checked for Featured context across automatic/explicit entry, clean archive Back links and Standard mode on previous/next hrefs and all neighbouring scenes. The retained cases cover the approved badge identities, future-work previews, all-card hover/focus, filtering, image/zoom masks, ticker reading and page-bound insignia ownership/rotation/reversal/reparenting.
 
-All 219 TS/TSX/MTS/MJS files parse. After excluding the artwork/info presentation, the two stable insignia windows, face-local ownership/alignment, content preparation and translation synchronisation and Halo input-ownership guards, the Glass runtime retains the supplied foundation. Turn physics, navigation queues, rigid geometry and optical shader source remain unchanged. Completed-work image markup is unchanged. Responsive entry, optical accent helpers and CollectionHeroMotion are byte-identical. Catalogue/model/recognition records and Home curation are unchanged.
+All 223 TS/TSX/MTS/MJS files parse. The complete Glass runtime and material stylesheet are byte-identical to the approved source; so are Coming Soon, shared Halo rendering/styles, image highlights, optical accents, CollectionHeroMotion, catalogue/model/recognition records and Home curation. This update changes entry, URLs and waiting feedback rather than those approved visual foundations.
 
 The compiled-code checks use local React/Next/DOM stand-ins; the constructed window markup is independently parsed with an HTML parser. They are not a complete React renderer, TypeScript project check, production Next build, real-browser render or physical-device review. The supplied snapshot has no package/configuration root, installed project dependencies or public assets, so the complete build must run in the real repository:
 
@@ -151,4 +179,4 @@ The compiled-code checks use local React/Next/DOM stand-ins; the constructed win
 npm run build
 ```
 
-Then review Sendero del Sol and the four planned works in Home, Collections, Archive, Standard and Glass. Check portrait/landscape phone and tablet plus desktop, specifically full rollover on every card, separation of Coming Soon and the revealed title, badge exit clipped inside the owning leaf, matching native page perspective during closing/held expansion, reverse dragging/cancellation, rapid navigation, below-image alignment, label wrapping, navigation-dot separation, native scroll, zoom clipping and the Featured return journey. Build success does not replace that visual review.
+Then review slow and prefetched navigation from Archive thumbnails, Collections previews, Home Featured Work and lightbox detail actions. On a phone in landscape check direct Glass entry, Exit, several Standard previous/next moves, rotation and explicit Open Artbook. Retain portrait/tablet/desktop compositions and review keyboard, reduced-motion, scroll, image/zoom masks and the already approved page-bound insignias. Check filtered and Series return journeys as well. Build success does not replace that visual review.

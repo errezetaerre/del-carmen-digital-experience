@@ -4,6 +4,7 @@ import {
     useEffect,
     useRef,
     useState,
+    useTransition,
 } from "react";
 
 import { useRouter } from "next/navigation";
@@ -48,6 +49,16 @@ export default function CollectionGallery({
 
     const [selectedIndex, setSelectedIndex] =
         useState<number | null>(null);
+    const [isPending, startTransition] = useTransition();
+    const [pendingArtworkId, setPendingArtworkId] = useState<string | null>(null);
+    const pendingArtworkRef = useRef<string | null>(null);
+
+    useEffect(() => {
+        if (!isPending) {
+            pendingArtworkRef.current = null;
+            setPendingArtworkId(null);
+        }
+    }, [isPending]);
 
     /*
      * ==========================================================
@@ -121,14 +132,15 @@ export default function CollectionGallery({
         index: number,
     ) => {
         if (interaction === "detail") {
+            if (pendingArtworkRef.current === artwork.id) return;
+            pendingArtworkRef.current = artwork.id;
+            setPendingArtworkId(artwork.id);
             const query =
                 detailQuery
                     ? `?${detailQuery}`
                     : "";
 
-            router.push(
-                `/artworks/${artwork.slug}${query}`,
-            );
+            startTransition(() => router.push(`/artworks/${artwork.slug}${query}`));
 
             return;
         }
@@ -167,6 +179,7 @@ export default function CollectionGallery({
                         >
                             <CollectionArtwork
                                 artwork={artwork}
+                                loading={isPending && pendingArtworkId === artwork.id}
                                 imageVariant={imageVariant}
                                 onOpen={() =>
                                     handleOpen(

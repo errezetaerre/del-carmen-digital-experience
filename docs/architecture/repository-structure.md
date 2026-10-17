@@ -1,4 +1,4 @@
-Version: 1.12
+Version: 1.13
 
 Document ID:
 DOC-RS
@@ -529,4 +529,11 @@ The Archive and its detail route retain the Featured filter in URL navigation co
 
 `src/shared/ui/artwork/FeaturedSeriesBadge.tsx` reuses the Halo vectors and local badge styles as a descriptive inline marker. `isFeaturedArtworkSeries()` in the existing artwork presentation query reads the HomeCuration Series reference. Home Collection, Collections hero content and Series detail compose this marker without adding another Collection domain or persistence field.
 
-The Glass Artbook uses two stable insignia portals with separate reveal windows. The runtime reparents each whole window into its owning physical artwork face, so the painting and insignia share native 3D perspective. It prepares source/adjacent destination content through `onHighlightArtwork` and synchronises local vertical displacement with the live pointer/spring angle. Page-local clipping hides the departing insignia at its own lower edge; stable host transfer preserves React content at completion/cancellation. Alignment uses untransformed local image bounds, and interaction locks remain independent of visual opacity. Route/history commitment stays at turn completion. This presentation layer does not clip or resize the rigid leaf or change shader/turn physics. The complete six-file book module remains the integration unit. Approved Coming Soon placement and all other non-book source remain unchanged.
+The Glass Artbook uses two stable insignia portals with separate reveal windows. The runtime reparents each whole window into its owning physical artwork face, so the painting and insignia share native 3D perspective. It prepares source/adjacent destination content through `onHighlightArtwork` and synchronises local vertical displacement with the live pointer/spring angle. Page-local clipping hides the departing insignia at its own lower edge; stable host transfer preserves React content at completion/cancellation. Alignment uses untransformed local image bounds, and interaction locks remain independent of visual opacity. Route/history commitment stays at turn completion. This presentation layer does not clip or resize the rigid leaf or change shader/turn physics. The complete six-file book module remains the integration unit. The approved Coming Soon and Halo presentation remains unchanged; subsequent entry/loading behaviour is described below.
+
+
+### Artwork Entry and Navigation Feedback — 2026-10-17
+
+The artwork presentation folder now includes `artworkExperience.ts`, a pure mode-URL helper and narrow mobile-landscape entry query. `ArtworkDetailResponsiveEntry` owns the one-time client viewport check. The detail route owns explicit Standard mode on all Standard navigation; the Glass wrapper uses the same URL helper for Exit and fallback. This is navigation state, not another Artwork field or persistence model.
+
+`ArtworkLoading.tsx`, `ArtworkLinkFeedback.tsx` and `ArtworkNavigationFeedback.module.css` extend shared artwork UI with accessible, local waiting feedback. CollectionGallery owns pending state for programmatic detail navigation; linked surfaces use Next Link status. Lightbox selection stays immediate. The detail route's `loading.tsx` owns its route fallback. These resources do not introduce a global navigation service, new domain, dependency or delayed/fake progress. The approved book engine and material stylesheet remain unchanged.

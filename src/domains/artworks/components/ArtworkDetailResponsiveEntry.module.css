@@ -1,0 +1,9 @@
+.entry { min-width: 0; }
+.loading { display: none; }
+.entry[data-entry-phase="opening"] > .standard { display: none; }
+.entry[data-entry-phase="opening"] > .loading { display: grid; }
+.loading { position: fixed; inset: 0; z-index: 10000; place-items: center; background: var(--surface-deep, #090908); }
+@media (pointer: coarse) and (orientation: landscape) and (min-width: 640px) and (min-height: 300px) and (max-height: 600px) {
+    .entry[data-entry-phase="checking"] > .standard { visibility: hidden; pointer-events: none; }
+    .entry[data-entry-phase="checking"] > .loading { display: grid; }
+}

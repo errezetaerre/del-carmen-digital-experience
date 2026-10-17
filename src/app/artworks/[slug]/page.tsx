@@ -8,9 +8,11 @@ import {
 } from "@/domains/artworks";
 
 import ArtworkDetailKineticExperience from "@/domains/artworks/components/ArtworkDetailKineticExperience";
+import ArtworkDetailResponsiveEntry from "@/domains/artworks/components/ArtworkDetailResponsiveEntry";
 import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
 import { isFeaturedArtwork } from "@/domains/artworks/presentation/getArtworkPresentation";
+import { artworkExperienceHref } from "@/domains/artworks/presentation/artworkExperience";
 
 interface ArtworkPageProps {
     params: Promise<{
@@ -192,6 +194,10 @@ export default async function ArtworkPage({
     const navigationQuery =
         archiveParams.toString();
 
+    const standardParams = new URLSearchParams(archiveParams);
+    standardParams.set("experience", "standard");
+    const standardNavigationQuery = standardParams.toString();
+
     const backHref = activeSeries
         ? `/series/${activeSeries.slug}`
         : navigationQuery
@@ -211,11 +217,7 @@ export default async function ArtworkPage({
             return undefined;
         }
 
-        return `/artworks/${targetArtwork.slug}${
-            navigationQuery
-                ? `?${navigationQuery}`
-                : ""
-        }`;
+        return artworkExperienceHref(targetArtwork.slug, navigationQuery, "standard");
     };
 
     const previousHref =
@@ -243,7 +245,7 @@ export default async function ArtworkPage({
                 previousPreviousArtwork
             }
             nextArtwork={artwork}
-            navigationQuery={navigationQuery}
+            navigationQuery={standardNavigationQuery}
         />
     ) : undefined;
 
@@ -252,7 +254,7 @@ export default async function ArtworkPage({
             artwork={artwork}
             previousArtwork={previousArtwork}
             nextArtwork={nextArtwork}
-            navigationQuery={navigationQuery}
+            navigationQuery={standardNavigationQuery}
             priority
         />
     );
@@ -262,11 +264,16 @@ export default async function ArtworkPage({
             artwork={nextArtwork}
             previousArtwork={artwork}
             nextArtwork={nextNextArtwork}
-            navigationQuery={navigationQuery}
+            navigationQuery={standardNavigationQuery}
         />
     ) : undefined;
 
     return (
+        <ArtworkDetailResponsiveEntry
+            glassHref={artworkExperienceHref(artwork.slug, navigationQuery, "glass")}
+            standardHref={artworkExperienceHref(artwork.slug, navigationQuery, "standard")}
+            enabled={experience !== "standard"}
+        >
         <ArtworkDetailKineticExperience
             previousScene={previousScene}
             currentScene={currentScene}
@@ -276,5 +283,6 @@ export default async function ArtworkPage({
             backHref={backHref}
             backLabel={backLabel}
         />
+        </ArtworkDetailResponsiveEntry>
     );
 }

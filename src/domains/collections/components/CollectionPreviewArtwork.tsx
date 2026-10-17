@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
 import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
+import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import type { Artwork } from "@/domains/artworks";
@@ -115,6 +116,7 @@ export default function CollectionPreviewArtwork({
                     </p>
                 </div>
                 <ArtworkBadges artwork={artwork} variant="thumbnail" passive />
+                <ArtworkLinkFeedback overlay />
             </div>
         </Link>
     );

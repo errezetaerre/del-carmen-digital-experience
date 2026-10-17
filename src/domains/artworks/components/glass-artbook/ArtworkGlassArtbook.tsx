@@ -7,8 +7,10 @@ import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
 import { getArtworkPresentation } from "../../presentation/getArtworkPresentation";
+import { artworkExperienceHref } from "../../presentation/artworkExperience";
 import ArtworkDetailViewer from "../ArtworkDetailViewer";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
 import { artworkPreviewMarkup } from "@/shared/ui/artwork/artworkPreviewMarkup";
 import { createGlassArtbook, GLASS_BOOK_QUERY } from "./runtime.mjs";
 import type { ArtworkGlassArtbookProps, GlassArtbookController } from "./types";
@@ -36,7 +38,7 @@ export default function ArtworkGlassArtbook({
     );
     const [highlightArtworks, setHighlightArtworks] = useState<[Artwork | null, Artwork | null]>([null, null]);
     const standardHref = selectedArtwork
-        ? `/artworks/${selectedArtwork.slug}${navigationQuery ? `?${navigationQuery}` : ""}`
+        ? artworkExperienceHref(selectedArtwork.slug, navigationQuery, "standard")
         : "/artworks";
 
     useEffect(() => { setPortalHost(document.body); }, []);
@@ -146,6 +148,7 @@ export default function ArtworkGlassArtbook({
         return (
             <main className="min-h-screen bg-surface-deep text-white">
                 <h1 className="sr-only">{selectedArtwork.title}</h1>
+                {bookEligible !== false && <div className="grid min-h-screen place-items-center px-6 py-20"><ArtworkLoading label="Opening Artbook…" /></div>}
                 {bookEligible === false && <Link href={standardHref} className="block px-6 py-12 font-sans text-sm text-white/60">Continue in standard view →</Link>}
                 <noscript><a href={standardHref}>Open {selectedArtwork.title} in standard view</a></noscript>
             </main>

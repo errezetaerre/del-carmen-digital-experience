@@ -1,6 +1,7 @@
 "use client";
 
 import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
+import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 
 //import { useEffect, useRef } from "react";
 import { useLayoutEffect, useRef } from "react";
@@ -459,6 +460,7 @@ export default function FeaturedArtwork() {
                 variant="bronzeUnderline"
               >
                 Discover the work
+                <ArtworkLinkFeedback />
               </LinkButton>
             </div>
           </div>

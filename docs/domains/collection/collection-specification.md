@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.5
+Version: 1.6
 
 Document ID: DOC-COL-SPEC
 
@@ -695,3 +695,10 @@ Home, the selected hero in `/collections`, and its `/series/[slug]` header show 
 `isFeaturedArtworkSeries()` provides the derived check; `FeaturedSeriesBadge` renders the marker. There is no new Collection entity or duplicated persisted Featured flag. The existing artwork archive's Featured filter continues to select featured artworks independently.
 
 All artwork thumbnails, including planned/in-progress works, retain their full technical rollover. A thumbnail-only Coming Soon/In Progress variant places its icon and label higher (`calc(15% + 20px)` from the top, `calc(10% + 20px)` up to 180px wide) to clear the revealed bottom title. Card proportions, artwork size, type, metadata and hover/focus animations stay intact; other frosted-preview surfaces retain their approved placement.
+
+
+## Artwork Navigation Feedback — 2026-10-17
+
+Collections preview-strip links now display the shared compact Opening feedback while their Next Link is pending. They keep their single navigation action, existing hover/focus identity, imagery, chronology and CollectionHeroMotion. Fast prefetched navigation can skip this state.
+
+Shared artwork buttons acknowledge a press with a transient outline. Programmatic detail navigation from the Archive marks its selected card busy and exposes Opening feedback; Home and Series lightboxes still open immediately. Lightbox detail links use the same pending underline before entering the detail route. Mobile-landscape automatic detail entry and the explicit Standard choice are owned by the artwork domain, as documented in `artwork-implementation.md`; they do not change the Collections/ArtworkSeries model or its compositions.

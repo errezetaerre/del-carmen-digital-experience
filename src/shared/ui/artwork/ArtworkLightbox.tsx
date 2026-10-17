@@ -2,6 +2,7 @@
 import { createPortal } from "react-dom";
 
 import Link from "next/link";
+import ArtworkLinkFeedback from "./ArtworkLinkFeedback";
 
 import {
     useEffect,
@@ -1191,6 +1192,7 @@ export default function ArtworkLightbox({
                                         event.stopPropagation()
                                     }
                                     className="
+                                        relative
                                         font-sans
                                         text-[9px]
                                         font-medium
@@ -1219,6 +1221,7 @@ export default function ArtworkLightbox({
                                     >
                                         →
                                     </span>
+                                    <ArtworkLinkFeedback />
                                 </Link>
 
                                 {showAllWorksCta && (

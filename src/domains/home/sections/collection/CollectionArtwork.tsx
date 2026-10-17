@@ -6,6 +6,8 @@ import gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
 import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
+import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
+import feedbackStyles from "@/shared/ui/artwork/ArtworkNavigationFeedback.module.css";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
@@ -17,6 +19,7 @@ type CollectionImageVariant =
 interface CollectionArtworkProps {
   artwork: Artwork;
   onOpen?: () => void;
+  loading?: boolean;
 
   imageVariant?: CollectionImageVariant;
   presentation?: "default" | "series";
@@ -25,6 +28,7 @@ interface CollectionArtworkProps {
 export default function CollectionArtwork({
   artwork,
   onOpen,
+  loading = false,
   imageVariant = "thumbnail",
   presentation = "default",
 }: CollectionArtworkProps) {
@@ -205,8 +209,10 @@ export default function CollectionArtwork({
     >
       <button
         type="button"
-        onClick={onOpen}
-        className="block w-full text-left"
+        onClick={() => { if (!loading) onOpen?.(); }}
+        disabled={loading}
+        aria-busy={loading}
+        className={`block w-full text-left ${feedbackStyles.pressable}`}
         aria-label={`View ${artwork.title}${presentationInfo.badges.length ? ` — ${presentationInfo.badges.map((badge) => badge.label).join(", ")}` : ""}`}
       >
         <CollectionArtworkFrame>
@@ -310,6 +316,7 @@ export default function CollectionArtwork({
           </div>
         </CollectionArtworkFrame>
       </button>
+      {loading && <span className={feedbackStyles.overlay}><ArtworkLoading label="Opening…" /></span>}
       <ArtworkBadges key={artwork.id} artwork={artwork} variant="thumbnail" expanded={cardActive} />
     </article>
   );
