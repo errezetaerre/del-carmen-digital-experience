@@ -13,7 +13,7 @@ import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
 import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
 import { artworkPreviewMarkup } from "@/shared/ui/artwork/artworkPreviewMarkup";
 import { createGlassArtbook, GLASS_BOOK_QUERY } from "./runtime.mjs";
-import type { ArtworkGlassArtbookProps, GlassArtbookController } from "./types";
+import type { ArtworkGlassArtbookProps, GlassArtbookController, GlassArtbookLoadState } from "./types";
 import styles from "./ArtworkGlassArtbook.module.css";
 
 export default function ArtworkGlassArtbook({
@@ -37,6 +37,7 @@ export default function ArtworkGlassArtbook({
         () => artworks.find((item) => item.id === initialArtworkId) ?? artworks[0] ?? null,
     );
     const [highlightArtworks, setHighlightArtworks] = useState<[Artwork | null, Artwork | null]>([null, null]);
+    const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId });
     const standardHref = selectedArtwork
         ? artworkExperienceHref(selectedArtwork.slug, navigationQuery, "standard")
         : "/artworks";
@@ -113,6 +114,7 @@ export default function ArtworkGlassArtbook({
                 return next;
             }),
             onNavigate: (artwork) => onNavigateRef.current(artwork),
+            onLoadStateChange: setLoadState,
         });
         controllerRef.current = controller;
         setActionsHost(host.querySelector<HTMLElement>("[data-glass-artwork-actions]"));
@@ -161,9 +163,16 @@ export default function ArtworkGlassArtbook({
                 Exit <span aria-hidden="true">×</span>
             </Link>
             <h1 className="sr-only">{selectedArtwork.title}</h1>
-            <div className={styles.bookViewport} data-lenis-prevent>
-                <div ref={hostRef} className={`${styles.root} font-sans`} aria-label="Glass Artbook artwork viewer" />
+            <div className={styles.bookViewport} data-lenis-prevent aria-busy={loadState.status === "loading"}>
+                <div ref={hostRef} className={`${styles.root} font-sans`} inert={loadState.status !== "ready"} aria-label="Glass Artbook artwork viewer" />
             </div>
+            {loadState.status !== "ready" && <div className={styles.loadingPanel}>
+                {loadState.status === "loading" ? <ArtworkLoading label={loadState.artworkId === selectedArtwork.id ? "Preparing Artbook…" : "Loading artwork…"} /> : <div className={styles.loadError}>
+                    <p role="alert" className="font-sans text-sm text-white/70">This artwork could not finish loading.</p>
+                    <button type="button" onClick={() => controllerRef.current?.retry()} className="font-sans text-[10px] uppercase tracking-[0.2em] text-brand-gold transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60">Try again</button>
+                    <Link href={standardHref} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-brand-gold">Continue in standard view →</Link>
+                </div>}
+            </div>}
             {actionsHost && experienceRef.current && createPortal(
                 <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly portalTarget={experienceRef.current} />,
                 actionsHost,

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
-import { MOBILE_LANDSCAPE_ENTRY_QUERY } from "../presentation/artworkExperience";
+import { LANDSCAPE_ARTBOOK_ENTRY_QUERY } from "../presentation/artworkExperience";
 import styles from "./ArtworkDetailResponsiveEntry.module.css";
 
 export default function ArtworkDetailResponsiveEntry({
@@ -16,7 +16,7 @@ export default function ArtworkDetailResponsiveEntry({
     useEffect(() => {
         if (checked.current) return;
         checked.current = true;
-        if (!enabled || !glassHref || !window.matchMedia(MOBILE_LANDSCAPE_ENTRY_QUERY).matches) {
+        if (!enabled || !glassHref || !window.matchMedia(LANDSCAPE_ARTBOOK_ENTRY_QUERY).matches) {
             setPhase("standard");
             return;
         }

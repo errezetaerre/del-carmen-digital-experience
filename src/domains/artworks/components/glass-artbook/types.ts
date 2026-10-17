@@ -19,10 +19,17 @@ export interface GlassArtbookOptions {
     renderPreview?: (artwork: Artwork) => string;
     onHighlightArtwork?: (slot: 0 | 1, artwork: Artwork) => void;
     onNavigate?: (artwork: Artwork) => void;
+    onLoadStateChange?: (state: GlassArtbookLoadState) => void;
+}
+
+export interface GlassArtbookLoadState {
+    status: "loading" | "ready" | "error";
+    artworkId: string;
 }
 
 export interface GlassArtbookController {
     navigate(direction: -1 | 1): void;
     select(id: string): void;
+    retry(): void;
     dispose(): void;
 }

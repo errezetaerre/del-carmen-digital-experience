@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.6
+Version: 1.7
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -108,15 +108,15 @@ Both ribbons become inert during a turn; the inactive host remains inert at rest
 
 `/artworks` adds **All works | Featured**, independent of category/year/medium. `featured=true` composes with the existing filters and is retained when entering detail, opening/exiting Glass and returning to the archive. Empty combinations use the existing empty state. All works removes only the Featured constraint; Clear filters resets all archive filters.
 
-The selection is a Home curatorial selection, not a substitute for Award or Honourable Mention. No new category or persisted Featured boolean is introduced. A valid Series context continues to own its own navigation sequence. Initial eligible mobile-landscape entry opens Glass automatically. Once Standard is shown or explicitly chosen through Exit, previous/next navigation carries `experience=standard` and retains Standard until Open Artbook is selected.
+The selection is a Home curatorial selection, not a substitute for Award or Honourable Mention. No new category or persisted Featured boolean is introduced. A valid Series context continues to own its own navigation sequence. Initial eligible phone/tablet-landscape entry opens Glass automatically. Once Standard is shown or explicitly chosen through Exit, previous/next navigation carries `experience=standard` and retains Standard until Open Artbook is selected.
 
 ## Responsive entry and loading feedback
 
-The page-bound 3D insignia design was visually approved by the project owner on 2026-10-17 before this entry/loading change. The runtime and material stylesheet are byte-identical to that approved version.
+The page-bound 3D insignia design and first loading treatment were visually approved by the project owner on 2026-10-17. This refinement extends landscape entry and connects the loading feedback to the actual resource preparation. Physical page geometry, native insignia ownership, turn/spring dynamics, shader and optical intensities retain the approved implementation.
 
-`ArtworkDetailResponsiveEntry` now checks the viewport once per entry. An unmarked detail URL opens Glass automatically for coarse-pointer landscape viewports at least 640px wide and 300px high, up to 600px high. This is a subset of the existing book capability and compact landscape layout; desktop, ordinary tablet landscape, portrait and smaller unsupported viewports retain Standard.
+`ArtworkDetailResponsiveEntry` checks the viewport once per entry, including a fresh browser reload. An unmarked detail URL opens Glass in landscape at least 640px wide and 300px high: viewport widths through 1366px do not depend on the primary pointer, allowing phone/tablet emulation; larger viewports qualify when `any-pointer: coarse` reports touch. Tablet height is no longer capped at 600px. A paired mouse therefore does not exclude a touch tablet. Larger fine-pointer desktop viewports, portrait and insufficient-size viewports retain Standard. Automatic candidates remain inside the existing runtime book capability.
 
-The automatic entry shows Opening Artbook while routing with replace rather than adding an extra entry to browser history. CSS hides the initial Standard paint only in the eligible viewport, retains its layout during the initial check, and the opening phase unmounts the hidden kinetic view. There is no orientation-change listener that reopens Glass during reading. A noscript link selects explicit Standard so the automatic-entry fallback does not become a dead end with scripting disabled.
+The automatic entry shows Opening Artbook while routing with replace rather than adding an extra entry to browser history. CSS hides the initial Standard paint only in the eligible viewport, retains its layout during the initial check, and the opening phase unmounts the hidden kinetic view. There is no orientation-change listener that reopens Glass during reading. A fresh unmarked landscape reload repeats the check; a `glass` URL restores the book directly. An explicit `standard` URL remains Standard after reload, preserving Exit and Standard navigation until Open Artbook is chosen. This distinction is intentional rather than an emulator failure. A noscript link selects explicit Standard so the automatic-entry fallback does not become a dead end with scripting disabled.
 
 `artworkExperienceHref()` builds the shared mode URL. Exit, Escape and the book's orientation fallback choose `experience=standard`. Every Standard previous/next href and neighbouring scene also carries that value, including swipe navigation. Open Artbook replaces the value with glass. Series/category/year/medium/Featured context is preserved; archive/Series Back links omit the experience marker.
 
@@ -124,9 +124,15 @@ The automatic entry shows Opening Artbook while routing with replace rather than
 
 `ArtworkLinkFeedback` runs as a descendant of Next Link. Collections preview links show a compact pending overlay; Open Artbook, lightbox detail and Home Featured Work links show a thin loading underline positioned outside text flow. Their labels, frame dimensions and touch ownership stay in place. `ArtworkLoading` supplies English status copy, a warm spinner and polite live announcements. Reduced motion disables both spinner and underline animation. Existing Coming Soon placement and shared Halo rendering/styles are unchanged.
 
-`src/app/artworks/[slug]/loading.tsx` supplies the route fallback. The Glass wrapper also displays Opening Artbook during client initialisation. Indicators follow the actual pending state; there is no fake progress percentage or imposed minimum delay. A prefetched link may skip the pending indicator and show its destination directly.
+`src/app/artworks/[slug]/loading.tsx` supplies the route fallback. The Glass wrapper displays Opening Artbook during client initialisation and Preparing Artbook while the runtime prepares the selected spread. The initial root remains laid out but invisible so masks, font discovery, canvas dimensions and local insignia alignment are prepared at their real sizes. The resource overlay ends before the approved opening animation, keeping that animation visible.
 
-The framework APIs used here are documented in [Next useLinkStatus](https://nextjs.org/docs/app/api-reference/functions/use-link-status), [Next loading convention](https://nextjs.org/docs/app/api-reference/file-conventions/loading) and [React useTransition](https://react.dev/reference/react/useTransition). No dependency update is required by this patch.
+`GlassArtbookOptions.onLoadStateChange` reports loading/ready/error with the intended Artwork ID. The runtime verifies load events, nonzero natural dimensions and `HTMLImageElement.decode()` for the primary asset and displayed images, then awaits the current `document.fonts.ready` after layout discovery. Browsers without decode retain the load/dimension check. The former 2.5-second forced opening is removed. Ready or broken cached images are distinguished explicitly. The book wrapper makes only the book host inert while loading or in error, with polite status feedback; Exit remains available above the loading panel.
+
+Only current and adjacent assets are preloaded and retained. Adjacent downloads run in parallel without holding a ready selected spread or downloading all 45 images. If a requested incoming image is not decoded, the current spread stays intact under Loading artwork and its requested turn continues once that image is ready. A pending drag/wheel request becomes a normal turn after loading, without retaining a released pointer. Existing ready-image dragging and fast button navigation keep their approved physics.
+
+An image error, decode error or 30-second resource timeout exposes This artwork could not finish loading, Try again and an explicit Standard alternative; it never forces an incomplete spread open. Retry rebuilds the failed image job and resumes the same intended preparation. Replaced selections and disposal invalidate prior continuations; cleanup removes image listeners and resource timers. Window blur cancels an unstarted pending turn while retaining the current spread. No artificial minimum delay or fake progress is added, and prefetched links can still open immediately.
+
+The framework APIs used here are documented in [Next useLinkStatus](https://nextjs.org/docs/app/api-reference/functions/use-link-status), [Next loading convention](https://nextjs.org/docs/app/api-reference/file-conventions/loading) and [React useTransition](https://react.dev/reference/react/useTransition). Resource readiness uses [HTMLImageElement.decode](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decode), [complete](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/complete) and [Document.fonts](https://developer.mozilla.org/en-US/docs/Web/API/Document/fonts). No dependency update is required by this patch.
 
 ## Installation
 
@@ -161,17 +167,17 @@ The update has 23 entries. `index.ts` and `runtime.d.mts` preserve the book's di
 From the actual project root:
 
 ```sh
-unzip -o "$HOME/Downloads/Del_Carmen_Artwork_Entrada_Mobile_y_Loading_2026-10-17.zip" -d .
+unzip -o "$HOME/Downloads/Del_Carmen_Artwork_Entrada_Landscape_y_Loading_2026-10-17_v2.zip" -d .
 npm run build
 ```
 
 ## Validation and remaining verification
 
-Fifty-one isolated checks pass against the compiled actual source. New cases cover coarse-pointer phone-landscape entry, portrait/tablet/desktop and insufficient-size fallbacks, explicit Standard bypass, one-time viewport checks, rotation without reopening, mode/context URLs, thumbnail acknowledgement, duplicate requests, target changes, transition completion, immediate lightbox selection, disabled/busy card status, link pending feedback, accessible route-loading copy, a noscript Standard fallback and the Glass Standard/loading fallback.
+Sixty-two isolated checks pass against the compiled actual source. Entry cases include phone/tablet landscape, fine-pointer emulation, touch tablets with a paired mouse, fresh reloads, portrait/desktop and insufficient-size fallbacks, explicit Standard bypass and rotation without reopening. Resource cases include actual displayed-image and primary-asset decoding, delayed fonts, complete/broken cached images, loads longer than the former 2.5-second deadline, decode rejection, timeout and retry, independent adjacent preloading, incoming-turn gating, stale-selection suppression, disposal cleanup and engines without decode. Wrapper checks retain a usable Exit through loading/error and verify the ready state removes only the overlay and interaction lock. Existing acknowledgement, link pending, mode/context and noscript cases are retained.
 
 The actual Server Page output is also checked for Featured context across automatic/explicit entry, clean archive Back links and Standard mode on previous/next hrefs and all neighbouring scenes. The retained cases cover the approved badge identities, future-work previews, all-card hover/focus, filtering, image/zoom masks, ticker reading and page-bound insignia ownership/rotation/reversal/reparenting.
 
-All 223 TS/TSX/MTS/MJS files parse. The complete Glass runtime and material stylesheet are byte-identical to the approved source; so are Coming Soon, shared Halo rendering/styles, image highlights, optical accents, CollectionHeroMotion, catalogue/model/recognition records and Home curation. This update changes entry, URLs and waiting feedback rather than those approved visual foundations.
+All 223 TS/TSX/MTS/MJS files parse, and all 391 local imports resolve. The runtime changes are readiness/lifecycle guards; the material stylesheet adds loading treatment and extends the approved landscape scrollport to eligible emulation and touch tablets. The shader, rim renderer, page geometry, insignia ownership/alignment/slide, movement/release response and fast-navigation spring/queue remain checked against the approved source. Coming Soon, shared Halo rendering/styles, image highlights, optical accents, CollectionHeroMotion, catalogue/model/recognition records and Home curation remain byte-identical.
 
 The compiled-code checks use local React/Next/DOM stand-ins; the constructed window markup is independently parsed with an HTML parser. They are not a complete React renderer, TypeScript project check, production Next build, real-browser render or physical-device review. The supplied snapshot has no package/configuration root, installed project dependencies or public assets, so the complete build must run in the real repository:
 
@@ -179,4 +185,4 @@ The compiled-code checks use local React/Next/DOM stand-ins; the constructed win
 npm run build
 ```
 
-Then review slow and prefetched navigation from Archive thumbnails, Collections previews, Home Featured Work and lightbox detail actions. On a phone in landscape check direct Glass entry, Exit, several Standard previous/next moves, rotation and explicit Open Artbook. Retain portrait/tablet/desktop compositions and review keyboard, reduced-motion, scroll, image/zoom masks and the already approved page-bound insignias. Check filtered and Series return journeys as well. Build success does not replace that visual review.
+Then review slow and prefetched navigation from Archive thumbnails, Collections previews, Home Featured Work and lightbox detail actions. On phone and tablet landscape, including emulation without touch, check direct unmarked entry and fresh reload, direct glass URLs, Exit followed by Standard reload/navigation, rotation and explicit Open Artbook. With throttled networking confirm the preparation indicator remains until the image and fonts are ready, the opening animation remains visible, and a missing image exposes retry/Standard options. Retain portrait and larger desktop compositions and review keyboard, reduced-motion, scroll, image/zoom masks and the already approved page-bound insignias. Check filtered and Series return journeys as well. Build success does not replace that visual review.

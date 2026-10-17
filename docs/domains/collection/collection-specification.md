@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.6
+Version: 1.7
 
 Document ID: DOC-COL-SPEC
 
@@ -701,4 +701,4 @@ All artwork thumbnails, including planned/in-progress works, retain their full t
 
 Collections preview-strip links now display the shared compact Opening feedback while their Next Link is pending. They keep their single navigation action, existing hover/focus identity, imagery, chronology and CollectionHeroMotion. Fast prefetched navigation can skip this state.
 
-Shared artwork buttons acknowledge a press with a transient outline. Programmatic detail navigation from the Archive marks its selected card busy and exposes Opening feedback; Home and Series lightboxes still open immediately. Lightbox detail links use the same pending underline before entering the detail route. Mobile-landscape automatic detail entry and the explicit Standard choice are owned by the artwork domain, as documented in `artwork-implementation.md`; they do not change the Collections/ArtworkSeries model or its compositions.
+Shared artwork buttons acknowledge a press with a transient outline. Programmatic detail navigation from the Archive marks its selected card busy and exposes Opening feedback; Home and Series lightboxes still open immediately. Lightbox detail links use the same pending underline before entering the detail route. Phone/tablet-landscape automatic detail entry, reload behaviour, selected-spread image/font preparation and the explicit Standard choice are owned by the artwork domain, as documented in `artwork-implementation.md`; they do not change the Collections/ArtworkSeries model or its compositions.

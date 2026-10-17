@@ -1,4 +1,4 @@
-Version: 1.13
+Version: 1.14
 
 Document ID:
 DOC-RS
@@ -534,6 +534,6 @@ The Glass Artbook uses two stable insignia portals with separate reveal windows.
 
 ### Artwork Entry and Navigation Feedback — 2026-10-17
 
-The artwork presentation folder now includes `artworkExperience.ts`, a pure mode-URL helper and narrow mobile-landscape entry query. `ArtworkDetailResponsiveEntry` owns the one-time client viewport check. The detail route owns explicit Standard mode on all Standard navigation; the Glass wrapper uses the same URL helper for Exit and fallback. This is navigation state, not another Artwork field or persistence model.
+The artwork presentation folder now includes `artworkExperience.ts`, a pure mode-URL helper and phone/tablet-landscape entry query. `ArtworkDetailResponsiveEntry` owns the one-time client viewport check, repeated on a fresh reload. It no longer caps tablet height or requires a coarse primary pointer for viewport widths through 1366px; larger touch tablets use `any-pointer: coarse`. The same query controls first-paint loading and the landscape scrollport. The detail route owns explicit Standard mode on all Standard navigation; the Glass wrapper uses the same URL helper for Exit and fallback. This is navigation state, not another Artwork field or persistence model.
 
-`ArtworkLoading.tsx`, `ArtworkLinkFeedback.tsx` and `ArtworkNavigationFeedback.module.css` extend shared artwork UI with accessible, local waiting feedback. CollectionGallery owns pending state for programmatic detail navigation; linked surfaces use Next Link status. Lightbox selection stays immediate. The detail route's `loading.tsx` owns its route fallback. These resources do not introduce a global navigation service, new domain, dependency or delayed/fake progress. The approved book engine and material stylesheet remain unchanged.
+`ArtworkLoading.tsx`, `ArtworkLinkFeedback.tsx` and `ArtworkNavigationFeedback.module.css` extend shared artwork UI with accessible, local waiting feedback. CollectionGallery owns pending state for programmatic detail navigation; linked surfaces use Next Link status. Lightbox selection stays immediate. The detail route's `loading.tsx` owns its route fallback. These resources do not introduce a global navigation service, new domain, dependency or delayed/fake progress. `GlassArtbookOptions.onLoadStateChange` connects local resource preparation to the wrapper loading/error panel. The runtime verifies primary/displayed image load and decoding plus font readiness before opening, independently preloads adjacent works, and waits for an unloaded incoming image before beginning its turn. Recoverable failure/timeout, retry and stale-continuation cleanup belong to the book module; Exit remains outside its interaction lock. Shader, leaf geometry, native insignia ownership and turn physics retain their approved implementation. This adds no global readiness service or dependency.

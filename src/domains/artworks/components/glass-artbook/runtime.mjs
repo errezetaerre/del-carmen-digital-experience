@@ -14,10 +14,11 @@ export function createGlassArtbook(root,options){
  if(!instance)throw Error('Glass Artbook requires a stable instance identifier');
  const nativeDocument=window.document;
  const wideLayout=matchMedia(GLASS_BOOK_QUERY);
- const resources=new Set(),assets=new Map(),cleanups=[];
+ const resources=new Set(),assets=new Map(),imageLoads=new Set(),imageJobs=new WeakMap(),cleanups=[];
  let entrancePlaying=false;
+ let mediaLoading=true,loadRequest=null,loadSignature='';
  let disposed=false,frameId=0,pendingPointer=null,wheelActive=false,wheelTimer=null,edgeTimer=null;
- function inputBlocked(){return entrancePlaying||!!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]');}
+ function inputBlocked(){return mediaLoading||entrancePlaying||!!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]');}
  function requestAnimationFrame(callback){frameId=window.requestAnimationFrame(now=>{if(!disposed)callback(now);});return frameId;}
  const document={
   documentElement:root,
@@ -31,15 +32,88 @@ export function createGlassArtbook(root,options){
  root.innerHTML=`<section class="scene" id="${instance}-scene" aria-label="Glass Artbook artwork viewer"><div class="stage" id="${instance}-stage"><div class="book" id="${instance}-book"><div class="leaf left" id="${instance}-baseLeft"></div><div class="leaf right" id="${instance}-baseRight"></div><div class="turn" id="${instance}-turn"><div class="face front" id="${instance}-turnFront"></div><div class="face back" id="${instance}-turnBack"></div></div><div class="hinge"></div><div class="ga-artwork-actions" data-glass-artwork-actions></div></div></div></section><div class="controls font-sans"><button type="button" id="${instance}-prev" class="previous-control text-white/60 transition-colors hover:text-brand-gold"><span class="nav-label text-[9px] uppercase tracking-[0.28em]">← Previous</span><span class="nav-title font-display" id="${instance}-previousTitle"></span></button><div class="control-center"><span class="meta text-[9px] tracking-[0.24em] text-white/35" id="${instance}-counter" aria-live="polite"></span><span class="guide-dock text-[9px] uppercase tracking-[0.14em] text-white/35" id="${instance}-guideDock" aria-hidden="true">Drag to explore · ← →</span></div><button type="button" id="${instance}-next" class="next-control text-white/60 transition-colors hover:text-brand-gold"><span class="nav-label text-[9px] uppercase tracking-[0.28em]">Next →</span><span class="nav-title font-display" id="${instance}-nextTitle"></span></button></div><div class="guide-bubble" id="${instance}-guide" aria-hidden="true"><span class="guide-arrow font-display">‹</span><span class="guide-text font-sans text-[9px] font-medium uppercase tracking-[0.3em] text-white/70" id="${instance}-guideText"><span class="guide-wide">Swipe / drag the glass · ← → to explore</span><span class="guide-narrow">Use Previous / Next to explore</span></span><span class="guide-arrow font-display">›</span></div><div hidden><input id="${instance}-optical" type="range" value="60"/><output id="${instance}-opticalValue"></output><input id="${instance}-cornerOptical" type="range" value="90"/><output id="${instance}-cornerValue"></output><input id="${instance}-persp" type="number" value="1040"/><span id="${instance}-perspValue"></span><p id="${instance}-glstatus"></p></div>`;
  root.dataset.renderer='webgl';
 
+ // Load and decode before revealing a spread. Cached/broken images can both
+ // report complete, so dimensions and decode are checked independently.
+ function waitForImage(image){
+  if(imageJobs.has(image))return imageJobs.get(image);
+  let resolve,timer=null,finished=false,decoding=false;
+  const job={promise:new Promise(done=>{resolve=done;}),cancel:()=>finish(false)};
+  function finish(ready){
+   if(finished)return;
+   finished=true;
+   image.removeEventListener('load',loaded);image.removeEventListener('error',failed);
+   if(timer!==null)window.clearTimeout(timer);
+   imageLoads.delete(job);resolve(ready);
+  }
+  function failed(){finish(false);}
+  function loaded(){
+   if(finished||decoding)return;
+   if(!image.naturalWidth||!image.naturalHeight){finish(false);return;}
+   decoding=true;
+   try{
+    Promise.resolve(typeof image.decode==='function'?image.decode():undefined)
+     .then(()=>finish(!!image.naturalWidth&&!!image.naturalHeight),failed);
+   }catch{failed();}
+  }
+  imageJobs.set(image,job);imageLoads.add(job);
+  image.addEventListener('load',loaded);image.addEventListener('error',failed);
+  timer=window.setTimeout(failed,30000);
+  if(image.complete)loaded();
+  return job;
+ }
  function getPrimaryAsset(work){
   const src=work.images.primary.src;
   if(assets.has(src))return assets.get(src);
-  const image=new window.Image();image.crossOrigin='anonymous';
-  const asset={image,status:'loading'};assets.set(src,asset);
-  image.onload=()=>{if(!disposed)asset.status=image.naturalWidth&&image.naturalHeight?'ready':'error';};
-  image.onerror=()=>{if(!disposed)asset.status='error';};
+  const image=new window.Image();image.decoding='async';
+  const asset={image,status:'loading',job:null,promise:null};assets.set(src,asset);
   image.src=src;
+  asset.job=waitForImage(image);
+  asset.promise=asset.job.promise.then(ready=>{asset.status=ready?'ready':'error';return ready;});
   return asset;
+ }
+ function publishLoadState(status,artworkIndex=index){
+  mediaLoading=status!=='ready';root.dataset.loadState=status;
+  const artworkId=works[artworkIndex].id,signature=status+':'+artworkId;
+  if(signature===loadSignature)return;
+  loadSignature=signature;options.onLoadStateChange?.({status,artworkId});
+ }
+ function cancelPreparation(){
+  if(loadRequest?.timer!=null)window.clearTimeout(loadRequest.timer);
+  loadRequest=null;
+ }
+ function prepareArtwork(artworkIndex,continueWith,kind){
+  cancelPreparation();
+  const request={artworkIndex,continueWith,kind,timer:null,failed:false};
+  loadRequest=request;publishLoadState('loading',artworkIndex);
+  const asset=getPrimaryAsset(works[artworkIndex]);
+  // The displayed elements also need decoding, rather than only a preloader.
+  // Adjacent assets are preloaded independently and never delay this spread.
+  const visibleImages=[];
+  for(const state of faceStates.values())if(state.kind==='art'&&state.workIndex===artworkIndex){
+   for(const image of state.content.querySelectorAll('img'))visibleImages.push(waitForImage(image).promise);
+  }
+  const fail=()=>{
+   if(disposed||loadRequest!==request||request.failed)return;
+   request.failed=true;window.clearTimeout(request.timer);
+   publishLoadState('error',artworkIndex);
+  };
+  request.timer=window.setTimeout(fail,30000);
+  // Force font/layout discovery before taking the current FontFaceSet.ready.
+  void root.offsetHeight;
+  Promise.all([asset.promise,...visibleImages,Promise.resolve(nativeDocument.fonts?.ready).then(()=>true)])
+   .then(results=>{
+    if(disposed||loadRequest!==request||request.failed)return;
+    if(results.some(ready=>!ready)){fail();return;}
+    window.clearTimeout(request.timer);loadRequest=null;
+    render();publishLoadState('ready',artworkIndex);continueWith();
+   },fail);
+ }
+ function ensureTurnReady(dir){
+  const target=index+dir;
+  if(getPrimaryAsset(works[target]).status==='ready')return true;
+  // Keep the current spread intact until the incoming image is ready.
+  prepareArtwork(target,()=>{if(!disposed&&wideLayout.matches&&!inputBlocked())navigate(dir);},'turn');
+  return false;
  }
  function showEdge(direction,amount){
   prepareInteraction();
@@ -96,6 +170,7 @@ export function createGlassArtbook(root,options){
  }
  function onInputBlur(){
   clearRequestedNavigation();
+  if(loadRequest?.kind==='turn'){cancelPreparation();publishLoadState('ready');render();}
   if(wheelActive)finishWheel();
   pendingPointer=null;
   if(drag)onPointerCancel({pointerId:drag.id});
@@ -122,6 +197,7 @@ export function createGlassArtbook(root,options){
   if(!wheelActive){
    const dir=pixels>0?1:-1;
    if(index+dir<0||index+dir>=works.length){showEdge(dir,pixels);lockWheel();return;}
+   if(!ensureTurnReady(dir))return;
    if(reducedMotion.matches){lockWheel();navigate(dir);return;}
    prepareInteraction();configure(dir);turn.style.display='block';turn.style.visibility='visible';
    angle=0;velocity=0;goal=0;settling=false;animating=true;wheelActive=true;
@@ -412,7 +488,7 @@ function render(){syncLayout();updateNavigation();const grazing=Math.pow(Math.si
  const shineX=50+(direction===1?1:-1)*34*Math.sin(theta);
  const shineEnergy=1+0.18*Math.pow(Math.sin(theta),2);
  turn.style.setProperty('--shine-x',shineX.toFixed(3)+'%');
- turn.style.setProperty('--shine-energy',shineEnergy.toFixed(4));turn.style.transform=`rotateY(${direction===1?-angle:angle}deg)`;$('#prev').disabled=entrancePlaying||(index===0&&!drag&&!animating);$('#next').disabled=entrancePlaying||(index===works.length-1&&!drag&&!animating);syncHighlights();scene.classList.toggle('turning',!!transition);syncOcclusion();paintMaterialFrame()}
+ turn.style.setProperty('--shine-energy',shineEnergy.toFixed(4));turn.style.transform=`rotateY(${direction===1?-angle:angle}deg)`;$('#prev').disabled=inputBlocked()||(index===0&&!drag&&!animating);$('#next').disabled=inputBlocked()||(index===works.length-1&&!drag&&!animating);syncHighlights();scene.classList.toggle('turning',!!transition);syncOcclusion();paintMaterialFrame()}
 function idle(){
  direction=1;angle=0;goal=0;velocity=0;transition=null;
  turn.style.visibility='hidden';turn.style.display='none';
@@ -441,6 +517,7 @@ function continueRequestedNavigation(){
 
 function navigate(dir){
  if(inputBlocked()||drag||animating||index+dir<0||index+dir>=works.length)return;
+ if(!ensureTurnReady(dir))return;
  prepareInteraction();configure(dir);turn.style.display='block';turn.style.visibility='visible';
  angle=0;velocity=0;goal=180;animating=true;settling=true;render();
  if(reducedMotion.matches||!wideLayout.matches){angle=180;finish();}
@@ -457,7 +534,7 @@ function finish(){
  render();
 }
 function tick(now){
- synchronizeMotionPause();progressEntrance(now);
+ synchronizeMotionPause();
  if(inputBlocked()){lastTime=now;requestAnimationFrame(tick);return;}
  const dt=Math.min(.025,(now-lastTime)/1000||.016);lastTime=now;
  if(settling&&!drag){
@@ -476,6 +553,11 @@ function tick(now){
 }
 function down(e,requestedDirection){
  if(inputBlocked()||drag||e.button!==0)return;
+ if(!animating){
+  const rect=stage.getBoundingClientRect();
+  const dir=requestedDirection??(e.clientX>=rect.left+baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5?1:-1);
+  if(index+dir<0||index+dir>=works.length||!ensureTurnReady(dir))return;
+ }
  try{scene.setPointerCapture(e.pointerId);}catch{return;}
  clearRequestedNavigation();
  prepareInteraction();
@@ -717,7 +799,7 @@ const preview={left:0,right:0};
 const guide=$('#guide'),guideText=$('#guideText'),guideDock=$('#guideDock');
 let entranceTween=null,guideTween=null,hoverTween=null,guideTimer=null;
 let guideLearned=false,guideSealing=false;
-let pausedForImage=false,navigationIndex=-1,entranceWaiting=false,entranceDeadline=0;
+let pausedForImage=false,navigationIndex=-1;
 let viewportSignature=[baseLeft.clientWidth,baseLeft.clientHeight,baseRight.clientWidth].join(':');
 root.dataset.guide=guideLearned?'learned':'reminding';
 
@@ -795,28 +877,26 @@ function onProximity(event){
 function prepareInteraction(){clearPreview(true);learnGuide();}
 function finishEntrance(){
  if(disposed)return;
- entranceTween?.kill();entranceTween=null;entranceWaiting=false;entrancePlaying=false;
+ entranceTween?.kill();entranceTween=null;entrancePlaying=false;
  preview.left=0;applyPreview();root.dataset.phase='open';render();positionGuide();
 }
 function drawEntrance(){applyPreview();render();}
-function progressEntrance(now){
- if(!entranceWaiting||disposed||pausedForImage)return;
- const asset=getPrimaryAsset(works[index]);
- if(asset.status==='loading'&&now<entranceDeadline)return;
- entranceWaiting=false;
+function beginEntrance(){
+ if(disposed)return;
+ root.dataset.phase='opening';
+ if(!motion||reducedMotion.matches||!wideLayout.matches){finishEntrance();return;}
  entranceTween=motion.timeline({onComplete:finishEntrance});
  // Accelerate toward the spread, then absorb the small rigid rebound.
  entranceTween.to(preview,{left:-2.3,duration:.88,delay:.32,ease:'power2.in',onUpdate:drawEntrance})
   .to(preview,{left:.7,duration:.18,ease:'power2.out',onUpdate:drawEntrance})
   .to(preview,{left:0,duration:.26,ease:'sine.inOut',onUpdate:drawEntrance});
+ if(pausedForImage)entranceTween.pause();
 }
 function startExperience(){
  updateNavigation();updateGuideCopy();
- if(motion&&!reducedMotion.matches&&wideLayout.matches){
-  entrancePlaying=true;entranceWaiting=true;root.dataset.phase='opening';
-  preview.left=66;drawEntrance();
-  entranceDeadline=performance.now()+2500;progressEntrance(performance.now());
- }else finishEntrance();
+ entrancePlaying=true;root.dataset.phase='loading';
+ preview.left=motion&&!reducedMotion.matches&&wideLayout.matches?66:0;drawEntrance();
+ prepareArtwork(index,beginEntrance,'entrance');
  positionGuide();guideTimer=window.setTimeout(pulseGuide,5000);
 }
 function synchronizeMotionPause(){
@@ -852,7 +932,7 @@ idle();requestAnimationFrame(tick);
   clearRequestedNavigation();
   if(!wideLayout.matches&&transition){const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;wheelActive=false;
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;goal=angle>90?180:0;angle=goal;finish();}
-  if(entrancePlaying)finishEntrance();if(guideSealing){guideTween?.kill();finishGuide();}clearPreview(true);updateGuideCopy();positionGuide();
+  if(entrancePlaying&&!mediaLoading)finishEntrance();if(guideSealing){guideTween?.kill();finishGuide();}clearPreview(true);updateGuideCopy();positionGuide();
   render();
  }
  wideLayout.addEventListener('change',onLayoutChange);cleanups.push(()=>wideLayout.removeEventListener('change',onLayoutChange));
@@ -869,7 +949,7 @@ idle();requestAnimationFrame(tick);
   const retained=new Set();
   for(const i of [index-1,index,index+1])if(works[i]){retained.add(works[i].images.primary.src);getPrimaryAsset(works[i]);}
   for(const state of faceStates.values())if(state.kind==='art')retained.add(works[state.workIndex].images.primary.src);
-  for(const [src,asset] of assets)if(!retained.has(src)){asset.image.onload=null;asset.image.onerror=null;assets.delete(src);}
+  for(const [src,asset] of assets)if(!retained.has(src)){asset.job.cancel();assets.delete(src);}
  };
  preload();startExperience();
  return {
@@ -877,17 +957,34 @@ idle();requestAnimationFrame(tick);
   select(id){
    const target=works.findIndex(work=>work.id===id);if(target<0||target===index)return;
    clearRequestedNavigation();
+   cancelPreparation();
    if(entrancePlaying)finishEntrance();clearPreview(true);
    if(wheelActive){wheelActive=false;if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;lockWheel();}
+   const wasLoading=mediaLoading;
    const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;settling=false;animating=false;clearEdge();index=target;idle();preload();
+   if(wasLoading||getPrimaryAsset(works[index]).status!=='ready')prepareArtwork(index,()=>{root.dataset.phase='open';render();positionGuide();},'selection');
+   else publishLoadState('ready');
+  },
+  retry(){
+   if(disposed||!loadRequest||!loadRequest.failed)return;
+   const request=loadRequest;
+   const src=works[request.artworkIndex].images.primary.src,asset=assets.get(src);
+   if(asset){asset.job.cancel();assets.delete(src);}
+   for(const state of faceStates.values())if(state.kind==='art'&&state.workIndex===request.artworkIndex){
+    for(const image of state.content.querySelectorAll('img')){
+     imageJobs.get(image)?.cancel();imageJobs.delete(image);
+     const src=image.getAttribute('src');image.removeAttribute('src');image.setAttribute('src',src);
+    }
+   }
+   prepareArtwork(request.artworkIndex,request.continueWith,request.kind);
   },
   dispose(){
-   clearRequestedNavigation();
+   clearRequestedNavigation();cancelPreparation();
    const pointerId=drag?.id;drag=null;pendingPointer=null;dropPointerCapture(pointerId);
    disposed=true;disposeExperience();window.cancelAnimationFrame(frameId);observer.disconnect();
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);if(edgeTimer!==null)window.clearTimeout(edgeTimer);
    for(const cleanup of cleanups)cleanup();scene.removeEventListener('wheel',onWheel);
-   for(const asset of assets.values()){asset.image.onload=null;asset.image.onerror=null;}assets.clear();
+   for(const job of imageLoads)job.cancel();assets.clear();
    for(const material of resources){const {gl}=material;gl.deleteBuffer(material.buffer);gl.deleteProgram(material.program);gl.getExtension('WEBGL_lose_context')?.loseContext();}resources.clear();
    root.replaceChildren();
   }
