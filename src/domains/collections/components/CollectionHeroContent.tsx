@@ -1,4 +1,6 @@
 import { LinkButton } from "@/shared/ui/button";
+import FeaturedSeriesBadge from "@/shared/ui/artwork/FeaturedSeriesBadge";
+import { isFeaturedArtworkSeries } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import type { ArtworkSeries } from "@/domains/artworks/series";
 
@@ -37,7 +39,7 @@ export default function CollectionHeroContent({
                     text-brand-gold
                 "
             >
-                Artwork Series
+                {isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : "Artwork Series"}
             </p>
 
             <h2

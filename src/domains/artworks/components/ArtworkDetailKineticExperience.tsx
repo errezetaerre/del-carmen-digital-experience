@@ -563,6 +563,7 @@ export default function ArtworkDetailKineticExperience({
         if (!viewport) return;
 
         const handleWheel = (event: WheelEvent) => {
+            if ((event.target as HTMLElement | null)?.closest("[data-artwork-highlights]")) return;
             if (
                 inputModeRef.current === "pointer" ||
                 draggingRef.current

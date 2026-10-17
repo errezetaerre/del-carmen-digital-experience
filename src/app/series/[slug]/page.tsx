@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import FeaturedSeriesBadge from "@/shared/ui/artwork/FeaturedSeriesBadge";
+import { isFeaturedArtworkSeries } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import {
     getArtworkSeries,
@@ -135,7 +137,7 @@ export default async function SeriesPage({
                                 text-brand-gold
                             "
                         >
-                            Artwork Series
+                            {isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : "Artwork Series"}
                         </p>
 
                         <h1

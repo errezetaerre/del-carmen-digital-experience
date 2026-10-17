@@ -1,4 +1,4 @@
-Version: 1.7
+Version: 1.12
 
 Document ID:
 DOC-RS
@@ -507,3 +507,26 @@ They reference existing Artwork IDs and distinguish an award, an honourable ment
 The canonical implementation record is `docs/domains/artworks/artwork-implementation.md`. The two root integration-review READMEs intentionally removed by Rolando remain removed; this patch does not recreate them or add new review-note documents to the repository.
 
 Existing HomeCuration, ArtworkSeries covers, responsive/standard/glass entry rules, queue/navigation, CSS geometry, reflection/corners and legal/Contact/Newsletter implementation remain unchanged. The earlier successful full-project build reported by Rolando covers the preceding baseline; this new source patch still needs its own complete build and browser/device validation after installation.
+
+
+---
+
+## Approved Artwork Halo Resources — 2026-10-16
+
+The current shared artwork presentation extends the existing `src/shared/ui/artwork/` folder with:
+
+- `ArtworkBadges.tsx` / `ArtworkBadges.module.css`: interactive below-image ribbons and compact thumbnail rails;
+- `artworkHaloSymbols.ts`: dependency-free shared symbol markup;
+- `ArtworkComingSoon.tsx` / `ArtworkComingSoon.module.css` and `artworkPreviewMarkup.ts`: one frosted-preview treatment for React and the book;
+- `ArtworkImageHighlights.tsx` / `ArtworkImageHighlights.module.css`: painted-image alignment and measured lightbox clearance.
+
+This replaces the earlier outlined label-list appearance. It does not create a new domain, global style system, icon dependency or persistence model. The existing domain presentation query owns badge semantics and the derived Featured check; shared UI owns rendering and local interaction.
+
+The Archive and its detail route retain the Featured filter in URL navigation context. The Glass wrapper supplies `getPresentation` and `renderPreview` callbacks and mounts the shared ribbon in a stable portal. The runtime's image/info markup and Halo-specific input guards adapt presentation; shader/rigid-leaf/navigation physics stay preserved. See `docs/domains/artworks/artwork-implementation.md` for the current file list and verification boundaries.
+
+
+### Shared Featured Series Identity
+
+`src/shared/ui/artwork/FeaturedSeriesBadge.tsx` reuses the Halo vectors and local badge styles as a descriptive inline marker. `isFeaturedArtworkSeries()` in the existing artwork presentation query reads the HomeCuration Series reference. Home Collection, Collections hero content and Series detail compose this marker without adding another Collection domain or persistence field.
+
+The Glass Artbook uses two stable insignia portals with separate reveal windows. The runtime reparents each whole window into its owning physical artwork face, so the painting and insignia share native 3D perspective. It prepares source/adjacent destination content through `onHighlightArtwork` and synchronises local vertical displacement with the live pointer/spring angle. Page-local clipping hides the departing insignia at its own lower edge; stable host transfer preserves React content at completion/cancellation. Alignment uses untransformed local image bounds, and interaction locks remain independent of visual opacity. Route/history commitment stays at turn completion. This presentation layer does not clip or resize the rigid leaf or change shader/turn physics. The complete six-file book module remains the integration unit. Approved Coming Soon placement and all other non-book source remain unchanged.

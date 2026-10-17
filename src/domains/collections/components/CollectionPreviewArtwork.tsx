@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
+import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import type { Artwork } from "@/domains/artworks";
 
@@ -39,7 +42,7 @@ export default function CollectionPreviewArtwork({
                     bg-white/[0.03]
                 "
             >
-                <Image
+                {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} variant="thumbnail" /> : <Image
                     src={image.src}
                     alt={image.alt}
                     fill
@@ -52,7 +55,7 @@ export default function CollectionPreviewArtwork({
 
                         group-hover/artwork:scale-[1.025]
                     "
-                />
+                />}
 
                 <div
                     className="
@@ -108,9 +111,10 @@ export default function CollectionPreviewArtwork({
                             text-white/50
                         "
                     >
-                        {artwork.year}
+                        {getArtworkPresentation(artwork).yearLabel}
                     </p>
                 </div>
+                <ArtworkBadges artwork={artwork} variant="thumbnail" passive />
             </div>
         </Link>
     );

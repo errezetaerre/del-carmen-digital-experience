@@ -1,0 +1,3 @@
+.root { position: relative; min-width: 0; margin-bottom: var(--halo-reserve,0px); }
+.highlights { position: absolute; z-index: 45; left: var(--halo-left,0); top: var(--halo-top,100%); width: var(--halo-width,100%); visibility: hidden; }
+.root[data-halo-ready="true"] > .highlights { visibility: visible; }

@@ -1,6 +1,6 @@
 # Artwork Model
 
-Version: 1.2
+Version: 1.3
 
 Document ID:
 DOC-AM
@@ -1350,3 +1350,16 @@ Featured remains a HomeCuration reference. The presentation query reads `homeCur
 `isArtworkAvailable()` is a necessary state check: only `completed` plus `available` returns true. It is not a checkout or purchase authorisation. Future commerce still requires a valid physical-piece/print offer, confirmed price/currency, current stock, delivery and server-side checks. Prices of planned works remain stored; this patch does not publish purchase buttons or infer availability from a positive price.
 
 See `artwork-implementation.md` for the current presentation, installed-file list and validation limits. No Prisma migration, Product/Cart entity, new artwork category or separate Collection domain is introduced.
+
+
+---
+
+# Halo Presentation Contract — 2026-10-16
+
+The approved insignia system is a presentation over the existing state, recognition and HomeCuration references. It adds no persistence field to Artwork. Derived `ArtworkBadge.kind` selects the Star/Medal/Trophy/Selection/Hourglass/Clock family independently of translated display wording. Public Award copy is now `Award`; its recorded title/event/year remains in detail. Honourable Mention and Official Selection remain distinct.
+
+`isFeaturedArtwork()` reads the existing Home Featured reference. The Archive's Featured filter and contextual Artwork Detail navigation reuse this query; they do not infer Featured from recognition, availability or category.
+
+Planned and in-progress previews use frosted glass with faint reference colours. The preview's centred icon and label express realisation state; status remains visible in the technical sheet. A completed original's `sold` state continues to read Sold. Product/edition exhaustion remains deferred to commerce.
+
+The installation and responsive/input boundaries are maintained in `artwork-implementation.md`. Artwork IDs, media paths, price records, recognition data and current classifications are unchanged by this visual integration.

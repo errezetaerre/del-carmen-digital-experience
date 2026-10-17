@@ -1,0 +1,17 @@
+.preview { position: relative; isolation: isolate; container-type: inline-size; width: 100%; height: 100%; min-height: 0; overflow: hidden; background: #20251e; color: #d7c9ad; }
+.fog { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 26% 20%,#bba98a23,transparent 70%),#20251e; }
+.fog img { position: absolute; inset: -8%; display: block; width: 116%; height: 116%; max-width: none; object-fit: cover; filter: blur(26px) saturate(.7); opacity: .2; pointer-events: none; user-select: none; }
+.fog::after { content: ""; position: absolute; inset: 0; background: linear-gradient(130deg,#aba8900d,transparent 37%,#d1c9b219 59%,#0b0e0959),radial-gradient(ellipse at 75% 18%,#c9c1a319,transparent 68%); }
+.mark { position: absolute; left: 15px; right: 15px; top: 38%; display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+.thumbnail .mark { top: calc(15% + 20px); }
+.symbol { display: flex; flex: 0 0 23px; align-items: center; justify-content: center; width: 23px; height: 23px; margin: 0; padding: 0; color: #c4aa79; }
+.symbol svg { display: block; flex: none; width: 23px; height: 23px; margin: 0; padding: 0; stroke-width: 1; }
+.label { display: block; max-width: 100%; margin: 0; padding: 0; color: #d7c9ad; font-family: var(--font-geist-sans),Arial,sans-serif; font-size: clamp(9px,3.2cqw,12px); font-weight: 400; line-height: 1.5; letter-spacing: .2em; text-transform: uppercase; }
+.detail { width: min(100%,900px); height: min(64svh,700px); min-height: 240px; margin-inline: auto; }
+@container (max-width: 180px) {
+    .mark { top: 20%; }
+    .thumbnail .mark { top: calc(10% + 20px); }
+    .symbol { flex-basis: 18px; width: 18px; height: 18px; }
+    .symbol svg { width: 18px; height: 18px; }
+}
+@media (orientation: landscape) and (max-height: 600px) { .detail { height: 78svh; min-height: 160px; } }

@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 
 import type { Artwork } from "@/domains/artworks";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
@@ -28,6 +29,7 @@ export default function CollectionArtwork({
   presentation = "default",
 }: CollectionArtworkProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [cardActive, setCardActive] = useState(false);
   const initialRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   const detailsTitleRef = useRef<HTMLHeadingElement>(null);
@@ -194,8 +196,12 @@ export default function CollectionArtwork({
         ? "max-w-[260px]"
         : "max-w-[200px]"
         }`}
-      onMouseEnter={animateIn}
-      onMouseLeave={animateOut}
+      onMouseEnter={() => { setCardActive(true); animateIn(); }}
+      onMouseLeave={() => { setCardActive(false); animateOut(); }}
+      onFocusCapture={() => { setCardActive(true); animateIn(); }}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) { setCardActive(false); animateOut(); }
+      }}
     >
       <button
         type="button"
@@ -205,10 +211,7 @@ export default function CollectionArtwork({
       >
         <CollectionArtworkFrame>
           <div className="relative aspect-[4/5] overflow-hidden bg-black">
-            <div className="pointer-events-none absolute inset-x-3 top-3 z-20">
-              <ArtworkBadges artwork={artwork} className="justify-end" />
-            </div>
-            <img
+            {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} variant="thumbnail" /> : <img
               src={displayImage.src}
               alt={displayImage.alt}
 
@@ -221,9 +224,9 @@ export default function CollectionArtwork({
                 ease-out
                 group-hover:scale-[1.035]
               "
-            />
+            />}
 
-            <div
+            {artwork.creationStatus === "completed" && <div
               className="
                 absolute
                 inset-0
@@ -236,7 +239,7 @@ export default function CollectionArtwork({
                 duration-700
                 group-hover:opacity-90
               "
-            />
+            />}
 
             <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
               {/* Estado inicial */}
@@ -307,6 +310,7 @@ export default function CollectionArtwork({
           </div>
         </CollectionArtworkFrame>
       </button>
+      <ArtworkBadges key={artwork.id} artwork={artwork} variant="thumbnail" expanded={cardActive} />
     </article>
   );
 }

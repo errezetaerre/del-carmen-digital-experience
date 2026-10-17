@@ -14,6 +14,7 @@ import type {
 } from "@/domains/artworks";
 
 import CollectionGallery from "@/domains/home/sections/collection/CollectionGallery";
+import { isFeaturedArtwork } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 interface ArtworkArchiveProps {
     artworks: Artwork[];
@@ -191,7 +192,9 @@ export default function ArtworkArchive({
             ? requestedMedium as Artwork["medium"]
             : "all";
 
-    const hasActiveFilters =
+    const featuredOnly = searchParams.get("featured") === "true";
+
+    const hasActiveFilters = featuredOnly ||
         activeCategory !== "all" ||
         activeYear !== "all" ||
         activeMedium !== "all";
@@ -223,7 +226,8 @@ export default function ArtworkArchive({
                     return (
                         matchesCategory &&
                         matchesYear &&
-                        matchesMedium
+                        matchesMedium &&
+                        (!featuredOnly || isFeaturedArtwork(artwork))
                     );
                 },
             );
@@ -231,6 +235,7 @@ export default function ArtworkArchive({
             activeCategory,
             activeYear,
             activeMedium,
+            featuredOnly,
             artworks,
         ]);
 
@@ -242,7 +247,8 @@ export default function ArtworkArchive({
         key:
             | "category"
             | "year"
-            | "medium",
+            | "medium"
+            | "featured",
         value: string,
     ) => {
         const params =
@@ -318,6 +324,16 @@ export default function ArtworkArchive({
                     md:mb-16
                 "
             >
+                <div className="mb-7 flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-white/[0.05] pb-6" role="group" aria-label="Artwork selection">
+                    <button type="button" aria-pressed={!featuredOnly} className={filterButtonClass(!featuredOnly)} onClick={() => updateFilter("featured", "all")}>
+                        All works
+                    </button>
+                    <span aria-hidden="true" className="text-white/20">|</span>
+                    <button type="button" aria-pressed={featuredOnly} className={filterButtonClass(featuredOnly)} onClick={() => updateFilter("featured", "true")}>
+                        Featured
+                    </button>
+                </div>
+
                 {/* ================================================
                     CATEGORY
                    ================================================ */}
@@ -640,7 +656,7 @@ export default function ArtworkArchive({
                         pt-6
                     "
                 >
-                    <p
+                    <p aria-live="polite"
                         className="
                             font-sans
                             text-[9px]

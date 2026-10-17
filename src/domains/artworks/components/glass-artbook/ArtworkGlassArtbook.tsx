@@ -8,6 +8,8 @@ import gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
 import { getArtworkPresentation } from "../../presentation/getArtworkPresentation";
 import ArtworkDetailViewer from "../ArtworkDetailViewer";
+import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import { artworkPreviewMarkup } from "@/shared/ui/artwork/artworkPreviewMarkup";
 import { createGlassArtbook, GLASS_BOOK_QUERY } from "./runtime.mjs";
 import type { ArtworkGlassArtbookProps, GlassArtbookController } from "./types";
 import styles from "./ArtworkGlassArtbook.module.css";
@@ -28,9 +30,11 @@ export default function ArtworkGlassArtbook({
     const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
     const [bookEligible, setBookEligible] = useState<boolean | null>(null);
     const [actionsHost, setActionsHost] = useState<HTMLElement | null>(null);
+    const [highlightsHosts, setHighlightsHosts] = useState<HTMLElement[]>([]);
     const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(
         () => artworks.find((item) => item.id === initialArtworkId) ?? artworks[0] ?? null,
     );
+    const [highlightArtworks, setHighlightArtworks] = useState<[Artwork | null, Artwork | null]>([null, null]);
     const standardHref = selectedArtwork
         ? `/artworks/${selectedArtwork.slug}${navigationQuery ? `?${navigationQuery}` : ""}`
         : "/artworks";
@@ -100,11 +104,18 @@ export default function ArtworkGlassArtbook({
             instanceId,
             motion: gsap,
             getPresentation: getArtworkPresentation,
+            renderPreview: artworkPreviewMarkup,
+            onHighlightArtwork: (slot, artwork) => setHighlightArtworks((previous) => {
+                const next: [Artwork | null, Artwork | null] = [...previous];
+                next[slot] = artwork;
+                return next;
+            }),
             onNavigate: (artwork) => onNavigateRef.current(artwork),
         });
         controllerRef.current = controller;
         setActionsHost(host.querySelector<HTMLElement>("[data-glass-artwork-actions]"));
-        return () => { controller.dispose(); controllerRef.current = null; setActionsHost(null); };
+        setHighlightsHosts(Array.from(host.querySelectorAll<HTMLElement>("[data-glass-artwork-highlights]")));
+        return () => { controller.dispose(); controllerRef.current = null; setActionsHost(null); setHighlightsHosts([]); setHighlightArtworks([null, null]); };
     }, [dataKey, instanceId, portalHost, bookEligible]);
 
     useEffect(() => {
@@ -154,6 +165,16 @@ export default function ArtworkGlassArtbook({
                 <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly portalTarget={experienceRef.current} />,
                 actionsHost,
             )}
+            {highlightsHosts.map((host, slot) => {
+                const artwork = highlightArtworks[slot];
+                return artwork ? createPortal(
+                    <div key={artwork.id} data-glass-highlight-artwork={artwork.id}>
+                        <ArtworkBadges artwork={artwork} />
+                    </div>,
+                    host,
+                    `highlights-${slot}`,
+                ) : null;
+            })}
         </main>,
         portalHost,
     );

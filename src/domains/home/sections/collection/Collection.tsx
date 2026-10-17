@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FeaturedSeriesBadge from "@/shared/ui/artwork/FeaturedSeriesBadge";
 
 import {
   getFeaturedCollection,
@@ -143,7 +144,7 @@ export default function Collection() {
                   text-brand-gold
                 "
               >
-                Featured Collection
+                <FeaturedSeriesBadge seriesId={series.id} />
               </p>
 
               <h2

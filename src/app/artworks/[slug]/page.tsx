@@ -10,6 +10,7 @@ import {
 import ArtworkDetailKineticExperience from "@/domains/artworks/components/ArtworkDetailKineticExperience";
 import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
+import { isFeaturedArtwork } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 interface ArtworkPageProps {
     params: Promise<{
@@ -20,6 +21,7 @@ interface ArtworkPageProps {
         category?: string;
         year?: string;
         medium?: string;
+        featured?: string;
         series?: string;
         experience?: string;
     }>;
@@ -41,6 +43,7 @@ export default async function ArtworkPage({
         category,
         year,
         medium,
+        featured,
         series: seriesSlug,
         experience,
     } = await searchParams;
@@ -98,6 +101,8 @@ export default async function ArtworkPage({
             ? medium
             : undefined;
 
+    const featuredOnly = featured === "true" && isFeaturedArtwork(artwork);
+
     const navigationArtworks = activeSeries
         ? seriesArtworks
         : artworks.filter((item) => {
@@ -118,7 +123,8 @@ export default async function ArtworkPage({
               return (
                   matchesCategory &&
                   matchesYear &&
-                  matchesMedium
+                  matchesMedium &&
+                  (!featuredOnly || isFeaturedArtwork(item))
               );
           });
 
@@ -180,6 +186,8 @@ export default async function ArtworkPage({
             activeMedium,
         );
     }
+
+    if (featuredOnly && !activeSeries) archiveParams.set("featured", "true");
 
     const navigationQuery =
         archiveParams.toString();

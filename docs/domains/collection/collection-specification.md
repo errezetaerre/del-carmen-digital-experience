@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.2
+Version: 1.5
 
 Document ID: DOC-COL-SPEC
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-15
+Last Updated: 2026-10-17
 
 ---
 
@@ -684,3 +684,14 @@ The Home visual keeps its existing precedence: `series.images.featured`, then co
 Verification evaluated the actual Artwork lookup helpers, series helpers, `getFeaturedCollection()` and the Home Collection component's JSX output with React/Next presentation stand-ins. All four series return section data, resolve their own cover, preserve their counts and produce links to their corresponding `/series/[slug]` route. Yasemi's JSX output is identical before and after the correction. Only `src/domains/artworks/series/artworkSeries.ts` changes within `src`; the other 206 source files remain byte-identical to the approved Journal working snapshot.
 
 This does not establish a full Next.js build, browser/device check or physical media-file verification. Project-root configuration, dependencies and `public/` were not supplied. Those checks remain for the complete application.
+
+
+## Featured Collection Identity
+
+The selected Featured Collection follows the existing HomeCuration ArtworkSeries reference, currently Yasemi. It uses the shared Halo star plus FEATURED COLLECTION copy, small uppercase Geist type and a warm luminous bronze gradient. It does not use an enclosing rectangle.
+
+Home, the selected hero in `/collections`, and its `/series/[slug]` header show the same identity in their existing editorial eyebrow. Other Series retain Artwork Series. This marker is curatorial; it does not change series chronology, artistic status, availability, hero layout or CollectionHeroMotion, nor assign a prize or Featured status to all works in the Series.
+
+`isFeaturedArtworkSeries()` provides the derived check; `FeaturedSeriesBadge` renders the marker. There is no new Collection entity or duplicated persisted Featured flag. The existing artwork archive's Featured filter continues to select featured artworks independently.
+
+All artwork thumbnails, including planned/in-progress works, retain their full technical rollover. A thumbnail-only Coming Soon/In Progress variant places its icon and label higher (`calc(15% + 20px)` from the top, `calc(10% + 20px)` up to 180px wide) to clear the revealed bottom title. Card proportions, artwork size, type, metadata and hover/focus animations stay intact; other frosted-preview surfaces retain their approved placement.

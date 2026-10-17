@@ -3,6 +3,8 @@
 
 
 import Image from "next/image";
+import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
+import previewStyles from "@/shared/ui/artwork/ArtworkComingSoon.module.css";
 import { createPortal } from "react-dom";
 
 
@@ -1300,6 +1302,10 @@ export default function ArtworkDetailViewer({
        \============================================================ */
 
 
+
+    if (artwork.creationStatus !== "completed") {
+        return triggerOnly ? null : <ArtworkComingSoon artwork={artwork} className={previewStyles.detail} />;
+    }
 
     return (
 

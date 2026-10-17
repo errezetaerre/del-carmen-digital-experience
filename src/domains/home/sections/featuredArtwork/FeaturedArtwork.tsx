@@ -1,6 +1,6 @@
 "use client";
 
-import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
 
 //import { useEffect, useRef } from "react";
 import { useLayoutEffect, useRef } from "react";
@@ -350,6 +350,7 @@ export default function FeaturedArtwork() {
         >
           <div data-featured-artwork
             className="featured-motion">
+            <ArtworkImageHighlights artwork={artwork}>
             <ArtworkFrame
               aspectRatio={`${artwork.dimensions.width} / ${artwork.dimensions.height}`}
               className="
@@ -381,6 +382,7 @@ export default function FeaturedArtwork() {
                 "
               />
             </ArtworkFrame>
+            </ArtworkImageHighlights>
           </div>
 
           {/* Artwork information */}
@@ -416,7 +418,6 @@ export default function FeaturedArtwork() {
               {artwork.year}
             </p>
 
-            <ArtworkBadges artwork={artwork} detailed className="mt-4 justify-center" />
 
             <div
               aria-hidden

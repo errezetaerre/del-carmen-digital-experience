@@ -4,6 +4,7 @@ import { homeCuration } from "@/domains/home/curation/homeCuration";
 
 export interface ArtworkBadge {
     id: string;
+    kind: "featured" | "award" | "honourable-mention" | "selection" | "planned" | "in-progress";
     label: string;
     detail?: string;
 }
@@ -19,6 +20,14 @@ export function isArtworkAvailable(artwork: Artwork): boolean {
     return artwork.creationStatus === "completed" && artwork.availability === "available";
 }
 
+export function isFeaturedArtwork(artwork: Artwork): boolean {
+    return homeCuration.featuredWork.artworkId === artwork.id;
+}
+
+export function isFeaturedArtworkSeries(seriesId: string): boolean {
+    return homeCuration.featuredCollection.seriesId === seriesId;
+}
+
 // This derived presentation joins existing Home curation with artwork state/history.
 // Featured is not duplicated as a persisted boolean on Artwork.
 export function getArtworkPresentation(artwork: Artwork): ArtworkPresentation {
@@ -29,9 +38,14 @@ export function getArtworkPresentation(artwork: Artwork): ArtworkPresentation {
     if (planned || inProgress) {
         badges.push({
             id: "creation-status",
+            kind: planned ? "planned" : "in-progress",
             label: planned ? "Coming soon" : "In progress",
             detail: `Planned for ${artwork.year}`,
         });
+    }
+
+    if (isFeaturedArtwork(artwork)) {
+        badges.push({ id: "featured", kind: "featured", label: "Featured", detail: "Curatorial selection" });
     }
 
     for (const recognition of artworkRecognitions) {
@@ -39,18 +53,15 @@ export function getArtworkPresentation(artwork: Artwork): ArtworkPresentation {
 
         const label = recognition.kind === "selection"
             ? "Official Selection"
-            : recognition.kind === "honourable-mention" ? "Honourable Mention" : "Award-winning";
+            : recognition.kind === "honourable-mention" ? "Honourable Mention" : "Award";
 
         badges.push({
             id: recognition.id,
+            kind: recognition.kind,
             label,
             detail: [recognition.title === label ? "" : recognition.title, recognition.event, recognition.year]
                 .filter(Boolean).join(" · "),
         });
-    }
-
-    if (homeCuration.featuredWork.artworkId === artwork.id) {
-        badges.push({ id: "featured", label: "Featured" });
     }
 
     const availability = {

@@ -12,7 +12,8 @@ import {
 
 import type { Artwork } from "@/domains/artworks/model";
 import styles from "./ArtworkLightbox.module.css";
-import ArtworkBadges from "./ArtworkBadges";
+import ArtworkImageHighlights from "./ArtworkImageHighlights";
+import ArtworkComingSoon from "./ArtworkComingSoon";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 import GlassArtworkFrame from "./GlassArtworkFrame";
 import { glassSeparatorMarkup } from "./glassAccents";
@@ -137,6 +138,9 @@ export default function ArtworkLightbox({
 
     const total =
         artworks.length;
+
+    const hasHighlights = artwork ? getArtworkPresentation(artwork).badges.some((badge) => badge.kind !== "planned" && badge.kind !== "in-progress") : false;
+    const nativeScroll = isGlass || hasHighlights;
 
     const primaryImage =
         artwork?.images.primary;
@@ -292,7 +296,7 @@ export default function ArtworkLightbox({
         panYRef.current =
             safePan.y;
 
-        if (isGlass) layer.style.touchAction = safeScale <= SNAP_SCALE ? "pan-y" : "none";
+        if (nativeScroll) layer.style.touchAction = safeScale <= SNAP_SCALE ? "pan-y" : "none";
 
         layer.style.transition =
             animate
@@ -565,7 +569,7 @@ export default function ArtworkLightbox({
         );
 
         try {
-            if (!isGlass || scaleRef.current > SNAP_SCALE || pointers.size >= 2) {
+            if (!nativeScroll || scaleRef.current > SNAP_SCALE || pointers.size >= 2) {
                 for (const id of pointers.keys()) event.currentTarget.setPointerCapture(id);
             }
         } catch {
@@ -674,7 +678,7 @@ export default function ArtworkLightbox({
             },
         );
 
-        if (isGlass && pointers.size === 1 && scaleRef.current <= SNAP_SCALE && swipeStartRef.current) {
+        if (nativeScroll && pointers.size === 1 && scaleRef.current <= SNAP_SCALE && swipeStartRef.current) {
             const dx = event.clientX - swipeStartRef.current.x;
             const dy = event.clientY - swipeStartRef.current.y;
             if (swipeAxisRef.current === "pending") {
@@ -1012,17 +1016,17 @@ export default function ArtworkLightbox({
 
             {/* Viewer */}
             <div
-                className={isGlass ? styles.viewer : "relative z-20 flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-3 md:px-20 md:py-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-3 [@media(orientation:landscape)_and_(max-height:600px)]:py-2"}
-                data-lenis-prevent={isGlass || undefined}
-                data-lightbox-scroll-viewport={isGlass || undefined}
+                className={isGlass ? styles.viewer : `${hasHighlights ? styles.standardViewer : ""} relative z-20 flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-3 md:px-20 md:py-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-3 [@media(orientation:landscape)_and_(max-height:600px)]:py-2`}
+                data-lenis-prevent={nativeScroll || undefined}
+                data-lightbox-scroll-viewport={nativeScroll || undefined}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerCancel}
                 onClick={handleBackdropClick}
             >
-                <Panel data-lightbox-content={isGlass ? "true" : undefined}
-                    className={isGlass ? styles.panelLayout : "relative flex h-[calc(100svh-24px)] w-full max-w-[1040px] flex-col lg:translate-x-[1.5vw] md:h-[min(90vh,900px)] [@media(orientation:landscape)_and_(max-height:600px)]:h-[calc(100svh-16px)] [@media(orientation:landscape)_and_(max-height:600px)]:max-w-none [@media(orientation:landscape)_and_(max-height:600px)]:translate-x-0"}
+                <Panel data-lightbox-content={isGlass ? "true" : undefined} data-lightbox-panel
+                    className={isGlass ? styles.panelLayout : `${styles.standardPanel} relative flex h-[calc(100svh-24px)] w-full max-w-[1040px] flex-col lg:translate-x-[1.5vw] md:h-[min(90vh,900px)] [@media(orientation:landscape)_and_(max-height:600px)]:h-[calc(100svh-16px)] [@media(orientation:landscape)_and_(max-height:600px)]:max-w-none [@media(orientation:landscape)_and_(max-height:600px)]:translate-x-0`}
                 >
                     {/* Artwork stage */}
                     <div className={isGlass ? styles.artworkStage : "relative flex min-h-0 flex-1 items-center justify-center px-7 pb-2 pt-12 md:px-10 md:pb-3 md:pt-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-12 [@media(orientation:landscape)_and_(max-height:600px)]:pb-1 [@media(orientation:landscape)_and_(max-height:600px)]:pt-3"}>
@@ -1033,24 +1037,20 @@ export default function ArtworkLightbox({
                         />
 
                         {/* Zoomable artwork — no visible frame/border */}
-                        <div className={isGlass ? styles.imageWrapper : "relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center"}>
-                            <div className="pointer-events-none absolute inset-x-3 top-3 z-40 flex justify-end" data-lightbox-content="true">
-                                <ArtworkBadges artwork={artwork} className="max-w-full justify-end" />
-                            </div>
-
-
+                        <ArtworkImageHighlights artwork={artwork} className={isGlass ? styles.imageWrapper : "relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center"}>
+                            <div className={isGlass ? styles.imageMask : "contents"}>
                             <div
                                 ref={zoomLayerRef}
                                 data-lightbox-content="true"
                                 className={isGlass ? styles.zoomViewport : "relative flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"}
                             >
-                                <img
+                                {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} /> : <img
                                     key={artwork.id}
                                     src={primaryImage.src}
                                     alt={primaryImage.alt}
                                     draggable={false}
                                     className={isGlass ? styles.primaryImage : "relative z-10 h-full max-h-full w-full max-w-full translate-x-[5.5vw] select-none object-contain"}
-                                />
+                                />}
 
                                 {/* Subtle image-only integration */}
                                 <div
@@ -1064,7 +1064,8 @@ export default function ArtworkLightbox({
                                     className={isGlass ? styles.imageReflection : "artwork-glass-reflection pointer-events-none fi xed -left-[30%] -top-[20%] z-30 h-[140%] w-[24%] rotate-[14deg] bg-gradient-to-r from-transparent via-white/[0.045] to-transparent blur-[10px]"}
                                 />
                             </div>
-                        </div>
+                            </div>
+                        </ArtworkImageHighlights>
 
 
                         {isGlass && descriptionExpanded && (
@@ -1094,7 +1095,8 @@ export default function ArtworkLightbox({
                     {/* Position dots */}
                     {total > 1 && (
                         <div
-                            className={isGlass ? styles.positionDots : "relative z-40 flex h-5 shrink-0 items-center justify-center gap-2 md:h-6 [@media(orientation:landscape)_and_(max-height:600px)]:h-4"}
+                            data-lightbox-position-dots
+                            className={isGlass ? styles.positionDots : `${styles.standardDots} relative z-40 flex h-5 shrink-0 items-center justify-center gap-2 md:h-6 [@media(orientation:landscape)_and_(max-height:600px)]:h-4`}
                             aria-label={`Artwork ${currentIndex + 1} of ${total}`}
                         >
                             {artworks.map((item, index) => {
@@ -1130,6 +1132,7 @@ export default function ArtworkLightbox({
                     {/* Information panel */}
                     <div
                         data-lightbox-content="true"
+                        data-lightbox-caption
                         className={isGlass ? styles.caption : "relative z-30 w-full shrink-0 px-5 pb-4 pt-3 text-center md:px-10 md:pb-5 md:pt-4 [@media(orientation:landscape)_and_(max-height:600px)]:h-[92px] [@media(orientation:landscape)_and_(max-height:600px)]:px-6 [@media(orientation:landscape)_and_(max-height:600px)]:pb-2 [@media(orientation:landscape)_and_(max-height:600px)]:pt-1"}
                     >
                         <p className="font-sans text-[10px] font-medium uppercase tracking-[0.30em] text-brand-gold/90 md:text-xs [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]">

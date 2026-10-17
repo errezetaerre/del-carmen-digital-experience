@@ -49,6 +49,13 @@
 .root :global([data-kind="info"] > .face-content) { z-index: 3; }
 .root :global(.art) { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; min-height: 0; height: 100%; padding: 8% 2.2%; border: 0; background: transparent; }
 .root :global(.art::before), .root :global(.art::after) { content: none; }
+.root :global(.ga-preview) { padding: 4% 2.2%; }
+.root :global(.ga-highlights-window) { position: absolute; inset: 0; z-index: 6; overflow: hidden; isolation: isolate; transform-style: flat; pointer-events: none; }
+.root :global([data-side="-1"] > .ga-highlights-window) { border-radius: var(--glass-outer-radius) var(--glass-inner-radius) var(--glass-inner-radius) var(--glass-outer-radius); }
+.root :global([data-side="1"] > .ga-highlights-window) { border-radius: var(--glass-inner-radius) var(--glass-outer-radius) var(--glass-outer-radius) var(--glass-inner-radius); }
+.root :global(.ga-artwork-highlights) { position: absolute; bottom: 0; left: 2.2%; width: calc(var(--glass-art-width, 100%) - 4.4%); opacity: 1; visibility: visible; pointer-events: auto; transform: translate3d(0, var(--ga-halo-y, calc(100% + 12px)), 0); transition: none; }
+.root :global(.ga-artwork-highlights[inert]) { pointer-events: none; }
+.root[data-phase="opening"] :global(.ga-artwork-highlights) { visibility: hidden; }
 .root :global(.art .ga-image) { max-height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.1); transform-origin: center; }
 .root :global(.info) { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; min-width: 0; min-height: 0; max-width: none; height: 100%; translate: none; transform: none; padding: clamp(1rem, 3vh, 2.5rem) clamp(1.5rem, 4.6vw, 4.875rem); overflow-y: auto; overscroll-behavior-x: contain; overscroll-behavior-y: auto; scrollbar-width: thin; scrollbar-color: rgb(201 154 91 / .25) transparent; pointer-events: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; user-select: text; }
 .root :global(.info > *) { flex-shrink: 0; }
@@ -166,3 +173,4 @@
     .root :global(.art) { padding: 1rem 2.2%; }
 }
 @media (prefers-reduced-motion: reduce) { .root :global(.turn), .root :global(.left) { will-change: auto; } }
+

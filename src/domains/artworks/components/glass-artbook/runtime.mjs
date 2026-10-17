@@ -111,6 +111,7 @@ export function createGlassArtbook(root,options){
   wheelActive=false;wheelTimer=null;lockWheel();release({pointerId:-1});
  }
  function onWheel(event){
+  if(event.target.closest("[data-artwork-highlights]"))return;
   if(!wideLayout.matches||inputBlocked())return;
   const horizontal=event.shiftKey&&Math.abs(event.deltaX)<1?event.deltaY:event.deltaX;
   if(!horizontal||(!event.shiftKey&&Math.abs(horizontal)<=Math.abs(event.deltaY)))return;
@@ -138,14 +139,16 @@ const works=options.artworks;
 const $=s=>document.querySelector(s), scene=$('#scene'),stage=$('#stage'),book=$('#book'),turn=$('#turn'),front=$('#turnFront'),back=$('#turnBack'),baseLeft=$('#baseLeft'),baseRight=$('#baseRight');let index=Math.max(0,works.findIndex(w=>w.id===options.initialArtworkId)), direction=1, angle=0,velocity=0,goal=0,drag=null,lastTime=performance.now(),settling=false,animating=false;
 const corners='<canvas class="material-gl" aria-hidden="true"></canvas><div class="glass-rim" aria-hidden="true"></div>';
 function art(w){
+ if(w.creationStatus&&w.creationStatus!=='completed'){
+  const preview=options.renderPreview?.(w)??`<p>${w.creationStatus==='planned'?'Coming Soon':'In Progress'}</p>`;
+  return `<div class="art ga-preview">${preview}</div>`;
+ }
  return `<div class="art" role="img" aria-label="${escapeHtml(w.images.primary.alt)}"><img class="ga-image relative z-10 h-auto max-h-[58svh] w-auto max-w-full select-none object-contain shadow-[0_35px_100px_rgba(0,0,0,0.45)] md:max-h-[64svh] lg:max-h-[75vh] [@media(orientation:landscape)_and_(max-height:600px)]:!max-h-[78svh] [@media(orientation:landscape)_and_(max-height:600px)]:!max-w-[94vw]" src="${escapeHtml(w.images.primary.src)}" alt="${escapeHtml(w.images.primary.alt)}" width="${w.images.primary.width??1200}" height="${w.images.primary.height??1200}" decoding="async" draggable="false"/></div>`;
 }
 function info(w,id){
  const presentation=options.getPresentation?.(w);
- const labels=presentation?.badges??[];
- const badgeMarkup=labels.length?`<ul aria-label="Artwork highlights" class="mt-5 flex flex-wrap gap-2">${labels.map(badge=>`<li class="max-w-full border border-brand-gold/30 bg-black/35 px-2 py-1 font-sans text-[9px] uppercase leading-4 tracking-[0.12em] text-brand-gold"><span>${escapeHtml(badge.label)}</span>${badge.detail?`<span class="mt-1 block normal-case tracking-normal text-white/60">${escapeHtml(badge.detail)}</span>`:''}</li>`).join('')}</ul>`:'';
  const authorship=w.authorship==='original'?'Original Artwork':w.authorship==='master-copy'?'Master Copy':'Study After';
- return `<div tabindex="0" class="info max-w-xl -translate-y-1 md:-translate-y-2 lg:max-w-md lg:translate-y-0"><small class="font-sans text-[10px] font-medium uppercase tracking-[0.34em] text-brand-gold">${escapeHtml(presentation?.yearLabel??String(w.year))} · ${authorship}</small><h2 class="mt-5 font-display text-4xl font-light leading-[0.98] tracking-[0.01em] text-white md:text-5xl xl:text-6xl">${escapeHtml(w.title)}</h2>${badgeMarkup}${presentation?.previewLabel?`<p class="mt-3 font-sans text-xs text-white/50">${escapeHtml(presentation.previewLabel)}</p>`:''}${w.quote?`<p class="ga-quote mt-6 font-display text-lg font-light italic leading-relaxed text-white/65 md:text-xl">“${escapeHtml(w.quote)}”</p>`:''}<div class="rule" aria-hidden="true">${glintMarkup(id+'-glint')}</div><dl class="ga-metadata mt-8 grid grid-cols-[110px_1fr] gap-x-6 gap-y-4 font-sans text-sm"><dt class="text-white/35">Medium</dt><dd class="text-white/75">${escapeHtml(formatLabel(w.medium)+' on '+formatLabel(w.support))}</dd><dt class="text-white/35">Dimensions</dt><dd class="text-white/75">${w.dimensions.width} × ${w.dimensions.height} ${escapeHtml(w.dimensions.unit)}</dd><dt class="text-white/35">Status</dt><dd class="text-white/75">${escapeHtml(presentation?.statusLabel??formatLabel(w.availability))}</dd></dl>${w.description?`<p class="ga-description mt-10 font-sans text-sm font-light leading-[1.9] text-white/55 md:text-[15px]">${escapeHtml(w.description)}</p>`:''}${w.categories.length?`<div class="ga-categories mt-10 gap-x-5 gap-y-3">${w.categories.map(category=>`<span class="font-sans text-[9px] uppercase tracking-[0.24em] text-white/35">${escapeHtml(formatLabel(category))}</span>`).join('')}</div>`:''}</div>`;
+ return `<div tabindex="0" class="info max-w-xl -translate-y-1 md:-translate-y-2 lg:max-w-md lg:translate-y-0"><small class="font-sans text-[10px] font-medium uppercase tracking-[0.34em] text-brand-gold">${escapeHtml(presentation?.yearLabel??String(w.year))} · ${authorship}</small><h2 class="mt-5 font-display text-4xl font-light leading-[0.98] tracking-[0.01em] text-white md:text-5xl xl:text-6xl">${escapeHtml(w.title)}</h2>${presentation?.previewLabel?`<p class="mt-3 font-sans text-xs text-white/50">${escapeHtml(presentation.previewLabel)}</p>`:''}${w.quote?`<p class="ga-quote mt-6 font-display text-lg font-light italic leading-relaxed text-white/65 md:text-xl">“${escapeHtml(w.quote)}”</p>`:''}<div class="rule" aria-hidden="true">${glintMarkup(id+'-glint')}</div><dl class="ga-metadata mt-8 grid grid-cols-[110px_1fr] gap-x-6 gap-y-4 font-sans text-sm"><dt class="text-white/35">Medium</dt><dd class="text-white/75">${escapeHtml(formatLabel(w.medium)+' on '+formatLabel(w.support))}</dd><dt class="text-white/35">Dimensions</dt><dd class="text-white/75">${w.dimensions.width} × ${w.dimensions.height} ${escapeHtml(w.dimensions.unit)}</dd><dt class="text-white/35">Status</dt><dd class="text-white/75">${escapeHtml(presentation?.statusLabel??formatLabel(w.availability))}</dd></dl>${w.description?`<p class="ga-description mt-10 font-sans text-sm font-light leading-[1.9] text-white/55 md:text-[15px]">${escapeHtml(w.description)}</p>`:''}${w.categories.length?`<div class="ga-categories mt-10 gap-x-5 gap-y-3">${w.categories.map(category=>`<span class="font-sans text-[9px] uppercase tracking-[0.24em] text-white/35">${escapeHtml(formatLabel(category))}</span>`).join('')}</div>`:''}</div>`;
 }
 // DOM labels and shader uniforms share these descriptors. Never infer the
 // artwork again from the current index while a different spread is exposed.
@@ -153,6 +156,18 @@ const faceStates=new Map();
 let transition=null;
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const glassProfile=Object.freeze({outerRadius:14,innerRadius:2});
+// Stable portal nodes move with their owning art face, never with the scene.
+const highlightWindows=[0,1].map(slot=>{
+ const window=nativeDocument.createElement('div');
+ window.className='ga-highlights-window';
+ window.dataset.glassHighlightWindow=String(slot);
+ window.innerHTML=`<div class="ga-artwork-highlights" data-glass-artwork-highlights="${slot}" inert aria-hidden="true"></div>`;
+ return window;
+});
+const highlights=highlightWindows.map(window=>window.firstElementChild);
+const highlightIndices=[-1,-1];
+const highlightLayouts=[null,null];
+let activeHighlight=0,highlightTransition=null;
 document.documentElement.style.setProperty('--glass-outer-radius',glassProfile.outerRadius+'px');
 document.documentElement.style.setProperty('--glass-inner-radius',glassProfile.innerRadius+'px');
 
@@ -334,13 +349,70 @@ function configure(dir){
  turn.dataset.direction=String(dir);
  return target;
 }
+function assignHighlight(slot,artworkIndex){
+ if(highlightIndices[slot]===artworkIndex)return;
+ highlightIndices[slot]=artworkIndex;
+ options.onHighlightArtwork?.(slot,works[artworkIndex]);
+}
+function alignHighlight(slot,face){
+ const content=faceStates.get(face).content;
+ const image=content.querySelector('.ga-image'),art=content.querySelector('.art');
+ const width=face.clientWidth;
+ const signature=[face.id,face.dataset.workIndex,width,image?.offsetLeft,image?.offsetWidth,art?.offsetLeft].join(':');
+ if(highlightLayouts[slot]===signature)return;
+ highlightLayouts[slot]=signature;
+ let left=width*.022,right=width*.978;
+ if(image&&image.offsetWidth){
+  const matrix=window.getComputedStyle(image).transform.match(/^matrix(?:3d)?\((.*)\)$/);
+  const scale=matrix?Math.abs(Number(matrix[1].split(',')[0])):1;
+  const paintedWidth=image.offsetWidth*scale;
+  const start=(art?.offsetLeft??0)+image.offsetLeft-(paintedWidth-image.offsetWidth)*.5;
+  left=Math.max(0,start);right=Math.min(width,start+paintedWidth);
+ }
+ highlights[slot].style.left=left.toFixed(3)+'px';
+ highlights[slot].style.width=Math.max(0,right-left).toFixed(3)+'px';
+}
+function syncHighlights(){
+ if(transition&&highlightTransition!==transition){
+  highlightTransition=transition;
+  assignHighlight(activeHighlight,transition.from);
+  assignHighlight(1-activeHighlight,transition.to);
+ }else if(!transition){
+  if(highlightTransition&&index===highlightTransition.to)activeHighlight=1-activeHighlight;
+  highlightTransition=null;
+  assignHighlight(activeHighlight,index);
+ }
+ // Both phases use the live leaf angle, including reverse drags and regrabs.
+ // The target ribbon enters during expansion, before finish() commits the route.
+ const ease=value=>{const p=Math.max(0,Math.min(1,value));return p*p*(3-2*p);};
+ for(const [slot,highlight] of highlights.entries()){
+  const sourceFace=transition?.direction===-1?front:baseLeft;
+  const targetFace=transition?.direction===-1?baseLeft:back;
+  const face=slot===activeHighlight?sourceFace:targetFace;
+  // Reparent the complete reveal window without remounting React content.
+  // Native face transforms supply the same perspective as the painting.
+  if(highlightWindows[slot].parentElement!==face)face.appendChild(highlightWindows[slot]);
+  alignHighlight(slot,face);
+  const work=works[highlightIndices[slot]];
+  const ready=!!work&&highlight.querySelector('[data-glass-highlight-artwork]')?.dataset.glassHighlightArtwork===work.id;
+  const displacement=transition
+   ?ease(slot===activeHighlight?angle/90:(180-angle)/90)
+   :(slot===activeHighlight?0:1);
+  const detail=highlight.querySelector('[data-artwork-highlight-detail]');
+  const contentHeight=detail?highlight.offsetHeight-detail.offsetTop:highlight.offsetHeight;
+  const distance=Math.max(32,highlight.offsetHeight,contentHeight)+12;
+  highlight.style.setProperty('--ga-halo-y',((ready?displacement:1)*distance).toFixed(3)+'px');
+  highlight.inert=!!transition||entrancePlaying||slot!==activeHighlight||!ready;
+  highlight.setAttribute('aria-hidden',String(entrancePlaying||!ready||displacement===1));
+ }
+}
 function render(){syncLayout();updateNavigation();const grazing=Math.pow(Math.sin(angle*Math.PI/180),1.5);turn.style.setProperty("--grazing",grazing.toFixed(4));// Specular highlight slides while the rigid sheet rotates; both endpoints
  // match the static leaf exactly, preventing the last-frame brightness jump.
  const theta=angle*Math.PI/180;
  const shineX=50+(direction===1?1:-1)*34*Math.sin(theta);
  const shineEnergy=1+0.18*Math.pow(Math.sin(theta),2);
  turn.style.setProperty('--shine-x',shineX.toFixed(3)+'%');
- turn.style.setProperty('--shine-energy',shineEnergy.toFixed(4));turn.style.transform=`rotateY(${direction===1?-angle:angle}deg)`;$('#prev').disabled=entrancePlaying||(index===0&&!drag&&!animating);$('#next').disabled=entrancePlaying||(index===works.length-1&&!drag&&!animating);scene.classList.toggle('turning',!!transition);syncOcclusion();paintMaterialFrame()}
+ turn.style.setProperty('--shine-energy',shineEnergy.toFixed(4));turn.style.transform=`rotateY(${direction===1?-angle:angle}deg)`;$('#prev').disabled=entrancePlaying||(index===0&&!drag&&!animating);$('#next').disabled=entrancePlaying||(index===works.length-1&&!drag&&!animating);syncHighlights();scene.classList.toggle('turning',!!transition);syncOcclusion();paintMaterialFrame()}
 function idle(){
  direction=1;angle=0;goal=0;velocity=0;transition=null;
  turn.style.visibility='hidden';turn.style.display='none';
@@ -453,7 +525,7 @@ scene.addEventListener('pointerdown',onPointerDown);scene.addEventListener('poin
 scene.addEventListener('pointerup',onPointerRelease);scene.addEventListener('pointercancel',onPointerCancel);scene.addEventListener('lostpointercapture',onPointerCancel);
 $('#next').onclick=()=>requestNavigation(1);$('#prev').onclick=()=>requestNavigation(-1);
 document.addEventListener('keydown',e=>{
- if(e.target.closest('input,textarea,select,[contenteditable]'))return;
+ if(e.target.closest('input,textarea,select,[contenteditable],[data-artwork-highlights]'))return;
  if(e.key==='ArrowRight'){e.preventDefault();requestNavigation(1)}
  if(e.key==='ArrowLeft'){e.preventDefault();requestNavigation(-1)}
 });
@@ -712,6 +784,7 @@ function applyPreview(){
  baseRight.style.transform=preview.right?'rotateY('+preview.right+'deg)':'none';
 }
 function onProximity(event){
+ if(event.target.closest("[data-artwork-highlights]"))return;
  if(!motion||reducedMotion.matches||!wideLayout.matches||inputBlocked()||drag||animating||pendingPointer||event.pointerType==='touch')return;
  const rect=stage.getBoundingClientRect(),position=(event.clientX-rect.left)/rect.width;
  let left=0,right=0;

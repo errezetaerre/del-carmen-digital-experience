@@ -16,6 +16,8 @@ export interface GlassArtbookOptions {
     instanceId: string;
     motion?: typeof gsap;
     getPresentation?: (artwork: Artwork) => ArtworkPresentation;
+    renderPreview?: (artwork: Artwork) => string;
+    onHighlightArtwork?: (slot: 0 | 1, artwork: Artwork) => void;
     onNavigate?: (artwork: Artwork) => void;
 }
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
+import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
 import { getArtworkPresentation } from "../presentation/getArtworkPresentation";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 
@@ -98,9 +98,11 @@ export default function ArtworkDetailScene({
                     "
                 >
                     <div data-artwork-detail-image>
+                        <ArtworkImageHighlights artwork={artwork}>
                         <ArtworkDetailViewer
                             artwork={artwork}
                         />
+                        </ArtworkImageHighlights>
                     </div>
 
                     <div
@@ -156,7 +158,6 @@ export default function ArtworkDetailScene({
                             {artwork.title}
                         </h1>
 
-                        <ArtworkBadges artwork={artwork} detailed className="mt-5" />
                         {presentation.previewLabel && (
                             <p className="mt-3 font-sans text-xs text-white/50">{presentation.previewLabel}</p>
                         )}

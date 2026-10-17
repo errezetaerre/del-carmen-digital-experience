@@ -1,15 +1,16 @@
 .dialog { position: fixed; inset: 0; z-index: 100; overflow: hidden; background: #030303; color: white; }
 .viewer { box-sizing: border-box; position: relative; z-index: 20; display: flex; align-items: center; align-items: safe center; justify-content: center; height: 100%; width: 100%; padding: clamp(3.5rem, 7vh, 5rem) clamp(3.5rem, 7vw, 6rem) 1.5rem; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
 .glassPanel { position: relative; isolation: isolate; border: .6px solid rgb(201 154 91 / .42); border-radius: 14px; background: rgb(0 0 0 / .05); box-shadow: inset 0 1px 1px rgb(240 213 163 / .12), inset 0 -1px 1px rgb(201 154 91 / .10), 0 35px 110px rgb(0 0 0 / .50); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-.panelLayout { --caption-height: 300px; box-sizing: border-box; flex: none; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 32px var(--caption-height); width: 60%; max-width: 624px; height: min(100%, 940px); min-height: calc(240px + 32px + var(--caption-height) + 22px); padding: 16px 20px 6px; }
+.panelLayout { --caption-height: 300px; box-sizing: border-box; flex: none; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) calc(32px + var(--halo-clearance, 0px)) var(--caption-height); width: 60%; max-width: 624px; height: min(calc(100% + var(--halo-clearance, 0px)), calc(940px + var(--halo-clearance, 0px))); min-height: calc(240px + 32px + var(--halo-clearance, 0px) + var(--caption-height) + 22px); padding: 16px 20px 6px; }
 .artworkStage { position: relative; z-index: 1; grid-column: 1; grid-row: 1; display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; padding: 0; touch-action: pan-y; }
 .artworkAura { display: none; }
-.imageWrapper { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; min-height: 0; overflow: hidden; border-radius: 9px; }
+.imageWrapper { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; min-height: 0; overflow: visible; border-radius: 9px; }
+.imageMask { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; min-height: 0; overflow: hidden; border-radius: 9px; }
 .zoomViewport { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; transform-origin: center; will-change: transform; touch-action: pan-y; }
 .primaryImage { position: relative; z-index: 10; display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; }
 .imageShade { position: absolute; pointer-events: none; inset: 0; z-index: 20; box-shadow: inset 0 0 30px 4px rgb(0 0 0 / .08); }
 .imageReflection { position: absolute; pointer-events: none; left: -30%; top: -20%; z-index: 30; width: 24%; height: 140%; transform: rotate(14deg); background: linear-gradient(90deg, transparent, rgb(225 187 128 / .06), transparent); filter: blur(10px); animation: glassReflection 16s cubic-bezier(.4, 0, .2, 1) infinite; }
-.positionDots { position: relative; z-index: 40; grid-column: 1; grid-row: 2; display: flex; align-items: center; justify-content: center; justify-content: safe center; height: 32px; min-height: 0; width: 100%; gap: .5rem; overflow-x: auto; scrollbar-width: none; }
+.positionDots { box-sizing: border-box; position: relative; z-index: 40; grid-column: 1; grid-row: 2; display: flex; align-items: center; justify-content: center; justify-content: safe center; height: calc(32px + var(--halo-clearance, 0px)); padding-top: var(--halo-clearance, 0px); min-height: 0; width: 100%; gap: .5rem; overflow-x: auto; scrollbar-width: none; }
 .positionDots button { flex: 0 0 24px; }
 .caption { position: relative; z-index: 30; grid-column: 1; grid-row: 3; display: grid; grid-template-rows: 18px 64px 18px 1px 104px 36px; gap: 8px; align-content: start; width: 100%; min-height: 0; box-sizing: border-box; padding: 8px 20px; text-align: center; }
 .caption > * { min-width: 0; margin: 0; }
@@ -43,9 +44,9 @@
     .viewer { padding: max(3.75rem, env(safe-area-inset-top)) 3.5rem max(.5rem, env(safe-area-inset-bottom)); }
     .dialog .counter { top: max(.75rem, env(safe-area-inset-top)); }
     .dialog .closeControl { top: max(.25rem, env(safe-area-inset-top)); }
-    .panelLayout { --caption-height: auto; min-height: 240px; width: 100%; max-width: 1040px; grid-template-columns: minmax(0, 1.35fr) minmax(210px, .8fr); grid-template-rows: minmax(0, 1fr) 24px; padding: 8px 12px 4px; }
+    .panelLayout { --caption-height: auto; min-height: calc(240px + var(--halo-clearance, 0px)); width: 100%; max-width: 1040px; grid-template-columns: minmax(0, 1.35fr) minmax(210px, .8fr); grid-template-rows: minmax(0, 1fr) calc(24px + var(--halo-clearance, 0px)); padding: 8px 12px 4px; }
     .artworkStage { grid-column: 1; grid-row: 1; }
-    .positionDots { grid-column: 1; grid-row: 2; height: 24px; }
+    .positionDots { grid-column: 1; grid-row: 2; height: calc(24px + var(--halo-clearance, 0px)); }
     .caption { grid-column: 2; grid-row: 1 / span 2; grid-template-rows: 14px 42px 14px 1px 32px 28px; gap: 4px; align-content: center; padding: 4px 12px; }
     .caption > h2 { font-size: 1.125rem; }
     .caption::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 1px; background: linear-gradient(transparent, rgb(167 121 67 / .25) 18%, rgb(225 187 128 / .55) 50%, rgb(167 121 67 / .25) 82%, transparent); pointer-events: none; }
@@ -55,10 +56,24 @@
     .readingPanel { padding: 1rem 1.25rem; }
 }
 @media (pointer: coarse) and (min-width: 768px) and (min-height: 601px) and (orientation: landscape) {
-    .panelLayout { --caption-height: auto; width: 100%; max-width: 1040px; height: min(100%, 640px); min-height: 380px; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .8fr); grid-template-rows: minmax(0, 1fr) 32px; }
+    .panelLayout { --caption-height: auto; width: 100%; max-width: 1040px; height: min(calc(100% + var(--halo-clearance, 0px)), calc(640px + var(--halo-clearance, 0px))); min-height: calc(380px + var(--halo-clearance, 0px)); grid-template-columns: minmax(0, 1.35fr) minmax(300px, .8fr); grid-template-rows: minmax(0, 1fr) calc(32px + var(--halo-clearance, 0px)); }
     .artworkStage { grid-column: 1; grid-row: 1; }
     .positionDots { grid-column: 1; grid-row: 2; }
     .caption { grid-column: 2; grid-row: 1 / span 2; align-content: center; }
     .caption::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 1px; background: linear-gradient(transparent, rgb(167 121 67 / .25) 18%, rgb(225 187 128 / .55) 50%, rgb(167 121 67 / .25) 82%, transparent); pointer-events: none; }
 }
 @media (prefers-reduced-motion: reduce) { .imageReflection { animation: none; opacity: 0; } .readingPanel { animation: none; } }
+
+/* The Halo band borrows existing letterbox space first. Any missing height is
+   added equally to the panel and navigation band, leaving image size intact. */
+.standardPanel { height: calc(100svh - 24px + var(--halo-clearance, 0px)); }
+.standardViewer { overflow-x: hidden; overflow-y: auto; touch-action: pan-y; align-items: safe center; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.standardDots { box-sizing: border-box; height: calc(20px + var(--halo-clearance, 0px)); padding-top: var(--halo-clearance, 0px); }
+@media (min-width: 768px) {
+    .standardPanel { height: min(calc(90vh + var(--halo-clearance, 0px)), calc(900px + var(--halo-clearance, 0px))); }
+    .standardDots { height: calc(24px + var(--halo-clearance, 0px)); }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+    .standardPanel { height: calc(100svh - 16px + var(--halo-clearance, 0px)); }
+    .standardDots { height: calc(16px + var(--halo-clearance, 0px)); }
+}
