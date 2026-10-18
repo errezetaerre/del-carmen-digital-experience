@@ -5,6 +5,7 @@ import { KineticCarousel } from "@/shared/ui/kinetic-carousel";
 
 import CollectionPreviewArtwork from "./CollectionPreviewArtwork";
 import styles from "./CollectionPreviewWorks.module.css";
+import { useTranslations } from "next-intl";
 
 interface CollectionPreviewWorksProps {
     artworks: Artwork[];
@@ -17,6 +18,7 @@ export default function CollectionPreviewWorks({
     artworks,
     seriesSlug,
 }: CollectionPreviewWorksProps) {
+    const t = useTranslations("Series");
     if (artworks.length === 0) {
         return null;
     }
@@ -64,7 +66,7 @@ export default function CollectionPreviewWorks({
                             text-white/35
                         "
                     >
-                        Works in this collection
+                        {t("worksInCollection")}
                     </p>
                     <div
                         className={`
@@ -131,7 +133,7 @@ export default function CollectionPreviewWorks({
                         text-white/35
                     "
                 >
-                    Works in this collection
+                    {t("worksInCollection")}
                 </p>
 
                 <KineticCarousel
@@ -144,8 +146,8 @@ export default function CollectionPreviewWorks({
                         h-full
                         gap-2
                     "
-                    previousLabel="Previous artworks"
-                    nextLabel="Next artworks"
+                    previousLabel={t("previousArtworks")}
+                    nextLabel={t("nextArtworks")}
                     previousButtonClassName="
                         left-2
                         top-1/2

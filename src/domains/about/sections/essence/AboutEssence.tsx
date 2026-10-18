@@ -1,12 +1,13 @@
+import { useTranslations } from "next-intl";
 import { Container } from "@/shared/layout/container";
 import AboutEssenceMotion from "./AboutEssenceMotion";
 
-const statement =
-    "Art invites us to slow down, to observe, and to discover what remains when everything unnecessary disappears.";
-
-const words = statement.split(" ");
-
 export default function AboutEssence() {
+    const t = useTranslations("About");
+    const statement =
+        t("essence.statement");
+    const words = statement.split(" ");
+
     return (
         <section className="about-essence-scene relative overflow-hidden bg-neutral-950 py-28 md:py-36 lg:py-44">
             <Container>
@@ -15,7 +16,7 @@ export default function AboutEssence() {
                         <div className="about-essence-rule mb-6 h-px w-12 bg-brand-gold/55" />
 
                         <p className="about-essence-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-brand-gold/70">
-                            The Essence
+                            {t("essence.eyebrow")}
                         </p>
                     </div>
 
@@ -33,9 +34,7 @@ export default function AboutEssence() {
                         </h2>
 
                         <p className="about-essence-copy mt-10 max-w-2xl font-sans text-sm font-light leading-7 text-stone-500 md:text-base md:leading-8">
-                            Del Carmen creates encounters between physical painting and
-                            digital experience while preserving the silence, humanity and
-                            intimacy of the original work.
+                            {t("essence.description")}
                         </p>
                     </div>
                 </div>

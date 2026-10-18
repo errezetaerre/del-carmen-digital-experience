@@ -1,6 +1,6 @@
 # Journal Implementation
 
-Version: 1.0
+Version: 1.1
 
 Document ID:
 DOC-JOURNAL-IMPL
@@ -587,3 +587,9 @@ This boundary should remain stable unless a demonstrated requirement justifies r
 Del Carmen Digital Experience
 
 Painting the Eternal Essence Within
+
+## EN/ES Home teaser increment — 2026-10-18
+
+Home now translates only the category, title and excerpt of the two existing renderable entries, using `src/i18n/content/journal.es.json` and `journalCopy.ts`. Their canonical slugs, years, imagery, publication/featured state and destination remain unchanged. `getJournalEntries()` still excludes the five entries awaiting story content. English objects remain exact; unknown future teaser slugs keep their original English text with explicit language marking.
+
+Journal index, full story scenes, related-entry copy and their metadata remain in English until the Journal translation block. Translating a Home teaser does not publish or translate its story, and does not change the existing journal motion or media. Broader scope and release checks are recorded in DOC-I18N.

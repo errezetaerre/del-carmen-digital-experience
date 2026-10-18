@@ -1,5 +1,8 @@
 import Link from "@/i18n/navigation";
 import FeaturedSeriesBadge from "@/shared/ui/artwork/FeaturedSeriesBadge";
+import { useLocale, useTranslations } from "next-intl";
+import { localizeArtwork } from "@/i18n/artworkCopy";
+import { formatSeriesStatus, localizeArtworkSeries, seriesTextLocale } from "@/i18n/seriesCopy";
 
 import {
   getFeaturedCollection,
@@ -11,6 +14,8 @@ import { LinkButton } from "@/shared/ui/button";
 import CollectionMotion from "./CollectionMotion";
 
 export default function Collection() {
+  const locale = useLocale();
+  const t = useTranslations("Series");
 
   const featuredCollection =
     getFeaturedCollection();
@@ -20,10 +25,12 @@ export default function Collection() {
   }
 
   const {
-    series,
-    coverArtwork,
+    series: sourceSeries,
+    coverArtwork: sourceCoverArtwork,
     artworkCount,
   } = featuredCollection;
+  const series = localizeArtworkSeries(sourceSeries, locale);
+  const coverArtwork = localizeArtwork(sourceCoverArtwork, locale);
 
   const collectionImage =
     series.images?.featured ??
@@ -168,6 +175,7 @@ export default function Collection() {
               {series.description && (
                 <p
                   data-collection-description
+                  lang={seriesTextLocale(series, locale)}
                   className="
                     collection-motion
                     mt-6
@@ -203,10 +211,7 @@ export default function Collection() {
                 "
               >
                 <span>
-                  {artworkCount}{" "}
-                  {artworkCount === 1
-                    ? "work"
-                    : "works"}
+                  {t("workCount", { count: artworkCount })}
                 </span>
 
                 {yearLabel && (
@@ -226,7 +231,7 @@ export default function Collection() {
                 </span>
 
                 <span>
-                  {series.status}
+                  {formatSeriesStatus(series.status, locale)}
                 </span>
               </div>
 
@@ -253,7 +258,7 @@ export default function Collection() {
                   "
                 >
 
-                  Explore collection →
+                  {t("exploreCollectionArrow")}
                 </LinkButton>
               </div>
             </div>
@@ -266,7 +271,7 @@ export default function Collection() {
           <Link
             data-collection-visual
             href={`/series/${series.slug}`}
-            aria-label={`Explore ${series.title} artwork series`}
+            aria-label={t("exploreNamed", { title: series.title })}
             className="
               collection-motion
               group
@@ -451,10 +456,7 @@ export default function Collection() {
                     "
                   >
                     <span>
-                      {artworkCount}{" "}
-                      {artworkCount === 1
-                        ? "work"
-                        : "works"}
+                      {t("workCount", { count: artworkCount })}
                     </span>
 
                     {yearLabel && (
@@ -474,7 +476,7 @@ export default function Collection() {
                     </span>
 
                     <span>
-                      {series.status}
+                      {formatSeriesStatus(series.status, locale)}
                     </span>
                   </div>
 
@@ -503,7 +505,7 @@ export default function Collection() {
                       group-focus:opacity-100
                     "
                   >
-                    <span>Explore series</span>
+                    <span>{t("exploreSeries")}</span>
                     <span aria-hidden>→</span>
                   </div>
                 </div>

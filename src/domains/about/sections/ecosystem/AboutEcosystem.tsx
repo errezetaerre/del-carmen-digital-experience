@@ -1,7 +1,11 @@
+import { useTranslations } from "next-intl";
 import { Container } from "@/shared/layout/container";
 import AboutEcosystemMotion from "./AboutEcosystemMotion";
 
 export default function AboutEcosystem() {
+    const t = useTranslations("About");
+
+
     return (
         <section className="about-ecosystem-scene relative overflow-hidden bg-neutral-950 py-24 md:py-28 lg:py-32">
             <Container>
@@ -9,13 +13,13 @@ export default function AboutEcosystem() {
                     {/* Editorial introduction */}
                     <div className="lg:col-span-4">
                         <p className="about-ecosystem-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-brand-gold/70">
-                            The Ecosystem
+                            {t("ecosystem.eyebrow")}
                         </p>
 
                         <h2 className="about-ecosystem-heading mt-5 font-display text-4xl font-light tracking-[-0.025em] text-stone-100 md:text-5xl lg:text-[3.5rem] lg:leading-[1.02]">
-                            One philosophy.
+                            {t("ecosystem.titleFirst")}
                             <span className="block text-stone-500">
-                                Distinct expressions.
+                                {t("ecosystem.titleSecond")}
                             </span>
                         </h2>
                     </div>
@@ -25,7 +29,7 @@ export default function AboutEcosystem() {
                         {/* Parent */}
                         <div className="about-ecosystem-parent text-center">
                             <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-stone-600">
-                                Parent Creative Identity
+                                {t("ecosystem.parent")}
                             </p>
 
                             <h3 className="mt-4 font-display text-4xl font-light text-stone-200 md:text-5xl">
@@ -51,7 +55,7 @@ export default function AboutEcosystem() {
                         <div className="grid md:grid-cols-2">
                             <article className="about-ecosystem-child border-y border-white/[0.08] px-4 py-9 text-center md:border-r md:px-8 md:py-10">
                                 <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-gold/65">
-                                    Fine Art
+                                    {t("ecosystem.fineArt")}
                                 </p>
 
                                 <h3 className="mt-3 font-display text-3xl font-light text-stone-100">
@@ -59,14 +63,13 @@ export default function AboutEcosystem() {
                                 </h3>
 
                                 <p className="mx-auto mt-4 max-w-xs font-sans text-sm font-light leading-6 text-stone-500">
-                                    Painting, artistic practice and contemplative experiences
-                                    centered on the artwork.
+                                    {t("ecosystem.fineArtDescription")}
                                 </p>
                             </article>
 
                             <article className="about-ecosystem-child border-b border-white/[0.08] px-4 py-9 text-center md:border-y md:px-8 md:py-10">
                                 <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-gold/65">
-                                    Digital Innovation
+                                    {t("ecosystem.digital")}
                                 </p>
 
                                 <h3 className="mt-3 font-display text-3xl font-light text-stone-100">
@@ -74,8 +77,7 @@ export default function AboutEcosystem() {
                                 </h3>
 
                                 <p className="mx-auto mt-4 max-w-xs font-sans text-sm font-light leading-6 text-stone-500">
-                                    Technology and experimentation extending how creative work
-                                    can be experienced.
+                                    {t("ecosystem.digitalDescription")}
                                 </p>
                             </article>
                         </div>

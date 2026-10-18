@@ -1,9 +1,9 @@
 # Internationalization
 
-Version: 1.1
+Version: 1.3
 Document ID: DOC-I18N
 Project: Del Carmen Digital Experience
-Status: Foundation reviewed; Artwork block implemented for owner review; broader Spanish release remains open
+Status: Foundation and Artwork block approved/pushed; Home/Collections approved; About/Artist implemented for owner review
 Last Updated: 2026-10-18
 
 ## Decision and source
@@ -11,6 +11,8 @@ Last Updated: 2026-10-18
 The owner approved one shared EN/ES site, English as the default, manual language selection, unchanged artwork titles and shared assets. The first increment is the language foundation, navigation and one artwork pilot, rather than a claim that the complete public Spanish edition is ready.
 
 Implementation starts from the actual upstream commit `f2cf5b15c6b2c16d9979d164831b44680d64a8b6`, with its root configuration, lockfile and latest owner catalogue. A separate local `feat/i18n-en-es` branch holds the work. No deployment or upstream push is part of this increment.
+
+The owner subsequently approved and pushed the foundation/Artwork block as `d56b7729f9b603a9ae64035a260a0b094a09eba9` on `feat/i18n-en-es`. That fetched commit matches the v2 delivery tree exactly and is the base for the Home/Collections increment. Its Vercel Preview is the review environment reported by the owner; the project's production branch, protections and variables have not been inspected or changed here.
 
 ## Shared architecture
 
@@ -20,6 +22,7 @@ Implementation starts from the actual upstream commit `f2cf5b15c6b2c16d9979d1648
 - `routing.ts`, `navigation.ts`, `request.ts` and `src/proxy.ts` integrate `next-intl` with App Router.
 - `messages/en.json` and `messages/es.json` hold shared interface messages by namespace. English/Spanish keys and interpolation variables must match.
 - `artworkCopy.ts` reads stored Spanish editorial translations by canonical artwork ID from `content/artworks.es.json` and maps medium/support/category labels. The translation file covers the current 45 works, including their existing image-variant alternative text. Titles, IDs, slugs, years, authorship, prices, availability, dimensions, membership and image URLs retain their canonical source.
+- `seriesCopy.ts` reads `content/series.es.json` for the four existing series' description/statement and image alt text. Series names remain original, with canonical media/layout/year/status/cover/member facts intact. `journalCopy.ts` and `content/journal.es.json` translate only the two published Home teasers in this increment.
 - `EnglishContent.tsx` temporarily marks untranslated editorial/form/legal sections as English without introducing a layout box. Translated shared elements override that language where necessary. Remove each boundary when that section's Spanish content is reviewed.
 
 The project adds exact dependency `next-intl@4.14.9`. Its declared peers include the existing Next.js/React versions; Next.js remains 16.2.12 and React remains 19.2.4. The added package is MIT-licensed; its declared dependency licenses include MIT, Apache-2.0 and BSD-3-Clause. Existing locked package versions remain unchanged. Dependency distributions retain their accompanying notices/licenses.
@@ -46,7 +49,17 @@ The next bounded block adds the Artworks archive introduction/metadata, category
 
 The original Epifanía quote/description/primary alt remain exact. English artwork objects, derived presentation and metadata remain exact. Unknown future artwork IDs retain English fallback and explicit English prose marking; add their Spanish records when the canonical catalogue grows.
 
-The remaining Home sections, full Series/editorial copy, About/Artist/Journal, forms and legal documents still require Spanish content work. Existing English content remains available and explicitly marked where wrapped; translated shared cards override their local language. This is a partial Spanish preview, not a completed bilingual commercial release.
+The owner approved the complete Artwork block and committed/pushed it before this increment. The next implemented block translates Home's Featured work, artist statement, featured collection, selected works, Journal preview, invitation and newsletter introduction; Collections intro/metadata/hero/thumbnail controls; and all four series' description, statement, state/counts, navigation and metadata. Original series and painting names remain exact. Both published Journal teaser titles/excerpts/categories are translated on Home, without publishing the five entries that still lack story content.
+
+The Home-level English boundary is removed; the unchanged newsletter form/consent keeps its own local English boundary inside Suspense. The owner approved Home/Collections before the About/Artist block below. Journal index/full stories, contact/newsletter forms, delivery/feedback and legal documents remain pending. This is still a partial Spanish preview, not a completed bilingual commercial release.
+
+The About/Artist increment adds typed `About` and `Artist` message namespaces to the same dictionaries: 157 new values per language, 367 total keys. About's Hero, Essence, Ecosystem and Continue scenes are translated; Artist's Hero, biography, philosophy, practice, five chronological milestones, desktop navigator, 17 process-image alternatives and closing artwork scene use the active locale. The seven philosophy paragraphs feed both the animated and reduced-motion reading modes. Page metadata follows the locale without changing the English title/description.
+
+The two completed route-level English boundaries are removed. Person, atelier, teacher, artwork, exhibition and brand names remain source names, as does the named film `The Encounter`. The film keeps its disabled, coming-soon state with translated availability/accessibility copy. The unused AboutFilm component also receives local messages but remains unmounted; this does not enable playback or introduce another scene.
+
+Text is resolved inside the existing scene functions, with the same record/paragraph counts, selectors, media order and layout. Journey chapter indices/numbers, event callbacks and proximity/scroll behavior stay exact. Canonical biography dates and distinction facts are preserved rather than updated from inference. All existing motion files, CSS, Glass/Standard behavior, catalogue, dependencies, APIs and consent records remain byte-identical to v3.
+
+Testing a direct `/series/[slug]?artwork=...` load exposed the existing viewer portal's `document.body` access during server rendering. SeriesGallery now imports that same viewer with `next/dynamic({ssr:false})` inside its existing Client Component. All four selected-work deep links return successfully in both languages. The viewer implementation, selection/Close handlers, context query, touch/zoom, geometry and physics are unchanged. This check establishes server readiness, not browser hydration or physical-device behavior.
 
 Spanish editorial wording is prepared for owner review. Several canonical English quotes already use the same short template (`el_misionero`, `el_baul_de_los_tesoros`, `sendero_del_sol`); the translation preserves their meaning rather than inventing new artist statements. The catalogue's existing reference-photo/digital-retouch notes and distinctions remain source content, not a new attribution or commercial authenticity claim. Review ambiguous wording with the owner before the final editorial release.
 
@@ -97,6 +110,32 @@ npm run build
 
 No new dependency installation is needed for this block. Restart the server and review `/es/artworks`, filters, and several works in Standard/Glass. A reverse check with the same patch is available before later edits; do not overwrite conflicting owner changes.
 
+### Incremental Home/Collections block after approved v2
+
+`Del_Carmen_EN_ES_Home_Collections_v3.zip` contains an incremental patch over the approved/pushed `d56b772` commit. It does not add dependencies or replace canonical artwork/series/journal data or media. Remain on `feat/i18n-en-es`, stop the local server and extract into Downloads:
+
+```sh
+i18n_home_patch="$HOME/Downloads/Del_Carmen_EN_ES_Home_Collections_v3/Del_Carmen_EN_ES_Home_Collections_v3.patch"
+git apply --check "$i18n_home_patch" &&
+git apply "$i18n_home_patch" &&
+npm run build
+```
+
+Restart the server and review `/es`, `/es/collections` and all four `/es/series/[slug]` pages, including a direct selected-work link and browser refresh. The newsletter form and full Journal/Artist destinations still retain their explicitly marked English copy until their own blocks. Commit/push the increment on the review branch after owner approval; no merge or production promotion is performed by this patch.
+
+### Incremental About/Artist block after approved v3
+
+`Del_Carmen_EN_ES_About_Artist_v4.zip` contains only the incremental patch over the approved Home/Collections result tree `9d677c66a545144a63968fc7f1d9fc4943339c19`. That is a content baseline, not a claim that the owner has committed or pushed v3. Keep the existing feature branch, stop the server and extract into Downloads:
+
+```sh
+i18n_artist_patch="$HOME/Downloads/Del_Carmen_EN_ES_About_Artist_v4/Del_Carmen_EN_ES_About_Artist_v4.patch"
+git apply --check "$i18n_artist_patch" &&
+git apply "$i18n_artist_patch" &&
+npm run build
+```
+
+No dependency installation or new environment variable is needed. The check can succeed whether the preceding approved content is committed or still in the working tree; preserve unrelated owner edits. Restart the server and review `/es/about` and `/es/artist`, including long headings, five milestones, portrait/landscape and reduced motion. Journal/forms/legal translation is a later block. A reverse check/application remains available before subsequent work is mixed into these files.
+
 ## Verification and practical limits
 
 The real project installs from its lockfile, passes `npm run build` with TypeScript and generates 123 static pages. Build/server checks use placeholder provider credentials; they do not submit contact/newsletter forms, access real subscriber data or validate provider delivery. Focused lint covers the added i18n/proxy/configuration code.
@@ -109,6 +148,18 @@ Headless browser installation was unavailable in the environment. These checks d
 
 The Artwork block also passes the real production build/TypeScript and focused lint (zero errors; the existing native thumbnail `<img>` warning remains). Twenty-nine additional checks cover all 45 translated records/alt variants, exact catalogue/fact/price/path preservation, immutable/idempotent localization, English equivalence, source-equivalent layout/animation/physics, ICU parsing/plurals and actual archive render/event fixtures for canonical filters. Nine production-server checks exercise all 45 Standard routes in each language, translated archive/metadata, Glass entry, status and localized context. These fixtures do not replace browser hydration or device review.
 
+The Home/Collections block passes build/TypeScript with 123 static pages, 21 new content/invariance checks and 12 production-server checks across 21 requests; all 29 Artwork checks also pass against the new 210-key message set. Before rebuilding, six English pages were captured from the approved production build; the new Home/Collections/four Series responses retain exactly the same normalized visible English copy and metadata. Tests also retain every changed component's class expressions, all approved motion engines, media/facts, arbitrary-member gallery selection callbacks and physical/input source. No real form/provider request is submitted.
+
+Focused lint on changed files has no new findings. It retains the pre-existing SeriesGallery `react-hooks/set-state-in-effect` error, its dependency warning and two native-image warnings; the baseline/current rule/severity counts match exactly and the existing selection effect body remains identical. These are outstanding technical QA, not a clean lint claim. Browser hydration, actual lazy-viewer opening/Close/focus, long Spanish text fit, portrait/landscape touch behavior and assistive technology still require owner/device review.
+
+The About/Artist block passes build/TypeScript with 123 static pages, 11 content/invariance checks and 12 production-server checks across five real GET responses. Before rebuilding, the preceding About/Artist responses and Spanish Home were saved from the approved build. New English About/Artist visible copy and metadata match exactly; Spanish Home remains visibly exact. Spanish checks cover all public scenes, both philosophy reading modes, all five milestone records, all 17 process alternatives, practice/closing alternatives, localized links, accessible desktop navigation, film availability and the noindex/no-cookie release boundary. The 210 preceding messages remain exact in both languages.
+
+Focused lint for About/Artist retains one pre-existing JourneyNavigator `react-hooks/refs` error: `getProximity` reads button geometry through refs during rendering. Running the same rule against the approved v3 source confirms the same error; the callback is byte-identical and no new finding is introduced. The other changed files pass lint. This inherited issue and the earlier SeriesGallery findings remain technical debt. The frozen motion and lint rules are not rewritten as part of translation. Source/HTTP checks do not establish browser hydration, visual Spanish fit, physical-device interactions or screen-reader behavior.
+
 ## Known dependency release gate — 2026-10-18
 
 Read-only `npm audit` on the approved upstream lockfile and the first pilot found the same 12 flagged packages (11 high, one critical), with no new finding introduced by the language dependency. This Artwork increment leaves both package files byte-identical to the installed pilot. The current Next.js 16.2.12 has upstream security advisories, including [AVIF image optimization](https://github.com/vercel/next.js/security/advisories/GHSA-2xp9-vwfh-vxw4). A controlled dependency/security update and regression checks are required before public release; passing a build does not resolve those findings. Do not apply an automatic forced major change as part of a content translation patch.
+
+## Preview and production workflow
+
+Per [Vercel environments](https://vercel.com/docs/deployments/environments), Preview supports testing changes separately from the production environment. Non-production branch commits normally produce Preview deployments; a push/merge to the configured production branch normally triggers production. Finishing translation does not itself promote a deployment. Keep work on the review branch until content, legal/commercial meaning, dependencies and release QA are validated; inspect the actual project configuration before the final merge/promotion. No Vercel settings, deployment, domain, protection or environment variable is changed in this increment.

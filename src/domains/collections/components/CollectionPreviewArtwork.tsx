@@ -4,6 +4,8 @@ import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
 import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
+import { useLocale } from "next-intl";
+import { localizeArtwork } from "@/i18n/artworkCopy";
 
 import type { Artwork } from "@/domains/artworks";
 
@@ -13,9 +15,11 @@ interface CollectionPreviewArtworkProps {
 }
 
 export default function CollectionPreviewArtwork({
-    artwork,
+    artwork: sourceArtwork,
     seriesSlug,
 }: CollectionPreviewArtworkProps) {
+    const locale = useLocale();
+    const artwork = localizeArtwork(sourceArtwork, locale);
     const image =
         artwork.images.collection ??
         artwork.images.thumbnail ??
@@ -118,7 +122,7 @@ export default function CollectionPreviewArtwork({
                             text-white/50
                         "
                     >
-                        {getArtworkPresentation(artwork).yearLabel}
+                        {getArtworkPresentation(artwork, locale).yearLabel}
                     </p>
                 </div>
                 <ArtworkBadges artwork={artwork} variant="thumbnail" passive />

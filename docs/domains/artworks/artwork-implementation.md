@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.27
+Version: 1.28
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -263,6 +263,8 @@ The selector retains the selected work, Series/filter query, view mode and fragm
 The first pilot passed the actual build/TypeScript, 60 content/context/continuity/HTTP checks and focused i18n lint; 33 requests exercised a real production server. The subsequent Artwork block passes build/TypeScript, 29 content/actual-component checks and nine production-server checks across 96 requests, including all 45 Standard routes in each language. Checks confirm unchanged catalogue/asset paths, exact English presentation/metadata, latest Yasemi I/II facts, canonical filter values, complete Spanish copy/alt coverage and byte-identical approved layout/animation/gesture source. Focused lint has no errors; its existing native-thumbnail image warning remains. Hook/DOM fixtures do not establish physical touch behavior. Browser installation was unavailable, so both-language visual and real-device review remain required. Full scope and installation are in `docs/architecture/internationalization.md`.
 
 ## Installation
+
+The owner approved/pushed the EN/ES foundation and complete Artwork block as `d56b772`. The subsequent Home/Collections increment adds translated Series detail/preview/carousel controls and per-locale Series metadata, with original series names and canonical membership retained. Direct Series links with an initially selected artwork now load the same portal viewer only in the browser through `next/dynamic({ssr:false})`, avoiding server access to `document.body`. The viewer file, Standard/Glass physics, geometry and selection/Close handler bodies remain exact. Server checks cover all four selected-work deep links in both languages; actual lazy-viewer hydration/keyboard/touch behavior remains for device review. Installation is the incremental v3 patch described in DOC-I18N, not a repeat of the original migration commands below.
 
 The owner installed/reviewed the first EN/ES pilot below. The subsequent Artwork content block is delivered as the incremental `Del_Carmen_EN_ES_Artworks_v2.patch`; apply it on that existing branch using the check/application/build commands in `docs/architecture/internationalization.md`. It adds no dependencies and does not replace catalogue/media files. The original migration instructions below remain the recovery/base record.
 

@@ -1,7 +1,7 @@
 # Artist Page --- Implementation Architecture
 
 **Document ID:** DOC-ARTIST-IMPL\
-**Version:** 1.2\
+**Version:** 1.3\
 **Status:** 🟢 Approved / Complete / Frozen\
 **Project:** Del Carmen Digital Experience\
 **Brand:** Del Carmen --- Fine Art by Rō Visual\
@@ -1373,3 +1373,21 @@ apart from the Version metadata.
 
 No implementation architecture, completed behavior or future technical
 possibility has been removed because it is not needed by Artist v1.0.
+
+------------------------------------------------------------------------
+
+# 21. EN/ES Editorial Localization — 2026-10-18
+
+The owner-approved shared language rollout adds Spanish text to the six frozen Artist scenes. English remains at `/artist`; `/es/artist` shares the same components/media. No route/page/domain duplication is introduced.
+
+The typed `Artist` namespace supplies the Hero, full biography, seven philosophy paragraphs, practice, five milestones, desktop Journey Navigator, seventeen process-image alternatives and closing artwork scene. The same philosophy content feeds animated and reduced-motion reading paths. The remaining practice placeholder is localized without changing its availability condition.
+
+Original person, atelier, teacher, exhibition, artwork and brand names remain source names. English text, dates, graduation facts, Sendero del Sol's 2024 distinction and all record/paragraph orders remain equivalent. Translation does not independently reverify or invent biographical facts.
+
+Milestone/media/navigation arrays resolve translated fields inside the existing scene functions. Their shapes, indices, numbers and media heights/paths remain exact. Journey progress subscription, direct navigation event and pointer-proximity callbacks remain byte-identical. All GSAP files, CSS, DOM targets, responsive classes and scene order remain frozen.
+
+The route removes its temporary English boundary and generates metadata from its activated locale. The closing Artworks CTA keeps its localized destination. No persistence, runtime AI, consent/form change, dependency or film behavior is added.
+
+Production build/TypeScript pass. Content/source guards and real-server checks cover both languages, original English visible copy/metadata, milestone/alternative/accessible-navigation text and both philosophy reading modes. Focused lint retains the existing JourneyNavigator `react-hooks/refs` error on geometry reads during render, confirmed against the preceding approved source without a new finding. This remains technical debt alongside the earlier SeriesGallery findings.
+
+Browser hydration, long Spanish line fit, navigator scroll/click/proximity behavior, reduced motion, screen readers and physical portrait/landscape devices remain for owner review. English v1.0 visual approval does not automatically approve Spanish layout. See DOC-I18N for installation; Journal, forms/legal, database and commerce remain separate blocks.

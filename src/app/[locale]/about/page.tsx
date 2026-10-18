@@ -1,14 +1,15 @@
-import EnglishContent from "@/i18n/EnglishContent";
 import { activateLocale } from "@/i18n/server";
+import { getSiteMessages } from "@/i18n/messages";
 import { createPageMetadata } from "@/shared/lib/metadata";
-
-export const metadata = createPageMetadata({title: "About", description: "Discover the artistic vision behind Del Carmen: painting, memory, contemplation and the human experience.", });
-
-// src/app/about/page.tsx
-
 import About from "@/domains/about";
 
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+    const locale = await activateLocale(params);
+    const copy = getSiteMessages(locale).About;
+    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+}
+
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
-  await activateLocale(params);
-    return <EnglishContent>{<About />}</EnglishContent>;
+    await activateLocale(params);
+    return <About />;
 }

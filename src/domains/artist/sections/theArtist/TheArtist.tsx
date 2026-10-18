@@ -1,7 +1,11 @@
+import { useTranslations } from "next-intl";
 import { Container } from "@/shared/layout/container";
 import TheArtistMotion from "./TheArtistMotion";
 
 export default function TheArtist() {
+    const t = useTranslations("Artist");
+
+
     return (
         <section
             id="the-artist"
@@ -99,7 +103,7 @@ export default function TheArtist() {
                                     text-[#F5EFE6]/50
                                 "
                             >
-                                The Artist
+                                {t("biography.eyebrow")}
                             </p>
 
                             <span
@@ -131,23 +135,23 @@ export default function TheArtist() {
                                 data-the-artist-title-line
                                 className="the-artist-motion block"
                             >
-                                Long before painting
+                                {t("biography.titleFirst")}
                             </span>
 
                             <span
                                 data-the-artist-title-line
                                 className="the-artist-motion block"
                             >
-                                became a practice,
+                                {t("biography.titleSecond")}
                             </span>
 
                             <span
                                 data-the-artist-title-line
                                 className="the-artist-motion block"
                             >
-                                there was{" "}
+                                {t("biography.titleThird")}{" "}
                                 <span className="text-brand-gold">
-                                    observation.
+                                    {t("biography.observation")}
                                 </span>
                             </span>
                         </h2>
@@ -187,41 +191,21 @@ export default function TheArtist() {
                                 data-the-artist-paragraph
                                 className="the-artist-motion"
                             >
-                                Growing up in El Carmen, Puntarenas, Costa Rica,
-                                Rolando Rojas would sit on a bench facing the sea
-                                and draw palm trees, boats and sunsets. At the
-                                time, drawing was simply curiosity — a quiet
-                                fascination with the world and with those who
-                                seemed naturally capable of translating it onto
-                                paper.
+                                {t("biography.childhood")}
                             </p>
 
                             <p
                                 data-the-artist-paragraph
                                 className="the-artist-motion"
                             >
-                                For many years, that fascination remained
-                                dormant. His professional path led instead
-                                toward computer science, programming and
-                                eventually digital design. Yet through
-                                multimedia, animation, color and composition,
-                                the visual world quietly returned. What appeared
-                                to be a different path was already shaping
-                                another way of seeing.
+                                {t("biography.digital")}
                             </p>
 
                             <p
                                 data-the-artist-paragraph
                                 className="the-artist-motion"
                             >
-                                It was not until adulthood that drawing
-                                re-entered his life with intention. An interest
-                                in the intricate illustrations of Johanna
-                                Basford led him to pen-and-ink work and to a
-                                short course that would become unexpectedly
-                                decisive. After only a few weeks, his teacher
-                                recognized a progression he had never imagined
-                                in himself and encouraged him to continue.
+                                {t("biography.return")}
                             </p>
 
                             <p
@@ -241,34 +225,21 @@ export default function TheArtist() {
                                     lg:leading-[1.3]
                                 "
                             >
-                                That encounter changed the question. It was no
-                                longer whether he had been born knowing how to
-                                draw, but how far curiosity, discipline and time
-                                might take him.
+                                {t("biography.turningPoint")}
                             </p>
 
                             <p
                                 data-the-artist-paragraph
                                 className="the-artist-motion"
                             >
-                                The search eventually led to academic realism
-                                and to Atelier del Sol in San José, where he
-                                trained under Emilia Cantor and immersed himself
-                                in drawing and painting methods rooted in the
-                                academic tradition. He later graduated as an
-                                academic painter — not as the conclusion of a
-                                journey, but as the foundation for a more
-                                personal one.
+                                {t("biography.training")}
                             </p>
 
                             <p
                                 data-the-artist-paragraph
                                 className="the-artist-motion"
                             >
-                                Today, his practice exists between discipline
-                                and discovery: between everything technique can
-                                teach and everything that can only emerge
-                                through experience.
+                                {t("biography.present")}
                             </p>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 # About Implementation
 
-Version: 1.2
+Version: 1.3
 
 Document ID: DOC-AI
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved / Complete / Frozen
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-15
+Last Updated: 2026-10-18
 
 ---
 
@@ -431,3 +431,17 @@ The component remains server-renderable. This state introduces no playback JavaS
 Source verification evaluates the actual Hero JSX with Next/Image and presentation stand-ins. It checks the disabled control, accessible description association, visible availability text, preserved poster and identical content outside the film-control wrapper. The modified file parses without syntax errors. All other 206 source files remain byte-identical to the approved Series-portadas working snapshot, including all GSAP motion, Journal and Glass Artbook.
 
 Full Next.js build, browser, assistive-technology and responsive visual checks remain pending in the complete project. Root configuration, dependencies and `public/` were not supplied. The existing approved responsive QA records above describe the baseline and do not claim visual approval of this added label.
+
+---
+
+# EN/ES Editorial Localization — 2026-10-18
+
+The owner-approved shared language rollout extends the frozen About experience through `/about` and `/es/about`. This is a text/accessibility/metadata increment, not a redesign or a new film integration.
+
+The typed `About` namespace in the existing message dictionaries supplies Hero, Essence, Ecosystem and Continue through `useTranslations`. Essence splits its translated statement into words inside the scene, preserving the word-target structure. English statement/copy remains exact.
+
+The route removes its temporary English boundary and generates metadata using the activated locale. Shared links retain localized Artist and Artworks destinations. Del Carmen, Rō Visual, Rō Visual Lab and the named film The Encounter remain original. The film keeps its disabled control, availability association and geometry; only the availability/accessibility wording is localized. The unmounted AboutFilm component also receives messages without entering the scene composition.
+
+Existing classes, paths, dimensions, selectors and motion files remain exact. No video master, playback, provider call, cookie, dependency or asset folder is added.
+
+The real project now has its root configuration and compiler: production build/TypeScript pass. Server checks verify exact previous English copy/metadata, all Spanish scenes, the statement, accessible film availability, localized links and noindex. Current checks supersede only the earlier lack of compiler/server access; prior visual approval does not establish Spanish layout or assistive-technology approval. Review desktop, phone/tablet portrait and landscape, long headings and reduced motion before release. See DOC-I18N for installation and complete scope.

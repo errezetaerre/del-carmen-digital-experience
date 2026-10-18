@@ -1,6 +1,8 @@
 import { Container } from "@/shared/layout";
+import { useTranslations } from "next-intl";
 
 export default function CollectionsIntro() {
+    const t = useTranslations("Collections");
     return (
         <section
             aria-labelledby="collections-intro-title"
@@ -27,7 +29,7 @@ export default function CollectionsIntro() {
                             text-brand-gold
                         "
                     >
-                        Collections
+                        {t("eyebrow")}
                     </p>
 
                     <h1
@@ -44,9 +46,7 @@ export default function CollectionsIntro() {
                             lg:text-7xl
                         "
                     >
-                        Bodies of work shaped by
-                        time, memory, and
-                        contemplation.
+                        {t("heading")}
                     </h1>
 
                     <p
@@ -59,7 +59,7 @@ export default function CollectionsIntro() {
                             text-white/30
                         "
                     >
-                        Scroll to explore ↓
+                        {t("scroll")}
                     </p>
                 </div>
             </Container>

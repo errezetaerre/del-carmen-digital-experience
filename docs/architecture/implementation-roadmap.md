@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.6
+Version: 1.8
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -532,7 +532,11 @@ Implemented for review: one `[locale]` public route tree; unchanged English URLs
 
 This does not complete the Spanish edition. The first pilot was positively reviewed by the owner, including Standard and Glass, on 2026-10-18. The next Artwork block is implemented for review: translated archive/filter/result states and shared cards, plus stored quote/description/alt translations for all 45 current works, shared by the viewers. The owner catalogue and approved movement/layout remain intact.
 
-Remaining language work is the rest of Home, full Series/editorial copy, About/Artist/Journal, forms/feedback and equivalent legal/consent wording with correct language/version records. Review the new Spanish wording and both-language responsive/keyboard/touch behavior. Spanish remains noindex and language alternates remain off until the complete content/domain review. A controlled update for the inherited dependency security findings is also a public-release gate; it is not included in the Artwork content patch. See DOC-I18N for scope, installation and verification.
+The owner approved/pushed the foundation and complete Artwork block as `d56b772` on `feat/i18n-en-es`. The Home/Collections increment is now implemented for review: remaining Home editorial sections and both published Journal teasers, Collections, four full series' copy/metadata and their shared controls. A direct selected-artwork Series SSR error is corrected by mounting the existing portal viewer only in the browser; approved movement/selection/geometry stay intact.
+
+The owner subsequently approved Home/Collections. About/Artist is now implemented for review over that v3 content: both pages' editorial/accessibility copy and metadata, six existing Artist scenes, five milestones, Journey navigation/process alternatives and both philosophy reading modes. Canonical dates/recognitions, names and approved motion/layout remain intact. Build/TypeScript, 11 content checks and 12 real-server checks pass. English About/Artist and the approved Spanish Home remain visibly equivalent. Focused lint confirms the existing JourneyNavigator refs error against the approved v3 baseline without a new finding.
+
+Remaining language work is Journal index/full stories, forms/feedback and equivalent legal/consent wording with correct language/version records. The unchanged newsletter form retains a local English boundary below its translated introduction. Review new Spanish wording and both-language responsive/keyboard/touch behavior. Spanish remains noindex and language alternates remain off until the complete content/domain review. A controlled update for inherited dependency security findings and baseline lint debt remains part of release QA. The owner is using Vercel Preview on the feature branch; production follows its actual configured branch/promotion workflow, not translation completion alone. No production deployment or merge is performed here. See DOC-I18N for scope, installation and verification.
 
 The real project passes its production build and TypeScript; 60 focused content/URL/continuity/HTTP checks and focused i18n lint pass. The build/server use placeholder email/Redis credentials without submitting forms. Physical devices, rendered browser/screen-reader review, real provider delivery and production indexing remain open. Earlier source-only limitations are historical; root config, package lock and compiler are available for this increment.
 

@@ -1,5 +1,6 @@
-import EnglishContent from "@/i18n/EnglishContent";
 import { activateLocale } from "@/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { formatSeriesStatus, localizeArtworkSeries, seriesTextLocale } from "@/i18n/seriesCopy";
 import { createPageMetadata } from "@/shared/lib/metadata";
 import { notFound } from "next/navigation";
 import Link from "@/i18n/navigation";
@@ -38,28 +39,33 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Pick<SeriesPageProps, "params">) {
+    const locale = await activateLocale(params);
     const { slug } = await params;
-    const series = getArtworkSeriesBySlug(slug);
-    if (!series) notFound();
-    return createPageMetadata({ title: series.title,
-        description: series.description || series.statement || `Explore the ${series.title} artwork series by Del Carmen.` });
+    const sourceSeries = getArtworkSeriesBySlug(slug);
+    if (!sourceSeries) notFound();
+    const series = localizeArtworkSeries(sourceSeries, locale);
+    const t = await getTranslations({ locale, namespace: "Series" });
+    return createPageMetadata({ locale, title: series.title,
+        description: series.description || series.statement || t("metadataFallback", { title: series.title }) });
 }
 
 export default async function SeriesPage({
     params,
     searchParams,
 }: SeriesPageProps) {
-    await activateLocale(params);
+    const locale = await activateLocale(params);
+    const t = await getTranslations({ locale, namespace: "Series" });
     const { slug } = await params;
     const resolvedSearchParams =
         await searchParams;
 
-    const series =
+    const sourceSeries =
         getArtworkSeriesBySlug(slug);
 
-    if (!series) {
+    if (!sourceSeries) {
         notFound();
     }
+    const series = localizeArtworkSeries(sourceSeries, locale);
 
     const artworks =
         getArtworksBySeriesId(
@@ -84,7 +90,7 @@ export default async function SeriesPage({
 
 
 
-    return <EnglishContent>{(
+    return (
         <main
             className="
                 min-h-screen
@@ -150,7 +156,7 @@ export default async function SeriesPage({
                                 text-brand-gold
                             "
                         >
-                            {isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : "Artwork Series"}
+                            {isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : t("label")}
                         </p>
 
                         <h1
@@ -208,10 +214,7 @@ export default async function SeriesPage({
                                 "
                             >
                                 <span>
-                                    {artworks.length}{" "}
-                                    {artworks.length === 1
-                                        ? "work"
-                                        : "works"}
+                                    {t("workCount", { count: artworks.length })}
                                 </span>
 
                                 <span
@@ -223,7 +226,7 @@ export default async function SeriesPage({
                                 </span>
 
                                 <span>
-                                    {series.status}
+                                    {formatSeriesStatus(series.status, locale)}
                                 </span>
                             </div>
 
@@ -315,10 +318,11 @@ export default async function SeriesPage({
                                             text-brand-gold
                                         "
                                         >
-                                            Series Statement
+                                            {t("statement")}
                                         </p>
 
                                         <p
+                                            lang={seriesTextLocale(series, locale)}
                                             className="
                                             font-display
                                             text-2xl
@@ -353,6 +357,7 @@ export default async function SeriesPage({
                                         )}
 
                                         <p
+                                            lang={seriesTextLocale(series, locale)}
                                             className="
                                             mx-auto
                                             max-w-2xl
@@ -410,7 +415,7 @@ text-center
                                 text-white/30
                             "
                         >
-                            Continue Exploring
+                            {t("continue")}
                         </p>
 
                         <div
@@ -439,7 +444,7 @@ text-center
                                     hover:text-brand-gold
                                 "
                             >
-                                ← Back to Collections
+                                {t("back")}
                             </Link>
 
                             <Link
@@ -456,12 +461,12 @@ text-center
                                     hover:text-brand-gold
                                 "
                             >
-                                Return Home →
+                                {t("home")}
                             </Link>
                         </div>
                     </div>
                 </Container>
             </section>
         </main>
-    )}</EnglishContent>;
+    );
 }

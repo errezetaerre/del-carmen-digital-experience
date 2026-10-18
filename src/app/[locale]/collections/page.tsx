@@ -1,8 +1,13 @@
-import EnglishContent from "@/i18n/EnglishContent";
 import { activateLocale } from "@/i18n/server";
+import { getSiteMessages } from "@/i18n/messages";
+import { localizeArtworkSeries } from "@/i18n/seriesCopy";
 import { createPageMetadata } from "@/shared/lib/metadata";
 
-export const metadata = createPageMetadata({title: "Collections", description: "Explore the artwork series of Del Carmen: connected paintings, shared themes and the stories behind each collection.", });
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+    const locale = await activateLocale(params);
+    const copy = getSiteMessages(locale).Collections;
+    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+}
 
 import {
     CollectionHero,
@@ -13,11 +18,11 @@ import {
 import Footer from "@/shared/layout/footer";
 
 export default async function CollectionsPage({ params }: { params: Promise<{ locale: string }> }) {
-  await activateLocale(params);
+  const locale = await activateLocale(params);
     const collections =
         getCollections();
 
-    return <EnglishContent>{(
+    return (
         <main
             className="
                 relative
@@ -37,7 +42,7 @@ export default async function CollectionsPage({ params }: { params: Promise<{ lo
                 }) => (
                     <CollectionHero
                         key={series.id}
-                        series={series}
+                        series={localizeArtworkSeries(series, locale)}
                         artworks={artworks}
                     />
                 ),
@@ -45,5 +50,5 @@ export default async function CollectionsPage({ params }: { params: Promise<{ lo
 
             <Footer />
         </main>
-    )}</EnglishContent>;
+    );
 }

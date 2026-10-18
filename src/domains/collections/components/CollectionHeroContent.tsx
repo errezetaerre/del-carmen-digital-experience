@@ -1,6 +1,8 @@
 import { LinkButton } from "@/shared/ui/button";
 import FeaturedSeriesBadge from "@/shared/ui/artwork/FeaturedSeriesBadge";
 import { isFeaturedArtworkSeries } from "@/domains/artworks/presentation/getArtworkPresentation";
+import { useLocale, useTranslations } from "next-intl";
+import { localizeArtworkSeries, seriesTextLocale } from "@/i18n/seriesCopy";
 
 import type { ArtworkSeries } from "@/domains/artworks/series";
 
@@ -10,14 +12,17 @@ interface CollectionHeroContentProps {
 }
 
 export default function CollectionHeroContent({
-    series,
+    series: sourceSeries,
     artworkCount,
 }: CollectionHeroContentProps) {
+    const locale = useLocale();
+    const t = useTranslations("Series");
+    const series = localizeArtworkSeries(sourceSeries, locale);
     const yearLabel = series.yearStart
         ? series.yearEnd
             ? `${series.yearStart} — ${series.yearEnd}`
             : series.status === "ongoing"
-                ? `${series.yearStart} — ongoing`
+                ? `${series.yearStart} — ${t("ongoing")}`
                 : `${series.yearStart}`
         : null;
 
@@ -39,7 +44,7 @@ export default function CollectionHeroContent({
                     text-brand-gold
                 "
             >
-                {isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : "Artwork Series"}
+                {isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : t("label")}
             </p>
 
             <h2
@@ -60,6 +65,7 @@ export default function CollectionHeroContent({
 
             {series.description && (
                 <p
+                    lang={seriesTextLocale(series, locale)}
                     className="
                         mt-6
                         max-w-lg
@@ -104,10 +110,7 @@ export default function CollectionHeroContent({
                 )}
 
                 <span>
-                    {artworkCount}{" "}
-                    {artworkCount === 1
-                        ? "work"
-                        : "works"}
+                    {t("workCount", { count: artworkCount })}
                 </span>
             </div>
 
@@ -116,7 +119,7 @@ export default function CollectionHeroContent({
                     href={`/series/${series.slug}`}
                     variant="goldUnderline"
                 >
-                    Explore Collection
+                    {t("exploreCollection")}
                 </LinkButton>
             </div>
         </div>

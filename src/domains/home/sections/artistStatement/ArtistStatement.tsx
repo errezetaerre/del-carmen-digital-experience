@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import { Container } from "@/shared/layout";
 import LinkButton from "@/shared/ui/button/LinkButton";
@@ -6,6 +7,7 @@ import LinkButton from "@/shared/ui/button/LinkButton";
 import ArtistStatementMotion from "./ArtistStatementMotion";
 
 export default function ArtistStatement() {
+  const t = useTranslations("Home");
   return (
     <section
       data-artist-statement
@@ -44,7 +46,7 @@ export default function ArtistStatement() {
               md:col-span-3
               lg:col-span-5
             "
-            aria-label="Artist portrait"
+            aria-label={t("artistPortrait")}
           >
             {/* Mask */}
             <div
@@ -112,7 +114,7 @@ export default function ArtistStatement() {
                 lg:text-6xl
               "
             >
-              Art as eternal memory
+              {t("artistTitle")}
             </h2>
 
             {/* Statement */}
@@ -136,14 +138,12 @@ export default function ArtistStatement() {
             >
               <p data-artist-paragraph
                 className="artist-statement-motion">
-                My works are born from a vow with heaven: to capture the
-                beauty that the soul recognizes, but the world has forgotten.
+                {t("artistParagraphFirst")}
               </p>
 
               <p data-artist-paragraph
                 className="artist-statement-motion">
-                I paint to awaken consciousness, to remind us that what is
-                essential is not seen, but felt.
+                {t("artistParagraphSecond")}
               </p>
             </div>
 
@@ -177,7 +177,7 @@ export default function ArtistStatement() {
                     tracking-[0.28em]
                   "
                 >
-                  Discover my story →
+                  {t("artistStory")}
                 </LinkButton>
               </div>
             </div>

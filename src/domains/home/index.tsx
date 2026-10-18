@@ -6,7 +6,6 @@ import SelectedWorks from "./sections/selectedWorks";
 import JournalPreview from "./sections/journal";
 import Invitation from "./sections/invitation";
 import Footer from "@/shared/layout/footer";
-import EnglishContent from "@/i18n/EnglishContent";
 
 export default function Home() {
   return (
@@ -19,14 +18,12 @@ export default function Home() {
       "
     >
       <Hero />
-      <EnglishContent>
       <FeaturedArtwork />
       <ArtistStatement />
       <Collection />
       <SelectedWorks />
       <JournalPreview />
       <Invitation />
-      </EnglishContent>
       <Footer />
     </main>
   );
