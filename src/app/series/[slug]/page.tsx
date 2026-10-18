@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/shared/lib/metadata";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import FeaturedSeriesBadge from "@/shared/ui/artwork/FeaturedSeriesBadge";
@@ -31,6 +32,14 @@ export function generateStaticParams() {
             slug: series.slug,
         }),
     );
+}
+
+export async function generateMetadata({ params }: Pick<SeriesPageProps, "params">) {
+    const { slug } = await params;
+    const series = getArtworkSeriesBySlug(slug);
+    if (!series) notFound();
+    return createPageMetadata({ title: series.title,
+        description: series.description || series.statement || `Explore the ${series.title} artwork series by Del Carmen.` });
 }
 
 export default async function SeriesPage({

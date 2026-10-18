@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.24
+Version: 1.25
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -17,7 +17,7 @@ This implementation combines the existing realisation-state foundation with the 
 
 ## Catalogue state and factual boundaries
 
-The current 45-record catalogue adopts the owner-supplied `data/artworks.ts` from 2026-10-17 byte for byte. Seven works have explicit `planned` / `unavailable` state: `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque` retain 2027; `yasemi_ii`, `yasemi_iii` and `yasemi_iv` retain their supplied planned year 2026. Yasemi I remains completed/available. The other 38 records retain their completed-work meaning. Only the six supplied Yasemi state/availability fields differ from the preceding catalogue; all years, copy, dimensions, media paths, classification and prices are retained. This is not an independent physical-inventory audit.
+The current 45-record catalogue adopts the latest owner-supplied `data/artworks.ts` from 2026-10-17 byte for byte. It contains 38 completed works and seven explicit `planned` / `unavailable` works: `buda`, `margarita`, `recordando_mi_puerto`, `la_mujer_del_bosque`, `yasemi_i`, `yasemi_iii` and `yasemi_iv`. In the latest owner update, Yasemi I changes from completed/available to planned/unavailable and Yasemi II changes from planned/unavailable to completed/available. These four state/availability values are the only differences from the preceding supplied catalogue. All years, copy, dimensions, media paths, classification and prices remain as supplied. State never follows the year automatically. This is not an independent physical-inventory audit.
 
 State is explicit; year and positive price never infer completion or purchase availability. Only `completed` plus `available` passes `isArtworkAvailable()`. Future commerce must additionally validate the physical-piece/edition offer, price/currency, stock and delivery on the server.
 
@@ -243,6 +243,14 @@ ArtworkLightbox and the fullscreen ArtworkDetailViewer use the shared `useDialog
 Existing viewer Escape, expanded-description Escape priority, ArrowLeft/ArrowRight, zoom/pan, touch, native scrolling and selection owners remain unchanged. Only modal refs and hook calls are added to their source. Glass Artbook geometry/material/runtime, masks, badges, arrival renderer, image sizing and catalogue records remain byte-identical to the owner-approved v14.
 
 27 new focus/controller/component checks cover initial focus, native internal Tab, boundary wrapping in both directions, Escape ownership, latest close callbacks, hidden/disabled/inert controls, dynamic controls, temporary root focus, nested modal priority, restoration and idempotent cleanup. Actual compiled integrations are checked in the menu, both shared viewer presentations, empty viewers and fullscreen opening/Escape reset. The preceding 51 arrival, nine drawing, 49 trackpad and 132 regression checks pass, for 268 local checks. All 235 source files parse and 420 local imports resolve identically under case-sensitive and case-insensitive policies. Validation uses compiled source, native EventTarget and React/Next/DOM fixtures; project TypeScript/build, browser focus behavior, assistive technology and physical devices still require real-environment verification.
+
+## Canonical detail metadata
+
+`getArtworkMetadata()` derives the document title and description from the selected canonical Artwork. Completed works retain their real title, year and authorship meaning. Planned and in-progress works are explicitly named Coming soon or In progress; they are not described as finished merely because their stored year is past or they have a price. The latest owner data therefore describes Yasemi I as Coming soon and Yasemi II as completed. Stored availability/price does not create a purchase claim. Description falls back to the quote and then existing medium/support, while original artwork names and accents are preserved.
+
+`/artworks/[slug]` and `/series/[slug]` export server metadata using their existing canonical slug selectors. Unknown slugs retain not-found behavior. Archive filters, Series context, Standard/Glass experience state and selected-artwork query parameters do not alter the work/series title or description. All page-rendering bodies, static-param functions, UI/import behavior and the approved Glass/Standard/arrival/accessibility implementations remain unchanged.
+
+28 focused compiled-source checks cover the shared formatter, seven static routes, all 45 artwork slugs, four series and the two published Journal entries, missing/unpublished routes, query independence, explicit realisation state, authorship, textual social fields and absence of fabricated URLs/images/prices/publication dates. All 237 source files parse and 433 local imports resolve identically under both filesystem case policies. Page bodies/route props/static-param functions and all unrelated source are compared against the preceding owner-updated snapshot. This is not a complete Next project typecheck/build, browser head inspection, crawler or search-engine test. Full SEO and production validation remains open.
 
 ## Installation
 

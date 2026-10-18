@@ -1,3 +1,4 @@
+import { createPageMetadata } from "@/shared/lib/metadata";
 import { notFound } from "next/navigation";
 
 import JournalEntryExperience from "@/domains/journal/components/entry/JournalEntryExperience";
@@ -12,6 +13,14 @@ interface JournalEntryPageProps {
     params: Promise<{
         slug: string;
     }>;
+}
+
+export async function generateMetadata({ params }: JournalEntryPageProps) {
+    const { slug } = await params;
+    const entry = getJournalEntryBySlug(slug);
+    const story = getJournalStoryBySlug(slug);
+    if (!entry || !story) notFound();
+    return createPageMetadata({ title: entry.title, description: entry.excerpt, type: "article" });
 }
 
 export default async function JournalEntryPage({

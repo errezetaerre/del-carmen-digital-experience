@@ -1,3 +1,7 @@
+import { createPageMetadata } from "@/shared/lib/metadata";
+
+export const metadata = createPageMetadata({title: "Collections", description: "Explore the artwork series of Del Carmen: connected paintings, shared themes and the stories behind each collection.", });
+
 import {
     CollectionHero,
     CollectionsIntro,

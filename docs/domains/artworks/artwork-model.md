@@ -1,6 +1,6 @@
 # Artwork Model
 
-Version: 1.5
+Version: 1.6
 
 Document ID:
 DOC-AM
@@ -1335,7 +1335,7 @@ No future commerce or domain capability has been removed because it is not imple
 
 This requirement-driven extension supersedes the earlier initial vocabulary where availability had only three values and the catalogue had no realisation state. The remaining classification, HomeCuration and future Product boundaries are preserved.
 
-The four user-confirmed future works are `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque`. They now have `creationStatus: "planned"` and `availability: "unavailable"`. Their existing planned year, dimensions, image paths, authorship and price records are retained. Their primary image alt text identifies a planned artwork preview. This initially left 41 entries with an explicit `completed` state. The owner subsequently supplied an updated `data/artworks.ts` on 2026-10-17: `yasemi_ii`, `yasemi_iii` and `yasemi_iv` also have `creationStatus: "planned"` and `availability: "unavailable"`. This latest file is the catalogue source of truth, with 45 entries, 38 completed and seven planned. Yasemi I remains completed/available; Yasemi II–IV retain 2026 and all supplied dimensions, media paths, copy and prices. No state is inferred from the year.
+The four initially confirmed future works are `buda`, `margarita`, `recordando_mi_puerto` and `la_mujer_del_bosque`, with `creationStatus: "planned"` and `availability: "unavailable"`. Subsequent owner updates also identify planned Yasemi works. The latest `data/artworks.ts` supplied on 2026-10-17 is the source of truth: 45 records, 38 completed and seven planned. The planned Yasemi records are now `yasemi_i`, `yasemi_iii` and `yasemi_iv`; Yasemi II is completed/available. The latest update swaps the state/availability pair of Yasemi I and Yasemi II, with all years, dimensions, media paths, copy and prices retained exactly. No state is inferred from the year.
 
 Recognition is a separate reference structure in `model/artworkRecognition.ts` and `data/artworkRecognitions.ts`:
 

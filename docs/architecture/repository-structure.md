@@ -1,4 +1,4 @@
-Version: 1.30
+Version: 1.31
 
 Document ID:
 DOC-RS
@@ -614,3 +614,12 @@ The shared `dust.ts` retains its approved two-page Glass Artbook and mobile-menu
 `src/shared/hooks/useDialogFocus.ts` owns reusable modal focus behavior for MobileMenu, ArtworkLightbox and the fullscreen ArtworkDetailViewer. It exports the client hook and a DOM binding used for event-level verification. Opening focuses the preferred close control or first available control; Tab/Shift+Tab remain inside the current dialog; closing returns focus to the connected, visible prior control. A per-document stack gives only the most recently opened bound dialog ownership of focus and Tab. Dynamic controls, hidden/disabled/inert ancestors, empty dialogs, missing return targets, repeated cleanup and callback updates retain explicit handling.
 
 MobileMenu delegates Escape to its current close callback. Artwork viewers retain their existing Escape, expanded-reading, arrow, zoom and pan handlers. The integrations add only refs/imports/hook calls; the existing classes, JSX composition, content, swipe/selection handlers and scroll locks retain their source. No new dependency or environment setting is introduced. This is one bounded accessibility correction within Phase 1 QA; it does not declare global keyboard, screen-reader, responsive or production verification complete.
+
+
+### Server-rendered page metadata
+
+`src/shared/lib/metadata.ts` formats one complete page title, a whitespace-normalized description and matching Open Graph/Twitter text through the existing Next Metadata API. The helper depends only on the existing site configuration and Next types; it introduces no request headers, cookies, fetch, environment variable, package or client runtime. Home and the six main static routes export static metadata. Artwork, Series and published Journal detail routes export `generateMetadata` using their existing canonical slug selectors and not-found boundaries. Filter/experience query state does not redefine artwork metadata.
+
+Artwork-specific realisation/authorship wording belongs to `src/domains/artworks/presentation/getArtworkMetadata.ts`. Planned and in-progress works receive explicit labels; the year and stored price cannot assert completion or a purchase offer. Journal detail uses the article Open Graph type without inventing a full publication date. Root layout, legal metadata, route rendering, navigation and interaction code retain their source. No canonical URL, public origin, social preview image, sitemap, robots policy or structured commercial data is fabricated before those configurations/content are ready.
+
+The current metadata increment is a foundation rather than a complete technical SEO audit. Canonical origin/URLs, sitemap/robots, real preview images, indexing, performance and production/crawler review remain in the implementation roadmap. EN/ES, persistence and commerce remain separate requested increments.

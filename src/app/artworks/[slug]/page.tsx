@@ -1,3 +1,4 @@
+import { getArtworkMetadata } from "@/domains/artworks/presentation/getArtworkMetadata";
 import { notFound } from "next/navigation";
 
 import {
@@ -33,6 +34,13 @@ export function generateStaticParams() {
     return getArtworks().map((artwork) => ({
         slug: artwork.slug,
     }));
+}
+
+export async function generateMetadata({ params }: Pick<ArtworkPageProps, "params">) {
+    const { slug } = await params;
+    const artwork = getArtworkBySlug(slug);
+    if (!artwork) notFound();
+    return getArtworkMetadata(artwork);
 }
 
 export default async function ArtworkPage({

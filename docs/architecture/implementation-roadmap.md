@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.3
+Version: 1.4
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -500,3 +500,25 @@ The owner approved the Artwork/Glass Artbook presentation and the complete glass
 The next bounded accessibility increment is implemented for review: MobileMenu gains initial focus, Tab containment, Escape closing and return focus; ArtworkLightbox and the fullscreen ArtworkDetailViewer share focus containment/restoration while keeping their existing key and pointer owners. No approved visual or motion system is redesigned. Local compiled-source and event-fixture verification is recorded in the canonical Artwork Implementation and Repository Structure documents. Real browser/assistive-technology and complete-project checks remain open.
 
 Remaining global responsive, accessibility, performance, SEO, production and domain/sender verification remains active. EN/ES, persistent database-backed canonical data, original/print/edition offers and prices, shopping cart/checkout and the downloadable sales catalogue remain requested future increments. They must keep Artwork identity, ArtworkSeries grouping, editorial curation and commerce configuration separate. The language controls currently show EN; this keyboard-access increment does not deliver translation.
+
+
+13. Current Continuity and Requested Backlog — 2026-10-17 (Costa Rica)
+
+13.1 Current increments
+
+The owner approved the glass presentation, insignias, full-panel warm comet/fairy dust and the modal keyboard-focus increment. The current source adopts the latest owner catalogue exactly: Yasemi I is planned/unavailable; Yasemi II is completed/available. The catalogue remains 45 works, 38 completed and seven planned.
+
+The next implemented increment is the page-metadata foundation, ready for owner review: static titles/descriptions for Home, About, Artist, Artworks, Collections, Contact and Journal; canonical dynamic metadata for artwork, series and published journal detail routes; shared Open Graph/Twitter text. It does not redesign the approved visual/interaction systems or fabricate a public origin. It is not a declaration that global QA or SEO is complete.
+
+13.2 Outstanding work
+
+1. Public-experience release QA: remaining cross-page responsive/device checks, keyboard/screen-reader review, performance and full-project build verification. Complete technical SEO after the metadata foundation: canonical public origin/URLs, sitemap/robots, real social preview images, structured data where justified and production/crawler review.
+2. EN/ES: functional language selection and translation of navigation, page content, forms, feedback, legal/editorial copy and metadata through one coherent language architecture. The current public copy remains English.
+3. Persistent canonical data: introduce the planned database/repository integration and seed real, owner-confirmed Artwork, ArtworkSeries, recognition and curation records. Preserve their domain boundaries and the latest supplied catalogue; choose the production connection and operational setup explicitly.
+4. Sales and cart: review the visual experience first, then distinguish the available physical painting (including hand-painted copies/studies) from prints/editions, confirm prices/currency/stock and connect cart, order/payment and delivery behavior. Existing Artwork availability/price alone does not authorize checkout.
+5. Downloadable sales PDF: catalogue design and generation from confirmed artworks/offers, prices and availability for direct purchase enquiries.
+6. Production: acquire/configure the public domain and email service, complete sender/DNS/delivery checks, deploy and perform production QA. The current public contact email remains the approved provisional one until changed by the owner.
+7. Remaining editorial assets/content: final About film or approved poster/fallback and completion of intentionally unpublished Journal entries. The supplied catalogue has two renderable published entries and five awaiting story content; they remain hidden until renderable. These are content decisions, not broken public links.
+8. Later visual enrichment: subtle animated atmospheres and the proposed Houdini/3D background, after the core public site is finished and those visual studies are approved.
+
+These items preserve the requested cart, distinctions, planned-work differentiation, prices, original/print choice, bilingual experience, database and PDF catalogue. Insignias, featured/recognition treatment and Coming soon differentiation are already implemented; remaining work must not reopen them without a concrete defect or a new approved requirement. The next major functional block after metadata review is EN/ES.

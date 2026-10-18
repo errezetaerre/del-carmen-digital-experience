@@ -1,3 +1,7 @@
+import { createPageMetadata } from "@/shared/lib/metadata";
+
+export const metadata = createPageMetadata({title: "Artworks", description: "Explore original artworks, master copies and studies by Rolando Del Carmen, with artwork details, series and planned works.", });
+
 import { Suspense } from "react";
 import Footer from "@/shared/layout/footer";
 
