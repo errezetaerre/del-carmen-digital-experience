@@ -1,5 +1,6 @@
 /* Transparent wrappers keep the existing Standard composition elsewhere. */
 .heading, .reading { display: contents; }
+.spread { position: relative; }
 
 /* Applied only while a scene gesture owns the pointer; reading stays selectable. */
 .viewport[data-artwork-dragging] { user-select: none; -webkit-user-select: none; }

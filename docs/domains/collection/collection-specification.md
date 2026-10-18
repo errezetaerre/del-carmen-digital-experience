@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.12
+Version: 1.13
 
 Document ID: DOC-COL-SPEC
 
@@ -728,6 +728,6 @@ Each CollectionPreviewArtwork link fills that changing height with a zero minimu
 
 ## Shared selected-artwork arrival accent
 
-The selected-artwork viewer reused by Home and Series adds the shared `ArtworkArrivalAccent` component from `ArtworkArrivalEffect.tsx`, using `artworkArrivalLifecycle.ts` for readiness and cleanup, for completed works with Cover/Featured/recognition insignias. The selected Artwork ID keys a single warm contour-comet and badge-dust sequence after the image decodes, fonts settle and the band is measured. Portrait, landscape and desktop viewer layouts use the same effect. Standard detail extends its existing portrait effect to tablet landscape, retaining archive/Series navigation context.
+The selected-artwork viewer reused by Home and Series adds the shared `ArtworkArrivalAccent` component from `ArtworkArrivalEffect.tsx`, using `artworkArrivalLifecycle.ts` for readiness and cleanup, for completed works with Cover/Featured/recognition insignias. The selected Artwork ID keys a single warm contour-comet and fairy-dust sequence after the image decodes, fonts settle and the band is measured. Its path follows the complete glass panel, including image and information, with the existing rounded corners; the painting outline is not used as the contour. Dust follows the four panel edges and remains at the insignia band. The pointer-transparent canvas is mounted above the rim and outside the image mask. Portrait, landscape and desktop viewer layouts use the same effect. Standard detail extends its existing portrait effect to tablet landscape, retaining archive/Series navigation context.
 
 The lightbox permits its own modal while suppressing decoration for another modal, zoom or expanded reading. Pointer/swipe starts, navigation controls and closing clean up the decoration. Existing datasets, arbitrary Series sizes, thumbnail hover expansion, frame/image/insignia sizing, swipe/zoom/button/scroll handlers and the approved Collections hero motion remain unchanged. Actual browser/device and project-build review remains required; compiled-source/event/drawing validation is recorded in the canonical Artwork Implementation document.

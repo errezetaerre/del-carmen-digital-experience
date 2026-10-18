@@ -21,10 +21,11 @@ export function bindArtworkArrivalAccent(host: HTMLElement, surface: "standard" 
     const ribbon = root?.querySelector<HTMLElement>("[data-artwork-highlights]");
     const dialog = surface === "lightbox" ? root?.closest<HTMLElement>('[role="dialog"][aria-modal="true"]') : null;
     const viewerPanel = surface === "lightbox" ? root?.closest<HTMLElement>("[data-lightbox-panel]") : null;
+    const glassFrame = surface === "lightbox" ? viewerPanel : root?.closest<HTMLElement>("[data-artwork-detail-layout]");
     const zoomLayer = surface === "lightbox" ? root?.querySelector<HTMLElement>("[data-artwork-arrival-zoom]") : null;
     const viewport = surface === "lightbox" ? dialog : panel?.parentElement?.parentElement;
     const document = host.ownerDocument, browserView = document.defaultView;
-    if (!root || !image || !ribbon || !viewport || !browserView ||
+    if (!root || !image || !ribbon || !glassFrame || !viewport || !browserView ||
         (surface === "standard" && panel?.dataset.artworkKineticPanel !== "current")) return () => {};
     const view: Window = browserView;
     const eligibleViewport = view.matchMedia(surface === "lightbox" ? "(min-width:0px)" : STANDARD_ARTWORK_ACCENT_QUERY);
@@ -45,7 +46,7 @@ export function bindArtworkArrivalAccent(host: HTMLElement, surface: "standard" 
         const modalBlocked = Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"][aria-modal="true"]')).some(modal => modal !== dialog);
         const zoomed = zoomLayer && (zoomLayer.getBoundingClientRect().width > zoomLayer.offsetWidth * 1.01 ||
             zoomLayer.getBoundingClientRect().height > zoomLayer.offsetHeight * 1.01);
-        if (!eligibleViewport.matches || reducedMotion.matches || document.hidden || !host.isConnected ||
+        if (!eligibleViewport.matches || reducedMotion.matches || document.hidden || !host.isConnected || !glassFrame!.isConnected ||
             (surface === "standard" && panel!.dataset.artworkKineticPanel !== "current") || viewport!.hasAttribute("data-artwork-dragging") ||
             (entry && entry.dataset.entryPhase !== "standard") ||
             document.querySelector("[data-artwork-navigation-snapshot]") || modalBlocked || zoomed ||
@@ -53,7 +54,7 @@ export function bindArtworkArrivalAccent(host: HTMLElement, surface: "standard" 
             stop(); return;
         }
         if (!mediaReady || root!.dataset.haloReady !== "true") return;
-        const origin = host.getBoundingClientRect(), picture = paintingBounds(image!, origin);
+        const origin = glassFrame!.getBoundingClientRect(), picture = paintingBounds(image!, origin);
         const badge = ribbon!.getBoundingClientRect(), panelBox = panel?.getBoundingClientRect();
         const viewportBox = viewport!.getBoundingClientRect();
         // A neighbouring/partially sliding scene is not a landing.
@@ -61,12 +62,17 @@ export function bindArtworkArrivalAccent(host: HTMLElement, surface: "standard" 
             origin.top + picture.y >= view.innerHeight || origin.top + picture.y + picture.height <= 0) {
             stop(); return;
         }
+        const border = { x: 1, y: 1, width: glassFrame!.clientWidth - 2, height: glassFrame!.clientHeight - 2,
+            radius: Math.max(0, (parseFloat(view.getComputedStyle(glassFrame!).borderTopLeftRadius) || 0) - 1) };
+        if (border.width <= 0 || border.height <= 0) { stop(); return; }
         const badgeBounds = { x: badge.left - origin.left, y: badge.top - origin.top, width: badge.width, height: badge.height };
-        const signature = [picture.x, picture.y, picture.width, picture.height,
+        const signature = [border.x, border.y, border.width, border.height, border.radius,
+            picture.x, picture.y, picture.width, picture.height,
             badgeBounds.x, badgeBounds.y, badgeBounds.width, badgeBounds.height].map(n => n.toFixed(1)).join("/");
         if (played) { if (signature !== geometry) stop(); return; }
         played = true; geometry = signature;
-        stopDust = burstArtworkDust(host, picture, badgeBounds);
+        // Draw above the complete glass panel, outside the image mask and its stacking context.
+        stopDust = burstArtworkDust(glassFrame!, border, badgeBounds);
     }
     function prepare() {
         const token = ++generation;
@@ -92,6 +98,7 @@ export function bindArtworkArrivalAccent(host: HTMLElement, surface: "standard" 
     function visibility() { if (document.hidden) interrupt(); else queue(); }
     const resize = new ResizeObserver(queue);
     resize.observe(root); resize.observe(image); resize.observe(ribbon);
+    resize.observe(glassFrame);
     const mutations = new MutationObserver(queue);
     mutations.observe(document.body, { childList: true, subtree: true, attributes: true,
         attributeFilter: ["data-entry-phase", "data-artwork-kinetic-panel", "data-artwork-dragging", "data-halo-ready", "aria-modal"] });
