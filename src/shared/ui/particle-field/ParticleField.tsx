@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
+import { DUST_COLORS, drawDustMote } from "./dust";
 
 type PointerPosition = {
   x: number;
@@ -39,13 +40,6 @@ type Particle = {
   twinkleSpeed: number;
   twinkleAmount: number;
 };
-
-const PARTICLE_COLORS = [
-  "rgba(218, 178, 92, 0.95)",
-  "rgba(235, 235, 230, 0.92)",
-  "rgba(201, 164, 92, 0.90)",
-  "rgba(250, 245, 225, 0.95)",
-];
 
 export default function ParticleField({
   targetRef,
@@ -144,18 +138,15 @@ export default function ParticleField({
               targetY: y,
 
               size:
-                Math.random() * 2.2 +
-                0.8,
+                Math.random() * 1.2 +
+                0.45,
 
               alpha:
-                Math.random() * 0.35 +
-                0.55,
+                Math.random() * 0.30 +
+                0.35,
 
               color:
-                PARTICLE_COLORS[
-                index %
-                PARTICLE_COLORS.length
-                ],
+                DUST_COLORS[index % DUST_COLORS.length],
 
               phase:
                 Math.random() *
@@ -341,9 +332,13 @@ export default function ParticleField({
       };
     };
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
     const animate = (
       time: number,
     ) => {
+      animationRef.current = null;
+      if (document.hidden || reducedMotion.matches) return;
       context.clearRect(
         0,
         0,
@@ -482,75 +477,15 @@ export default function ParticleField({
               shimmer,
             );
 
-          /*
-           * Glow.
-           */
-          context.save();
-
-          context.shadowBlur =
-            isActive
-              ? 20
-              : isFollowingPointer
-                ? 17
-                : 14;
-
-          context.shadowColor =
-            particle.color;
-
-          context.beginPath();
-
-          context.arc(
+          drawDustMote(
+            context,
             particle.x,
             particle.y,
             particle.size,
-            0,
-            Math.PI * 2,
+            index,
+            intensity * particle.alpha,
           );
 
-          context.fillStyle =
-            particle.color.replace(
-              /[\d.]+\)$/,
-              `${intensity})`,
-            );
-
-          context.fill();
-
-          /*
-           * Small luminous core for
-           * larger particles.
-           */
-          if (
-            particle.size >
-            1.8
-          ) {
-            context.save();
-
-            context.shadowBlur =
-              18;
-
-            context.shadowColor =
-              "rgba(255, 248, 225, 0.9)";
-
-            context.beginPath();
-
-            context.arc(
-              particle.x,
-              particle.y,
-              particle.size *
-              0.32,
-              0,
-              Math.PI * 2,
-            );
-
-            context.fillStyle =
-              "rgba(255, 250, 235, 0.9)";
-
-            context.fill();
-
-            context.restore();
-          }
-
-          context.restore();
         },
       );
 
@@ -560,34 +495,37 @@ export default function ParticleField({
         );
     };
 
-    resize();
-    createParticles();
-
-    window.addEventListener(
-      "resize",
-      resize,
-    );
-
-    animationRef.current =
-      requestAnimationFrame(
-        animate,
-      );
-
-    return () => {
-      window.removeEventListener(
-        "resize",
-        resize,
-      );
-
-      if (
-        animationRef.current !==
-        null
-      ) {
-        cancelAnimationFrame(
-          animationRef.current,
-        );
+    const pause = () => {
+      if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    };
+    const syncMotion = () => {
+      pause();
+      if (!document.hidden && !reducedMotion.matches) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        context.clearRect(0, 0, window.innerWidth, window.innerHeight);
       }
     };
+    const onResize = () => {
+      resize();
+      createParticles();
+      syncMotion();
+    };
+    resize();
+    createParticles();
+    window.addEventListener("resize", onResize);
+    document.addEventListener("visibilitychange", syncMotion);
+    reducedMotion.addEventListener("change", syncMotion);
+    syncMotion();
+
+    return () => {
+      pause();
+      window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", syncMotion);
+      reducedMotion.removeEventListener("change", syncMotion);
+    };
+
   }, [
     particleCount,
     targetRef,

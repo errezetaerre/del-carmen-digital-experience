@@ -30,6 +30,8 @@ export default function CollectionPreviewArtwork({
                 group/artwork
                 relative
                 block
+                h-full
+                min-h-0
                 min-w-0
                 overflow-hidden
             "
@@ -55,6 +57,7 @@ export default function CollectionPreviewArtwork({
                         ease-out
 
                         group-hover/artwork:scale-[1.025]
+                        group-focus-within/artwork:scale-[1.025]
                     "
                 />}
 
@@ -71,6 +74,7 @@ export default function CollectionPreviewArtwork({
                         duration-500
 
                         group-hover/artwork:opacity-100
+                        group-focus-within/artwork:opacity-100
                     "
                 />
 
@@ -88,6 +92,8 @@ export default function CollectionPreviewArtwork({
 
                         group-hover/artwork:translate-y-0
                         group-hover/artwork:opacity-100
+                        group-focus-within/artwork:translate-y-0
+                        group-focus-within/artwork:opacity-100
                     "
                 >
                     <p

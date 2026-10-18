@@ -18,6 +18,7 @@ import {
     useState,
 
     type PointerEvent,
+    type CSSProperties,
 
 } from "react";
 
@@ -1555,6 +1556,14 @@ export default function ArtworkDetailViewer({
                         handleArtworkDoubleClick
 
                     }
+
+                    data-artwork-detail-photo
+
+                    style={{
+                        "--artwork-photo-aspect":
+                            (artwork.images.primary.width ?? 1200) /
+                            (artwork.images.primary.height ?? 1200),
+                    } as CSSProperties}
 
                     className="
 

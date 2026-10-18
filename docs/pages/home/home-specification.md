@@ -1,6 +1,6 @@
 # Del Carmen Digital Experience --- Home Specification
 
-Version: 1.6
+Version: 1.7
 
 Document ID: DOC-HS
 
@@ -1498,4 +1498,9 @@ The opening artwork has its own **Cover Artwork** marker. This identifies its ro
 
 The label sits above the painting title within the existing artwork information panel, aligned left. Its small uppercase Geist typography, warm bronze gradient and contained icon halo use the shared Halo identity. An open-book vector distinguishes the cover from the Featured star. There is no added ribbon background, badge button or new information panel.
 
-The marker is mounted once outside the existing responsive content variants, covering mobile portrait, mobile landscape, tablet and desktop without repeating in the same view. The approved painting composition, title/copy styles, existing frame, curatorial choice and Hero motion remain intact.
+The Hero marker is mounted once outside the existing responsive content variants, covering mobile portrait, mobile landscape, tablet and desktop without repeating in the same view. The same Home cover role follows the artwork through shared thumbnail rails, Collections previews, lightboxes, Standard detail and the native Glass ribbon via `getArtworkPresentation()`; it is not limited to the Hero. The approved painting composition, title/copy styles, existing frame, curatorial choice and Hero motion remain intact.
+
+
+## Tablet artwork viewer — 2026-10-17
+
+The existing shared Home/Series glass viewer uses more of the tablet viewport width. Portrait keeps the image above dots and information; landscape uses a wider painting column beside the caption. Masking, intrinsic aspect ratio and caption/dot row allocation remain intact. It reuses the existing viewer rather than creating a second Home experience. Phone proportions and the approved Home composition are retained; tablet visual/device confirmation belongs in the complete site.

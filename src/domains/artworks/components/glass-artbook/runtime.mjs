@@ -1,5 +1,7 @@
 // The approved 11B-23 engine, adapted to real Artwork data and primary media.
 // Deliberately local to the experimental artwork-detail view.
+import { bindArtworkTouchNavigation } from '../artworkTouchNavigation';
+import { burstDust } from '@/shared/ui/particle-field/dust';
 let wheelMomentumLocked=false;
 let wheelMomentumUnlockTimer=null;
 
@@ -14,11 +16,13 @@ export function createGlassArtbook(root,options){
  if(!instance)throw Error('Glass Artbook requires a stable instance identifier');
  const nativeDocument=window.document;
  root.dataset.phase='loading';
+ delete root.dataset.glassGesturing;
  const wideLayout=matchMedia(GLASS_BOOK_QUERY);
  const resources=new Set(),assets=new Map(),imageLoads=new Set(),imageJobs=new WeakMap(),cleanups=[];
  let entrancePlaying=false;
  let mediaLoading=true,loadRequest=null,loadSignature='';
  let disposed=false,frameId=0,pendingPointer=null,wheelActive=false,wheelTimer=null,edgeTimer=null;
+ let pendingDustIndex=null,dustCleanup=null;
  function inputBlocked(){return mediaLoading||entrancePlaying||!!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]');}
  function requestAnimationFrame(callback){frameId=window.requestAnimationFrame(now=>{if(!disposed)callback(now);});return frameId;}
  const document={
@@ -128,13 +132,51 @@ export function createGlassArtbook(root,options){
   if(id==null||id<0)return;
   try{if(scene.hasPointerCapture(id))scene.releasePointerCapture(id);}catch{}
  }
+ function setSelectionLock(active){
+  if(!active){delete root.dataset.glassGesturing;return;}
+  root.dataset.glassGesturing='';
+  const selection=nativeDocument.getSelection?.();
+  if(!selection)return;
+  let owned=!!((selection.anchorNode&&root.contains(selection.anchorNode))||(selection.focusNode&&root.contains(selection.focusNode)));
+  for(let i=0;!owned&&i<selection.rangeCount;i++){
+   try{owned=selection.getRangeAt(i).intersectsNode(root);}catch{}
+  }
+  if(owned)selection.removeAllRanges();
+ }
+ function isReadingPress(event){
+  const pane=event.target.closest('.info');
+  if(!pane)return false;
+  // Keep an overflowing sheet's scrollbar usable alongside the page gesture.
+  if(pane.scrollHeight>pane.clientHeight){
+   const box=pane.getBoundingClientRect(),gutter=Math.max(14,pane.offsetWidth-pane.clientWidth);
+   if(event.clientX>=box.right-gutter&&event.clientX<=box.right)return true;
+  }
+  const fallback=()=>!!event.target.closest('.info h2,.info p,.info small,.info dt,.info dd,.info span,.info .ga-categories');
+  if(!nativeDocument.createRange||!nativeDocument.createTreeWalker)return fallback();
+  const range=nativeDocument.createRange();
+  try{
+   const walker=nativeDocument.createTreeWalker(pane,4); // NodeFilter.SHOW_TEXT
+   for(let node=walker.nextNode();node;node=walker.nextNode()){
+    if(!node.textContent?.trim())continue;
+    range.selectNodeContents(node);
+    for(const rect of range.getClientRects()){
+     if(rect.width>0&&rect.height>0&&event.clientX>=rect.left-2&&event.clientX<=rect.right+2&&event.clientY>=rect.top-2&&event.clientY<=rect.bottom+2)return true;
+    }
+   }
+   return false;
+  }catch{return fallback();}
+  finally{range.detach?.();}
+ }
  function onPointerDown(event){
   if(event.isPrimary===false){
    onPointerCancel({pointerId:drag?.id??pendingPointer?.id});
    return;
   }
-  if(!wideLayout.matches||inputBlocked()||wheelActive||event.button!==0||event.target.closest('button,a,input,textarea,select,[contenteditable]'))return;
+  if(!wideLayout.matches||inputBlocked()||wheelActive||event.button!==0||event.target.closest('button,a,input,textarea,select,[contenteditable],[data-artwork-highlights]'))return;
   if(drag||pendingPointer)return;
+  // Letters own selection; padding, line gaps and free glass own page turns.
+  if(!animating&&isReadingPress(event))return;
+  if(event.pointerType==='mouse'){setSelectionLock(true);event.preventDefault();}
   // Mouse regrabs stay immediate. A touch must establish horizontal intent,
   // including while a leaf is settling, so vertical reading remains native.
   if(animating&&event.pointerType!=='touch'){down(event);return;}
@@ -143,13 +185,13 @@ export function createGlassArtbook(root,options){
  function onPointerMove(event){
   if(pendingPointer&&pendingPointer.id===event.pointerId&&!drag){
    const dx=event.clientX-pendingPointer.x,dy=event.clientY-pendingPointer.y;
-   if(Math.max(Math.abs(dx),Math.abs(dy))<8)return;
-   if(Math.abs(dx)<Math.abs(dy)*1.05){pendingPointer=null;return;}
-   const rect=stage.getBoundingClientRect();
-   const dir=event.pointerType==='touch'?(dx<0?1:-1):(pendingPointer.x>=rect.left+baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5?1:-1);
-   if(!animating&&(index+dir<0||index+dir>=works.length)){showEdge(dir,dx);pendingPointer=null;return;}
+   if(Math.max(Math.abs(dx),Math.abs(dy))<6)return;
+   if(Math.abs(dx)<Math.abs(dy)*1.05){pendingPointer=null;if(!animating)setSelectionLock(false);return;}
+   const dir=dx<0?1:-1;
+   if(!animating&&(index+dir<0||index+dir>=works.length)){showEdge(dir,dx);pendingPointer=null;setSelectionLock(false);return;}
    const start=pendingPointer.event;pendingPointer=null;
    down(start,dir);
+   if(!drag&&!animating)setSelectionLock(false);
   }
   move(event);
  }
@@ -159,22 +201,25 @@ export function createGlassArtbook(root,options){
   clearEdge();
   if(inputBlocked())onPointerCancel(event);else release(event);
   dropPointerCapture(event.pointerId);
+  if(!animating&&!drag&&!pendingPointer)setSelectionLock(false);
  }
  function onPointerCancel(event){
   if(disposed)return;
   if(pendingPointer?.id===event.pointerId)pendingPointer=null;
-  if(!drag||drag.id!==event.pointerId)return;
+  if(!drag||drag.id!==event.pointerId){if(!animating&&!pendingPointer)setSelectionLock(false);return;}
   const id=drag.id;drag=null;
   goal=angle>90?180:0;velocity=0;settling=true;animating=true;
   dropPointerCapture(id);
   if(reducedMotion.matches){angle=goal;finish();}else render();
  }
  function onInputBlur(){
+  clearLandedDust();
   clearRequestedNavigation();
   if(loadRequest?.kind==='turn'){cancelPreparation();publishLoadState('ready');render();}
   if(wheelActive)finishWheel();
   pendingPointer=null;
   if(drag)onPointerCancel({pointerId:drag.id});
+  setSelectionLock(false);
  }
  function onVisibilityChange(){if(nativeDocument.hidden)onInputBlur();}
  function lockWheel(){
@@ -410,6 +455,8 @@ function syncOcclusion(){
  }
 }
 function configure(dir){
+ clearLandedDust();
+ setSelectionLock(true);
  direction=dir;
  const target=index+dir;
  if(target<0||target>=works.length)throw Error('Invalid artwork transition');
@@ -435,19 +482,21 @@ function alignHighlight(slot,face){
  const content=faceStates.get(face).content;
  const image=content.querySelector('.ga-image'),art=content.querySelector('.art');
  const width=face.clientWidth;
- const signature=[face.id,face.dataset.workIndex,width,image?.offsetLeft,image?.offsetWidth,art?.offsetLeft].join(':');
+ const signature=[face.id,face.dataset.workIndex,width,face.clientHeight,image?.offsetLeft,image?.offsetWidth,art?.offsetLeft].join(':');
  if(highlightLayouts[slot]===signature)return;
  highlightLayouts[slot]=signature;
- let left=width*.022,right=width*.978;
+ const inset=Math.max(16,Math.min(28,width*.035));
+ let left=inset,right=width-inset;
  if(image&&image.offsetWidth){
   const matrix=window.getComputedStyle(image).transform.match(/^matrix(?:3d)?\((.*)\)$/);
   const scale=matrix?Math.abs(Number(matrix[1].split(',')[0])):1;
   const paintedWidth=image.offsetWidth*scale;
   const start=(art?.offsetLeft??0)+image.offsetLeft-(paintedWidth-image.offsetWidth)*.5;
-  left=Math.max(0,start);right=Math.min(width,start+paintedWidth);
+  left=Math.max(inset,start);right=Math.min(width-inset,start+paintedWidth);
  }
  highlights[slot].style.left=left.toFixed(3)+'px';
  highlights[slot].style.width=Math.max(0,right-left).toFixed(3)+'px';
+ highlights[slot].style.bottom=Math.max(12,Math.min(18,face.clientHeight*.025)).toFixed(3)+'px';
 }
 function syncHighlights(){
  if(transition&&highlightTransition!==transition){
@@ -477,11 +526,34 @@ function syncHighlights(){
    :(slot===activeHighlight?0:1);
   const detail=highlight.querySelector('[data-artwork-highlight-detail]');
   const contentHeight=detail?highlight.offsetHeight-detail.offsetTop:highlight.offsetHeight;
-  const distance=Math.max(32,highlight.offsetHeight,contentHeight)+12;
+  const distance=Math.max(32,highlight.offsetHeight,contentHeight)+Math.max(0,parseFloat(highlight.style.bottom)||16)+12;
   highlight.style.setProperty('--ga-halo-y',((ready?displacement:1)*distance).toFixed(3)+'px');
   highlight.inert=!!transition||entrancePlaying||slot!==activeHighlight||!ready;
   highlight.setAttribute('aria-hidden',String(entrancePlaying||!ready||displacement===1));
  }
+}
+function clearLandedDust(){
+ pendingDustIndex=null;dustCleanup?.();dustCleanup=null;
+}
+function requestLandedDust(){
+ clearLandedDust();
+ const work=works[index];
+ const badges=options.getPresentation?.(work)?.badges??[];
+ if(disposed||nativeDocument.hidden||reducedMotion.matches||!badges.some(badge=>badge.kind!=='planned'&&badge.kind!=='in-progress'))return;
+ pendingDustIndex=index;
+}
+function syncLandedDust(){
+ if(pendingDustIndex===null)return;
+ if(pendingDustIndex!==index){clearLandedDust();return;}
+ if(transition||entrancePlaying||inputBlocked())return;
+ const highlight=highlights[activeHighlight];
+ const ready=highlight.querySelector('[data-glass-highlight-artwork]')?.dataset.glassHighlightArtwork===works[index].id;
+ // The stable React portal may commit after the native turn. Wait for the
+ // correct live ribbon, not an arbitrary delay or the outgoing artwork.
+ if(!ready||highlight.inert||!highlight.querySelector('[data-artwork-highlights]'))return;
+ if(!highlight.clientWidth||!highlight.clientHeight)return;
+ if(!baseLeft.clientWidth||!baseLeft.clientHeight)return;
+ pendingDustIndex=null;dustCleanup=burstDust(baseLeft,'perimeter');
 }
 function render(){syncLayout();updateNavigation();const grazing=Math.pow(Math.sin(angle*Math.PI/180),1.5);turn.style.setProperty("--grazing",grazing.toFixed(4));// Specular highlight slides while the rigid sheet rotates; both endpoints
  // match the static leaf exactly, preventing the last-frame brightness jump.
@@ -489,7 +561,7 @@ function render(){syncLayout();updateNavigation();const grazing=Math.pow(Math.si
  const shineX=50+(direction===1?1:-1)*34*Math.sin(theta);
  const shineEnergy=1+0.18*Math.pow(Math.sin(theta),2);
  turn.style.setProperty('--shine-x',shineX.toFixed(3)+'%');
- turn.style.setProperty('--shine-energy',shineEnergy.toFixed(4));turn.style.transform=`rotateY(${direction===1?-angle:angle}deg)`;$('#prev').disabled=inputBlocked()||(index===0&&!drag&&!animating);$('#next').disabled=inputBlocked()||(index===works.length-1&&!drag&&!animating);syncHighlights();scene.classList.toggle('turning',!!transition);syncOcclusion();paintMaterialFrame()}
+ turn.style.setProperty('--shine-energy',shineEnergy.toFixed(4));turn.style.transform=`rotateY(${direction===1?-angle:angle}deg)`;$('#prev').disabled=inputBlocked()||(index===0&&!drag&&!animating);$('#next').disabled=inputBlocked()||(index===works.length-1&&!drag&&!animating);syncHighlights();scene.classList.toggle('turning',!!transition);syncOcclusion();paintMaterialFrame();syncLandedDust()}
 function idle(){
  direction=1;angle=0;goal=0;velocity=0;transition=null;
  turn.style.visibility='hidden';turn.style.display='none';
@@ -532,6 +604,7 @@ function finish(){
  paintMaterialFrame();
  turn.style.display='none';turn.style.visibility='hidden';
  animating=false;settling=false;direction=1;angle=0;goal=0;velocity=0;transition=null;
+ setSelectionLock(false);
  render();
 }
 function tick(now){
@@ -559,7 +632,10 @@ function down(e,requestedDirection){
   const dir=requestedDirection??(e.clientX>=rect.left+baseLeft.clientWidth+(baseRight.offsetLeft-baseLeft.clientWidth)*.5?1:-1);
   if(index+dir<0||index+dir>=works.length||!ensureTurnReady(dir))return;
  }
- try{scene.setPointerCapture(e.pointerId);}catch{return;}
+ // Native Touch Events have identifiers independent of Pointer Events.
+ // Document movement also keeps a mouse grab alive if capture is unavailable.
+ try{scene.setPointerCapture(e.pointerId);}catch{}
+ setSelectionLock(true);e.preventDefault?.();
  clearRequestedNavigation();
  prepareInteraction();
  const rect=stage.getBoundingClientRect();
@@ -580,6 +656,7 @@ function down(e,requestedDirection){
 }
 function move(e){
  if(!drag||e.pointerId!==drag.id)return;
+ e.preventDefault?.();
  const now=performance.now();
  const travel=stage.getBoundingClientRect().width*.45;
  const signed=drag.dir===1?-(e.clientX-drag.startX):(e.clientX-drag.startX);
@@ -604,8 +681,18 @@ function release(e){
  if(reducedMotion.matches&&settling){angle=goal;finish();}
 }
 
-scene.addEventListener('pointerdown',onPointerDown);scene.addEventListener('pointermove',onPointerMove);
-scene.addEventListener('pointerup',onPointerRelease);scene.addEventListener('pointercancel',onPointerCancel);scene.addEventListener('lostpointercapture',onPointerCancel);
+function usesNativeTouch(event){return event.pointerType==='touch'&&'ontouchstart' in window;}
+const scenePointerHandlers=[['pointerdown',onPointerDown],['pointermove',onPointerMove],['pointerup',onPointerRelease],['pointercancel',onPointerCancel],['lostpointercapture',onPointerCancel]]
+ .map(([type,handler])=>[type,event=>{if(!usesNativeTouch(event))handler(event);}]);
+for(const [type,handler] of scenePointerHandlers)scene.addEventListener(type,handler);
+const stopTouch=bindArtworkTouchNavigation(scene,{
+ start(input){onPointerDown(input);return pendingPointer?.id===input.pointerId||drag?.id===input.pointerId;},
+ move:onPointerMove,end:input=>input.type==='pointercancel'?onPointerCancel(input):onPointerRelease(input)
+});
+cleanups.push(stopTouch);
+function onOutsidePointerMove(event){if(!usesNativeTouch(event)&&!scene.contains(event.target))onPointerMove(event);}
+function onDocumentPointerUp(event){if(!usesNativeTouch(event))onPointerRelease(event);}
+function onDocumentPointerCancel(event){if(!usesNativeTouch(event))onPointerCancel(event);}
 $('#next').onclick=()=>requestNavigation(1);$('#prev').onclick=()=>requestNavigation(-1);
 document.addEventListener('keydown',e=>{
  if(e.target.closest('input,textarea,select,[contenteditable],[data-artwork-highlights]'))return;
@@ -880,6 +967,8 @@ function finishEntrance(){
  if(disposed)return;
  entranceTween?.kill();entranceTween=null;entrancePlaying=false;
  preview.left=0;applyPreview();root.dataset.phase='open';render();positionGuide();
+ setSelectionLock(false);
+ requestLandedDust();
 }
 function drawEntrance(){applyPreview();render();}
 function beginEntrance(){
@@ -907,7 +996,7 @@ function synchronizeMotionPause(){
  for(const animation of [entranceTween,guideTween,hoverTween]){
   if(pause)animation?.pause();else animation?.resume();
  }
- if(pause){clearRequestedNavigation();clearPreview(true);}
+ if(pause){clearRequestedNavigation();clearPreview(true);clearLandedDust();}
 }
 function disposeExperience(){
  entranceTween?.kill();guideTween?.kill();hoverTween?.kill();
@@ -920,17 +1009,19 @@ scene.addEventListener('pointerleave',()=>clearPreview());
 idle();requestAnimationFrame(tick);
 
  const approvedFinish=finish;
- finish=function(){const before=index;approvedFinish();if(index!==before){preload();options.onNavigate?.(works[index]);}continueRequestedNavigation();};
+ finish=function(){const before=index;approvedFinish();if(index!==before){requestLandedDust();preload();options.onNavigate?.(works[index]);}continueRequestedNavigation();};
  scene.addEventListener('wheel',onWheel,{passive:false});
- nativeDocument.addEventListener('pointerup',onPointerRelease);nativeDocument.addEventListener('pointercancel',onPointerCancel);
+ nativeDocument.addEventListener('pointermove',onOutsidePointerMove);nativeDocument.addEventListener('pointerup',onDocumentPointerUp);nativeDocument.addEventListener('pointercancel',onDocumentPointerCancel);
  window.addEventListener('blur',onInputBlur);nativeDocument.addEventListener('visibilitychange',onVisibilityChange);
  cleanups.push(()=>{
-  nativeDocument.removeEventListener('pointerup',onPointerRelease);nativeDocument.removeEventListener('pointercancel',onPointerCancel);
+  nativeDocument.removeEventListener('pointermove',onOutsidePointerMove);nativeDocument.removeEventListener('pointerup',onDocumentPointerUp);nativeDocument.removeEventListener('pointercancel',onDocumentPointerCancel);
   window.removeEventListener('blur',onInputBlur);nativeDocument.removeEventListener('visibilitychange',onVisibilityChange);
-  for(const [type,listener] of [['pointerdown',onPointerDown],['pointermove',onPointerMove],['pointerup',onPointerRelease],['pointercancel',onPointerCancel],['lostpointercapture',onPointerCancel]])scene.removeEventListener(type,listener);
+  for(const [type,listener] of scenePointerHandlers)scene.removeEventListener(type,listener);
  });
  function onLayoutChange(){
+  clearLandedDust();
   clearRequestedNavigation();
+  if(!wideLayout.matches){pendingPointer=null;setSelectionLock(false);}
   if(!wideLayout.matches&&transition){const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;wheelActive=false;
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;goal=angle>90?180:0;angle=goal;finish();}
   if(entrancePlaying&&!mediaLoading)finishEntrance();if(guideSealing){guideTween?.kill();finishGuide();}clearPreview(true);updateGuideCopy();positionGuide();
@@ -942,6 +1033,7 @@ idle();requestAnimationFrame(tick);
   const signature=[baseLeft.clientWidth,baseLeft.clientHeight,baseRight.clientWidth].join(':');
   if(signature!==viewportSignature){
    viewportSignature=signature;
+   clearLandedDust();
    if(guideSealing){guideTween?.kill();finishGuide();}
   }
   render();positionGuide();
@@ -957,8 +1049,10 @@ idle();requestAnimationFrame(tick);
   navigate(dir){requestNavigation(dir);},
   select(id){
    const target=works.findIndex(work=>work.id===id);if(target<0||target===index)return;
+   clearLandedDust();
    clearRequestedNavigation();
    cancelPreparation();
+   setSelectionLock(false);
    if(entrancePlaying)finishEntrance();clearPreview(true);
    if(wheelActive){wheelActive=false;if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;lockWheel();}
    const wasLoading=mediaLoading;
@@ -983,7 +1077,9 @@ idle();requestAnimationFrame(tick);
    prepareArtwork(request.artworkIndex,request.continueWith,request.kind);
   },
   dispose(){
+   clearLandedDust();
    clearRequestedNavigation();cancelPreparation();
+   setSelectionLock(false);
    const pointerId=drag?.id;drag=null;pendingPointer=null;dropPointerCapture(pointerId);
    disposed=true;disposeExperience();window.cancelAnimationFrame(frameId);observer.disconnect();
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);if(edgeTimer!==null)window.clearTimeout(edgeTimer);

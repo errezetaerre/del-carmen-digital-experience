@@ -1,6 +1,6 @@
 # Artwork Model
 
-Version: 1.4
+Version: 1.5
 
 Document ID:
 DOC-AM
@@ -1363,3 +1363,10 @@ The approved insignia system is a presentation over the existing state, recognit
 Planned and in-progress previews use frosted glass with faint reference colours. The preview's centred icon and label express realisation state; status remains visible in the technical sheet. A completed original's `sold` state continues to read Sold. Product/edition exhaustion remains deferred to commerce.
 
 The installation and responsive/input boundaries are maintained in `artwork-implementation.md`. Artwork IDs, media paths, price records, recognition data and current classifications are unchanged by this visual integration.
+
+
+## Home cover presentation identity — 2026-10-17
+
+The derived `ArtworkBadge.kind` also supports `cover`, labelled Cover Artwork with an open-book symbol. `isCoverArtwork()` reads `homeCuration.hero.artworkId`; no cover boolean is persisted on Artwork and no new ArtworkRecognition kind is introduced. The same descriptor follows the artwork through every shared presentation surface, while Hero uses the same query for its compact opening marker.
+
+This is the Home cover role. It is independent of ArtworkSeries.coverArtworkId, Featured Work, Featured Collection, real recognition, creation state and sales availability. Multiple curatorial and recognition badges can coexist. The current cover is Epifanía Nupcial; Cover Artwork does not assert that its recorded year is the most recent. The owner-supplied 45 records, seven planned states, prices and media references remain unchanged.

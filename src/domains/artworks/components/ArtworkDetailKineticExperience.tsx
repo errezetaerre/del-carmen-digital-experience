@@ -6,7 +6,6 @@ import {
     useLayoutEffect,
     useRef,
     useState,
-    type PointerEvent,
     type ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
@@ -15,6 +14,7 @@ import { LinkButton } from "@/shared/ui/button";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 import sceneStyles from "./ArtworkDetailScene.module.css";
 import { captureStandardNavigation, finishStandardNavigation } from "../presentation/artworkNavigationContinuity";
+import { bindArtworkTouchNavigation, type ArtworkDragInput } from "./artworkTouchNavigation";
 
 interface ArtworkDetailKineticExperienceProps {
     previousScene?: ReactNode;
@@ -55,8 +55,8 @@ let artworkOnboardingLearnedInCurrentDocument = false;
 
 type OnboardingPhase = "reminding" | "sealing" | "learned";
 
-// Only the bounded reading pane owns these gestures. Outside that
-// layout, its display:contents wrapper retains the existing scene navigation.
+// The reading pane owns vertical input; horizontal gestures explore scenes.
+// A mouse press in the pane stays native until horizontal intent is established.
 function isReadingPane(target: EventTarget | null) {
     const pane = (target as HTMLElement | null)?.closest?.<HTMLElement>("[data-artwork-detail-reading]");
     return Boolean(pane && getComputedStyle(pane).overflowY === "auto");
@@ -74,7 +74,7 @@ export default function ArtworkDetailKineticExperience({
     const router = useRouter();
     const [nativePortrait, setNativePortrait] = useState(false);
     useEffect(() => {
-        const viewport = window.matchMedia("(pointer:coarse) and (orientation:portrait)");
+        const viewport = window.matchMedia("(orientation:portrait) and (max-width:1366px), (orientation:portrait) and (any-pointer:coarse)");
         const update = () => setNativePortrait(viewport.matches);
         update();
         viewport.addEventListener("change", update);
@@ -595,7 +595,6 @@ export default function ArtworkDetailKineticExperience({
 
         const handleWheel = (event: WheelEvent) => {
             if ((event.target as HTMLElement | null)?.closest("[data-artwork-highlights]")) return;
-            if (isReadingPane(event.target)) return;
             if (
                 inputModeRef.current === "pointer" ||
                 draggingRef.current
@@ -787,8 +786,6 @@ export default function ArtworkDetailKineticExperience({
         const handleKeyDown = (event: KeyboardEvent) => {
             const target = event.target as HTMLElement | null;
 
-            if (isReadingPane(target)) return;
-
             if (
                 target?.closest(
                     "input, textarea, select, button, [contenteditable='true'], [data-artwork-kinetic-ignore]",
@@ -827,9 +824,9 @@ export default function ArtworkDetailKineticExperience({
     }, [navigate, nextHref, previousHref, sealOnboardingHint]);
 
     function handlePointerDown(
-        event: PointerEvent<HTMLDivElement>,
+        event: ArtworkDragInput,
     ) {
-        if (navigatingRef.current) return;
+        if (navigatingRef.current || draggingRef.current) return;
 
         if (
             event.pointerType === "mouse" &&
@@ -840,11 +837,11 @@ export default function ArtworkDetailKineticExperience({
 
         const target = event.target as HTMLElement;
 
-        if (isReadingPane(target)) return;
+        const readingPane = isReadingPane(target);
 
         if (
             target.closest(
-                "a, button, input, textarea, select, [contenteditable='true']",
+                "a, button, input, textarea, select, [contenteditable='true'], [data-artwork-highlights], [data-artwork-kinetic-ignore]",
             )
         ) {
             return;
@@ -876,11 +873,11 @@ export default function ArtworkDetailKineticExperience({
         lastTimeRef.current = performance.now();
         velocityRef.current = 0;
 
-        event.currentTarget.setAttribute("data-artwork-dragging", "");
-        if (event.pointerType === "mouse") event.preventDefault();
+        if (!readingPane || event.pointerType !== "mouse") event.currentTarget.setAttribute("data-artwork-dragging", "");
+        if (event.pointerType === "mouse" && !readingPane) event.preventDefault();
 
         // Native touch panning owns the vertical axis; mouse regrab stays immediate.
-        if (event.pointerType === "mouse") {
+        if (event.pointerType === "mouse" && !readingPane) {
             try {
                 event.currentTarget.setPointerCapture(
                     event.pointerId,
@@ -892,7 +889,7 @@ export default function ArtworkDetailKineticExperience({
     }
 
     function handlePointerMove(
-        event: PointerEvent<HTMLDivElement>,
+        event: ArtworkDragInput,
     ) {
         if (
             !draggingRef.current ||
@@ -930,6 +927,7 @@ export default function ArtworkDetailKineticExperience({
             }
 
             horizontalDragRef.current = true;
+            event.currentTarget.setAttribute("data-artwork-dragging", "");
             const selection = window.getSelection();
             if (selection && ((selection.anchorNode && event.currentTarget.contains(selection.anchorNode)) || (selection.focusNode && event.currentTarget.contains(selection.focusNode)))) selection.removeAllRanges();
             try { event.currentTarget.setPointerCapture(event.pointerId); } catch {}
@@ -971,7 +969,7 @@ export default function ArtworkDetailKineticExperience({
     }
 
     function finishPointer(
-        event: PointerEvent<HTMLDivElement>,
+        event: ArtworkDragInput,
     ) {
         if (
             !draggingRef.current ||
@@ -1043,6 +1041,20 @@ export default function ArtworkDetailKineticExperience({
         resetToCurrent();
     }
 
+    useLayoutEffect(() => {
+        const viewport = viewportRef.current;
+        if (!viewport) return;
+        return bindArtworkTouchNavigation(viewport, {
+            start(input) {
+                if (draggingRef.current) return false;
+                handlePointerDown(input);
+                return draggingRef.current && pointerIdRef.current === input.pointerId;
+            },
+            move: handlePointerMove,
+            end: finishPointer,
+        });
+    }, [clearWheelState, navigate, nextHref, previousHref, releaseTextSelection, resetToCurrent, sealOnboardingHint, setTrackX]);
+
     const panels = [
         ...(hasPrevious
             ? [
@@ -1080,15 +1092,37 @@ export default function ArtworkDetailKineticExperience({
                 overscroll-x-contain
                 touch-pan-y
             `}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={finishPointer}
-            onPointerCancel={finishPointer}
-            onLostPointerCapture={finishPointer}
+            onPointerDown={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) handlePointerDown(event); }}
+            onPointerMove={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) handlePointerMove(event); }}
+            onPointerUp={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) finishPointer(event); }}
+            onPointerCancel={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) finishPointer(event); }}
+            onLostPointerCapture={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) finishPointer(event); }}
             onClickCapture={(event) => {
                 if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
                 const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
-                if (link && !link.hasAttribute("download") && (!link.target || link.target === "_self")) captureStandardNavigation(event.currentTarget, link.href);
+                if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+
+                const action = link.getAttribute("data-artwork-navigation");
+                if (action === "previous" || action === "next") {
+                    // Footer links use the same rendered neighbour and motion as
+                    // dragging. Keep their href for native/new-tab navigation.
+                    const panel = link.closest("[data-artwork-kinetic-panel]");
+                    if (panel?.getAttribute("data-artwork-kinetic-panel") !== "current") {
+                        event.preventDefault();
+                        return;
+                    }
+                    const direction: Direction = action === "next" ? 1 : -1;
+                    if (getHref(direction)) {
+                        event.preventDefault();
+                        if (navigatingRef.current || draggingRef.current) return;
+                        clearWheelState();
+                        sealOnboardingHint();
+                        navigate(direction);
+                        return;
+                    }
+                }
+
+                captureStandardNavigation(event.currentTarget, link.href);
             }}
         >
             <div className={`${glassStyles.standardToolbar} pointer-events-none absolute inset-x-0 top-0 z-40`}>

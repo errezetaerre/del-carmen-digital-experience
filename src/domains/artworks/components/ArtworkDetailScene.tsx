@@ -320,6 +320,7 @@ export default function ArtworkDetailScene({
                                                 navigationQuery,
                                             )}
                                             data-artwork-kinetic-ignore
+                                            data-artwork-navigation="previous"
                                             className="
                                                 group
                                                 min-w-0
@@ -369,6 +370,7 @@ export default function ArtworkDetailScene({
                                                 navigationQuery,
                                             )}
                                             data-artwork-kinetic-ignore
+                                            data-artwork-navigation="next"
                                             className="
                                                 group
                                                 min-w-0

@@ -9,8 +9,8 @@ const shapes = {
     selection: '<circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.3 2.3 4.7-4.7"/>',
     planned: '<path d="M6 3h12M6 21h12M7 3v4c0 2 5 3 5 5s-5 3-5 5v4M17 3v4c0 2-5 3-5 5s5 3 5 5v4"/>',
     "in-progress": '<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/>',
-} satisfies Record<ArtworkBadge["kind"] | "cover", string>;
+} satisfies Record<ArtworkBadge["kind"], string>;
 
-export function artworkHaloSymbol(kind: ArtworkBadge["kind"] | "cover"): string {
+export function artworkHaloSymbol(kind: ArtworkBadge["kind"]): string {
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${shapes[kind]}</svg>`;
 }

@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.8
+Version: 1.10
 
 Document ID: DOC-COL-SPEC
 
@@ -711,3 +711,17 @@ SeriesGallery explicitly uses the shared ArtworkLightbox's glass presentation, m
 The owner-supplied current catalogue marks Yasemi II, III and IV as planned/unavailable while retaining their 2026 year; Yasemi I remains completed/available. All four remain members of Yasemi and use the shared completed/frosted preview rules according to their explicit status. The Featured Collection reference and cover remain Yasemi/Yasemi I.
 
 Home, Archive and Series cards now place their descriptive Halo rail inside the main artwork button. The whole thumbnail, including expanded symbols, labels and distinction detail, activates that single artwork action. Hover/focus expansion, technical rollover, frame geometry and loading guards remain intact; thumbnail badges no longer consume clicks as separate disclosure buttons. Below-image ribbons retain interactive details/ticker behaviour, and linked Collections previews keep their existing passive single-link treatment.
+
+
+## Cover identity and tablet viewer sizing — 2026-10-17
+
+An artwork chosen for the Home cover carries the shared Cover Artwork Halo descriptor into Collections previews, Series cards and the shared Series/Home glass viewer. Its open-book symbol and expanded text derive from the Home curatorial reference. It does not make every work in a Series a cover or confer Featured Collection/award status; ArtworkSeries.coverArtworkId keeps its existing purpose.
+
+The shared viewer uses the available tablet width, retaining portrait image/dots/caption stacking and a wider landscape image/caption spread. Its object-contain mask, fixed caption/dot rows, scroll and zoom code, Series-only artwork list, deep link, Close and detail context remain intact. No new viewer engine, gallery card size, CollectionHeroMotion or series/domain data changes are introduced. Standard detail’s directional reading/exploration and Glass text-selection ownership are documented in the canonical artwork implementation.
+
+
+## Works Preview Reveal Reliability — 2026-10-17
+
+CollectionPreviewWorks keeps the bottom-anchored 1–4-work grid, centred singleton and 5+-work KineticCarousel. Its local stylesheet now owns the group's explicit height transition: 1.75rem collapsed, 13rem expanded and 14rem from 1280px, over 700ms with the approved easing. Hover or focus within the group expands the preview; departure collapses it. Reduced motion removes interpolation while retaining the reveal. This avoids depending on a generated named-group hover utility for the strip's height.
+
+Each CollectionPreviewArtwork link fills that changing height with a zero minimum height. Its image, passive Halo rail, title/year reveal and pending-link feedback belong to the same scoped artwork link. Keyboard focus reveals the same image/metadata treatment as hover. The mask, chronology, planned/frosted rendering, thumbnails' destinations and existing CollectionHeroMotion entrance/departure remain intact. Mobile still suppresses the desktop preview. Compiled-source checks cover grid/carousel structure and CSS contracts; real browser hover/focus and device layout verification remain required.

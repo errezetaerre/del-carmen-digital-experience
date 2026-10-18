@@ -1,4 +1,4 @@
-Version: 1.17
+Version: 1.22
 
 Document ID:
 DOC-RS
@@ -564,3 +564,38 @@ This is presentation layout, not a new Artwork field, domain, global layout serv
 The Glass module reports preparation kind alongside status and artwork ID. Entrance/direct-selection waits remain blocking; an incoming turn retains the ready spread with a compact notice. Native construction establishes the gate before paint. Shader, geometry, page-bound Halo portals and physical interaction remain owned by the existing engine. The complete six-file book module remains the installation unit.
 
 The catalogue, Home/Series shared lightbox, Coming Soon, actual recognition records, mode-entry policy and future commerce/EN–ES/database responsibilities retain their established authority. Build and browser/device verification limits are recorded in the canonical artwork implementation document.
+
+
+### Shared Cover Marker and Tablet Gesture Ownership — 2026-10-17
+
+`getArtworkPresentation.ts` now owns the derived `cover` descriptor and `isCoverArtwork()` query over the existing HomeCuration hero reference. The Hero marker, shared thumbnail rails, Collections previews, lightboxes, Standard and native Glass ribbons consume that same identity. ArtworkRecognition and persisted Artwork/Series data retain their current models.
+
+Standard separates vertical reading from horizontal exploration. The kinetic viewport recognises native portrait scrolling in tablet-sized fine-pointer emulation as well as touch; portrait layout stacks the image and technical sheet. Its horizontal reading-pane gestures retain the existing slide/release animation. Shared `ArtworkLightbox.module.css` owns the wider tablet image/caption frame while the viewer interaction engine remains unchanged.
+
+The native Glass runtime owns a temporary text-selection lock during its page gesture/opening/settling. It restores resting reading behavior and leaves material, geometry, spring physics and native page-bound insignia rendering intact. Existing resource gates and route-continuity feedback remain installed. Current implementation and validation limits live in the canonical artwork implementation document.
+
+
+### Native Touch Delivery and Book Reading Ownership — 2026-10-17
+
+`src/domains/artworks/components/artworkTouchNavigation.ts` is a local event adapter, installed by ArtworkDetailKineticExperience in a layout effect and reused by the native Glass viewer. Native Touch Events and mouse/pointer fallback feed the same ArtworkDragInput movement/release handlers. It owns only horizontal touch input, isolates native pointer cancellation from its live touch stream, preserves vertical reading/taps and disposes cancelled/multitouch sessions. It adds no duplicate animation engine, domain state, dependency or device-specific timing.
+
+Standard tablet portrait adds 32px above its already-approved large painting. Its stacked information and native vertical scroll remain in the existing scene CSS; desktop header/footer positioning remains intact. The photo-fit refinement below preserves that top spacing and height cap.
+
+The Glass runtime gives resting info text native selection ownership and clears book-intersecting selections when a turn starts. Existing gesture locks protect the moving faces. Native Halo alignment now reserves side and bottom corner clearance and includes the bottom offset in its off-page exit distance, while preserving page-local windows, perspective, live-angle reveal and source/destination portal ownership. Material, rigid geometry and spring/turn physics retain their current implementation. Validation scope and pending full-project/device confirmation belong to the canonical artwork implementation document.
+
+### Standard Footer Motion and Tablet Photo Fit — 2026-10-17
+
+ArtworkDetailScene marks only Previous/Next links for the existing kinetic viewport. Current-panel ordinary activation uses that viewport's neighbour slide and post-landing route handoff. Native hrefs, modified-click behaviour, Standard/Series/filter context and adjacent-only prefetch remain in their existing owners. Busy/offscreen footer activations cannot dispatch additional routes; Back and Open Artbook keep their separate actions. There is no second animation engine or navigation service.
+
+ArtworkDetailViewer supplies a local photo-aspect custom property from existing image metadata. ArtworkDetailScene.module.css uses it only in tablet portrait to fit a Standard photo to the smaller of the available width and the approved 64svh height limit, independently of its source-pixel size. Object-contain, portrait breathing room and the stacked sheet remain intact. Photo resolution, catalogue data, planned previews and zoom retain their current source. The landscape and native-input refinements below retain the six-file Glass installation unit. Canonical artwork implementation records image-quality and full-project/device verification limits.
+
+
+### Glass Input, Collections Reveal and Shared Dust — 2026-10-17
+
+Bounded Standard tablet landscape gives its completed photo the available stage dimensions with object-contain. The local scene stylesheet owns this sizing while portrait fit, technical-sheet anchors, native reading and compact phone/other desktop layouts retain their existing owners.
+
+The native Glass viewer reuses artworkTouchNavigation rather than creating another touch-delivery engine. Its own six-pixel horizontal intent starts the existing page physics from either side. A local DOM Range glyph hit test gives visible info text native selection while leaving padding, line gaps and blank paragraph space available for a turn; the overflowing pane’s scrollbar and the Halo band own their interactions, native Pointer Events cannot cancel an adapter-owned touch stream, and document movement/capture fallback keep pending mouse grabs usable near the scene boundary. Temporary selection locks end on rejection or the existing release/settle/cancellation lifecycle.
+
+`src/domains/collections/components/CollectionPreviewWorks.module.css` owns the collapsed/expanded strip heights and hover/focus-within transition for the existing grid and KineticCarousel. CollectionPreviewArtwork supplies full-height, zero-minimum-height links and corresponding focus metadata reveal. CollectionHeroMotion, arbitrary Series datasets, centred singleton, bottom anchoring, mobile suppression and scoped single-link navigation retain their established implementation.
+
+`src/shared/ui/particle-field/dust.ts` owns warm mote/glint drawing shared by ParticleField and a small, finite book landing burst. The book schedules decoration only after a labelled artwork lands and its actual page-bound React ribbon is ready. The book selects a bounded 48–96-mote/1250ms perimeter canvas anchored to the resting artwork leaf, covering all four edges with a soft 32px margin. A 24-mote/1050ms ribbon variant remains the helper default. Native, untransformed leaf geometry continues to own sizing/position/perspective; the actual current ribbon remains the readiness/eligibility gate. Missing 2D contexts return without scheduling a frame, and a checked, explicitly non-null CanvasRenderingContext2D binding supports deferred drawing. ParticleField keeps the menu's existing attraction/controls and adds visibility/reduced-motion suspension and resize reseeding. No recognition fields, global motion service, persistent particle loop for the book or dependency is added. Canonical artwork implementation records exact scope and full-project/device validation limits.

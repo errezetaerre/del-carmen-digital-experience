@@ -4,6 +4,7 @@ import type { Artwork } from "@/domains/artworks";
 import { KineticCarousel } from "@/shared/ui/kinetic-carousel";
 
 import CollectionPreviewArtwork from "./CollectionPreviewArtwork";
+import styles from "./CollectionPreviewWorks.module.css";
 
 interface CollectionPreviewWorksProps {
     artworks: Artwork[];
@@ -28,13 +29,14 @@ export default function CollectionPreviewWorks({
      * STANDARD GRID
      * ------------------------------------------------
      *
-     * 1–4 artworks preserve the approved
-     * implementation exactly.
+     * 1–4 artworks keep the approved grid
+     * geometry and bottom anchoring.
      */
     if (!hasCarousel) {
         return (
             <div
-                className="
+                className={`
+                    ${styles.root}
                     group/works
                     relative
                     z-20
@@ -43,7 +45,7 @@ export default function CollectionPreviewWorks({
                     w-full
                     max-w-3xl
                     lg:block
-                "
+                `}
             >
                 <div
                     className="
@@ -66,14 +68,10 @@ export default function CollectionPreviewWorks({
                     </p>
                     <div
                         className={`
+                            ${styles.viewport}
                             grid
                             h-7
                             gap-2
-                            transition-[height]
-                            duration-700
-                    ease-[cubic-bezier(0.22,1,0.36,1)]
-                            group-hover/works:h-52
-                            xl:group-hover/works:h-56
                             ${artworks.length === 1
                                 ? "grid-cols-[repeat(3,minmax(0,1fr))] [&>*]:col-start-2"
                                 : "grid-cols-4"
@@ -104,7 +102,8 @@ export default function CollectionPreviewWorks({
      */
     return (
         <div
-            className="
+            className={`
+                ${styles.root}
                 group/works
                 relative
                 z-20
@@ -113,7 +112,7 @@ export default function CollectionPreviewWorks({
                 w-full
                 max-w-3xl
                 lg:block
-            "
+            `}
         >
             <div
                 className="
@@ -137,14 +136,10 @@ export default function CollectionPreviewWorks({
 
                 <KineticCarousel
                     itemCount={artworks.length}
-                    viewportClassName="
+                    viewportClassName={`
+                        ${styles.viewport}
                         h-7
-                        transition-[height]
-                        duration-700
-                        ease-[cubic-bezier(0.22,1,0.36,1)]
-                        group-hover/works:h-52
-                        xl:group-hover/works:h-56
-                    "
+                    `}
                     trackClassName="
                         h-full
                         gap-2

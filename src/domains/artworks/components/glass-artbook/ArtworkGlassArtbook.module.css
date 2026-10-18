@@ -42,7 +42,8 @@
 }
 .root :global(*) { box-sizing: border-box; }
 .root[data-phase="loading"] { visibility: hidden; }
-.root :global(.scene) { position: relative; height: 100%; min-height: 0; border: 0; background: transparent; overflow: visible; touch-action: pan-y; user-select: none; }
+.root :global(.scene) { position: relative; height: 100%; min-height: 0; border: 0; background: transparent; overflow: visible; touch-action: pan-y; cursor: grab; }
+.root[data-glass-gesturing] :global(*), .root[data-phase="opening"] :global(*) { user-select: none !important; -webkit-user-select: none !important; }
 .root :global(.stage) { position: relative; width: 100%; height: 100%; perspective: 1040px; perspective-origin: var(--glass-hinge, 50%) 50%; overflow: visible; }
 .root :global(.book) { position: relative; display: grid; height: 100%; grid-template-columns: minmax(0, 1.65fr) minmax(320px, 1fr); gap: 4px; transform-style: preserve-3d; overflow: visible; }
 .root :global(.leaf) { position: relative; min-width: 0; min-height: 0; overflow: visible; }
@@ -58,11 +59,15 @@
 .root :global(.ga-highlights-window) { position: absolute; inset: 0; z-index: 6; overflow: hidden; isolation: isolate; transform-style: flat; pointer-events: none; }
 .root :global([data-side="-1"] > .ga-highlights-window) { border-radius: var(--glass-outer-radius) var(--glass-inner-radius) var(--glass-inner-radius) var(--glass-outer-radius); }
 .root :global([data-side="1"] > .ga-highlights-window) { border-radius: var(--glass-inner-radius) var(--glass-outer-radius) var(--glass-outer-radius) var(--glass-inner-radius); }
-.root :global(.ga-artwork-highlights) { position: absolute; bottom: 0; left: 2.2%; width: calc(var(--glass-art-width, 100%) - 4.4%); opacity: 1; visibility: visible; pointer-events: auto; transform: translate3d(0, var(--ga-halo-y, calc(100% + 12px)), 0); transition: none; }
+.root :global(.ga-artwork-highlights) { position: absolute; bottom: 16px; left: 2.2%; width: calc(var(--glass-art-width, 100%) - 4.4%); opacity: 1; visibility: visible; pointer-events: auto; transform: translate3d(0, var(--ga-halo-y, calc(100% + 28px)), 0); transition: none; }
 .root :global(.ga-artwork-highlights[inert]) { pointer-events: none; }
 .root[data-phase="opening"] :global(.ga-artwork-highlights) { visibility: hidden; }
 .root :global(.art .ga-image) { max-height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.1); transform-origin: center; }
-.root :global(.info) { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; min-width: 0; min-height: 0; max-width: none; height: 100%; translate: none; transform: none; padding: clamp(1rem, 3vh, 2.5rem) clamp(1.5rem, 4.6vw, 4.875rem); overflow-y: auto; overscroll-behavior-x: contain; overscroll-behavior-y: auto; scrollbar-width: thin; scrollbar-color: rgb(201 154 91 / .25) transparent; pointer-events: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; user-select: text; }
+.root :global(.info) { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; min-width: 0; min-height: 0; max-width: none; height: 100%; translate: none; transform: none; padding: clamp(1rem, 3vh, 2.5rem) clamp(1.5rem, 4.6vw, 4.875rem); overflow-y: auto; overscroll-behavior-x: contain; overscroll-behavior-y: auto; scrollbar-width: thin; scrollbar-color: rgb(201 154 91 / .25) transparent; pointer-events: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; user-select: text; -webkit-user-select: text; }
+.root :global(.info h2), .root :global(.info p), .root :global(.info small), .root :global(.info dt), .root :global(.info dd), .root :global(.info .ga-categories) { cursor: text; }
+.root :global(.info *) { user-select: text; -webkit-user-select: text; }
+.root[data-glass-gesturing] :global(.scene) { cursor: grabbing; }
+.root[data-glass-gesturing] :global(.info *) { cursor: grabbing; }
 .root :global(.info > *) { flex-shrink: 0; }
 .root :global(.info > :first-child) { margin-top: auto; }
 .root :global(.info > :last-child) { margin-bottom: auto; }

@@ -4,7 +4,7 @@ import { homeCuration } from "@/domains/home/curation/homeCuration";
 
 export interface ArtworkBadge {
     id: string;
-    kind: "featured" | "award" | "honourable-mention" | "selection" | "planned" | "in-progress";
+    kind: "cover" | "featured" | "award" | "honourable-mention" | "selection" | "planned" | "in-progress";
     label: string;
     detail?: string;
 }
@@ -22,6 +22,10 @@ export function isArtworkAvailable(artwork: Artwork): boolean {
 
 export function isFeaturedArtwork(artwork: Artwork): boolean {
     return homeCuration.featuredWork.artworkId === artwork.id;
+}
+
+export function isCoverArtwork(artwork: Pick<Artwork, "id">): boolean {
+    return homeCuration.hero.artworkId === artwork.id;
 }
 
 export function isFeaturedArtworkSeries(seriesId: string): boolean {
@@ -42,6 +46,10 @@ export function getArtworkPresentation(artwork: Artwork): ArtworkPresentation {
             label: planned ? "Coming soon" : "In progress",
             detail: `Planned for ${artwork.year}`,
         });
+    }
+
+    if (isCoverArtwork(artwork)) {
+        badges.push({ id: "cover", kind: "cover", label: "Cover Artwork", detail: "Selected for the Home cover" });
     }
 
     if (isFeaturedArtwork(artwork)) {
