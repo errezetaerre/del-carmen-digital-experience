@@ -314,3 +314,94 @@ export function burstGlassDust(book: HTMLElement, left: HTMLElement, right: HTML
   document.addEventListener("visibilitychange", onVisibility);reducedMotion.addEventListener("change", onMotion);
   frame = view.requestAnimationFrame(draw);return stop;
 }
+
+export type ArtworkDustRect = { x: number; y: number; width: number; height: number };
+
+function drawArtworkDustGlint(context: CanvasRenderingContext2D, rect: ArtworkDustRect, elapsed: number, inset: number) {
+  const sweepMs = 900, tailMs = 140, glintMs = 40;
+  const length = 2 * (rect.width + rect.height);
+  const from = Math.max(0, elapsed - tailMs), to = Math.min(sweepMs, elapsed);
+  if (to <= from) return;
+  const corners = [rect.width, rect.width + rect.height, 2 * rect.width + rect.height];
+  context.save(); context.lineCap = "round"; context.lineJoin = "round";
+  for (let step = from; step < to; step += 5) {
+    const end = Math.min(to, step + 5), start = step / sweepMs * length, finish = end / sweepMs * length;
+    const point = perimeterPoint(start, rect.width, rect.height), age = elapsed - (step + end) / 2;
+    context.beginPath(); context.moveTo(inset + rect.x + point.x, inset + rect.y + point.y);
+    for (const distance of [...corners.filter(c => c > start && c < finish), finish]) {
+      const next = perimeterPoint(distance, rect.width, rect.height);
+      context.lineTo(inset + rect.x + next.x, inset + rect.y + next.y);
+    }
+    const opacity = Math.pow(Math.max(0, 1 - age / tailMs), 1.8);
+    context.strokeStyle = `rgb(${DUST_COLORS[2]})`; context.shadowColor = `rgba(${DUST_COLORS[2]}, .8)`;
+    context.shadowBlur = 9; context.lineWidth = .85; context.globalAlpha = opacity * .42; context.stroke();
+    if (age < glintMs) {
+      context.strokeStyle = `rgb(${DUST_COLORS[3]})`; context.shadowBlur = 4;
+      context.lineWidth = .35; context.globalAlpha = Math.max(0, 1 - age / glintMs) * .75; context.stroke();
+    }
+  }
+  context.restore();
+  if (elapsed > 0 && elapsed < sweepMs) {
+    const head = perimeterPoint(elapsed / sweepMs * length, rect.width, rect.height);
+    drawDustMote(context, inset + rect.x + head.x, inset + rect.y + head.y, .75, 3, .75);
+  }
+}
+
+// A single quiet clock accents the painted rectangle and its own Halo ribbon.
+export function burstArtworkDust(container: HTMLElement, painting: ArtworkDustRect, ribbon: ArtworkDustRect): () => void {
+  const document = container.ownerDocument, browserView = document.defaultView;
+  if (!browserView || document.hidden || !container.isConnected || !container.clientWidth || !container.clientHeight ||
+      !painting.width || !painting.height || !ribbon.width || !ribbon.height) return () => {};
+  const view: Window = browserView;
+  const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reducedMotion.matches) return () => {};
+  const canvas = document.createElement("canvas"), candidate = canvas.getContext("2d");
+  if (!candidate) return () => {};
+  const context: CanvasRenderingContext2D = candidate;
+  const inset = 24, width = Math.max(container.clientWidth, painting.x + painting.width, ribbon.x + ribbon.width) + inset * 2;
+  const height = Math.max(container.clientHeight, painting.y + painting.height, ribbon.y + ribbon.height) + inset * 2;
+  const dpr = Math.min(view.devicePixelRatio || 1, 2), sweepMs = 900, duration = 1550;
+  canvas.width = Math.ceil(width * dpr); canvas.height = Math.ceil(height * dpr);
+  Object.assign(canvas.style, { position: "absolute", left: "-24px", top: "-24px", width: `${width}px`, height: `${height}px`,
+    pointerEvents: "none", userSelect: "none", zIndex: "1" });
+  canvas.setAttribute("aria-hidden", "true"); canvas.setAttribute("data-artwork-dust", "");
+  canvas.setAttribute("data-artwork-dust-placement", "standard-portrait");
+  context.setTransform(dpr, 0, 0, dpr, 0, 0); container.appendChild(canvas);
+  const length = 2 * (painting.width + painting.height), count = Math.max(32, Math.min(64, Math.round(length / 34)));
+  const particles = Array.from({ length: count }, (_, i) => {
+    const progress = (i + .5) / count, point = perimeterPoint(progress * length, painting.width, painting.height);
+    const outward = 4 + Math.random() * 7;
+    return { x: painting.x + point.x, y: painting.y + point.y, dx: point.nx * outward, dy: point.ny * outward,
+      delay: progress * sweepMs, fade: 650, size: .4 + Math.random() * .8, color: i % DUST_COLORS.length };
+  });
+  for (let i = 0; i < 16; i++) particles.push({
+    x: ribbon.x + (i + .5) / 16 * ribbon.width, y: ribbon.y + Math.min(14, ribbon.height) * Math.random(),
+    dx: (Math.random() - .5) * 18, dy: -(8 + Math.random() * 16), delay: (i % 4) * 28, fade: 900,
+    size: .4 + Math.random() * .85, color: i % DUST_COLORS.length,
+  });
+  let frame: number | null = null, start: number | null = null, stopped = false;
+  function stop() {
+    if (stopped) return; stopped = true;
+    if (frame !== null) view.cancelAnimationFrame(frame); frame = null;
+    document.removeEventListener("visibilitychange", visibility); reducedMotion.removeEventListener("change", motion); canvas.remove();
+  }
+  function visibility() { if (document.hidden) stop(); }
+  function motion() { if (reducedMotion.matches) stop(); }
+  function draw(time: number) {
+    frame = null; if (stopped) return;
+    if (document.hidden || reducedMotion.matches || !container.isConnected) { stop(); return; }
+    if (start === null) start = time;
+    const elapsed = time - start;
+    if (elapsed >= duration) { stop(); return; }
+    context.clearRect(0, 0, width, height); drawArtworkDustGlint(context, painting, elapsed, inset);
+    for (const particle of particles) {
+      const p = Math.max(0, Math.min(1, (elapsed - particle.delay) / particle.fade));
+      if (p <= 0 || p >= 1) continue;
+      drawDustMote(context, inset + particle.x + particle.dx * p, inset + particle.y + particle.dy * p,
+        particle.size * (1 - .2 * p), particle.color, Math.sin(Math.PI * p) * .62);
+    }
+    frame = view.requestAnimationFrame(draw);
+  }
+  document.addEventListener("visibilitychange", visibility); reducedMotion.addEventListener("change", motion);
+  frame = view.requestAnimationFrame(draw); return stop;
+}

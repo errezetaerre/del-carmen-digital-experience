@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.10
+Version: 1.12
 
 Document ID: DOC-COL-SPEC
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-17
+Last Updated: 2026-10-18
 
 ---
 
@@ -725,3 +725,9 @@ The shared viewer uses the available tablet width, retaining portrait image/dots
 CollectionPreviewWorks keeps the bottom-anchored 1–4-work grid, centred singleton and 5+-work KineticCarousel. Its local stylesheet now owns the group's explicit height transition: 1.75rem collapsed, 13rem expanded and 14rem from 1280px, over 700ms with the approved easing. Hover or focus within the group expands the preview; departure collapses it. Reduced motion removes interpolation while retaining the reveal. This avoids depending on a generated named-group hover utility for the strip's height.
 
 Each CollectionPreviewArtwork link fills that changing height with a zero minimum height. Its image, passive Halo rail, title/year reveal and pending-link feedback belong to the same scoped artwork link. Keyboard focus reveals the same image/metadata treatment as hover. The mask, chronology, planned/frosted rendering, thumbnails' destinations and existing CollectionHeroMotion entrance/departure remain intact. Mobile still suppresses the desktop preview. Compiled-source checks cover grid/carousel structure and CSS contracts; real browser hover/focus and device layout verification remain required.
+
+## Shared selected-artwork arrival accent
+
+The selected-artwork viewer reused by Home and Series adds the shared `ArtworkArrivalAccent` component from `ArtworkArrivalEffect.tsx`, using `artworkArrivalLifecycle.ts` for readiness and cleanup, for completed works with Cover/Featured/recognition insignias. The selected Artwork ID keys a single warm contour-comet and badge-dust sequence after the image decodes, fonts settle and the band is measured. Portrait, landscape and desktop viewer layouts use the same effect. Standard detail extends its existing portrait effect to tablet landscape, retaining archive/Series navigation context.
+
+The lightbox permits its own modal while suppressing decoration for another modal, zoom or expanded reading. Pointer/swipe starts, navigation controls and closing clean up the decoration. Existing datasets, arbitrary Series sizes, thumbnail hover expansion, frame/image/insignia sizing, swipe/zoom/button/scroll handlers and the approved Collections hero motion remain unchanged. Actual browser/device and project-build review remains required; compiled-source/event/drawing validation is recorded in the canonical Artwork Implementation document.

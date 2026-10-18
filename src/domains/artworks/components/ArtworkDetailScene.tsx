@@ -4,6 +4,7 @@ import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "../presentation/getArtworkPresentation";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 import sceneStyles from "./ArtworkDetailScene.module.css";
+import ArtworkStandardPortraitAccent from "./ArtworkStandardPortraitAccent";
 
 import type { Artwork } from "@/domains/artworks";
 import ArtworkDetailViewer from "@/domains/artworks/components/ArtworkDetailViewer";
@@ -109,6 +110,7 @@ export default function ArtworkDetailScene({
                         <ArtworkDetailViewer
                             artwork={artwork}
                         />
+                        {hasHighlights && artwork.creationStatus === "completed" && <ArtworkStandardPortraitAccent artworkId={artwork.id} />}
                         </ArtworkImageHighlights>
                     </div>
 

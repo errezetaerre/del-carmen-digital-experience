@@ -1,4 +1,4 @@
-Version: 1.25
+Version: 1.28
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-17
+2026-10-18
 
 ---
 
@@ -599,3 +599,11 @@ The native Glass viewer owns retained-target delivery in `glass-artbook/glassTou
 `src/domains/collections/components/CollectionPreviewWorks.module.css` owns the collapsed/expanded strip heights and hover/focus-within transition for the existing grid and KineticCarousel. CollectionPreviewArtwork supplies full-height, zero-minimum-height links and corresponding focus metadata reveal. CollectionHeroMotion, arbitrary Series datasets, centred singleton, bottom anchoring, mobile suppression and scoped single-link navigation retain their established implementation.
 
 `src/shared/ui/particle-field/dust.ts` owns the approved warm menu renderer, independent 24-mote/1050ms ribbon burst and finite mirrored comet accent. Real current ribbon/book/leaf geometry gates the landing. One book-local canvas and clock synchronise top/exterior/bottom/full-inner-ascent/full-spine-descent phases across unequal-width leaves. The 720ms path has a tiny moving warm head, 50ms fine bright core and 160ms graded tail that clears by 880ms. Each leaf emits bounded motes; 24 extra motes emit along the moving centre of the gap during the final descent. The spread is finite at 1620ms. Unborn/faded motes and zero-alpha core strokes are skipped; native geometry, 32px margins and pointer-transparent drawing preserve layout/hit areas. The approved cleanup/hidden/reduced/disconnected/unsupported guards and non-null context bindings remain. Material, menu controls, copy, image fitting and data remain unchanged. Canonical artwork implementation records exact scope, regression evidence and full-project/browser/device limits.
+
+### Shared Artwork Arrival Accent — 2026-10-17
+
+`src/shared/ui/artwork/ArtworkArrivalEffect.tsx` and `artworkArrivalLifecycle.ts` own the shared decorative layer and its readiness/lifetime adapter with distinct implementation names on case-insensitive filesystems. The domain's installed `ArtworkStandardPortraitAccent.tsx` and `standardPortraitAccent.ts` entry points are forwarding modules, so Standard and Home/Series do not maintain duplicate implementations. Current imports use the distinct names directly. The former `ArtworkArrivalAccent.tsx` and `artworkArrivalAccent.ts` files expose identical compatibility exports and can be safely overwritten during a ZIP merge. The layer mounts only for the selected completed work with a real Cover/Featured/recognition Halo. Standard uses portrait plus tablet-landscape eligibility, including size-based emulators and shorter tablet viewports. ArtworkLightbox opts into its own modal scope across layouts and keys the layer by the selected Artwork ID.
+
+The adapter measures the contain-painted image and aligned Halo band after decode/fonts/measurement and actual view reveal. Standard excludes adjacent/sliding panels; lightbox permits its own dialog while excluding other modals, zoom and expanded reading. Passive input observation and cleanup preserve the existing navigation, drag, wheel, zoom, reading, selection and close owners. The existing lightbox handlers and responsive styles retain their exact source; only the optional layer and passive DOM markers are inserted. Body/media/image/resize observers, pending callbacks and current decoration are released on interruption/disposal.
+
+The shared `dust.ts` retains its approved Glass/menu renderers and Standard warm comet/particle drawing. Only the Standard canvas allocation extends to the actual offset painting/band bounds. Its single finite clock, 24px margins, capped DPR and pointer-transparent layer preserve image/layout/hit areas. Existing Halo, Catalogue, Series membership, archive filter context, kinetic physics, Standard trackpad correction and seven-file Glass installation unit retain their owners. Canonical artwork implementation records exact scope, validation and actual build/browser/device review requirements.

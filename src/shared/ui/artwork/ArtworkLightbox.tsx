@@ -14,6 +14,7 @@ import {
 import type { Artwork } from "@/domains/artworks/model";
 import styles from "./ArtworkLightbox.module.css";
 import ArtworkImageHighlights from "./ArtworkImageHighlights";
+import ArtworkArrivalAccent from "./ArtworkArrivalEffect";
 import ArtworkComingSoon from "./ArtworkComingSoon";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 import GlassArtworkFrame from "./GlassArtworkFrame";
@@ -997,6 +998,7 @@ export default function ArtworkLightbox({
                     <button
                         type="button"
                         onClick={goPrevious}
+                        data-artwork-arrival-navigation
                         onPointerDown={(event) => event.stopPropagation()}
                         aria-label="Previous artwork"
                         className="fixed left-1 top-[42%] z-[145] flex h-12 w-12 -translate-y-1/2 items-center justify-center font-display text-4xl font-light text-white/45 transition-all duration-300 hover:scale-110 hover:text-brand-gold md:left-5 md:top-1/2 md:h-14 md:w-14 lg:left-10"
@@ -1006,6 +1008,7 @@ export default function ArtworkLightbox({
                     <button
                         type="button"
                         onClick={goNext}
+                        data-artwork-arrival-navigation
                         onPointerDown={(event) => event.stopPropagation()}
                         aria-label="Next artwork"
                         className="fixed right-1 top-[42%] z-[145] flex h-12 w-12 -translate-y-1/2 items-center justify-center font-display text-4xl font-light text-white/45 transition-all duration-300 hover:scale-110 hover:text-brand-gold md:right-5 md:top-1/2 md:h-14 md:w-14 lg:right-10"
@@ -1042,11 +1045,13 @@ export default function ArtworkLightbox({
                             <div className={isGlass ? styles.imageMask : "contents"}>
                             <div
                                 ref={zoomLayerRef}
+                                data-artwork-arrival-zoom
                                 data-lightbox-content="true"
                                 className={isGlass ? styles.zoomViewport : "relative flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"}
                             >
                                 {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} /> : <img
                                     key={artwork.id}
+                                    data-artwork-arrival-photo
                                     src={primaryImage.src}
                                     alt={primaryImage.alt}
                                     draggable={false}
@@ -1066,6 +1071,7 @@ export default function ArtworkLightbox({
                                 />
                             </div>
                             </div>
+                            {hasHighlights && artwork.creationStatus === "completed" && <ArtworkArrivalAccent key={artwork.id} artworkId={artwork.id} surface="lightbox" />}
                         </ArtworkImageHighlights>
 
 
@@ -1106,6 +1112,7 @@ export default function ArtworkLightbox({
                                 return (
                                     <button
                                         key={item.id}
+                                        data-artwork-arrival-navigation
                                         type="button"
                                         onClick={() => {
                                             resetZoom(false);
