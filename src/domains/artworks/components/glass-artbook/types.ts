@@ -1,5 +1,6 @@
 import type gsap from "gsap";
 import type { Artwork } from "@/domains/artworks";
+import type { SiteLocale } from "@/i18n/config";
 import type { ArtworkPresentation } from "../../presentation/getArtworkPresentation";
 
 export interface ArtworkGlassArtbookProps {
@@ -11,6 +12,7 @@ export interface ArtworkGlassArtbookProps {
 }
 
 export interface GlassArtbookOptions {
+    locale?: SiteLocale;
     artworks: readonly Artwork[];
     initialArtworkId: string;
     instanceId: string;

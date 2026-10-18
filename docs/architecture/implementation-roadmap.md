@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.4
+Version: 1.6
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -522,3 +522,18 @@ The next implemented increment is the page-metadata foundation, ready for owner 
 8. Later visual enrichment: subtle animated atmospheres and the proposed Houdini/3D background, after the core public site is finished and those visual studies are approved.
 
 These items preserve the requested cart, distinctions, planned-work differentiation, prices, original/print choice, bilingual experience, database and PDF catalogue. Insignias, featured/recognition treatment and Coming soon differentiation are already implemented; remaining work must not reopen them without a concrete defect or a new approved requirement. The next major functional block after metadata review is EN/ES.
+
+
+14. EN/ES — Shared Foundation and First Editorial Pilot — 2026-10-18
+
+The owner approved shared EN/ES routing, English by default, manual selection, shared media/code, original artwork titles and stored/reviewed translations. The current implementation is based on the actual approved upstream commit `f2cf5b1` and is prepared on an isolated local review branch.
+
+Implemented for review: one `[locale]` public route tree; unchanged English URLs plus `/es`; typed common messages; localized navigation/footer/selector; Home hero and Epifanía Nupcial editorial pilot; technical/creation-state/distinction controls in the viewers and Glass engine; preserved selected-work/query/view context; localized Standard snapshot destinations; explicit language boundaries for English content that is not yet translated. The native touch/physics/material/dust contracts and owner catalogue remain intact.
+
+This does not complete the Spanish edition. The first pilot was positively reviewed by the owner, including Standard and Glass, on 2026-10-18. The next Artwork block is implemented for review: translated archive/filter/result states and shared cards, plus stored quote/description/alt translations for all 45 current works, shared by the viewers. The owner catalogue and approved movement/layout remain intact.
+
+Remaining language work is the rest of Home, full Series/editorial copy, About/Artist/Journal, forms/feedback and equivalent legal/consent wording with correct language/version records. Review the new Spanish wording and both-language responsive/keyboard/touch behavior. Spanish remains noindex and language alternates remain off until the complete content/domain review. A controlled update for the inherited dependency security findings is also a public-release gate; it is not included in the Artwork content patch. See DOC-I18N for scope, installation and verification.
+
+The real project passes its production build and TypeScript; 60 focused content/URL/continuity/HTTP checks and focused i18n lint pass. The build/server use placeholder email/Redis credentials without submitting forms. Physical devices, rendered browser/screen-reader review, real provider delivery and production indexing remain open. Earlier source-only limitations are historical; root config, package lock and compiler are available for this increment.
+
+Next: review the pilot, extend the Spanish editorial sections and forms/legal content, then complete bilingual responsive/accessibility/SEO verification. Database, confirmed offers/prices, sales/cart, catalogue PDF, domain/email/deployment and later visual atmospheres retain their place in section 13. Marketing can be planned as its own workstream with actual campaign/content/measurement requirements; this increment adds no marketing tracking or public marketing section.

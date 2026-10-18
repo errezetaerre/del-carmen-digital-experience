@@ -1,3 +1,4 @@
+import Link from "@/i18n/navigation";
 import {
     getSelectedWorks,
 } from "@/domains/home/services";
@@ -125,7 +126,7 @@ export default function SelectedWorks() {
             md:mt-20
           "
                 >
-                    <a
+                    <Link
                         href="/artworks"
                         className="
               font-sans
@@ -141,7 +142,7 @@ export default function SelectedWorks() {
             "
                     >
                         View all works →
-                    </a>
+                    </Link>
                 </div>
             </Container>
         </section>

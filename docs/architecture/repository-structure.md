@@ -1,4 +1,4 @@
-Version: 1.31
+Version: 1.33
 
 Document ID:
 DOC-RS
@@ -623,3 +623,15 @@ MobileMenu delegates Escape to its current close callback. Artwork viewers retai
 Artwork-specific realisation/authorship wording belongs to `src/domains/artworks/presentation/getArtworkMetadata.ts`. Planned and in-progress works receive explicit labels; the year and stored price cannot assert completion or a purchase offer. Journal detail uses the article Open Graph type without inventing a full publication date. Root layout, legal metadata, route rendering, navigation and interaction code retain their source. No canonical URL, public origin, social preview image, sitemap, robots policy or structured commercial data is fabricated before those configurations/content are ready.
 
 The current metadata increment is a foundation rather than a complete technical SEO audit. Canonical origin/URLs, sitemap/robots, real preview images, indexing, performance and production/crawler review remain in the implementation roadmap. EN/ES, persistence and commerce remain separate requested increments.
+
+### EN/ES shared routes and first editorial pilot
+
+The owner-approved language architecture is implemented as a pilot from upstream commit `f2cf5b1`. Public layouts/pages now live once under `src/app/[locale]/`; `src/app/api/`, global CSS/favicon and all public assets remain global. English keeps the existing unprefixed URLs; Spanish adds `/es` with unchanged slugs. There is one canonical Artwork/ArtworkSeries catalogue, not an English and a Spanish duplicate. The catalogue and media files are not part of the migration patch.
+
+`src/i18n/` owns typed locales, `next-intl` routing/navigation/request configuration, shared message namespaces, the language selector and language boundaries for untranslated English. `content/artworks.es.json` holds quote/description and existing image-variant alt translations for all 45 current works by canonical ID; `artworkCopy.ts` joins that copy immutably with the single owner catalogue. `src/proxy.ts` excludes APIs/framework files/assets. The exact new dependency is `next-intl@4.14.9`; the existing Next.js/React versions remain pinned. Language follows the URL; browser negotiation and the locale cookie are disabled. No runtime AI translation service is called.
+
+Navigation, Home hero and Epifanía Nupcial form the owner-reviewed first pilot. The subsequent Artwork block translates archive introduction/metadata, filters/result/empty states and shared thumbnail labels, plus all 45 works' editorial/alt copy in the viewers. Native Glass labels and history, Standard route continuity and shared viewers use the same locale. Facts, original artwork titles, asset paths and the approved motion/material/input contracts remain canonical. Stored policy/consent/API/subscriber text remains unchanged. Remaining Home/Series/editorial/form/legal copy is English with explicit language boundaries until its Spanish translation is reviewed. Spanish stays noindex and language alternates remain disabled before the complete content/domain review.
+
+The actual repository and dependencies are now available: `npm run build` passes TypeScript and generates 123 static pages. The first pilot passed 60 content/context/continuity/HTTP checks and focused i18n lint. The Artwork block passes 29 additional content/actual-component checks, nine production-server checks across 96 requests and focused lint with no errors (the existing native-thumbnail image warning remains). Its package files are byte-identical to the pilot. Browser installation was unavailable; rendered device gestures, visual fit, screen readers and production providers/crawlers are still unverified. Earlier source-snapshot test limitations above describe those earlier increments, not the current build environment. Inherited dependency security findings require a controlled update before public release, as recorded in DOC-I18N.
+
+Canonical decisions, scope, exact patch installation and release gates are in `docs/architecture/internationalization.md`. Apply the Git migration patch rather than merging a partial route folder over the existing tree. The separate review branch retains the approved upstream recovery point.

@@ -1,8 +1,9 @@
-import Link from "next/link";
+import Link from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import LanguageSwitcher from "@/i18n/LanguageSwitcher";
 
 import { brand } from "@/config/brand";
 import {
-  DEFAULT_LANGUAGE,
   NAVIGATION_ITEMS,
 } from "@/domains/navigation/constants";
 import { Container } from "@/shared/layout";
@@ -10,6 +11,8 @@ import { Container } from "@/shared/layout";
 import FooterMotion from "./FooterMotion";
 
 export default function Footer() {
+  const locale = useLocale();
+  const t = useTranslations("Navigation");
   const currentYear = new Date().getFullYear();
 
   const footerLinkStyles =
@@ -20,6 +23,7 @@ export default function Footer() {
 
   return (
     <footer
+      lang={locale}
       data-footer
       className="relative bg-background text-white">
       {/* Closing line */}
@@ -96,7 +100,7 @@ export default function Footer() {
 
             {/* Navigation */}
             <nav
-              aria-label="Footer navigation"
+              aria-label={t("footer")}
               className="mt-10"
             >
               <ul className="flex flex-col items-start gap-4">
@@ -106,7 +110,7 @@ export default function Footer() {
                       href={item.href}
                       className={footerLinkStyles}
                     >
-                      {item.label}
+                      {t(item.key)}
                     </Link>
                   </li>
                 ))}
@@ -116,7 +120,7 @@ export default function Footer() {
                     href="/#newsletter"
                     className={footerLinkStyles}
                   >
-                    Newsletter
+                    {t("newsletter")}
                   </Link>
                 </li>
               </ul>
@@ -167,7 +171,7 @@ export default function Footer() {
 
             {/* Social */}
             <nav
-              aria-label="Social media"
+              aria-label={t("social")}
               className="mt-10"
             >
               <ul
@@ -245,8 +249,7 @@ export default function Footer() {
             </nav>
 
             {/* Language */}
-            <button
-              type="button"
+            <LanguageSwitcher
               className="
                 mt-8
                 w-fit
@@ -262,13 +265,11 @@ export default function Footer() {
                 md:self-end
                 [@media(orientation:landscape)_and_(max-height:600px)]:!self-start
               "
-            >
-              {DEFAULT_LANGUAGE}
-            </button>
+            />
 
             {/* Legal */}
             <nav
-              aria-label="Legal"
+              aria-label={t("legal")}
               className="mt-8"
             >
               <ul className="flex items-center gap-6">
@@ -286,7 +287,7 @@ export default function Footer() {
                       hover:text-brand-gold
                     "
                   >
-                    Privacy
+                    {t("privacy")}
                   </Link>
                 </li>
 
@@ -304,7 +305,7 @@ export default function Footer() {
                       hover:text-brand-gold
                     "
                   >
-                    Terms
+                    {t("terms")}
                   </Link>
                 </li>
               </ul>
@@ -346,7 +347,7 @@ export default function Footer() {
               text-white/30
             "
           >
-            All rights reserved.
+            {t("rights")}
           </p>
         </div>
       </Container>

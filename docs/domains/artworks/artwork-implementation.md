@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.25
+Version: 1.27
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -252,14 +252,29 @@ Existing viewer Escape, expanded-description Escape priority, ArrowLeft/ArrowRig
 
 28 focused compiled-source checks cover the shared formatter, seven static routes, all 45 artwork slugs, four series and the two published Journal entries, missing/unpublished routes, query independence, explicit realisation state, authorship, textual social fields and absence of fabricated URLs/images/prices/publication dates. All 237 source files parse and 433 local imports resolve identically under both filesystem case policies. Page bodies/route props/static-param functions and all unrelated source are compared against the preceding owner-updated snapshot. This is not a complete Next project typecheck/build, browser head inspection, crawler or search-engine test. Full SEO and production validation remains open.
 
+## EN/ES artwork pilot
+
+The language foundation now uses the real upstream repository/configuration at `f2cf5b1`. Public route files move under `[locale]`; English `/artworks/[slug]` remains unchanged externally and Spanish uses `/es/artworks/[slug]`. The owner catalogue is byte-identical and is not included in the migration patch. Original titles, IDs/slugs, years, dimensions, authorship, state/availability, prices, Series and public asset paths remain shared facts.
+
+`src/i18n/artworkCopy.ts` reads Spanish quote/description and image-variant alt text from `src/i18n/content/artworks.es.json` by canonical ID. The current 45 works are covered; unknown future IDs retain English fallback and explicit text-language marking. Epifanía's initially reviewed editorial text stays exact. Interface translations cover the technical sheet, authorship/medium/support/category labels, Cover/Featured/recognition/planned states, shared viewer and fullscreen controls, loading and native Glass labels. The archive now translates its introduction, metadata, filters, result counts and empty/reset states; shared thumbnails translate their technique/year/CTA/accessibility labels. English derived presentation and metadata are compared exactly for all 45 works against the installed pilot, and the canonical catalogue remains byte-identical. The new Spanish wording remains for owner review.
+
+The selector retains the selected work, Series/filter query, view mode and fragment. Glass native history records the locale. Standard passes a localized target to its retained-scene snapshot so its cleanup matches the actual next route; the turn/drag/inertia equations are unchanged. Resting text selection, pointer/touch adapters, CSS geometry, optical strengths, insignia perspective, dust and focus handling retain their approved implementations. Spanish metadata remains noindex until the complete release review.
+
+The first pilot passed the actual build/TypeScript, 60 content/context/continuity/HTTP checks and focused i18n lint; 33 requests exercised a real production server. The subsequent Artwork block passes build/TypeScript, 29 content/actual-component checks and nine production-server checks across 96 requests, including all 45 Standard routes in each language. Checks confirm unchanged catalogue/asset paths, exact English presentation/metadata, latest Yasemi I/II facts, canonical filter values, complete Spanish copy/alt coverage and byte-identical approved layout/animation/gesture source. Focused lint has no errors; its existing native-thumbnail image warning remains. Hook/DOM fixtures do not establish physical touch behavior. Browser installation was unavailable, so both-language visual and real-device review remain required. Full scope and installation are in `docs/architecture/internationalization.md`.
+
 ## Installation
 
-The UX update builds on the approved Series/Home viewer, complete-thumbnail action and latest owner-supplied catalogue. Merge the patch into the existing repository rather than replacing directories. The archive includes the complete seven-file Glass module, including its private touch adapter and unchanged barrel/declaration, and the existing canonical documentation; no integration-review README, package, environment variable or generated preview is added.
+The owner installed/reviewed the first EN/ES pilot below. The subsequent Artwork content block is delivered as the incremental `Del_Carmen_EN_ES_Artworks_v2.patch`; apply it on that existing branch using the check/application/build commands in `docs/architecture/internationalization.md`. It adds no dependencies and does not replace catalogue/media files. The original migration instructions below remain the recovery/base record.
+
+The EN/ES pilot builds on the approved Series/Home viewer, complete-thumbnail action and latest owner-supplied catalogue. It moves public routes and updates the actual package lock/configuration, so apply the supplied Git migration patch rather than copying partial folders over the old route tree. The archive's reference folder includes the complete seven-file Glass module, including the private touch adapter and unchanged barrel/declaration. No integration-review README, public asset, owner catalogue, environment file or generated visual preview is added.
 
 From the actual project root:
 
 ```sh
-unzip -o "$HOME/Downloads/Del_Carmen_Artwork_UX_2026-10-17_v12.zip" -d .
+git switch -c feat/i18n-en-es &&
+git apply --check "$HOME/Downloads/Del_Carmen_EN_ES_Pilot_v1/Del_Carmen_EN_ES_Pilot_v1.patch" &&
+git apply "$HOME/Downloads/Del_Carmen_EN_ES_Pilot_v1/Del_Carmen_EN_ES_Pilot_v1.patch" &&
+npm ci &&
 npm run build
 ```
 

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/i18n/navigation";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
 import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";

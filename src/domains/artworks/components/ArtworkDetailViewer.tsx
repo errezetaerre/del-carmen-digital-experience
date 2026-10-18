@@ -1,5 +1,8 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+import { localizeArtwork } from "@/i18n/artworkCopy";
+
 
 
 import Image from "next/image";
@@ -64,10 +67,13 @@ interface PanPosition {
 
 
 export default function ArtworkDetailViewer({
-    artwork,
+    artwork: sourceArtwork,
     triggerOnly = false,
     portalTarget,
 }: ArtworkDetailViewerProps) {
+    const locale = useLocale();
+    const t = useTranslations("Artwork");
+    const artwork = localizeArtwork(sourceArtwork, locale);
 
 
 
@@ -1329,7 +1335,7 @@ export default function ArtworkDetailViewer({
 
                     type="button"
 
-                    aria-label={`Expand ${artwork.title}`}
+                    aria-label={t("expandNamed", { title: artwork.title })}
 
                     onClick={() =>
 
@@ -1617,7 +1623,7 @@ export default function ArtworkDetailViewer({
 
                     type="button"
 
-                    aria-label="Expand artwork"
+                    aria-label={t("expand")}
 
                     onClick={() =>
 
@@ -1820,7 +1826,7 @@ export default function ArtworkDetailViewer({
 
                     aria-modal="true"
 
-                    aria-label={`Zoomed view of ${artwork.title}`}
+                    aria-label={t("zoomed", { title: artwork.title })}
 
                     className="
 
@@ -1972,7 +1978,7 @@ export default function ArtworkDetailViewer({
 
                             type="button"
 
-                            aria-label="Close zoom viewer"
+                            aria-label={t("closeZoom")}
 
                             onClick={
 
@@ -2272,7 +2278,7 @@ export default function ArtworkDetailViewer({
 
                                 type="button"
 
-                                aria-label="Zoom out"
+                                aria-label={t("zoomOut")}
 
                                 disabled={
 
@@ -2346,7 +2352,7 @@ export default function ArtworkDetailViewer({
 
                                 type="button"
 
-                                aria-label="Reset zoom"
+                                aria-label={t("resetZoom")}
 
                                 onClick={() => {
                                    setZoom(MIN_ZOOM);
@@ -2410,7 +2416,7 @@ export default function ArtworkDetailViewer({
 
                                 type="button"
 
-                                aria-label="Zoom in"
+                                aria-label={t("zoomIn")}
 
                                 disabled={
 

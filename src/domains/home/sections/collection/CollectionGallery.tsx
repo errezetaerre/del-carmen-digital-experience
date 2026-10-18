@@ -7,7 +7,7 @@ import {
     useTransition,
 } from "react";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";

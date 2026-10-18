@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import gsap from "gsap";
+import { useLocale, useTranslations } from "next-intl";
+import { formatArtworkTechnique, localizeArtwork } from "@/i18n/artworkCopy";
 
 import type { Artwork } from "@/domains/artworks";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
@@ -26,12 +28,15 @@ interface CollectionArtworkProps {
 }
 
 export default function CollectionArtwork({
-  artwork,
+  artwork: sourceArtwork,
   onOpen,
   loading = false,
   imageVariant = "thumbnail",
   presentation = "default",
 }: CollectionArtworkProps) {
+  const locale = useLocale();
+  const t = useTranslations("Artwork");
+  const artwork = localizeArtwork(sourceArtwork, locale);
   const cardRef = useRef<HTMLDivElement>(null);
   const [cardActive, setCardActive] = useState(false);
   const initialRef = useRef<HTMLDivElement>(null);
@@ -47,8 +52,8 @@ export default function CollectionArtwork({
       : artwork.images.thumbnail ??
       artwork.images.primary;
 
-  const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
-  const presentationInfo = getArtworkPresentation(artwork);
+  const techniqueLabel = locale === "es" ? formatArtworkTechnique(artwork, locale) : `${artwork.medium} on ${artwork.support}`;
+  const presentationInfo = getArtworkPresentation(artwork, locale);
 
   const animateIn = () => {
     if (
@@ -195,6 +200,7 @@ export default function CollectionArtwork({
 
   return (
     <article
+      lang={locale}
       ref={cardRef}
       className={`group relative w-full ${presentation === "series"
         ? "max-w-[260px]"
@@ -213,7 +219,7 @@ export default function CollectionArtwork({
         disabled={loading}
         aria-busy={loading}
         className={`relative block w-full text-left ${feedbackStyles.pressable}`}
-        aria-label={`View ${artwork.title}${presentationInfo.badges.length ? ` — ${presentationInfo.badges.map((badge) => badge.label).join(", ")}` : ""}`}
+        aria-label={`${t("viewNamed", { title: artwork.title })}${presentationInfo.badges.length ? ` — ${presentationInfo.badges.map((badge) => badge.label).join(", ")}` : ""}`}
       >
         <CollectionArtworkFrame>
           <div className="relative aspect-[4/5] overflow-hidden bg-black">
@@ -308,7 +314,7 @@ export default function CollectionArtwork({
                   </span>
 
                   <span className="text-[9px] uppercase tracking-[0.25em] text-brand-gold">
-                    Discover →
+                    {t("discover")}
                   </span>
                 </div>
               </div>
@@ -317,7 +323,7 @@ export default function CollectionArtwork({
         </CollectionArtworkFrame>
         <ArtworkBadges key={artwork.id} artwork={artwork} variant="thumbnail" passive expanded={cardActive} />
       </button>
-      {loading && <span className={feedbackStyles.overlay}><ArtworkLoading label="Opening…" /></span>}
+      {loading && <span className={feedbackStyles.overlay}><ArtworkLoading label={t("opening")} /></span>}
     </article>
   );
 }

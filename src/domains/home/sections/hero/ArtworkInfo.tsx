@@ -1,10 +1,14 @@
 import type { ArtworkProps } from "@/domains/artworks/components/types";
 import CoverArtworkBadge from "./CoverArtworkBadge";
+import { useLocale } from "next-intl";
+import { formatArtworkTechnique, localizeArtwork } from "@/i18n/artworkCopy";
 
 export default function ArtworkInfo({
-  artwork,
+  artwork: sourceArtwork,
 }: ArtworkProps) {
-  const techniqueLabel = `${artwork.medium} on ${artwork.support}`;
+  const locale = useLocale();
+  const artwork = localizeArtwork(sourceArtwork, locale);
+  const techniqueLabel = locale === "es" ? formatArtworkTechnique(artwork, locale) : `${artwork.medium} on ${artwork.support}`;
 
   return (
     <div
