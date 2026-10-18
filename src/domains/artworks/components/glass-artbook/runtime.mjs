@@ -1,7 +1,7 @@
 // The approved 11B-23 engine, adapted to real Artwork data and primary media.
 // Deliberately local to the experimental artwork-detail view.
-import { bindArtworkTouchNavigation } from '../artworkTouchNavigation';
-import { burstDust } from '@/shared/ui/particle-field/dust';
+import { bindGlassTouchNavigation } from './glassTouchNavigation';
+import { burstDust, burstGlassDust } from '@/shared/ui/particle-field/dust';
 let wheelMomentumLocked=false;
 let wheelMomentumUnlockTimer=null;
 
@@ -100,6 +100,7 @@ export function createGlassArtbook(root,options){
   const fail=()=>{
    if(disposed||loadRequest!==request||request.failed)return;
    request.failed=true;window.clearTimeout(request.timer);
+   if(pendingPointer?.loading&&pendingPointer.request===request){pendingPointer=null;setSelectionLock(false);}
    publishLoadState('error',artworkIndex,kind);
   };
   request.timer=window.setTimeout(fail,30000);
@@ -167,6 +168,33 @@ export function createGlassArtbook(root,options){
   }catch{return fallback();}
   finally{range.detach?.();}
  }
+ function cancelPendingTouch(){
+  const pending=pendingPointer;pendingPointer=null;
+  if(pending?.loading&&loadRequest===pending.request){
+   cancelPreparation();publishLoadState('ready');render();
+  }
+ }
+ function beginTouchTurn(pending,event,dir){
+  pending.latest=event;
+  if(!animating&&getPrimaryAsset(works[index+dir]).status!=='ready'){
+   // Retain this finger and its latest position during an incoming-image wait.
+   // A button's readiness continuation must not replace a live touch gesture.
+   pending.loading=true;pending.direction=dir;pending.from=index;
+   event.preventDefault();setSelectionLock(true);clearRequestedNavigation();
+   prepareArtwork(index+dir,()=>{
+    if(disposed||pendingPointer!==pending)return;
+    if(!wideLayout.matches||inputBlocked()||index!==pending.from){pendingPointer=null;setSelectionLock(false);return;}
+    pendingPointer=null;down(pending.event,pending.direction);move(pending.latest);
+    // Position accumulated while loading is not an instantaneous fling.
+    if(drag)drag.v=0;
+    if(!drag&&!animating)setSelectionLock(false);
+   },'turn');
+   pending.request=loadRequest;
+   return;
+  }
+  pendingPointer=null;down(pending.event,dir);move(event);
+  if(!drag&&!animating)setSelectionLock(false);
+ }
  function onPointerDown(event){
   if(event.isPrimary===false){
    onPointerCancel({pointerId:drag?.id??pendingPointer?.id});
@@ -184,11 +212,17 @@ export function createGlassArtbook(root,options){
  }
  function onPointerMove(event){
   if(pendingPointer&&pendingPointer.id===event.pointerId&&!drag){
+   if(pendingPointer.loading){pendingPointer.latest=event;event.preventDefault();return;}
    const dx=event.clientX-pendingPointer.x,dy=event.clientY-pendingPointer.y;
    if(Math.max(Math.abs(dx),Math.abs(dy))<6)return;
-   if(Math.abs(dx)<Math.abs(dy)*1.05){pendingPointer=null;if(!animating)setSelectionLock(false);return;}
+   if(event.pointerType==='touch'){
+    // Small diagonal grip movement is undecided, not a permanently lost grab.
+    if(Math.abs(dy)>=10&&Math.abs(dy)>Math.abs(dx)*1.25){pendingPointer=null;if(!animating)setSelectionLock(false);return;}
+    if(Math.abs(dx)<6||Math.abs(dx)<Math.abs(dy)*1.05)return;
+   }else if(Math.abs(dx)<Math.abs(dy)*1.05){pendingPointer=null;if(!animating)setSelectionLock(false);return;}
    const dir=dx<0?1:-1;
    if(!animating&&(index+dir<0||index+dir>=works.length)){showEdge(dir,dx);pendingPointer=null;setSelectionLock(false);return;}
+   if(event.pointerType==='touch'){beginTouchTurn(pendingPointer,event,dir);return;}
    const start=pendingPointer.event;pendingPointer=null;
    down(start,dir);
    if(!drag&&!animating)setSelectionLock(false);
@@ -197,7 +231,7 @@ export function createGlassArtbook(root,options){
  }
  function onPointerRelease(event){
   if(disposed)return;
-  if(pendingPointer?.id===event.pointerId)pendingPointer=null;
+  if(pendingPointer?.id===event.pointerId)cancelPendingTouch();
   clearEdge();
   if(inputBlocked())onPointerCancel(event);else release(event);
   dropPointerCapture(event.pointerId);
@@ -205,7 +239,7 @@ export function createGlassArtbook(root,options){
  }
  function onPointerCancel(event){
   if(disposed)return;
-  if(pendingPointer?.id===event.pointerId)pendingPointer=null;
+  if(pendingPointer?.id===event.pointerId)cancelPendingTouch();
   if(!drag||drag.id!==event.pointerId){if(!animating&&!pendingPointer)setSelectionLock(false);return;}
   const id=drag.id;drag=null;
   goal=angle>90?180:0;velocity=0;settling=true;animating=true;
@@ -552,8 +586,13 @@ function syncLandedDust(){
  // correct live ribbon, not an arbitrary delay or the outgoing artwork.
  if(!ready||highlight.inert||!highlight.querySelector('[data-artwork-highlights]'))return;
  if(!highlight.clientWidth||!highlight.clientHeight)return;
- if(!baseLeft.clientWidth||!baseLeft.clientHeight)return;
- pendingDustIndex=null;dustCleanup=burstDust(baseLeft,'perimeter');
+ if(!book.clientWidth||!book.clientHeight||!baseLeft.clientWidth||!baseLeft.clientHeight||!baseRight.clientWidth||!baseRight.clientHeight)return;
+ pendingDustIndex=null;
+ const stops=[
+  burstDust(highlight),
+  burstGlassDust(book,baseLeft,baseRight)
+ ];
+ dustCleanup=()=>{for(const stop of stops)stop();};
 }
 function render(){syncLayout();updateNavigation();const grazing=Math.pow(Math.sin(angle*Math.PI/180),1.5);turn.style.setProperty("--grazing",grazing.toFixed(4));// Specular highlight slides while the rigid sheet rotates; both endpoints
  // match the static leaf exactly, preventing the last-frame brightness jump.
@@ -685,7 +724,7 @@ function usesNativeTouch(event){return event.pointerType==='touch'&&'ontouchstar
 const scenePointerHandlers=[['pointerdown',onPointerDown],['pointermove',onPointerMove],['pointerup',onPointerRelease],['pointercancel',onPointerCancel],['lostpointercapture',onPointerCancel]]
  .map(([type,handler])=>[type,event=>{if(!usesNativeTouch(event))handler(event);}]);
 for(const [type,handler] of scenePointerHandlers)scene.addEventListener(type,handler);
-const stopTouch=bindArtworkTouchNavigation(scene,{
+const stopTouch=bindGlassTouchNavigation(scene,{
  start(input){onPointerDown(input);return pendingPointer?.id===input.pointerId||drag?.id===input.pointerId;},
  move:onPointerMove,end:input=>input.type==='pointercancel'?onPointerCancel(input):onPointerRelease(input)
 });
@@ -1021,7 +1060,7 @@ idle();requestAnimationFrame(tick);
  function onLayoutChange(){
   clearLandedDust();
   clearRequestedNavigation();
-  if(!wideLayout.matches){pendingPointer=null;setSelectionLock(false);}
+  if(!wideLayout.matches){cancelPendingTouch();setSelectionLock(false);}
   if(!wideLayout.matches&&transition){const pointerId=drag?.id;drag=null;dropPointerCapture(pointerId);pendingPointer=null;wheelActive=false;
    if(wheelTimer!==null)window.clearTimeout(wheelTimer);wheelTimer=null;goal=angle>90?180:0;angle=goal;finish();}
   if(entrancePlaying&&!mediaLoading)finishEntrance();if(guideSealing){guideTween?.kill();finishGuide();}clearPreview(true);updateGuideCopy();positionGuide();

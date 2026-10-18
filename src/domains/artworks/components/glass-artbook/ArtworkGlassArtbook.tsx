@@ -167,7 +167,7 @@ export default function ArtworkGlassArtbook({
             </Link>
             <h1 className="sr-only">{selectedArtwork.title}</h1>
             <div className={styles.bookViewport} data-lenis-prevent aria-busy={loadState.status === "loading"}>
-                <div ref={hostRef} className={`${styles.root} font-sans`} inert={loadState.status !== "ready"} aria-label="Glass Artbook artwork viewer" />
+                <div ref={hostRef} className={`${styles.root} font-sans`} inert={loadState.status !== "ready" && !(loadState.status === "loading" && loadState.kind === "turn")} aria-label="Glass Artbook artwork viewer" />
             </div>
             {loadState.status !== "ready" && <div className={`${styles.loadingPanel} ${loadState.kind === "turn" ? styles.turnLoading : ""}`}>
                 {loadState.status === "loading" ? <ArtworkLoading label={loadState.kind === "turn" ? "Loading artwork…" : "Preparing Artbook…"} /> : <div className={styles.loadError}>

@@ -91,6 +91,8 @@ export default function ArtworkDetailKineticExperience({
     const draggingRef = useRef(false);
     const horizontalDragRef = useRef(false);
     const pointerIdRef = useRef<number | null>(null);
+    const pointerTypeRef = useRef<string | null>(null);
+    const nativeTouchActiveRef = useRef(false);
     const startXRef = useRef(0);
     const startYRef = useRef(0);
     const lastXRef = useRef(0);
@@ -495,6 +497,11 @@ export default function ArtworkDetailKineticExperience({
                 1,
             );
 
+            // Mobile browser chrome can change height during a live gesture.
+            // A height-only observation must not reset its horizontal position.
+            if ((draggingRef.current || inputModeRef.current === "wheel") &&
+                Math.abs(width - viewportWidthRef.current) < .5) return;
+
             viewportWidthRef.current = width;
 
             /*
@@ -542,6 +549,8 @@ export default function ArtworkDetailKineticExperience({
         draggingRef.current = false;
         horizontalDragRef.current = false;
         pointerIdRef.current = null;
+        pointerTypeRef.current = null;
+        nativeTouchActiveRef.current = false;
         inputModeRef.current = "idle";
         releaseTextSelection();
 
@@ -574,6 +583,8 @@ export default function ArtworkDetailKineticExperience({
             draggingRef.current = false;
             horizontalDragRef.current = false;
             pointerIdRef.current = null;
+            pointerTypeRef.current = null;
+            nativeTouchActiveRef.current = false;
             inputModeRef.current = "idle";
             releaseTextSelection();
             try { if (viewport && pointerId !== null && viewport.hasPointerCapture(pointerId)) viewport.releasePointerCapture(pointerId); } catch {}
@@ -866,6 +877,7 @@ export default function ArtworkDetailKineticExperience({
         draggingRef.current = true;
         horizontalDragRef.current = false;
         pointerIdRef.current = event.pointerId;
+        pointerTypeRef.current = event.pointerType;
 
         startXRef.current = event.clientX;
         startYRef.current = event.clientY;
@@ -1046,12 +1058,21 @@ export default function ArtworkDetailKineticExperience({
         if (!viewport) return;
         return bindArtworkTouchNavigation(viewport, {
             start(input) {
-                if (draggingRef.current) return false;
-                handlePointerDown(input);
-                return draggingRef.current && pointerIdRef.current === input.pointerId;
+                if (draggingRef.current) {
+                    // Pointer down can precede native touchstart. Adopt that
+                    // same gesture without resetting its position or velocity.
+                    if (pointerTypeRef.current !== "touch" || nativeTouchActiveRef.current) return false;
+                    pointerIdRef.current = input.pointerId;
+                } else handlePointerDown(input);
+                const accepted = draggingRef.current && pointerIdRef.current === input.pointerId;
+                nativeTouchActiveRef.current = accepted;
+                return accepted;
             },
             move: handlePointerMove,
-            end: finishPointer,
+            end(input) {
+                try { finishPointer(input); }
+                finally { nativeTouchActiveRef.current = false; }
+            },
         });
     }, [clearWheelState, navigate, nextHref, previousHref, releaseTextSelection, resetToCurrent, sealOnboardingHint, setTrackX]);
 
@@ -1092,11 +1113,11 @@ export default function ArtworkDetailKineticExperience({
                 overscroll-x-contain
                 touch-pan-y
             `}
-            onPointerDown={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) handlePointerDown(event); }}
-            onPointerMove={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) handlePointerMove(event); }}
-            onPointerUp={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) finishPointer(event); }}
-            onPointerCancel={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) finishPointer(event); }}
-            onLostPointerCapture={(event) => { if (event.pointerType !== "touch" || !("ontouchstart" in window)) finishPointer(event); }}
+            onPointerDown={(event) => { if (event.pointerType !== "touch" || !nativeTouchActiveRef.current) handlePointerDown(event); }}
+            onPointerMove={(event) => { if (event.pointerType !== "touch" || !nativeTouchActiveRef.current) handlePointerMove(event); }}
+            onPointerUp={(event) => { if (event.pointerType !== "touch" || !nativeTouchActiveRef.current) finishPointer(event); }}
+            onPointerCancel={(event) => { if (event.pointerType !== "touch" || !nativeTouchActiveRef.current) finishPointer(event); }}
+            onLostPointerCapture={(event) => { if (event.pointerType !== "touch" || !nativeTouchActiveRef.current) finishPointer(event); }}
             onClickCapture={(event) => {
                 if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
                 const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
