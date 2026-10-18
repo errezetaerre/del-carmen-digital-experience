@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.23
+Version: 1.24
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -235,6 +235,14 @@ The complete panel determines the comet path: `[data-lightbox-panel]` encloses t
 Pointer/touch starts, horizontal wheels, navigation clicks/arrows and blur cancel decoration while leaving native input untouched. Hidden/disconnected documents, ineligible layout, reduced motion, snapshots/other modals, zoom, expanded reading, disconnected panel or changed painting/panel/badge geometry remove an active contour. Cleanup releases frames, dust, image/input/media listeners, resize/mutation observers and late decode/font continuations. Image failure cannot start the effect. No navigation timing, permanent border, image fitting, technical-sheet geometry, dataset, route rule or dependency changes are introduced.
 
 67 focused arrival/drawing/outline checks cover completed/badged mounting, full-panel ownership and readiness, portrait/tablet-landscape media policy, current-panel visibility/alignment, decode/fonts/Halo/route reveal, own/other modals, zoom, expanded reading, input cleanup and selected-ID changes. They also cover full portrait/landscape panels, measured corner radii, tangent samples and outward particle normals, all four emitting edges plus the badge, above-rim canvas ownership, frame resizing/disconnection and unchanged image/layout/input implementations. The preceding 49 trackpad, 132 regression and 14 case-sensitive/case-insensitive module-resolution checks pass, for 262 local checks. All 234 source files parse and 417 local imports resolve identically under both filesystem policies. Six portrait/landscape frames from the actual renderer were drawn with @napi-rs/canvas and visually inspected. These compiled-source fixtures, native EventTarget callbacks and canvas frames are not a Next production build, project typecheck, actual browser layout or physical-device test. The owner must rerun the complete project build and inspect the effect in the existing viewer after merging the corrected package.
+
+## Modal keyboard access
+
+ArtworkLightbox and the fullscreen ArtworkDetailViewer use the shared `useDialogFocus` hook. The shared viewer prefers its existing close button; the fullscreen portal starts at its first available control, which is the close button. Focus stays within the active dialog with Tab/Shift+Tab and returns to a still-connected visible prior control on close. A missing/hidden return target is ignored. The shared per-document stack gives a newer bound dialog priority without allowing an underlying one to steal focus. The lightbox only enables the hook when it can render a real open artwork. Selected-artwork changes do not rebind or refocus an already open dialog.
+
+Existing viewer Escape, expanded-description Escape priority, ArrowLeft/ArrowRight, zoom/pan, touch, native scrolling and selection owners remain unchanged. Only modal refs and hook calls are added to their source. Glass Artbook geometry/material/runtime, masks, badges, arrival renderer, image sizing and catalogue records remain byte-identical to the owner-approved v14.
+
+27 new focus/controller/component checks cover initial focus, native internal Tab, boundary wrapping in both directions, Escape ownership, latest close callbacks, hidden/disabled/inert controls, dynamic controls, temporary root focus, nested modal priority, restoration and idempotent cleanup. Actual compiled integrations are checked in the menu, both shared viewer presentations, empty viewers and fullscreen opening/Escape reset. The preceding 51 arrival, nine drawing, 49 trackpad and 132 regression checks pass, for 268 local checks. All 235 source files parse and 420 local imports resolve identically under case-sensitive and case-insensitive policies. Validation uses compiled source, native EventTarget and React/Next/DOM fixtures; project TypeScript/build, browser focus behavior, assistive technology and physical devices still require real-environment verification.
 
 ## Installation
 

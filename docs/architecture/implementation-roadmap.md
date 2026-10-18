@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.2
+Version: 1.3
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,7 +7,7 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-05
+Last Updated: 2026-10-18
  
 1. Objective
 This document defines the official implementation sequence of the Del Carmen Digital Experience platform.
@@ -491,3 +491,12 @@ The complete supplied v1.1 Implementation Roadmap body is preserved above, apart
 No planned backend, database, GraphQL, Marketplace, Collector, Authentication, Admin, Museum, Academy, Community, AI, AR, VR, mobile, archive, multilingual, analytics, CMS or Collector Dashboard direction has been removed because it is not implemented today.
 
 The new section records subsequent Phase 1 implementation while preserving the longer-term technical trajectory.
+
+
+12. Phase 1 QA — Current Increment
+
+The owner approved the Artwork/Glass Artbook presentation and the complete glass-perimeter comet/fairy-dust treatment in the v14 source on 2026-10-17 (Costa Rica). This approval records the supplied experience; it does not replace the remaining release checks listed in section 11.8.
+
+The next bounded accessibility increment is implemented for review: MobileMenu gains initial focus, Tab containment, Escape closing and return focus; ArtworkLightbox and the fullscreen ArtworkDetailViewer share focus containment/restoration while keeping their existing key and pointer owners. No approved visual or motion system is redesigned. Local compiled-source and event-fixture verification is recorded in the canonical Artwork Implementation and Repository Structure documents. Real browser/assistive-technology and complete-project checks remain open.
+
+Remaining global responsive, accessibility, performance, SEO, production and domain/sender verification remains active. EN/ES, persistent database-backed canonical data, original/print/edition offers and prices, shopping cart/checkout and the downloadable sales catalogue remain requested future increments. They must keep Artwork identity, ArtworkSeries grouping, editorial curation and commerce configuration separate. The language controls currently show EN; this keyboard-access increment does not deliver translation.

@@ -14,6 +14,7 @@ import {
 } from "../constants";
 
 import { ParticleField } from "@/shared/ui/particle-field";
+import useDialogFocus from "@/shared/hooks/useDialogFocus";
 
 import {
   usePathname,
@@ -57,6 +58,9 @@ export default function MobileMenu({
     useRef<HTMLElement | null>(null);
 
   const touchTrackingRef = useRef(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  useDialogFocus(dialogRef, isOpen, { initialFocusRef: closeButtonRef, onEscape: onClose });
 
   const pointerRef = useRef({
     x: 0,
@@ -225,6 +229,7 @@ export default function MobileMenu({
 
   return (
     <div
+      ref={dialogRef}
       id="mobile-navigation"
       className="
         fixed
@@ -277,6 +282,7 @@ export default function MobileMenu({
 
           {/* Close */}
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={onClose}
             aria-label="Close menu"

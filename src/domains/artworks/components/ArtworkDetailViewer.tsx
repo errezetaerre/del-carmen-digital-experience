@@ -6,6 +6,7 @@ import Image from "next/image";
 import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
 import previewStyles from "@/shared/ui/artwork/ArtworkComingSoon.module.css";
 import { createPortal } from "react-dom";
+import useDialogFocus from "@/shared/hooks/useDialogFocus";
 
 
 
@@ -185,6 +186,9 @@ export default function ArtworkDetailViewer({
        \============================================================ */
 
 
+
+    const zoomDialogRef = useRef<HTMLDivElement>(null);
+    useDialogFocus(zoomDialogRef, isZoomOpen);
 
     useEffect(() => {
 
@@ -1811,6 +1815,7 @@ export default function ArtworkDetailViewer({
                 createPortal(
                 <div
 
+                    ref={zoomDialogRef}
                     role="dialog"
 
                     aria-modal="true"

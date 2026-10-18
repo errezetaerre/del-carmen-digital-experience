@@ -1,4 +1,4 @@
-Version: 1.29
+Version: 1.30
 
 Document ID:
 DOC-RS
@@ -607,3 +607,10 @@ The native Glass viewer owns retained-target delivery in `glass-artbook/glassTou
 The adapter measures the complete `[data-lightbox-panel]` or Standard `[data-artwork-detail-layout]` after decode/fonts/Halo readiness and actual view reveal. The image rectangle only gates visible arrival; the full panel owns the rounded comet perimeter. The panel receives the canvas directly, outside the image mask, while the existing band still owns badge particles. Standard adds only a relative positioning context to its transparent spread. Standard excludes adjacent/sliding panels; lightbox permits its own dialog while excluding other modals, zoom and expanded reading. Passive input observation and cleanup preserve the existing navigation, drag, wheel, zoom, reading, selection and close owners. The existing lightbox handlers and responsive styles retain their exact source; only the optional layer and passive DOM markers are inserted. Body/media/image/resize observers, pending callbacks and current decoration are released on interruption/disposal.
 
 The shared `dust.ts` retains its approved two-page Glass Artbook and mobile-menu renderers. The arrival-only path now follows all four edges and the measured glass corner radius, with a warm graded comet and 48–104 outward fairy-dust motes plus the existing 16 badge motes. The canvas sits above the persistent rim and clears after its single finite sequence. Its 24px margins, capped DPR and pointer-transparent layer preserve image/layout/hit areas. Existing Halo, Catalogue, Series membership, archive filter context, kinetic physics, Standard trackpad correction and seven-file Glass installation unit retain their owners. Canonical artwork implementation records exact scope, validation and actual build/browser/device review requirements.
+
+
+### Dialog keyboard focus
+
+`src/shared/hooks/useDialogFocus.ts` owns reusable modal focus behavior for MobileMenu, ArtworkLightbox and the fullscreen ArtworkDetailViewer. It exports the client hook and a DOM binding used for event-level verification. Opening focuses the preferred close control or first available control; Tab/Shift+Tab remain inside the current dialog; closing returns focus to the connected, visible prior control. A per-document stack gives only the most recently opened bound dialog ownership of focus and Tab. Dynamic controls, hidden/disabled/inert ancestors, empty dialogs, missing return targets, repeated cleanup and callback updates retain explicit handling.
+
+MobileMenu delegates Escape to its current close callback. Artwork viewers retain their existing Escape, expanded-reading, arrow, zoom and pan handlers. The integrations add only refs/imports/hook calls; the existing classes, JSX composition, content, swipe/selection handlers and scroll locks retain their source. No new dependency or environment setting is introduced. This is one bounded accessibility correction within Phase 1 QA; it does not declare global keyboard, screen-reader, responsive or production verification complete.

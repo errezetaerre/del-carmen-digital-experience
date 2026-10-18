@@ -20,6 +20,7 @@ import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtwo
 import GlassArtworkFrame from "./GlassArtworkFrame";
 import { glassSeparatorMarkup } from "./glassAccents";
 import { InteractionHint } from "@/shared/ui/interaction-hint";
+import useDialogFocus from "@/shared/hooks/useDialogFocus";
 
 interface ArtworkLightboxProps {
     artworks: Artwork[];
@@ -146,6 +147,8 @@ export default function ArtworkLightbox({
 
     const primaryImage =
         artwork?.images.primary;
+    const dialogRef = useRef<HTMLDivElement>(null);
+    useDialogFocus(dialogRef, isOpen && Boolean(artwork && primaryImage), { initialFocusRef: closeButtonRef });
 
     const techniqueLabel =
         artwork
@@ -953,6 +956,7 @@ export default function ArtworkLightbox({
         <div
             className={isGlass ? styles.dialog : "fixed inset-0 z-[100] overflow-hidden bg-[#030303] text-white"}
             data-lenis-prevent={isGlass || undefined}
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label={`Artwork viewer — ${artwork.title}`}
