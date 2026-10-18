@@ -1,6 +1,6 @@
 # Artwork Implementation
 
-Version: 1.18
+Version: 1.19
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -214,6 +214,12 @@ After the entrance drop or a completed artwork turn, the book requests decoratio
 
 The existing mobile menu's ParticleField reuses this same drawing helper with smaller warm motes and its existing selected-link perimeter/finger attraction. Menu links, touch navigation, typography, layout, close action and body-scroll lock keep their current implementation. The particle field pauses/clears for hidden documents or reduced motion, reseeds its ambient positions on resize and removes its animation frame/listeners on unmount. No 3D dependency, extra global animation service or new menu route is introduced. The shared dust helper retains its default 24-mote/1050ms ribbon variant; the book combines it with the mirrored spread burst. The earlier standalone perimeter variant remains available in the helper. Canvas acquisition checks for a missing 2D context and then stores an explicitly non-null CanvasRenderingContext2D binding for its deferred draw callback, resolving the reported nullable-context TypeScript error.
 
+## Standard trackpad accumulation
+
+Standard accepts every nonzero horizontal-dominant Wheel increment, including fractional pixel values, into its existing accumulator. The previous per-event 1.5 and 0.1 cutoffs could reject an entire smooth gesture before it reached the unchanged 72px navigation threshold. This was reproduced with repeated 1px, 0.5px and 0.05px input. Zero delta contributes no movement. Directional intent, native vertical reading, active drag ownership, Halo ribbon input and the momentum quiet-period lock retain their established behavior. Pointer/touch handling, release velocity, easing and durations remain unchanged. The Glass engine already accepts those small increments and retains its approved source.
+
+49 focused compiled-source trackpad checks cover Standard phone/tablet portrait and landscape plus desktop, both directions, smooth fractional increments, reading-pane input, vertical reading, touch tap/cancellation/vertical-gesture recovery, active touch ownership, blur recovery, incomplete gestures and route-handoff momentum. Glass checks cover phone/tablet landscape and desktop, fractional increments, release/settling, vertical reading, active touch/loading guards, Halo ownership and ineligible portrait layout. The 132 preceding regression checks also pass against the corrected source; earlier whole-source comparisons allow only the two explicit Wheel acceptance changes. These are simulated input-stream checks rather than physical trackpad/browser testing. The input filter is a reproduced defect; whether it fully explains the owner's observed emulator behavior still needs checking on that setup.
+
 ## Installation
 
 The UX update builds on the approved Series/Home viewer, complete-thumbnail action and latest owner-supplied catalogue. Merge the patch into the existing repository rather than replacing directories. The archive includes the complete seven-file Glass module, including its private touch adapter and unchanged barrel/declaration, and the existing canonical documentation; no integration-review README, package, environment variable or generated preview is added.
@@ -221,7 +227,7 @@ The UX update builds on the approved Series/Home viewer, complete-thumbnail acti
 From the actual project root:
 
 ```sh
-unzip -o "$HOME/Downloads/Del_Carmen_Artwork_UX_2026-10-17_v9.zip" -d .
+unzip -o "$HOME/Downloads/Del_Carmen_Artwork_UX_2026-10-17_v10.zip" -d .
 npm run build
 ```
 

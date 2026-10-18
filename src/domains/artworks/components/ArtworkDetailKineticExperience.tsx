@@ -618,7 +618,7 @@ export default function ArtworkDetailKineticExperience({
 
             const horizontalIntent =
                 event.shiftKey ||
-                (absX > 1.5 &&
+                (absX > 0 &&
                     absX >= absY * AXIS_LOCK_RATIO);
 
             if (!horizontalIntent) {
@@ -653,7 +653,7 @@ export default function ArtworkDetailKineticExperience({
                 ? event.deltaY
                 : event.deltaX;
 
-            if (Math.abs(delta) < 0.1) return;
+            if (delta === 0) return;
 
             inputModeRef.current = "wheel";
             sealOnboardingHint();
