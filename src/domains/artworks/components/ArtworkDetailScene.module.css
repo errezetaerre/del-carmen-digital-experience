@@ -36,6 +36,8 @@
 /* Portrait tablet is a native vertical scene, even in fine-pointer emulation. */
 @media (orientation: portrait) and (max-width: 1366px), (orientation: portrait) and (any-pointer: coarse) {
     .viewport { height: 100vh; height: 100dvh; overflow-y: auto; overscroll-behavior-y: auto; -webkit-overflow-scrolling: touch; }
+    .heading :global([data-artwork-open-artbook]) { display: inline; }
+    .heading :global([data-artwork-orientation-hint]) { display: none; }
 }
 @media (orientation: portrait) and (min-width: 768px) and (max-width: 1366px), (orientation: portrait) and (min-width: 768px) and (any-pointer: coarse) {
     .scene .content { padding-top: max(11rem, calc(env(safe-area-inset-top) + 10rem)); }

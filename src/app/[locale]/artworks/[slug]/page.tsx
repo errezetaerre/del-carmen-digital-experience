@@ -16,6 +16,7 @@ import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
 import { isFeaturedArtwork } from "@/domains/artworks/presentation/getArtworkPresentation";
 import { artworkExperienceHref } from "@/domains/artworks/presentation/artworkExperience";
+import ArtworkPortraitEntry from "@/domains/artworks/components/portrait-artbook/ArtworkPortraitEntry";
 
 interface ArtworkPageProps {
     params: Promise<{
@@ -238,15 +239,25 @@ export default async function ArtworkPage({
     const nextHref =
         createArtworkHref(nextArtwork);
 
+    const portraitBook = {
+        artworks: currentIndex >= 0 ? navigationArtworks : [artwork],
+        initialArtworkId: artwork.id,
+        navigationQuery,
+        backHref,
+        backLabel,
+    };
+
     if (experience === "glass") {
         return (
-            <ArtworkGlassArtbook
-                artworks={currentIndex >= 0 ? navigationArtworks : [artwork]}
-                initialArtworkId={artwork.id}
-                navigationQuery={navigationQuery}
-                backHref={backHref}
-                backLabel={backLabel}
-            />
+            <ArtworkPortraitEntry book={portraitBook} explicitGlass>
+                <ArtworkGlassArtbook
+                    artworks={currentIndex >= 0 ? navigationArtworks : [artwork]}
+                    initialArtworkId={artwork.id}
+                    navigationQuery={navigationQuery}
+                    backHref={backHref}
+                    backLabel={backLabel}
+                />
+            </ArtworkPortraitEntry>
         );
     }
 
@@ -280,7 +291,7 @@ export default async function ArtworkPage({
         />
     ) : undefined;
 
-    return (
+    const standardExperience = (
         <ArtworkDetailResponsiveEntry
             glassHref={artworkExperienceHref(artwork.slug, navigationQuery, "glass")}
             standardHref={artworkExperienceHref(artwork.slug, navigationQuery, "standard")}
@@ -296,5 +307,9 @@ export default async function ArtworkPage({
             backLabel={backLabel}
         />
         </ArtworkDetailResponsiveEntry>
+    );
+
+    return experience === "standard" ? standardExperience : (
+        <ArtworkPortraitEntry book={portraitBook}>{standardExperience}</ArtworkPortraitEntry>
     );
 }

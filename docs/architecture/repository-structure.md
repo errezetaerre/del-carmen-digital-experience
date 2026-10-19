@@ -1,4 +1,4 @@
-Version: 1.37
+Version: 1.38
 
 Document ID:
 DOC-RS
@@ -651,3 +651,12 @@ New local copy helpers/data: `src/i18n/formPrivacyCopy.ts` / `content/formPrivac
 `src/domains/newsletter/server/confirmationEmail.ts` owns the extracted existing email design and translated/escaped confirmation copy. The existing POST routes validate locale/version and derive consent records on the server. Existing confirm/unsubscribe GET routes localize result redirects while retaining status/query/hash semantics. The language parameter is presentation context, not authority to alter consent. The subscriber helper gains an optional locale argument defaulting to English; all Lua scripts/TTLs/keys and minimal unsubscribe records remain exact.
 
 Contact metadata, both legal page/layout copies and shared notices follow locale; their temporary English boundaries are removed. The Home newsletter keeps Suspense. No route/domain/asset duplication, dependency, cookie, provider or production write is introduced. Build/TypeScript and 30 source/component/server groups pass; English visible copy and prior Spanish sections remain exact. Existing NewsletterForm lint debt, physical/browser/provider and final legal/commercial/security review remain open. DOC-I18N defines delivery/recovery.
+
+
+### Portrait Glass Artbook — 2026-10-18
+
+`domains/artworks/components/portrait-artbook/` owns only the new mobile/tablet portrait editorial turn. `ArtworkPortraitEntry.tsx` selects and lazy-loads the portrait variant, retaining the existing desktop/landscape children and the selected artwork when native history and device rotation meet. `portraitArtbookViewport.ts` owns its established portrait media policy. `ArtworkPortraitArtbook.tsx` composes stable current/adjacent full-width editorial pages, localized fixed controls, loading/retry and the shared glass/dust material. `portraitArtbookMotion.ts` owns native-touch/mouse/Wheel/keyboard input, decoded inert face copies, rigid central-hinge occlusion and the landing handoff. `ArtworkPortraitArtbook.module.css` owns only this frame, clipping, perspective and responsive presentation.
+
+ArtworkDetailScene supplies an opt-in editorial-only view of the existing artwork presentation; its default preserves Standard. ArtworkPage wraps default/Glass entry with the portrait selector, while explicit Standard bypasses it. The portrait Standard Open Artbook action is visible for comparison and return. Global navigation remains outside all turn surfaces. The original seven-file landscape/desktop glass module, both existing input adapters, Standard kinetic controller, shared Home/Series lightbox, approved Bronze accent helpers, dust renderer, canonical catalogue, translation dictionaries, assets and environment/dependencies remain in their existing owners. Collections still uses canonical ArtworkSeries and no parallel grouping/domain is created.
+
+DOC-ART-IMP records the plane construction, readiness, history, validation and physical-device review limits. This is an incremental portrait experiment over approved bilingual Forms/Legal v6; it does not replace prior packages or promote production.

@@ -18,6 +18,7 @@ interface ArtworkDetailSceneProps {
     nextArtwork?: Artwork;
     navigationQuery: string;
     priority?: boolean;
+    editorialOnly?: boolean;
 }
 
 function createArtworkHref(
@@ -34,6 +35,7 @@ export default function ArtworkDetailScene({
     previousArtwork,
     nextArtwork,
     navigationQuery,
+    editorialOnly = false,
 }: ArtworkDetailSceneProps) {
     const locale = useLocale();
     const t = useTranslations("Artwork");
@@ -53,9 +55,11 @@ export default function ArtworkDetailScene({
         formatArtworkAuthorship(artwork, locale);
 
     const hasHighlights = presentation.badges.some((badge) => badge.kind !== "planned" && badge.kind !== "in-progress");
+    const SceneElement = editorialOnly ? "section" : "main";
 
     return (
-        <main
+        <SceneElement
+            data-artwork-editorial={editorialOnly || undefined}
             className={`
                 ${glassStyles.standardScene}
                 ${sceneStyles.scene}
@@ -97,7 +101,7 @@ export default function ArtworkDetailScene({
                         <ArtworkDetailViewer
                             artwork={artwork}
                         />
-                        {hasHighlights && artwork.creationStatus === "completed" && <ArtworkStandardPortraitAccent artworkId={artwork.id} />}
+                        {!editorialOnly && hasHighlights && artwork.creationStatus === "completed" && <ArtworkStandardPortraitAccent artworkId={artwork.id} />}
                         </ArtworkImageHighlights>
                     </div>
 
@@ -129,16 +133,17 @@ export default function ArtworkDetailScene({
                             {authorshipLabel}
                         </p>
 
-                            <Link
+                            {!editorialOnly && <><Link
                                 href={artbookHref}
                                 data-artwork-kinetic-ignore
+                                data-artwork-open-artbook
                                 aria-label={t("openArtworkArtbook", { title: artwork.title })}
                                 className={`${glassStyles.entryLink} relative font-sans text-[9px] uppercase tracking-[0.20em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`}
                             >
                                 {t("openArtbook")}
                                 <ArtworkLinkFeedback label={t("openingArtbook")} />
                             </Link>
-                            <span className={`${glassStyles.orientationHint} font-sans text-[9px] uppercase tracking-[0.20em] text-white/35`}>{t("orientationHint")}</span>
+                            <span data-artwork-orientation-hint className={`${glassStyles.orientationHint} font-sans text-[9px] uppercase tracking-[0.20em] text-white/35`}>{t("orientationHint")}</span></>}
                         </div>
 
                         <h1
@@ -282,7 +287,7 @@ export default function ArtworkDetailScene({
                         )}
                         </div>
 
-                        {(previousArtwork || nextArtwork) && (
+                        {!editorialOnly && (previousArtwork || nextArtwork) && (
                             <div
                                 className={`
                                     ${sceneStyles.navigation}
@@ -407,6 +412,6 @@ export default function ArtworkDetailScene({
                     </div>
                 </div>
             </Container>
-        </main>
+        </SceneElement>
     );
 }

@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.10
+Version: 1.11
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -549,3 +549,12 @@ Next: review forms/legal and actual configured email delivery, then complete bil
 Journal was approved. Contact/newsletter, all validation/feedback, shared privacy notices/checkboxes, confirmation mail and both legal drafts are now prepared in Spanish. English wording stays exact. Spanish acceptance uses its own revision and a language-bound checkbox; APIs validate the registered pair and derive recorded statements/purposes. Old English forms/links remain compatible without historical consent rewrites. Transaction scripts, retention, rate/honeypot and all approved visual/input code stay intact.
 
 Build/TypeScript and 30 source/component/server groups pass. The existing NewsletterForm effect lint finding is confirmed against v5 with no new finding. Current remaining release work is review of this block, actual configured email delivery, complete bilingual editorial/responsive/accessibility/SEO review, inherited dependency/security update and baseline lint fixes. Spanish remains noindex; legal drafts remain drafts/noindex. Database, commerce/cart and PDF catalogue follow their existing sequence. No production promotion, merge or push is performed here. DOC-I18N owns installation and detailed limits.
+
+
+### Portrait Glass Artbook experiment after bilingual form approval — 2026-10-18
+
+The owner approved the Journal/forms/legal block and reports its push in progress. At the owner's request, a bounded portrait-only Glass Artbook experiment precedes the remaining global release review. Mobile/tablet portrait turns the complete editorial surface around its vertical centre: A-right on the front, B-left on the reverse, and B-right underneath. Fixed navigation, the existing Standard fallback and desktop/landscape engines retain their owners. The approved shared bronze material, catalogue, translations and Series/filter identity are retained. Only adjacent artwork pages are mounted/decoded; an inert full-width split avoids reflow or a content swap on landing.
+
+Production build/TypeScript, focused lint, source/markup invariants and headless Chromium touch/viewport/continuity checks are performed for this increment. The owner must review its actual visual feel on phone/tablet portrait and physical Safari/Android/iPad, including vertical reading, slow media, cancellation, return to Standard, orientation changes and reduced motion. This experiment is not approval to change desktop/landscape or the Home/Series lightbox.
+
+After portrait review, resume configured-provider delivery and the remaining complete EN/ES editorial/responsive/accessibility/SEO, inherited dependency security and baseline lint verification. Spanish remains noindex and legal drafts remain drafts/noindex. Database, confirmed commerce offers/cart and the sales PDF retain their sequence. No production promotion, merge, commit or upstream push is performed by this increment.
