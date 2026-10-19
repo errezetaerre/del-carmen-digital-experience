@@ -1,49 +1,51 @@
-import EnglishContent from "@/i18n/EnglishContent";
+import { getTranslations } from "next-intl/server";
+import { getSiteMessages } from "@/i18n/messages";
 import { activateLocale } from "@/i18n/server";
 import type { Metadata } from "next";
 import Link from "@/i18n/navigation";
 
 import { brand } from "@/config/brand";
-import { legalContact } from "@/config/legal";
+import { getLegalContact } from "@/i18n/legalCopy";
 
-export const metadata: Metadata = {
-    title: "Privacy Notice | Del Carmen",
-    description: "A draft notice about contact enquiries, newsletter subscriptions and personal data at Del Carmen.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const locale = await activateLocale(params);
+    const copy = getSiteMessages(locale).Privacy;
+    return { title: copy.metadataTitle, description: copy.metadataDescription };
+}
 
 export default async function PrivacyPage({ params }: { params: Promise<{ locale: string }> }) {
-  await activateLocale(params);
-    return <EnglishContent>{(
+  const locale = await activateLocale(params);
+    const t = await getTranslations({ locale, namespace: "Privacy" });
+    const legalContact = getLegalContact(locale);
+    return (
         <article aria-labelledby="privacy-title">
             <header>
                 <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-brand-gold">
-                    Del Carmen · Legal
+                    {t("label")}
                 </p>
                 <h1 id="privacy-title" className="mt-6 font-display text-5xl font-light leading-[1.02] md:text-7xl">
-                    Privacy Notice
+                    {t("title")}
                 </h1>
                 <p className="mt-8 max-w-2xl font-sans text-base font-light leading-8 text-white/65 md:text-lg">
-                    Information about the details you share when you contact us or subscribe to studio updates.
+                    {t("description")}
                 </p>
                 <p className="mt-8 border-l border-brand-gold/50 pl-4 font-sans text-xs leading-6 text-white/60">
-                    Draft for review · 15 October 2026
-                    <span className="block">This notice is being prepared for publication. For questions about your personal data, please contact us.</span>
+                    {t("draftDate")}
+                    <span className="block">{t("draft")}</span>
                 </p>
             </header>
 
             <section aria-labelledby="privacy-about">
-                <h2 id="privacy-about">About this notice</h2>
+                <h2 id="privacy-about">{t("aboutTitle")}</h2>
                 <p>
-                    Del Carmen Digital Experience presents the work of Rolando Del Carmen under {brand.name} and {brand.parentBrand}.
-                    This draft describes the contact and newsletter features of the website.
+                    {t("aboutFirst")} {brand.name} {t("aboutAnd")} {brand.parentBrand}{t("aboutLast")}
                 </p>
             </section>
 
             <section aria-labelledby="privacy-responsible">
-                <h2 id="privacy-responsible">Who is responsible</h2>
+                <h2 id="privacy-responsible">{t("responsibleTitle")}</h2>
                 <p>
-                    {legalContact.responsibleName} is the individual responsible for the contact and newsletter
-                    information described in this notice. {brand.name} and {brand.parentBrand} are the project&apos;s artistic and commercial identities.
+                    {legalContact.responsibleName} {t("responsibleFirst")} {brand.name} {t("responsibleAnd")} {brand.parentBrand} {t("responsibleLast")}
                 </p>
                 <address className="mt-5 not-italic">
                     <p>
@@ -58,108 +60,89 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
             </section>
 
             <section aria-labelledby="privacy-information">
-                <h2 id="privacy-information">Information you share</h2>
+                <h2 id="privacy-information">{t("informationTitle")}</h2>
                 <ul>
-                    <li>Contact enquiries: your name, email address, enquiry topic and message.</li>
-                    <li>Newsletter requests: your email address, subscription source, request and confirmation dates, and subscription status.</li>
-                    <li>Consent records: the statement you agree to, its version and the date of your request, kept with the corresponding enquiry or subscription.</li>
-                    <li>Form protection: an IP address or request identifier is used to limit repeated requests and protect the forms from abuse.</li>
+                    <li>{t("contactData")}</li>
+                    <li>{t("newsletterData")}</li>
+                    <li>{t("consentData")}</li>
+                    <li>{t("protectionData")}</li>
                 </ul>
                 <p className="mt-4">
-                    Both forms are voluntary. Contact requires your name, email, subject, message and consent;
-                    Newsletter requires your email and consent. Without the required details and consent, the requested
-                    form cannot be processed. You can browse the artwork without completing either form.
+                    {t("voluntary")}
                 </p>
             </section>
 
             <section aria-labelledby="privacy-consent">
-                <h2 id="privacy-consent">Your consent and choices</h2>
+                <h2 id="privacy-consent">{t("consentTitle")}</h2>
                 <p>
-                    Each form explains its purpose before asking for your details and includes a consent checkbox
-                    that starts unselected. Consent to an enquiry covers responding to that enquiry; newsletter consent
-                    covers occasional artwork, exhibition and studio updates. A newsletter request still requires email
-                    confirmation before the subscription becomes active.
+                    {t("consentDescription")}
                 </p>
                 <p>
-                    You can withdraw consent or ask us about your information by emailing{" "}
-                    <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a>.
-                    Consent records follow the retention period of the corresponding enquiry or subscription.
+                    {t("withdrawFirst")}{" "}
+                    <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a>{t("withdrawLast")}
                 </p>
             </section>
 
             <section aria-labelledby="privacy-purpose">
-                <h2 id="privacy-purpose">How the information is used</h2>
+                <h2 id="privacy-purpose">{t("purposeTitle")}</h2>
                 <p>
-                    Contact details and messages are used to receive and respond to your enquiry.
-                    Newsletter details are used to confirm and manage your subscription.
-                    Request identifiers help protect the contact and newsletter forms.
+                    {t("purposeDescription")}
                 </p>
-                <p>Sending a contact enquiry does not subscribe you to the newsletter.</p>
+                <p>{t("separateConsent")}</p>
             </section>
 
             <section aria-labelledby="privacy-retention">
-                <h2 id="privacy-retention">Contact enquiries and retention</h2>
+                <h2 id="privacy-retention">{t("retentionTitle")}</h2>
                 <p>
-                    Ordinary closed enquiries are kept for up to 12 months after the last substantive exchange or closure,
-                    as applicable. Correspondence needed for an ongoing transaction, accounting requirement or dispute is
-                    assessed separately. A valid personal-data request is handled independently of these routine retention periods.
+                    {t("contactRetention")}
                 </p>
                 <p>
-                    These periods concern the records we manage. Email-service and infrastructure providers may retain
-                    separate copies under their applicable terms; contact us if you need information about a specific record.
+                    {t("providerRetention")}
                 </p>
             </section>
 
             <section aria-labelledby="privacy-providers">
-                <h2 id="privacy-providers">Services involved</h2>
+                <h2 id="privacy-providers">{t("providersTitle")}</h2>
                 <p>
-                    Email delivery uses Resend. Newsletter records and form-protection controls use Upstash.
-                    These providers process information under their respective service and data-processing terms.
+                    {t("providersDescription")}
                 </p>
                 <p>
-                    You can read the <a href="https://resend.com/legal/privacy-policy">Resend privacy policy</a> and the{" "}
-                    <a href="https://upstash.com/trust/privacy.pdf">Upstash privacy policy</a> for information about their services.
-                    Contact us if you have questions about processing locations or recipients of your information.
+                    {t("providersFirst")} <a href="https://resend.com/legal/privacy-policy">{t("resendPrivacy")}</a> {t("providersAnd")}{" "}
+                    <a href="https://upstash.com/trust/privacy.pdf">{t("upstashPrivacy")}</a> {t("providersLast")}
                 </p>
             </section>
 
             <section aria-labelledby="privacy-newsletter">
-                <h2 id="privacy-newsletter">Newsletter choices and records</h2>
+                <h2 id="privacy-newsletter">{t("newsletterTitle")}</h2>
                 <p>
-                    A subscription becomes active after email confirmation. An unconfirmed request and its confirmation
-                    link expire after 24 hours from the latest valid request. A new request requires a new confirmation.
+                    {t("pendingRetention")}
                 </p>
                 <p>
-                    We keep active subscription details while the subscription and its purpose continue, with an annual
-                    review of whether they are still needed. Unsubscribing immediately removes the address from the active list.
-                    We retain only the email address, unsubscribe date and status for up to 30 days to resolve unsubscribe
-                    incidents; that record then expires. Unsubscribing and requesting deletion are separate actions.
+                    {t("activeRetention")}
                 </p>
                 <p>
-                    To withdraw a subscription or ask about an existing record, email{" "}
-                    <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a> or use our <Link href="/contact">Contact page</Link>.
+                    {t("newsletterWithdrawFirst")}{" "}
+                    <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a> {t("newsletterWithdrawOr")} <Link href="/contact">{t("newsletterContact")}</Link>.
                 </p>
             </section>
 
             <section aria-labelledby="privacy-requests">
-                <h2 id="privacy-requests">Questions and personal-data requests</h2>
+                <h2 id="privacy-requests">{t("requestsTitle")}</h2>
                 <p>
-                    You can contact us about access to your information, correction, deletion or withdrawal of consent.
-                    Tell us which request you would like us to review. We may need to confirm that the request concerns your own information.
+                    {t("requestsDescription")}
                 </p>
                 <p>
-                    Please email <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a> or use the{" "}
-                    <Link href="/contact">Contact page</Link> for these enquiries.
+                    {t("requestsFirst")} <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a> {t("requestsOr")}{" "}
+                    <Link href="/contact">{t("requestsContact")}</Link> {t("requestsLast")}
                 </p>
             </section>
 
             <section aria-labelledby="privacy-links">
-                <h2 id="privacy-links">External websites</h2>
+                <h2 id="privacy-links">{t("linksTitle")}</h2>
                 <p>
-                    Links to social platforms and other websites lead to services with their own privacy practices.
-                    Review their notices when you choose to visit them.
+                    {t("linksDescription")}
                 </p>
             </section>
         </article>
-    )}</EnglishContent>;
+    );
 }

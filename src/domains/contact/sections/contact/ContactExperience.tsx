@@ -1,8 +1,11 @@
+import { useTranslations } from "next-intl";
 import { Container } from "@/shared/layout/container";
 import ContactForm from "./ContactForm";
 import ContactMotion from "./ContactMotion";
 
 export default function ContactExperience() {
+    const t = useTranslations("Contact");
+
     return (
         <section className="contact-motion relative min-h-[calc(100svh-5rem)] overflow-hidden">
             <ContactMotion />
@@ -34,7 +37,7 @@ export default function ContactExperience() {
                                 text-brand-gold/65
                             "
                         >
-                            Contact
+                            {t("label")}
                         </p>
 
                         <h1
@@ -48,11 +51,11 @@ export default function ContactExperience() {
                             "
                         >
                             <span className="contact-title-line-1 block">
-                                Begin a
+                                {t("titleFirst")}
                             </span>
 
                             <span className="contact-title-line-2 block italic text-stone-300">
-                                conversation.
+                                {t("titleSecond")}
                             </span>
                         </h1>
 
@@ -65,8 +68,7 @@ export default function ContactExperience() {
                                 md:text-[0.95rem]
                             "
                         >
-                            Whether you are interested in an artwork, a collaboration,
-                            or simply wish to connect, you are welcome to write.
+                            {t("description")}
                         </p>
                     </header>
 

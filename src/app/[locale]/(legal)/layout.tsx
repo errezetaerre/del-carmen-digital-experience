@@ -1,3 +1,4 @@
+import { useLocale, useTranslations } from "next-intl";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "@/i18n/navigation";
@@ -14,16 +15,19 @@ export const metadata: Metadata = {
 };
 
 export default function LegalLayout({ children }: { children: ReactNode }) {
+    const locale = useLocale();
+    const t = useTranslations("Legal");
+
     return (
         <>
-            <main lang="en" className="relative w-full min-w-0 overflow-x-clip bg-background text-white">
+            <main lang={locale} className="relative w-full min-w-0 overflow-x-clip bg-background text-white">
                 <Container className="pb-20 pt-36 md:pb-28 md:pt-44">
                     <div className="mx-auto max-w-3xl">
                         <Link
                             href="/"
                             className="inline-flex font-sans text-[10px] uppercase tracking-[0.24em] text-white/50 transition-colors hover:text-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold"
                         >
-                            ← Back to Home
+                            {t("back")}
                         </Link>
 
                         <div
@@ -68,12 +72,12 @@ export default function LegalLayout({ children }: { children: ReactNode }) {
                         </div>
 
                         <nav
-                            aria-label="Legal and contact pages"
+                            aria-label={t("navigation")}
                             className="mt-16 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/10 pt-8 font-sans text-[10px] uppercase tracking-[0.2em] text-white/55 [&_a]:transition-colors [&_a:hover]:text-brand-gold [&_a:focus-visible]:outline [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-brand-gold"
                         >
-                            <Link href="/privacy">Privacy</Link>
-                            <Link href="/terms">Terms</Link>
-                            <Link href="/contact">Contact</Link>
+                            <Link href="/privacy">{t("privacy")}</Link>
+                            <Link href="/terms">{t("terms")}</Link>
+                            <Link href="/contact">{t("contact")}</Link>
                         </nav>
                     </div>
                 </Container>

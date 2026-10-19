@@ -1,8 +1,9 @@
 "use client";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Button } from "@/shared/ui/button";
 import { legalContact } from "@/config/legal";
-import { formPrivacy } from "@/config/formPrivacy";
+import { getFormPrivacy } from "@/i18n/formPrivacyCopy";
 import FormPrivacyNotice from "@/shared/ui/forms/FormPrivacyNotice";
 import PrivacyConsentField from "@/shared/ui/forms/PrivacyConsentField";
 
@@ -22,7 +23,8 @@ type FormData = {
     message: string;
 };
 
-type FormErrors = Partial<Record<keyof FormData | "consent", string>>;
+type FormErrorCode = "nameRequired" | "emailRequired" | "emailInvalid" | "subjectRequired" | "messageRequired" | "consentRequired" | "consentOutdated";
+type FormErrors = Partial<Record<keyof FormData | "consent", FormErrorCode>>;
 
 const INITIAL_FORM: FormData = {
     name: "",
@@ -31,33 +33,39 @@ const INITIAL_FORM: FormData = {
     message: "",
 };
 
-const SUBJECTS = [
-    {
-        value: "artworks",
-        label: "Artworks",
-        description:
-            "Questions about original works, availability, collecting or commissions.",
-    },
-    {
-        value: "collaboration",
-        label: "Collaboration",
-        description:
-            "Exhibitions, creative partnerships, editorial projects or professional proposals.",
-    },
-    {
-        value: "general",
-        label: "General",
-        description:
-            "Questions or messages that do not fit the categories above.",
-    },
-] as const;
-
 export default function ContactForm() {
+    const locale = useLocale();
+    const t = useTranslations("Contact");
+    const privacy = getFormPrivacy(locale);
+    const SUBJECTS = [
+        {
+            value: "artworks",
+            label: t("subjectArtworks"),
+            description:
+                t("subjectArtworksDescription"),
+        },
+        {
+            value: "collaboration",
+            label: t("subjectCollaboration"),
+            description:
+                t("subjectCollaborationDescription"),
+        },
+        {
+            value: "general",
+            label: t("subjectGeneral"),
+            description:
+                t("subjectGeneralDescription"),
+        },
+    ] as const;
+
     const [formData, setFormData] = useState<FormData>(INITIAL_FORM);
     const [errors, setErrors] = useState<FormErrors>({});
     const [status, setStatus] = useState<FormStatus>("idle");
     const [contactField, setContactField] = useState("");
-    const [consent, setConsent] = useState(false);
+    const [acceptedNotice, setAcceptedNotice] = useState<string | null>(null);
+    const noticeKey = locale + ":" + privacy.version;
+    const consent = acceptedNotice === noticeKey;
+    const setConsent = (checked: boolean) => setAcceptedNotice(checked ? noticeKey : null);
     const [subjectPreview, setSubjectPreview] = useState<string | null>(null);
     const feedbackRef = useRef<HTMLDivElement>(null);
 
@@ -95,27 +103,27 @@ export default function ContactForm() {
         const nextErrors: FormErrors = {};
 
         if (!formData.name.trim()) {
-            nextErrors.name = "Please enter your name.";
+            nextErrors.name = "nameRequired";
         }
 
         if (!formData.email.trim()) {
-            nextErrors.email = "Please enter your email.";
+            nextErrors.email = "emailRequired";
         } else if (
             !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
         ) {
-            nextErrors.email = "Please enter a valid email address.";
+            nextErrors.email = "emailInvalid";
         }
 
         if (!formData.subject) {
-            nextErrors.subject = "Please select a subject.";
+            nextErrors.subject = "subjectRequired";
         }
 
         if (!formData.message.trim()) {
-            nextErrors.message = "Please enter your message.";
+            nextErrors.message = "messageRequired";
         }
 
         if (!consent) {
-            nextErrors.consent = "Please give your consent before sending this enquiry.";
+            nextErrors.consent = "consentRequired";
         }
 
         setErrors(nextErrors);
@@ -148,7 +156,8 @@ export default function ContactForm() {
                     ...formData,
                     contactField,
                     consent,
-                    consentVersion: formPrivacy.version,
+                    locale,
+                    consentVersion: privacy.version,
                 }),
             });
 
@@ -164,8 +173,8 @@ export default function ContactForm() {
                     setErrors((current) => ({
                         ...current,
                         consent: result.code === "consent_outdated"
-                            ? "Please reload this page, review the current privacy notice and give your consent again."
-                            : "Please give your consent before sending this enquiry.",
+                            ? "consentOutdated"
+                            : "consentRequired",
                     }));
                     setConsent(false);
                     setStatus("idle");
@@ -202,7 +211,7 @@ export default function ContactForm() {
                 className="absolute left-[-9999px] h-px w-px overflow-hidden"
             >
                 <label htmlFor="contact-field">
-                    Website
+                    {t("website")}
                 </label>
 
                 <input
@@ -231,7 +240,7 @@ export default function ContactForm() {
                             text-stone-500
                         "
                     >
-                        Your name
+                        {t("name")}
                     </label>
 
                     <input
@@ -267,7 +276,7 @@ export default function ContactForm() {
                             id="name-error"
                             className="mt-2 font-sans text-xs text-error"
                         >
-                            {errors.name}
+                            {t(errors.name)}
                         </p>
                     )}
                 </div>
@@ -282,7 +291,7 @@ export default function ContactForm() {
                             text-stone-500
                         "
                     >
-                        Email
+                        {t("email")}
                     </label>
 
                     <input
@@ -317,7 +326,7 @@ export default function ContactForm() {
                             id="email-error"
                             className="mt-2 font-sans text-xs text-error"
                         >
-                            {errors.email}
+                            {t(errors.email)}
                         </p>
                     )}
                 </div>
@@ -336,7 +345,7 @@ export default function ContactForm() {
                         text-stone-500
                         "
                     >
-                        I&apos;m writing about
+                        {t("subject")}
                     </legend>
 
                     <div className="mt-5 flex flex-wrap gap-x-7 gap-y-4">
@@ -414,7 +423,7 @@ export default function ContactForm() {
                             if (!activeValue) {
                                 return (
                                     <span className="text-stone-600">
-                                        Choose the option that best matches your reason for writing.
+                                        {t("subjectHint")}
                                     </span>
                                 );
                             }
@@ -432,7 +441,7 @@ export default function ContactForm() {
                             id="subject-error"
                             className="mt-2 font-sans text-xs text-error"
                         >
-                            {errors.subject}
+                            {t(errors.subject)}
                         </p>
                     )}
                 </fieldset>
@@ -447,7 +456,7 @@ export default function ContactForm() {
                             text-stone-500
                         "
                     >
-                        Message
+                        {t("message")}
                     </label>
 
                     <textarea
@@ -483,7 +492,7 @@ export default function ContactForm() {
                             id="message-error"
                             className="mt-2 font-sans text-xs text-error"
                         >
-                            {errors.message}
+                            {t(errors.message)}
                         </p>
                     )}
                 </div>
@@ -495,7 +504,7 @@ export default function ContactForm() {
                     noticeId="contact-privacy-notice"
                     checked={consent}
                     disabled={isSubmitting}
-                    error={errors.consent}
+                    error={errors.consent ? t(errors.consent) : undefined}
                     onChange={(checked) => {
                         setConsent(checked);
                         setErrors((current) => ({ ...current, consent: undefined }));
@@ -514,19 +523,19 @@ export default function ContactForm() {
             >
                 {status === "success" && (
                     <p className="mb-6 border-l border-brand-gold/50 pl-4 text-success">
-                        Thank you. Your message has been sent successfully.
+                        {t("success")}
                     </p>
                 )}
 
                 {status === "rateLimited" && (
                     <p className="mb-6 text-error">
-                        Too many messages have been sent. Please wait a few minutes before trying again.
+                        {t("rateLimited")}
                     </p>
                 )}
 
                 {status === "error" && (
                     <p className="mb-6 text-error">
-                        Your message could not be sent. Please try again.
+                        {t("error")}
                     </p>
                 )}
             </div>
@@ -547,7 +556,7 @@ export default function ContactForm() {
                     className="group gap-5"
                 >
                     <span>
-                        {isSubmitting ? "Sending..." : status === "success" ? "Message sent" : "Send message"}
+                        {isSubmitting ? t("sending") : status === "success" ? t("sent") : t("send")}
                     </span>
 
                     {!isSubmitting && status !== "success" && (
@@ -561,7 +570,7 @@ export default function ContactForm() {
                 </Button>
 
                 <div className="font-sans text-xs leading-5 text-stone-600">
-                    <p>For direct correspondence</p>
+                    <p>{t("direct")}</p>
                     <p className="mt-1 text-stone-400">
                         <a href={`mailto:${legalContact.email}`} className="transition-colors hover:text-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold">
                             {legalContact.email}

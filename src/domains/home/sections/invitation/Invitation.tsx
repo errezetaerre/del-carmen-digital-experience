@@ -3,7 +3,6 @@ import { LinkButton } from "@/shared/ui/button";
 import { NewsletterForm } from "@/domains/newsletter";
 import InvitationMotion from "./InvitationMotion";
 import { useTranslations } from "next-intl";
-import EnglishContent from "@/i18n/EnglishContent";
 
 import { Suspense } from "react";
 
@@ -121,7 +120,7 @@ export default function Invitation() {
             </p>
 
             <Suspense fallback={null}>
-              <EnglishContent><NewsletterForm /></EnglishContent>
+              <NewsletterForm />
             </Suspense>
           </div>
 

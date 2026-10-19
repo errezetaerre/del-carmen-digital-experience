@@ -1,4 +1,6 @@
-import { formPrivacy, type PrivacyForm } from "@/config/formPrivacy";
+import { useLocale } from "next-intl";
+import type { PrivacyForm } from "@/config/formPrivacy";
+import { getFormPrivacy } from "@/i18n/formPrivacyCopy";
 
 type Props = {
     form: PrivacyForm;
@@ -10,6 +12,8 @@ type Props = {
 };
 
 export default function PrivacyConsentField({ form, noticeId, checked, onChange, disabled, error }: Props) {
+    const locale = useLocale();
+    const privacy = getFormPrivacy(locale);
     const id = `${form}-consent`;
     const errorId = `${id}-error`;
 
@@ -28,7 +32,7 @@ export default function PrivacyConsentField({ form, noticeId, checked, onChange,
                     aria-describedby={[noticeId, error ? errorId : ""].filter(Boolean).join(" ")}
                     className="mt-1 h-4 w-4 shrink-0 accent-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold disabled:cursor-wait disabled:opacity-50"
                 />
-                <span>{formPrivacy[form].consentLabel}</span>
+                <span>{privacy[form].consentLabel}</span>
             </label>
             {error && <p id={errorId} role="alert" className="mt-2 text-error">{error}</p>}
         </div>

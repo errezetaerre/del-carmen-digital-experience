@@ -1,12 +1,16 @@
-import EnglishContent from "@/i18n/EnglishContent";
+import { getSiteMessages } from "@/i18n/messages";
 import { activateLocale } from "@/i18n/server";
 import { createPageMetadata } from "@/shared/lib/metadata";
 
-export const metadata = createPageMetadata({title: "Contact", description: "Contact Del Carmen about artworks, exhibitions, collaborations and other enquiries.", });
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+    const locale = await activateLocale(params);
+    const copy = getSiteMessages(locale).Contact;
+    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+}
 
 import Contact from "@/domains/contact";
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   await activateLocale(params);
-    return <EnglishContent>{<Contact />}</EnglishContent>;
+    return <Contact />;
 }

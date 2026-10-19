@@ -1,0 +1,19 @@
+{
+  "version": "2026-10-18.1-es",
+  "contact": {
+    "summary": "Tus datos se utilizan para recibir y responder a tu consulta.",
+    "requiredSummary": "Los cuatro campos y el consentimiento son obligatorios para enviar este formulario opcional.",
+    "collection": "Tu nombre, correo electrónico, asunto y mensaje se envían al correo del estudio a través de Resend. Upstash utiliza un identificador de solicitud para proteger el formulario.",
+    "requirement": "Los cuatro campos y tu consentimiento son necesarios para enviar este formulario. Proporcionarlos es voluntario; sin ellos, el formulario no se puede enviar. Enviar un mensaje no te suscribe al boletín.",
+    "retention": "Las consultas ordinarias cerradas se conservan hasta 12 meses después del último intercambio sustancial o del cierre, según corresponda. Las transacciones y controversias en curso se evalúan por separado.",
+    "consentLabel": "Consiento el uso de estos datos para responder a mi consulta."
+  },
+  "newsletter": {
+    "summary": "Tu correo se utiliza para enviarte novedades ocasionales sobre obras, exposiciones y el estudio, después de que confirmes la suscripción.",
+    "requiredSummary": "El correo electrónico y el consentimiento son obligatorios. Suscribirse es opcional.",
+    "collection": "Tu correo electrónico, el origen de la suscripción, el registro de consentimiento, las fechas y el estado se almacenan en Upstash. Resend envía los correos de confirmación; Upstash también protege el formulario.",
+    "requirement": "Tu correo electrónico y tu consentimiento son necesarios para solicitar una suscripción. Proporcionarlos es voluntario; sin ellos, no se realizará la suscripción. También debes confirmar mediante el enlace del correo y puedes darte de baja en cualquier momento.",
+    "retention": "Las solicitudes sin confirmar caducan a las 24 horas. Los registros activos se revisan anualmente. El registro mínimo de baja caduca a los 30 días.",
+    "consentLabel": "Consiento recibir por correo electrónico novedades sobre obras, exposiciones y el estudio."
+  }
+}

@@ -1,10 +1,13 @@
+import { useLocale } from "next-intl";
 import Footer from "@/shared/layout/footer";
+import { localizeJournalEntry } from "@/i18n/journalCopy";
 
 import JournalIndex from "./components/JournalIndex";
 import { getJournalEntries } from "./data/journalEntries";
 
 export default function Journal() {
-    const entries = getJournalEntries();
+    const locale = useLocale();
+    const entries = getJournalEntries().map((entry) => localizeJournalEntry(entry, locale));
 
     return (
         <main

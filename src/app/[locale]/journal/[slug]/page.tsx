@@ -1,5 +1,6 @@
-import EnglishContent from "@/i18n/EnglishContent";
 import { activateLocale } from "@/i18n/server";
+import { localizeJournalEntry } from "@/i18n/journalCopy";
+import { localizeJournalStory } from "@/i18n/journalStoryCopy";
 import { createPageMetadata } from "@/shared/lib/metadata";
 import { notFound } from "next/navigation";
 
@@ -19,42 +20,38 @@ interface JournalEntryPageProps {
 }
 
 export async function generateMetadata({ params }: JournalEntryPageProps) {
-    await activateLocale(params);
+    const locale = await activateLocale(params);
     const { slug } = await params;
     const entry = getJournalEntryBySlug(slug);
     const story = getJournalStoryBySlug(slug);
     if (!entry || !story) notFound();
-    return createPageMetadata({ title: entry.title, description: entry.excerpt, type: "article" });
+    const localizedEntry = localizeJournalEntry(entry, locale);
+    return createPageMetadata({ locale, title: localizedEntry.title, description: localizedEntry.excerpt, type: "article" });
 }
 
 export default async function JournalEntryPage({
     params,
 }: JournalEntryPageProps) {
-    await activateLocale(params);
+    const locale = await activateLocale(params);
     const { slug } = await params;
 
     const entry = getJournalEntryBySlug(slug);
     const story = getJournalStoryBySlug(slug);
-    const entries = getJournalEntries();
+    const entries = getJournalEntries().map((item) => localizeJournalEntry(item, locale));
 
     if (!entry || !story) {
         notFound();
     }
 
-    // const {
-    //     previous,
-    //     next,
-    // } = getAdjacentJournalEntries(slug);
-
-    return <EnglishContent>{(
+    return (
         <main className="relative w-full min-w-0 overflow-x-clip bg-background text-white">
             <JournalEntryExperience
-                entry={entry}
-                story={story}
+                entry={localizeJournalEntry(entry, locale)}
+                story={localizeJournalStory(story, locale)}
                 entries={entries}
             />
 
             <Footer />
         </main>
-    )}</EnglishContent>;
+    );
 }

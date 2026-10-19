@@ -1,10 +1,10 @@
 # Información previa y consentimiento de formularios
 
-Version: 1.0
+Version: 1.1
 Document ID: DOC-FORM-PRIVACY-CONSENT
 Project: Del Carmen Digital Experience
 Owner: Rolando Rojas Zapata
-Last Updated: 2026-10-15
+Last Updated: 2026-10-18
 Status: Código y textos preparados; instalación, revisión de producción y publicación final pendientes.
 
 ## Alcance de la revisión
@@ -101,3 +101,43 @@ También pasaron los 22 escenarios anteriores de conservación y concurrencia co
 Los 210 archivos TS/TSX/MTS/MJS del snapshot pasan el análisis sintáctico. Frente al paquete aprobado anterior, cambian seis archivos de fuente y se añaden tres; los otros 206 son idénticos, incluidos los módulos visuales aprobados y los endpoints confirm/unsubscribe. Estos recuentos corresponden a esta revisión, no sustituyen los registros históricos de entregas anteriores.
 
 Quedan build/typecheck completo, render de Tailwind y revisión visual/responsive/accesible en navegador, entrega de correo y transiciones en Redis de staging con las dependencias instaladas. Tampoco se han comprobado los proveedores/regiones de producción, inventario histórico o procedimiento efectivo del buzón. No se afirma despliegue, eliminación real ni publicación legal definitiva.
+
+## Revisión EN/ES — 2026-10-18
+
+La revisión inglesa `2026-10-15.1` y su redacción archivada arriba se conservan exactamente. La copia española se registra por separado como `2026-10-18.1-es` en `src/i18n/content/formPrivacy.es.json`, consumida mediante `formPrivacyCopy.ts`. Ambos idiomas mantienen las finalidades `contact-enquiry` y `studio-newsletter`, los mismos destinatarios, datos, plazos y responsable. El domicilio se traduce conservando sus hechos en `legalContact.es.json`; la configuración canónica inglesa no se reemplaza.
+
+Redacción española archivada de esta revisión:
+
+```json
+{
+  "version": "2026-10-18.1-es",
+  "contact": {
+    "summary": "Tus datos se utilizan para recibir y responder a tu consulta.",
+    "requiredSummary": "Los cuatro campos y el consentimiento son obligatorios para enviar este formulario opcional.",
+    "collection": "Tu nombre, correo electrónico, asunto y mensaje se envían al correo del estudio a través de Resend. Upstash utiliza un identificador de solicitud para proteger el formulario.",
+    "requirement": "Los cuatro campos y tu consentimiento son necesarios para enviar este formulario. Proporcionarlos es voluntario; sin ellos, el formulario no se puede enviar. Enviar un mensaje no te suscribe al boletín.",
+    "retention": "Las consultas ordinarias cerradas se conservan hasta 12 meses después del último intercambio sustancial o del cierre, según corresponda. Las transacciones y controversias en curso se evalúan por separado.",
+    "consentLabel": "Consiento el uso de estos datos para responder a mi consulta."
+  },
+  "newsletter": {
+    "summary": "Tu correo se utiliza para enviarte novedades ocasionales sobre obras, exposiciones y el estudio, después de que confirmes la suscripción.",
+    "requiredSummary": "El correo electrónico y el consentimiento son obligatorios. Suscribirse es opcional.",
+    "collection": "Tu correo electrónico, el origen de la suscripción, el registro de consentimiento, las fechas y el estado se almacenan en Upstash. Resend envía los correos de confirmación; Upstash también protege el formulario.",
+    "requirement": "Tu correo electrónico y tu consentimiento son necesarios para solicitar una suscripción. Proporcionarlos es voluntario; sin ellos, no se realizará la suscripción. También debes confirmar mediante el enlace del correo y puedes darte de baja en cualquier momento.",
+    "retention": "Las solicitudes sin confirmar caducan a las 24 horas. Los registros activos se revisan anualmente. El registro mínimo de baja caduca a los 30 días.",
+    "consentLabel": "Consiento recibir por correo electrónico novedades sobre obras, exposiciones y el estudio."
+  }
+}
+```
+
+Los formularios envían `locale` junto a `consent`/`consentVersion`. El servidor acepta ausencia de locale para formularios ingleses anteriores, o `en`/`es` exactos; rechaza otros valores con 400 `invalid_locale`. Comprueba el booleano y la revisión registrada para ese idioma, sin aceptar declaraciones/finalidades proporcionadas por el cliente. Una pareja idioma/versión que no corresponde conserva el rechazo `consent_outdated` sin correo ni alta.
+
+La selección de la casilla está ligada al idioma y la revisión visibles; cambiar a otro idioma exige una selección válida para su copia sin borrar el texto escrito por la persona. Los errores se guardan como claves y se muestran en el idioma actual. Las casillas comienzan desmarcadas y las finalidades siguen separadas.
+
+Contact añade el idioma a la constancia del mismo correo operativo y conserva la declaración exacta seleccionada por el servidor. Newsletter añade `consent.language` y conserva versión/finalidad/declaración/fecha; confirmación conserva ese objeto. Los registros antiguos no se migran, reenvían ni etiquetan retrospectivamente. La baja sigue eliminando la constancia y conservando solo email/estado/fecha por 30 días. Los scripts Redis y los plazos anteriores no cambian.
+
+El correo de confirmación y los resultados de confirmación/baja siguen el idioma de presentación permitido. Un locale en la URL solo elige presentación, nunca modifica ni concede consentimiento. Los enlaces antiguos sin locale continúan en inglés.
+
+Cada cambio futuro en una copia requiere revisión de su versión y archivo de su texto anterior. Si cambia una finalidad, destinatario, plazo o dato material, revisar las dos versiones; no tratar una traducción como autorización para ampliar el tratamiento. Esta entrega traduce los borradores existentes y verifica su coherencia técnica, sin certificar suficiencia jurídica o aprobación final para producción.
+
+El bloque pasa build/TypeScript y 30 grupos de pruebas con componentes/handlers reales compilados, transportes simulados y GETs de producción local. No se envían mensajes reales, se accede a suscriptores ni se ejecutan migraciones. Quedan revisión editorial/jurídica, navegadores/dispositivos, validación nativa, lectores de pantalla y entrega real. Se conserva el error previo de lint de sincronización de Newsletter, confirmado sin hallazgos nuevos.

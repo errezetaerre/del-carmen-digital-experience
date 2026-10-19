@@ -1,4 +1,5 @@
 "use client";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
     FormEvent,
@@ -9,7 +10,7 @@ import {
 import { useSearchParams } from "next/navigation";
 
 import { Button } from "@/shared/ui/button";
-import { formPrivacy } from "@/config/formPrivacy";
+import { getFormPrivacy } from "@/i18n/formPrivacyCopy";
 import FormPrivacyNotice from "@/shared/ui/forms/FormPrivacyNotice";
 import PrivacyConsentField from "@/shared/ui/forms/PrivacyConsentField";
 
@@ -26,12 +27,19 @@ type NewsletterStatus =
     | "rateLimited";
 
 export default function NewsletterForm() {
+    const locale = useLocale();
+    const t = useTranslations("Newsletter");
+    const privacy = getFormPrivacy(locale);
+
     const searchParams = useSearchParams();
 
     const [email, setEmail] = useState("");
     const [contactField, setContactField] = useState("");
-    const [consent, setConsent] = useState(false);
-    const [consentError, setConsentError] = useState<string>();
+    const [acceptedNotice, setAcceptedNotice] = useState<string | null>(null);
+    const noticeKey = locale + ":" + privacy.version;
+    const consent = acceptedNotice === noticeKey;
+    const setConsent = (checked: boolean) => setAcceptedNotice(checked ? noticeKey : null);
+    const [consentError, setConsentError] = useState<"consentRequired" | "consentOutdated">();
     const [status, setStatus] =
         useState<NewsletterStatus>("idle");
 
@@ -100,7 +108,7 @@ export default function NewsletterForm() {
         }
 
         if (!consent) {
-            setConsentError("Please give your consent before requesting a subscription.");
+            setConsentError("consentRequired");
             return;
         }
 
@@ -121,7 +129,8 @@ export default function NewsletterForm() {
                         contactField,
                         source: "home",
                         consent,
-                        consentVersion: formPrivacy.version,
+                        locale,
+                        consentVersion: privacy.version,
                     }),
                 },
             );
@@ -141,8 +150,8 @@ export default function NewsletterForm() {
 
                 if (result?.code === "consent_required" || result?.code === "consent_outdated") {
                     setConsentError(result.code === "consent_outdated"
-                        ? "Please reload this page, review the current privacy notice and give your consent again."
-                        : "Please give your consent before requesting a subscription.");
+                        ? "consentOutdated"
+                        : "consentRequired");
                     setConsent(false);
                     setStatus("idle");
                     return;
@@ -178,7 +187,7 @@ export default function NewsletterForm() {
                 "
             >
                 <label htmlFor="newsletter-contact-field">
-                    Website
+                    {t("website")}
                 </label>
 
                 <input
@@ -213,7 +222,7 @@ export default function NewsletterForm() {
                             text-white/45
                         "
                     >
-                        Email
+                        {t("email")}
                     </label>
 
                     <input
@@ -252,7 +261,7 @@ export default function NewsletterForm() {
                             disabled:cursor-wait
                             disabled:opacity-60
                         "
-                        placeholder="you@example.com"
+                        placeholder={t("emailPlaceholder")}
                     />
                 </div>
 
@@ -262,7 +271,7 @@ export default function NewsletterForm() {
                         noticeId="newsletter-privacy-notice"
                         checked={consent}
                         disabled={isSubmitting}
-                        error={consentError}
+                        error={consentError ? t(consentError) : undefined}
                         onChange={(checked) => {
                             setConsent(checked);
                             setConsentError(undefined);
@@ -279,8 +288,8 @@ export default function NewsletterForm() {
                 >
                     <span>
                         {isSubmitting
-                            ? "Subscribing..."
-                            : "Subscribe"}
+                            ? t("subscribing")
+                            : t("subscribe")}
                     </span>
 
                     {!isSubmitting && (
@@ -313,64 +322,55 @@ export default function NewsletterForm() {
             >
                 {status === "idle" && (
                     <p className="text-white/35">
-                        Occasional notes about new works,
-                        exhibitions and studio updates. You
-                        can unsubscribe at any time.
+                        {t("idle")}
                     </p>
                 )}
 
                 {status === "pendingConfirmation" && (
                     <p className="text-success">
-                        Check your inbox to confirm your
-                        subscription.
+                        {t("pending")}
                     </p>
                 )}
 
                 {status === "confirmed" && (
                     <p className="text-success">
-                        Your subscription is confirmed.
-                        Welcome to the journey.
+                        {t("confirmed")}
                     </p>
                 )}
 
                 {status === "unsubscribed" && (
                     <p className="text-success">
-                        You&apos;ve been unsubscribed
-                        successfully.
+                        {t("unsubscribed")}
                     </p>
                 )}
 
                 {status === "invalidConfirmation" && (
                     <p className="text-error">
-                        This confirmation link is invalid or
-                        has expired.
+                        {t("invalidConfirmation")}
                     </p>
                 )}
 
                 {status === "invalidUnsubscribe" && (
                     <p className="text-error">
-                        This unsubscribe link is invalid or
-                        no longer available.
+                        {t("invalidUnsubscribe")}
                     </p>
                 )}
 
                 {status === "alreadySubscribed" && (
                     <p className="text-brand-gold">
-                        This email is already subscribed.
+                        {t("alreadySubscribed")}
                     </p>
                 )}
 
                 {status === "error" && (
                     <p className="text-error">
-                        Something went wrong. Please try
-                        again.
+                        {t("error")}
                     </p>
                 )}
 
                 {status === "rateLimited" && (
                     <p className="text-error">
-                        Too many attempts. Please wait a few
-                        minutes before trying again.
+                        {t("rateLimited")}
                     </p>
                 )}
             </div>

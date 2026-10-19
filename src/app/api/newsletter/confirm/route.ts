@@ -1,3 +1,5 @@
+import { localizeHref } from "@/i18n/config";
+import { resolveFormLocale } from "@/i18n/formPrivacyCopy";
 import { createHash, randomBytes } from "crypto";
 
 import { NextResponse } from "next/server";
@@ -28,8 +30,9 @@ function redirectToResult(
     request: Request,
     result: "success" | "invalid",
 ) {
+    const locale = resolveFormLocale(new URL(request.url).searchParams.get("locale") ?? undefined) ?? "en";
     const url = new URL(
-        `/?newsletter=${result}#invitation`,
+        localizeHref("/?newsletter=" + result + "#invitation", locale),
         getBaseUrl(request),
     );
 

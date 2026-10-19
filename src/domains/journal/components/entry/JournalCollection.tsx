@@ -1,4 +1,6 @@
 "use client";
+import { useLocale, useTranslations } from "next-intl";
+import { journalEntryTextLocale } from "@/i18n/journalCopy";
 
 import Link from "@/i18n/navigation";
 import { useMemo } from "react";
@@ -16,6 +18,9 @@ export default function JournalCollection({
     entries,
     currentSlug,
 }: JournalCollectionProps) {
+    const locale = useLocale();
+    const t = useTranslations("Journal");
+
     const collection = useMemo(
         () => entries.filter((entry) => entry.slug !== currentSlug),
         [entries, currentSlug],
@@ -105,7 +110,7 @@ export default function JournalCollection({
                                 text-brand-gold
                             "
                         >
-                            Journal
+                            {t("label")}
                         </p>
                         <h2
                             className="
@@ -118,9 +123,9 @@ export default function JournalCollection({
                                 md:text-5xl
                             "
                         >
-                            Journal
+                            {t("collectionTitleFirst")}
                             <br />
-                            Collection
+                            {t("collectionTitleSecond")}
                         </h2>
                         <p
                             className="
@@ -133,8 +138,7 @@ export default function JournalCollection({
                                 text-white/35
                             "
                         >
-                            Continue through the
-                            remaining reflections.
+                            {t("continue")}
                         </p>
                     </div>
                     <Link
@@ -155,22 +159,22 @@ export default function JournalCollection({
                             lg:mt-0
                         "
                     >
-                        Journal Index →
+                        {t("index")}
                     </Link>
                 </div>
                 {/* Kinetic collection */}
                 <div className="relative min-w-0">
                     <div className="mb-5 flex min-h-5 items-center justify-end pr-5">
                         <p className="font-sans text-[8px] font-medium uppercase tracking-[0.3em] text-white/25">
-                            Drag or swipe to explore ↔
+                            {t("drag")}
                         </p>
                     </div>
                     <KineticCarousel
                         itemCount={collection.length}
                         viewportProps={{ "data-journal-collection-viewport": "" }}
                         trackClassName="gap-5 lg:gap-5"
-                        previousLabel="Explore previous journals"
-                        nextLabel="Explore more journals"
+                        previousLabel={t("previous")}
+                        nextLabel={t("next")}
                     >
                         {collection.map(
                             (journal) => (
@@ -263,8 +267,7 @@ export default function JournalCollection({
                                                         text-brand-gold
                                                     "
                                             >
-                                                Explore
-                                                →
+                                                {t("explore")}
                                             </p>
                                         </div>
                                     </div>
@@ -283,7 +286,7 @@ export default function JournalCollection({
                                                     tracking-[0.28em]
                                                 "
                                         >
-                                            <span className="text-brand-gold">
+                                            <span className="text-brand-gold" lang={journalEntryTextLocale(journal, locale)}>
                                                 {
                                                     journal.category
                                                 }
@@ -311,7 +314,7 @@ export default function JournalCollection({
                                                     duration-500
                                                     group-hover:text-white
                                                     md:text-4xl
-                                                "
+                                                " lang={journalEntryTextLocale(journal, locale)}
                                         >
                                             {
                                                 journal.title

@@ -1,6 +1,6 @@
 # Journal Implementation
 
-Version: 1.1
+Version: 1.2
 
 Document ID:
 DOC-JOURNAL-IMPL
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-05
+2026-10-18
 
 ---
 
@@ -44,7 +44,7 @@ No unobserved backend, CMS, persistence or publishing behavior is assumed.
 
 File:
 
-`src/app/journal/page.tsx`
+`src/app/[locale]/journal/page.tsx`
 
 Responsibility:
 
@@ -55,7 +55,7 @@ Responsibility:
 
 File:
 
-`src/app/journal/[slug]/page.tsx`
+`src/app/[locale]/journal/[slug]/page.tsx`
 
 Responsibilities:
 
@@ -92,7 +92,7 @@ src/domains/journal/
 App routes:
 
 ```text
-src/app/journal/
+src/app/[locale]/journal/
 ├── page.tsx
 └── [slug]/
     └── page.tsx
@@ -138,9 +138,7 @@ getAdjacentJournalEntries(slug)
 
 The adjacent helper is currently available but the supplied Journal detail route does not use it.
 
-A commented previous/next retrieval block remains in the route source.
-
-Therefore previous/next Journal navigation must not be documented as implemented UI.
+Previous/next Journal navigation must not be documented as implemented UI.
 
 ## `journalStories.ts`
 
@@ -154,9 +152,11 @@ getJournalStoryBySlug(slug)
 
 Current supplied story content defines scenes for:
 
-`the-art-of-remembering`
+`the-art-of-remembering` — three scenes.
 
-Other catalogue entries currently do not have supplied JournalStory records.
+`inside-the-studio` — four scenes.
+
+The other five catalogue records do not have supplied JournalStory records. Public surfaces use `getJournalEntries()`, so those records are not linked as published stories.
 
 The route correctly protects this mismatch through `notFound()`.
 
@@ -593,3 +593,19 @@ Painting the Eternal Essence Within
 Home now translates only the category, title and excerpt of the two existing renderable entries, using `src/i18n/content/journal.es.json` and `journalCopy.ts`. Their canonical slugs, years, imagery, publication/featured state and destination remain unchanged. `getJournalEntries()` still excludes the five entries awaiting story content. English objects remain exact; unknown future teaser slugs keep their original English text with explicit language marking.
 
 Journal index, full story scenes, related-entry copy and their metadata remain in English until the Journal translation block. Translating a Home teaser does not publish or translate its story, and does not change the existing journal motion or media. Broader scope and release checks are recorded in DOC-I18N.
+
+## EN/ES Journal index and published stories — 2026-10-18
+
+This subsequent block extends the owner-approved Home/About/Artist language work. The existing shared routes serve English at `/journal` / `/journal/[slug]` and Spanish at `/es/journal` / `/es/journal/[slug]`, with canonical slugs unchanged.
+
+The `Journal` namespace owns index introduction, CTAs, scroll/drag hints, related-entry heading/index link and carousel accessible labels. Article/header/card categories, titles and excerpts reuse the already approved `journalCopy.ts` translations. The new `content/journalStories.es.json` stores the seven scene eyebrows/titles/texts; `journalStoryCopy.ts` applies only existing fields without changing IDs, order, layout or media. English returns its original object. Unknown/partial future scene translations retain English content and an explicit section language, without publishing new content.
+
+The index/domain root and detail route supply localized entries; detail supplies localized scenes and related entries. Both route-level English boundaries are removed, and metadata uses the same active locale. The two published titles appear as El arte de recordar and En el estudio in Spanish. Five other catalogue records still wait for source stories and resolve to not-found in either language.
+
+Previously unnamed image-only index links gain a localized accessible name using the entry title. Their decorative image alt remains empty. Entry/card prose has explicit fallback language. This change adds no editorial image-description model, asset replacement, new carousel, article-navigation mechanism or film integration.
+
+The existing classes, media paths, video/poster flags, four scene-layout branches, scene counts, motion selectors, both Journal GSAP files and shared carousel engine remain exact. Current-entry exclusion, memoization and drag/wheel/momentum ownership stay in their approved components. Forms, consent, databases, dependencies and marketing remain outside this increment.
+
+The real production build/TypeScript and 22 focused content/server checks pass. Tests preserve all preceding 367 message values and the three English Journal visible responses/metadata; they check all seven Spanish scenes, article/social metadata, related links, image-link names, media attributes, same-story language switching and unpublished/unknown not-found boundaries. Spanish Home/About/Artist remains visibly exact. Focused lint has zero errors and three verified pre-existing native-image warnings, with no new finding.
+
+These checks use real HTTP responses and actual compiled helpers/source invariants. They do not establish browser hydration, rendered Spanish layout, physical gestures, reduced-motion behavior, screen-reader operation, video-file availability/playback or deployment approval. Review both article experiences on desktop and phone/tablet portrait/landscape. Spanish stays noindex until the remaining forms/legal and production review in DOC-I18N is complete.
