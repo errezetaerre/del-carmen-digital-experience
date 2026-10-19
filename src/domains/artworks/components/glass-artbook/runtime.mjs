@@ -251,6 +251,8 @@ export function createGlassArtbook(root,options){
   if(reducedMotion.matches){angle=goal;finish();}else render();
  }
  function onInputBlur(){
+  guidePointerPressed=false;
+  postponeGuide();
   clearLandedDust();
   clearRequestedNavigation();
   if(loadRequest?.kind==='turn'){cancelPreparation();publishLoadState('ready');render();}
@@ -259,7 +261,7 @@ export function createGlassArtbook(root,options){
   if(drag)onPointerCancel({pointerId:drag.id});
   setSelectionLock(false);
  }
- function onVisibilityChange(){if(nativeDocument.hidden)onInputBlur();}
+ function onVisibilityChange(){if(nativeDocument.hidden)onInputBlur();else scheduleGuide();}
  function lockWheel(){
   wheelMomentumLocked=true;
   if(wheelMomentumUnlockTimer!==null)window.clearTimeout(wheelMomentumUnlockTimer);
@@ -928,8 +930,9 @@ function paintMaterialFrame(){
 const motion=options.motion;
 const preview={left:0,right:0};
 const guide=$('#guide'),guideText=$('#guideText'),guideDock=$('#guideDock');
-let entranceTween=null,guideTween=null,hoverTween=null,guideTimer=null;
+let entranceTween=null,guideTween=null,hoverTween=null,guideTimer=null,demonstrationTween=null;
 let guideLearned=false,guideSealing=false;
+let guidePointerPressed=false;
 let pausedForImage=false,navigationIndex=-1;
 let viewportSignature=[baseLeft.clientWidth,baseLeft.clientHeight,baseRight.clientWidth].join(':');
 root.dataset.guide=guideLearned?'learned':'reminding';
@@ -955,13 +958,42 @@ function positionGuide(){
  if(motion)motion.set(guide,{...values,xPercent:-50,yPercent:-50});
  else{guide.style.left=values.left+'px';guide.style.top=values.top+'px';}
 }
+function scheduleGuide(){
+ if(guideTimer!==null)window.clearTimeout(guideTimer);guideTimer=null;
+ if(!disposed&&!nativeDocument.hidden)guideTimer=window.setTimeout(pulseGuide,5000);
+}
+function stopGuideDemonstration(){
+ if(!demonstrationTween&&!root.hasAttribute('data-glass-demonstrating'))return;
+ demonstrationTween?.kill();demonstrationTween=null;
+ delete root.dataset.glassDemonstrating;
+ preview.left=0;preview.right=0;applyPreview();
+}
+function postponeGuide(){stopGuideDemonstration();scheduleGuide();}
 function pulseGuide(){
- if(disposed)return;
- if(!guideSealing&&!entrancePlaying&&!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]')&&!reducedMotion.matches&&motion){
+ guideTimer=null;
+ if(disposed||nativeDocument.hidden)return;
+ const selection=nativeDocument.getSelection?.();
+ const readingSelection=!!(selection?.toString()&&root.contains(selection.anchorNode));
+ if(!guideSealing&&!demonstrationTween&&!inputBlocked()&&!guidePointerPressed&&!drag&&!pendingPointer&&!animating&&!wheelActive&&!readingSelection&&!reducedMotion.matches&&motion){
   const target=guideLearned?guideDock:guide;
   guideTween=motion.to(target,{opacity:.32,duration:.70,yoyo:true,repeat:1,ease:'sine.inOut',overwrite:true});
+  if(!guideLearned&&wideLayout.matches&&works.length>1){
+   clearPreview(true);
+   const side=index<works.length-1?'right':'left',lift=side==='right'?-16:16;
+   root.dataset.glassDemonstrating=side;
+   // A rigid resting leaf teaches the hinge. The real turn angle, spring,
+   // contents, navigation and input ownership never become a fake turn.
+   demonstrationTween=motion.timeline({onComplete(){
+    demonstrationTween=null;delete root.dataset.glassDemonstrating;
+    preview.left=0;preview.right=0;applyPreview();scheduleGuide();
+   }})
+    .to(preview,{[side]:lift,duration:.72,ease:'power2.out',onUpdate:applyPreview})
+    .to(preview,{[side]:0,duration:.82,ease:'power3.in',onUpdate:applyPreview},'+=.28')
+    .to(preview,{[side]:side==='right'?.65:-.65,duration:.14,ease:'power2.out',onUpdate:applyPreview})
+    .to(preview,{[side]:0,duration:.18,ease:'sine.inOut',onUpdate:applyPreview});
+  }
  }
- guideTimer=window.setTimeout(pulseGuide,5000);
+ scheduleGuide();
 }
 function finishGuide(){
  if(disposed)return;
@@ -971,7 +1003,8 @@ function finishGuide(){
 function learnGuide(){
  if(guideLearned||guideSealing)return;
  if(guideTimer!==null)window.clearTimeout(guideTimer);guideTimer=null;
- guideTimer=window.setTimeout(pulseGuide,5000);
+ scheduleGuide();
+ stopGuideDemonstration();
  guideTween?.kill();guideTween=null;
  positionGuide();guideSealing=true;root.dataset.guide='sealing';
  if(!motion||reducedMotion.matches){finishGuide();return;}
@@ -986,6 +1019,7 @@ function learnGuide(){
 }
 function clearPreview(immediate=false){
  if(entrancePlaying)return;
+ stopGuideDemonstration();
  hoverTween?.kill();hoverTween=null;
  if(immediate||!motion||reducedMotion.matches){
   preview.left=0;preview.right=0;
@@ -998,7 +1032,7 @@ function applyPreview(){
 }
 function onProximity(event){
  if(event.target.closest("[data-artwork-highlights]"))return;
- if(!motion||reducedMotion.matches||!wideLayout.matches||inputBlocked()||drag||animating||pendingPointer||event.pointerType==='touch')return;
+ if(!motion||reducedMotion.matches||!wideLayout.matches||inputBlocked()||drag||animating||pendingPointer||demonstrationTween||guidePointerPressed||event.pointerType==='touch')return;
  const rect=stage.getBoundingClientRect(),position=(event.clientX-rect.left)/rect.width;
  let left=0,right=0;
  if(position<.14&&index>0)left=2.6*Math.max(0,Math.min(1,(.14-position)/.14));
@@ -1012,6 +1046,7 @@ function finishEntrance(){
  preview.left=0;applyPreview();root.dataset.phase='open';render();positionGuide();
  setSelectionLock(false);
  requestLandedDust();
+ scheduleGuide();
 }
 function drawEntrance(){applyPreview();render();}
 function beginEntrance(){
@@ -1030,23 +1065,46 @@ function startExperience(){
  entrancePlaying=true;root.dataset.phase='loading';
  preview.left=motion&&!reducedMotion.matches&&wideLayout.matches?66:0;drawEntrance();
  prepareArtwork(index,beginEntrance,'entrance');
- positionGuide();guideTimer=window.setTimeout(pulseGuide,5000);
+ positionGuide();
 }
 function synchronizeMotionPause(){
  const pause=!!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]');
  if(pause===pausedForImage)return;
  pausedForImage=pause;
+ postponeGuide();
  for(const animation of [entranceTween,guideTween,hoverTween]){
   if(pause)animation?.pause();else animation?.resume();
  }
  if(pause){clearRequestedNavigation();clearPreview(true);clearLandedDust();}
 }
 function disposeExperience(){
+ stopGuideDemonstration();
  entranceTween?.kill();guideTween?.kill();hoverTween?.kill();
  if(guideTimer!==null)window.clearTimeout(guideTimer);
 }
 scene.addEventListener('pointermove',onProximity);
 scene.addEventListener('pointerleave',()=>clearPreview());
+// Observe the first press before native-touch or mouse ownership is decided.
+// Reading and taps postpone teaching; only a real navigation learns it.
+function guidePress(){guidePointerPressed=true;postponeGuide();}
+function guideRelease(){if(guidePointerPressed){guidePointerPressed=false;postponeGuide();}}
+function guideMotionChanged(){postponeGuide();}
+root.addEventListener('pointerdown',guidePress,true);
+nativeDocument.addEventListener('pointerup',guideRelease,true);
+nativeDocument.addEventListener('pointercancel',guideRelease,true);
+scene.addEventListener('wheel',postponeGuide,{passive:true,capture:true});
+scene.addEventListener('scroll',postponeGuide,true);
+root.addEventListener('focusin',postponeGuide);
+reducedMotion.addEventListener('change',guideMotionChanged);
+cleanups.push(()=>{
+ root.removeEventListener('pointerdown',guidePress,true);
+ nativeDocument.removeEventListener('pointerup',guideRelease,true);
+ nativeDocument.removeEventListener('pointercancel',guideRelease,true);
+ scene.removeEventListener('wheel',postponeGuide,true);
+ scene.removeEventListener('scroll',postponeGuide,true);
+ root.removeEventListener('focusin',postponeGuide);
+ reducedMotion.removeEventListener('change',guideMotionChanged);
+});
 
 // One animation loop: transform, content and material are drawn in one frame.
 idle();requestAnimationFrame(tick);
@@ -1062,6 +1120,7 @@ idle();requestAnimationFrame(tick);
   for(const [type,listener] of scenePointerHandlers)scene.removeEventListener(type,listener);
  });
  function onLayoutChange(){
+  postponeGuide();
   clearLandedDust();
   clearRequestedNavigation();
   if(!wideLayout.matches){cancelPendingTouch();setSelectionLock(false);}

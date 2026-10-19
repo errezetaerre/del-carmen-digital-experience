@@ -16,16 +16,9 @@ import { createPortraitArtbookMotion, type PortraitArtbookController } from "./p
 import styles from "./ArtworkPortraitArtbook.module.css";
 
 let portraitHintLearned = false;
-// The earlier flag could be set by reading or tapping. Only this version
-// records an intentional book turn; an old flag must not hide the lesson.
-const portraitHintKey = "del-carmen:portrait-artbook:turn-learned:v1";
-
-function hasLearnedPortraitHint() {
-    if (!portraitHintLearned && typeof window !== "undefined") {
-        try { portraitHintLearned = window.localStorage.getItem(portraitHintKey) === "true"; } catch { /* The in-memory lesson still works without storage. */ }
-    }
-    return portraitHintLearned;
-}
+// Like Standard, learning lasts for this document, including client-side
+// artwork navigation. A new visit/reload teaches again; old stored flags
+// must not suppress the visible lesson on the production domain forever.
 
 function PortraitMaterial() {
     const host = useRef<HTMLDivElement>(null);
@@ -68,7 +61,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     const dockRef = useRef<HTMLSpanElement>(null);
     const controllerRef = useRef<PortraitArtbookController | null>(null);
     const presentedRef = useRef(false);
-    const [learnedAtMount] = useState(hasLearnedPortraitHint);
+    const [learnedAtMount] = useState(() => portraitHintLearned);
     const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId, kind: "entrance" });
 
     useLayoutEffect(() => {
@@ -98,7 +91,6 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
             onInteraction() {
                 if (portraitHintLearned) return;
                 portraitHintLearned = true;
-                try { window.localStorage.setItem(portraitHintKey, "true"); } catch { /* Keep the lesson for this visit. */ }
                 root.dataset.portraitLearned = "";
                 const bubble = bubbleRef.current, dock = dockRef.current;
                 if (!bubble || !dock) return;

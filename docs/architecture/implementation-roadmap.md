@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.12
+Version: 1.13
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,8 +7,12 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-18
+Last Updated: 2026-10-19
  
+Current increment — 2026-10-19
+
+PR #1 has been merged into main at `b2d2976`; the owner supplied a Vercel Production/Ready confirmation. The next bounded refinement adds an editorial slide with the Standard instruction and an idle rigid-leaf lift/fall in every artwork-detail Glass layout. Portrait learning now lasts for the current document instead of suppressing future visits through localStorage. User navigation, reading, zoom and reduced motion take precedence over teaching. This increment is prepared on a new branch from production; it does not publish itself. The existing Home/Series portrait integration, visitor book, database and commercial roadmap retain their separate scope.
+
 1. Objective
 This document defines the official implementation sequence of the Del Carmen Digital Experience platform.
 Its purpose is to transform the approved documentation into a modular, scalable and maintainable software system.

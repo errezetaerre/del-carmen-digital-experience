@@ -88,6 +88,8 @@ export default function ArtworkDetailKineticExperience({
 
     const viewportRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
+    const currentPanelRef = useRef<HTMLDivElement>(null);
+    const onboardingSlideRef = useRef<gsap.core.Timeline | null>(null);
 
     const baseXRef = useRef(0);
     const positionRef = useRef(0);
@@ -132,6 +134,14 @@ export default function ArtworkDetailKineticExperience({
             window.clearInterval(onboardingIntervalRef.current);
             onboardingIntervalRef.current = null;
         }
+    }, []);
+
+    const stopOnboardingSlide = useCallback(() => {
+        onboardingSlideRef.current?.kill();
+        onboardingSlideRef.current = null;
+        const panel = currentPanelRef.current;
+        if (panel) gsap.set(panel, { clearProps: "transform" });
+        viewportRef.current?.removeAttribute("data-standard-demonstrating");
     }, []);
 
     const positionOnboardingBubble = useCallback(() => {
@@ -180,6 +190,7 @@ export default function ArtworkDetailKineticExperience({
         artworkOnboardingLearnedInCurrentDocument = true;
         onboardingSealUntilRef.current = performance.now() + 1050;
         clearOnboardingTimers();
+        stopOnboardingSlide();
         setOnboardingPhase("sealing");
 
         const viewport = viewportRef.current;
@@ -187,6 +198,10 @@ export default function ArtworkDetailKineticExperience({
         const target = onboardingTargetRef.current;
 
         if (!viewport || !bubble || !target) {
+            setOnboardingPhase("learned");
+            return;
+        }
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
             setOnboardingPhase("learned");
             return;
         }
@@ -257,22 +272,44 @@ export default function ArtworkDetailKineticExperience({
                 },
                 "-=0.18",
             );
-    }, [clearOnboardingTimers, positionOnboardingBubble]);
+    }, [clearOnboardingTimers, positionOnboardingBubble, stopOnboardingSlide]);
 
     useEffect(() => {
         if (onboardingLearnedRef.current) return;
 
         const bubble = onboardingBubbleRef.current;
-        if (!bubble) return;
+        const viewport = viewportRef.current;
+        if (!bubble || !viewport) return;
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
         const playReminder = () => {
-            if (onboardingLearnedRef.current) return;
+            if (onboardingLearnedRef.current || onboardingSlideRef.current || document.hidden || draggingRef.current || navigatingRef.current ||
+                document.querySelector('[role="dialog"][aria-modal="true"]')) return;
 
             const currentBubble = onboardingBubbleRef.current;
             if (!currentBubble) return;
 
             gsap.killTweensOf(currentBubble);
             positionOnboardingBubble();
+            stopOnboardingSlide();
+
+            // This is a teaching offset on the current editorial panel only.
+            // The real track, its position and release velocity stay untouched.
+            const panel = currentPanelRef.current;
+            if (panel && (hasNext || hasPrevious) && !reducedMotion.matches &&
+                !document.getSelection()?.toString()) {
+                const distance = Math.min(26, viewport.clientWidth * .055) * (hasNext ? -1 : 1);
+                viewport.dataset.standardDemonstrating = "";
+                onboardingSlideRef.current = gsap.timeline({ onComplete: stopOnboardingSlide })
+                    .to(panel, { x: distance, duration: .7, ease: "power2.out" })
+                    .to(panel, { x: 0, duration: .9, ease: "power3.inOut" }, "+=.2");
+            }
+
+            if (reducedMotion.matches) {
+                gsap.set(currentBubble, { opacity: 1, filter: "none", scale: 1 });
+                gsap.to(currentBubble, { opacity: 0, delay: ONBOARDING_VISIBLE_MS / 1000, duration: .1 });
+                return;
+            }
 
             /*
              * Atmospheric reminder: materialize through blur + opacity,
@@ -314,24 +351,42 @@ export default function ArtworkDetailKineticExperience({
                 });
         };
 
-        requestAnimationFrame(playReminder);
+        const firstReminder = requestAnimationFrame(playReminder);
         onboardingIntervalRef.current = window.setInterval(
             playReminder,
             ONBOARDING_REPEAT_MS,
         );
 
-        window.addEventListener("resize", positionOnboardingBubble);
+        const interrupt = () => stopOnboardingSlide();
+        const resized = () => { stopOnboardingSlide(); positionOnboardingBubble(); };
+        viewport.addEventListener("pointerdown", interrupt, true);
+        viewport.addEventListener("touchstart", interrupt, { passive: true, capture: true });
+        viewport.addEventListener("wheel", interrupt, { passive: true, capture: true });
+        viewport.addEventListener("scroll", interrupt, true);
+        viewport.addEventListener("focusin", interrupt);
+        document.addEventListener("visibilitychange", interrupt);
+        reducedMotion.addEventListener("change", interrupt);
+        window.addEventListener("resize", resized);
 
         return () => {
+            cancelAnimationFrame(firstReminder);
             clearOnboardingTimers();
+            stopOnboardingSlide();
             gsap.killTweensOf(bubble);
             if (navigationRouteTimerRef.current !== null) {
                 window.clearTimeout(navigationRouteTimerRef.current);
                 navigationRouteTimerRef.current = null;
             }
-            window.removeEventListener("resize", positionOnboardingBubble);
+            viewport.removeEventListener("pointerdown", interrupt, true);
+            viewport.removeEventListener("touchstart", interrupt, true);
+            viewport.removeEventListener("wheel", interrupt, true);
+            viewport.removeEventListener("scroll", interrupt, true);
+            viewport.removeEventListener("focusin", interrupt);
+            document.removeEventListener("visibilitychange", interrupt);
+            reducedMotion.removeEventListener("change", interrupt);
+            window.removeEventListener("resize", resized);
         };
-    }, [clearOnboardingTimers, positionOnboardingBubble]);
+    }, [clearOnboardingTimers, hasNext, hasPrevious, positionOnboardingBubble, stopOnboardingSlide]);
 
     const getHref = useCallback(
         (direction: Direction) =>
@@ -1170,6 +1225,7 @@ export default function ArtworkDetailKineticExperience({
             {onboardingPhase !== "learned" && (
                 <div
                     ref={onboardingBubbleRef}
+                    data-artwork-onboarding
                     aria-hidden
                     className="
                         pointer-events-none
@@ -1209,6 +1265,7 @@ export default function ArtworkDetailKineticExperience({
                 {panels.map((panel) => (
                     <div
                         key={panel.key}
+                        ref={panel.key === "current" ? currentPanelRef : undefined}
                         data-artwork-kinetic-panel={panel.key}
                         className="
                             w-screen
