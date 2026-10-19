@@ -16,6 +16,16 @@ import { createPortraitArtbookMotion, type PortraitArtbookController } from "./p
 import styles from "./ArtworkPortraitArtbook.module.css";
 
 let portraitHintLearned = false;
+// The earlier flag could be set by reading or tapping. Only this version
+// records an intentional book turn; an old flag must not hide the lesson.
+const portraitHintKey = "del-carmen:portrait-artbook:turn-learned:v1";
+
+function hasLearnedPortraitHint() {
+    if (!portraitHintLearned && typeof window !== "undefined") {
+        try { portraitHintLearned = window.localStorage.getItem(portraitHintKey) === "true"; } catch { /* The in-memory lesson still works without storage. */ }
+    }
+    return portraitHintLearned;
+}
 
 function PortraitMaterial() {
     const host = useRef<HTMLDivElement>(null);
@@ -58,7 +68,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     const dockRef = useRef<HTMLSpanElement>(null);
     const controllerRef = useRef<PortraitArtbookController | null>(null);
     const presentedRef = useRef(false);
-    const [learnedAtMount] = useState(() => portraitHintLearned);
+    const [learnedAtMount] = useState(hasLearnedPortraitHint);
     const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId, kind: "entrance" });
 
     useLayoutEffect(() => {
@@ -82,10 +92,13 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
                     loadingTimer = window.setTimeout(() => setLoadState({ ...state, kind: "turn" }), 120);
                 } else setLoadState(state);
             },
-            onInteraction() {
+            onActivity() {
                 stopDust?.(); stopDust = undefined;
+            },
+            onInteraction() {
                 if (portraitHintLearned) return;
                 portraitHintLearned = true;
+                try { window.localStorage.setItem(portraitHintKey, "true"); } catch { /* Keep the lesson for this visit. */ }
                 root.dataset.portraitLearned = "";
                 const bubble = bubbleRef.current, dock = dockRef.current;
                 if (!bubble || !dock) return;
@@ -121,7 +134,11 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
         controllerRef.current = controller;
         return () => {
             window.clearTimeout(loadingTimer); stopDust?.(); controller.dispose(); controllerRef.current = null;
-            if (hintBubble) gsap.killTweensOf(hintBubble);
+            if (hintBubble) {
+                gsap.killTweensOf(hintBubble);
+                delete hintBubble.dataset.sealing;
+                gsap.set(hintBubble, { clearProps: "transform,opacity,filter,visibility" });
+            }
         };
     }, [artworks, index, currentArtwork, locale, navigationQuery, router]);
 
@@ -171,7 +188,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
                 <span className={`${styles.title} font-display text-sm font-light md:text-base`}>{next.title}</span>
             </Link> : <div />}
         </nav>
-        <div ref={bubbleRef} className={`${styles.reminder} font-sans text-[9px] uppercase tracking-[0.15em] text-white/70`} aria-hidden="true">‹ &nbsp; {t("swipe")} &nbsp; ›</div>
+        <div ref={bubbleRef} data-portrait-hint className={`${styles.reminder} font-sans text-[9px] uppercase tracking-[0.15em] text-white/70`} aria-hidden="true">{glass("swipeGlass")}</div>
         {loadState.status !== "ready" && <div className={styles.status}>
             {loadState.status === "loading" ? <ArtworkLoading label={glass(loadState.kind === "entrance" ? "preparing" : "loadingArtwork")} /> : <div className={styles.error}>
                 <p role="alert" className="font-sans text-xs text-white/65">{glass("error")}</p>

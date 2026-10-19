@@ -12,6 +12,7 @@ interface Options {
     previous: HTMLElement | null;
     next: HTMLElement | null;
     onLoad(state: GlassArtbookLoadState): void;
+    onActivity(): void;
     onInteraction(): void;
     onLand(direction: Direction): void;
     onExit(): void;
@@ -47,6 +48,7 @@ function clonePage(source: HTMLElement, width: number, prefix: string) {
     clone.classList.add(styles.canvas);
     clone.style.width = `${width}px`;
     clone.style.visibility = "visible";
+    clone.style.opacity = "1";
     clone.inert = true;
     clone.setAttribute("aria-hidden", "true");
     const originals = [source, ...source.querySelectorAll<HTMLElement>("*")];
@@ -85,6 +87,8 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     let disposed = false, ready = false, settling = false, request = 0;
     let turn: Turn | null = null, grip: Grip | null = null;
     let wheelDistance = 0, wheelTimer: number | undefined;
+    let demonstrationTimer: number | undefined;
+    let demonstration: gsap.core.Timeline | null = null;
     let failedDirection: Direction | null = null;
     let frameWidth = frame.getBoundingClientRect().width;
 
@@ -135,13 +139,66 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         view.clearTimeout(wheelTimer); wheelTimer = undefined; wheelDistance = 0;
     }
     function clearTurn() {
+        demonstration?.kill(); demonstration = null;
         if (turn) gsap.killTweensOf(turn);
         turn = null; settling = false;
         overlay.hidden = true; overlay.replaceChildren();
         overlay.style.removeProperty("width"); overlay.style.removeProperty("height");
-        current.style.removeProperty("visibility"); current.inert = false;
+        current.style.removeProperty("visibility"); current.style.removeProperty("opacity"); current.inert = false;
         delete root.dataset.portraitTurning;
         delete root.dataset.portraitProgress;
+        delete root.dataset.portraitDemonstrating;
+        delete root.dataset.portraitHintVisible;
+    }
+    function clearDemonstration() {
+        view.clearTimeout(demonstrationTimer); demonstrationTimer = undefined;
+        if (demonstration) clearTurn();
+        delete root.dataset.portraitHintVisible;
+    }
+    function activity() {
+        clearDemonstration();
+        options.onActivity();
+        scheduleDemonstration();
+    }
+    function interact() {
+        clearDemonstration();
+        options.onInteraction();
+    }
+    function scheduleDemonstration() {
+        view.clearTimeout(demonstrationTimer); demonstrationTimer = undefined;
+        if (disposed || !ready || doc.hidden || root.hasAttribute("data-portrait-learned")) return;
+        const direction = options.next ? 1 : options.previous ? -1 : null;
+        if (!direction) return;
+        demonstrationTimer = view.setTimeout(() => {
+            demonstrationTimer = undefined;
+            if (disposed || root.hasAttribute("data-portrait-learned")) return;
+            const selection = doc.getSelection();
+            if (doc.hidden || blocked() || grip || turn || settling || root.dataset.portraitLoading === "true" ||
+                (selection?.toString() && current.contains(selection.anchorNode))) {
+                scheduleDemonstration(); return;
+            }
+            root.dataset.portraitHintVisible = "";
+            if (reducedMotion.matches) {
+                demonstrationTimer = view.setTimeout(() => {
+                    delete root.dataset.portraitHintVisible;
+                    scheduleDemonstration();
+                }, 2400);
+                return;
+            }
+            // Teach the actual central hinge without navigating or revealing
+            // another artwork. All four faces belong to the current page.
+            const preview = build(direction, current);
+            if (!preview) { clearDemonstration(); scheduleDemonstration(); return; }
+            current.inert = false;
+            root.dataset.portraitDemonstrating = "";
+            const update = () => {
+                if (blocked() || doc.hidden || reducedMotion.matches) { clearDemonstration(); scheduleDemonstration(); return; }
+                draw(preview.progress);
+            };
+            demonstration = gsap.timeline({ onComplete() { clearTurn(); scheduleDemonstration(); } })
+                .to(preview, { progress: .16, duration: .8, ease: "power2.out", onUpdate: update })
+                .to(preview, { progress: 0, duration: 1, ease: "power3.in", onUpdate: update }, "+=.5");
+        }, 5000);
     }
     function draw(progress: number) {
         if (!turn) return;
@@ -166,9 +223,9 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
             turn.right.style.clipPath = `inset(0 0 0 ${crossed}px)`;
         }
     }
-    function build(direction: Direction, destination: HTMLElement) {
+    function build(direction: Direction, destination: HTMLElement): Turn | null {
         const { width, height } = frame.getBoundingClientRect();
-        if (!width || !height) return false;
+        if (!width || !height) return null;
         const half = width / 2;
         frameWidth = width;
         const perspective = Math.max(1040, width * 2.6);
@@ -202,11 +259,11 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         overlay.hidden = false;
         restores.forEach(restore => restore());
         // The live page remains in place, ready to be restored on cancellation.
-        current.style.visibility = "hidden"; current.inert = true;
+        current.style.visibility = "hidden"; current.style.opacity = "0"; current.inert = true;
         root.dataset.portraitTurning = "";
         doc.getSelection()?.removeAllRanges();
         draw(0);
-        return true;
+        return turn;
     }
     function settle(commit: boolean) {
         if (!turn) return;
@@ -234,7 +291,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         if (!destination || disposed || settling || !ready || blocked()) return;
         const token = ++request;
         failedDirection = direction;
-        options.onInteraction();
+        interact();
         load("loading", destination);
         const ok = await prepare(destination);
         if (disposed || token !== request) return;
@@ -255,12 +312,16 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         }
     }
     function cancel() {
+        clearDemonstration();
         ++request; grip = null; clearWheel();
         if (turn) settle(false);
         else { settling = false; if (ready) load("ready"); }
+        scheduleDemonstration();
     }
     function start(input: ArtworkDragInput): boolean {
-        if (!ready || settling || turn || grip || blocked() || input.button !== 0) return false;
+        if (!ready || settling || grip || blocked() || input.button !== 0) return false;
+        activity();
+        if (turn) return false;
         const target = input.target as Element | null;
         if (target?.closest("a, button, input, textarea, select, [contenteditable='true'], [data-artwork-highlights]")) return false;
         clearWheel(); ++request;
@@ -317,7 +378,10 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         clientX: event.clientX, clientY: event.clientY, target: event.target, currentTarget: frame,
         preventDefault: () => { if (event.cancelable) event.preventDefault(); },
     });
-    function pointerDown(event: PointerEvent) { if (event.pointerType !== "touch") start(pointerInput(event)); }
+    function pointerDown(event: PointerEvent) {
+        if (event.button === 0 && ready && !blocked()) activity();
+        if (event.pointerType !== "touch") start(pointerInput(event));
+    }
     function pointerMove(event: PointerEvent) { if (event.pointerType !== "touch") move(pointerInput(event)); }
     function pointerEnd(event: PointerEvent) {
         if (event.pointerType !== "touch" && grip?.id === event.pointerId) finishGrip(event.type === "pointercancel");
@@ -333,7 +397,9 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         view.removeEventListener("blur", cancel);
     });
     function navigate(direction: Direction) {
-        if (!ready || settling || turn || grip || blocked()) return;
+        if (!ready || settling || grip || blocked()) return;
+        activity();
+        if (turn) return;
         clearWheel(); void begin(direction, true);
     }
     function keyDown(event: KeyboardEvent) {
@@ -346,6 +412,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     view.addEventListener("keydown", keyDown);
     cleanup.push(() => view.removeEventListener("keydown", keyDown));
     function wheel(event: WheelEvent) {
+        if (!event.ctrlKey && ready && !blocked()) activity();
         if (event.ctrlKey || blocked() || Math.abs(event.deltaX) <= Math.abs(event.deltaY) || !event.deltaX) return;
         if (wheelLocked) { event.preventDefault(); holdWheelTail(); return; }
         if (!ready || settling || grip || turn) return;
@@ -360,9 +427,27 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     }
     frame.addEventListener("wheel", wheel, { passive: false });
     cleanup.push(() => frame.removeEventListener("wheel", wheel));
+    const focusPage = () => { if (ready && !blocked()) activity(); };
+    const readingScrolled = (event: Event) => {
+        if (ready && !turn && event.target instanceof Node && current.contains(event.target)) activity();
+    };
+    const visibilityChanged = () => { if (doc.hidden) clearDemonstration(); else scheduleDemonstration(); };
+    const motionChanged = () => { clearDemonstration(); scheduleDemonstration(); };
+    frame.addEventListener("focusin", focusPage);
+    frame.addEventListener("scroll", readingScrolled, true);
+    doc.addEventListener("visibilitychange", visibilityChanged);
+    view.addEventListener("focus", scheduleDemonstration);
+    reducedMotion.addEventListener("change", motionChanged);
+    cleanup.push(() => {
+        frame.removeEventListener("focusin", focusPage);
+        frame.removeEventListener("scroll", readingScrolled, true);
+        doc.removeEventListener("visibilitychange", visibilityChanged);
+        view.removeEventListener("focus", scheduleDemonstration);
+        reducedMotion.removeEventListener("change", motionChanged);
+    });
     const observer = new ResizeObserver(() => {
         const width = frame.getBoundingClientRect().width;
-        if (Math.abs(width - frameWidth) > .5) { frameWidth = width; ++request; grip = null; clearTurn(); if (ready) load("ready"); }
+        if (Math.abs(width - frameWidth) > .5) { frameWidth = width; ++request; grip = null; clearTurn(); if (ready) load("ready"); scheduleDemonstration(); }
     });
     observer.observe(frame); cleanup.push(() => observer.disconnect());
 
@@ -374,6 +459,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         ready = true; root.dataset.portraitReady = "true";
         load("ready", current, "entrance");
         options.onArrival();
+        scheduleDemonstration();
         // Decode adjacent pages without delaying the current view.
         for (const page of [options.previous, options.next]) if (page) void prepare(page);
     }
@@ -390,7 +476,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
             else if (failedDirection) void begin(failedDirection, true);
         },
         dispose() {
-            disposed = true; ++request; grip = null; clearWheel(); clearTurn();
+            disposed = true; ++request; grip = null; clearWheel(); clearDemonstration(); clearTurn();
             cleanup.forEach(dispose => dispose()); imageCancels.forEach(cancel => cancel());
         },
     };
