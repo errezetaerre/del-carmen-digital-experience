@@ -35,9 +35,16 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
     const selected = badges.find((badge) => badge.id === openId);
     const expandedThumbnail = variant === "thumbnail" && (expanded || !!selected);
     const signature = badges.map((badge) => [badge.id, badge.label, badge.detail].join(":")).join("|");
+    const resetKey = `${artwork.id}:${signature}`;
+    const [previousKey, setPreviousKey] = useState(resetKey);
+    if (previousKey !== resetKey) {
+        setPreviousKey(resetKey);
+        setOpenId(null);
+        setPaused(false);
+    }
 
     useEffect(() => {
-        setOpenId(null); setPaused(false); direction.current = 1;
+        direction.current = 1;
         if (trackRef.current) trackRef.current.scrollLeft = 0;
     }, [artwork.id, signature]);
 

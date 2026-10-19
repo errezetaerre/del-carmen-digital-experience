@@ -8,6 +8,7 @@ import ArtworkLinkFeedback from "./ArtworkLinkFeedback";
 
 import {
     useEffect,
+    useLayoutEffect,
     useId,
     useRef,
     useState,
@@ -93,6 +94,15 @@ export default function ArtworkLightbox({
     const [swipeHintDismissed, setSwipeHintDismissed] =
         useState(false);
 
+    const [openingSource, setOpeningSource] = useState({ isOpen, initialIndex });
+    if (openingSource.isOpen !== isOpen || openingSource.initialIndex !== initialIndex) {
+        setOpeningSource({ isOpen, initialIndex });
+        if (isOpen) {
+            setCurrentIndex(initialIndex);
+            if (!openingSource.isOpen) setSwipeHintDismissed(false);
+        }
+    }
+
     const isGlass = presentation === "glass";
     const instanceId = `artwork${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
     const [descriptionExpanded, setDescriptionExpanded] = useState(false);
@@ -100,7 +110,7 @@ export default function ArtworkLightbox({
     const descriptionRef = useRef<HTMLParagraphElement>(null);
     const descriptionButtonRef = useRef<HTMLButtonElement>(null);
     const descriptionExpandedRef = useRef(false);
-    descriptionExpandedRef.current = descriptionExpanded;
+    useLayoutEffect(() => { descriptionExpandedRef.current = descriptionExpanded; }, [descriptionExpanded]);
     const swipeAxisRef = useRef<"pending" | "horizontal" | "vertical">("pending");
 
     /* =========================================================
@@ -169,8 +179,14 @@ export default function ArtworkLightbox({
         }`
         : "/artworks";
 
-    useEffect(() => {
+    const readingKey = JSON.stringify([isOpen, isGlass, artwork?.id, artwork?.description]);
+    const [previousReadingKey, setPreviousReadingKey] = useState(readingKey);
+    if (previousReadingKey !== readingKey) {
+        setPreviousReadingKey(readingKey);
         setDescriptionExpanded(false);
+    }
+
+    useEffect(() => {
         const text = descriptionRef.current;
         if (!isOpen || !isGlass || !text) {
             setDescriptionOverflows(false);
@@ -352,19 +368,6 @@ export default function ArtworkLightbox({
        ========================================================= */
 
     useEffect(() => {
-        if (!isOpen) {
-            return;
-        }
-
-        setCurrentIndex(
-            initialIndex,
-        );
-    }, [
-        initialIndex,
-        isOpen,
-    ]);
-
-    useEffect(() => {
         activePointersRef.current.clear();
 
         swipeStartRef.current =
@@ -479,12 +482,6 @@ export default function ArtworkLightbox({
     /* =========================================================
        SWIPE INTRODUCTION
        ========================================================= */
-
-    useEffect(() => {
-        if (isOpen) {
-            setSwipeHintDismissed(false);
-        }
-    }, [isOpen]);
 
     const dismissSwipeHint = () => {
         setSwipeHintDismissed(true);

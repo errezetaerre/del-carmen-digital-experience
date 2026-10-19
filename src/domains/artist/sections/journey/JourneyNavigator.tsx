@@ -47,8 +47,8 @@ export default function JourneyNavigator() {
     const [activeIndex, setActiveIndex] =
         useState<number | null>(0);
 
-    const [pointerY, setPointerY] =
-        useState<number | null>(null);
+    const [proximities, setProximities] =
+        useState<number[]>([]);
 
     const navigatorRef =
         useRef<HTMLDivElement | null>(null);
@@ -115,45 +115,22 @@ export default function JourneyNavigator() {
     const handlePointerMove = (
         event: React.PointerEvent<HTMLDivElement>,
     ) => {
-        setPointerY(event.clientY);
+        setProximities(buttonRefs.current.map((button) => {
+            if (!button) return 0;
+            const rect = button.getBoundingClientRect();
+            const distance = Math.abs(event.clientY - (rect.top + rect.height / 2));
+            return Math.max(0, 1 - distance / MAX_DISTANCE);
+        }));
     };
 
     const handlePointerLeave = () => {
-        setPointerY(null);
+        setProximities([]);
     };
 
     const getProximity = (
         index: number,
     ) => {
-        if (pointerY === null) {
-            return 0;
-        }
-
-        const button =
-            buttonRefs.current[index];
-
-        if (!button) {
-            return 0;
-        }
-
-        const rect =
-            button.getBoundingClientRect();
-
-        const centerY =
-            rect.top +
-            rect.height / 2;
-
-        const distance =
-            Math.abs(
-                pointerY - centerY,
-            );
-
-        return Math.max(
-            0,
-            1 -
-            distance /
-            MAX_DISTANCE,
-        );
+        return proximities[index] ?? 0;
     };
 
     return (

@@ -51,6 +51,12 @@ export default function MobileMenu({
   const [activeItem, setActiveItem] =
     useState<string | null>(null);
 
+  const [previousOpen, setPreviousOpen] = useState(isOpen);
+  if (previousOpen !== isOpen) {
+    setPreviousOpen(isOpen);
+    if (!isOpen) setActiveItem(null);
+  }
+
   const activeItemRef =
     useRef<HTMLAnchorElement | null>(null);
 
@@ -84,8 +90,6 @@ export default function MobileMenu({
 
   useEffect(() => {
     if (!isOpen) {
-      setActiveItem(null);
-
       activeItemRef.current = null;
 
       pointerRef.current.active = false;

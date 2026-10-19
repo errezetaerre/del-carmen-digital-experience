@@ -56,7 +56,6 @@ export default function CollectionGallery({
     useEffect(() => {
         if (!isPending) {
             pendingArtworkRef.current = null;
-            setPendingArtworkId(null);
         }
     }, [isPending]);
 

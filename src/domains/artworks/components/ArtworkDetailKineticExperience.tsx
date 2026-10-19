@@ -114,11 +114,11 @@ export default function ArtworkDetailKineticExperience({
     const onboardingBubbleRef = useRef<HTMLDivElement>(null);
     const onboardingTargetRef = useRef<HTMLDivElement>(null);
     const onboardingIntervalRef = useRef<number | null>(null);
-    const onboardingLearnedRef = useRef(false);
+    const onboardingLearnedRef = useRef(artworkOnboardingLearnedInCurrentDocument);
     const onboardingSealUntilRef = useRef(0);
     const navigationRouteTimerRef = useRef<number | null>(null);
     const [onboardingPhase, setOnboardingPhase] =
-        useState<OnboardingPhase>("reminding");
+        useState<OnboardingPhase>(() => artworkOnboardingLearnedInCurrentDocument ? "learned" : "reminding");
 
     const hasPrevious = Boolean(previousScene && previousHref);
     const hasNext = Boolean(nextScene && nextHref);
@@ -258,13 +258,6 @@ export default function ArtworkDetailKineticExperience({
                 "-=0.18",
             );
     }, [clearOnboardingTimers, positionOnboardingBubble]);
-
-    useLayoutEffect(() => {
-        if (artworkOnboardingLearnedInCurrentDocument) {
-            onboardingLearnedRef.current = true;
-            setOnboardingPhase("learned");
-        }
-    }, []);
 
     useEffect(() => {
         if (onboardingLearnedRef.current) return;

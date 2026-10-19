@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.11
+Version: 1.12
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -558,3 +558,13 @@ The owner approved the Journal/forms/legal block and reports its push in progres
 Production build/TypeScript, focused lint, source/markup invariants and headless Chromium touch/viewport/continuity checks are performed for this increment. The owner must review its actual visual feel on phone/tablet portrait and physical Safari/Android/iPad, including vertical reading, slow media, cancellation, return to Standard, orientation changes and reduced motion. This experiment is not approval to change desktop/landscape or the Home/Series lightbox.
 
 After portrait review, resume configured-provider delivery and the remaining complete EN/ES editorial/responsive/accessibility/SEO, inherited dependency security and baseline lint verification. Spanish remains noindex and legal drafts remain drafts/noindex. Database, confirmed commerce offers/cart and the sales PDF retain their sequence. No production promotion, merge, commit or upstream push is performed by this increment.
+
+### Pre-merge engineering review after portrait approval — 2026-10-18
+
+The owner approved the portrait follow-up and pushed `6cb8e49` on `feat/i18n-en-es`; PR #1 targets `main`. The next integration increment pins Next.js and eslint-config-next to 16.4.2 and refreshes compatible vulnerable transitive dependencies. The production dependency audit reports zero known vulnerabilities. The full audit retains five development-only findings in the ESLint/fast-glob/micromatch/braces chain; braces 3.0.3 has no patched release at this review. Do not use the suggested forced downgrade to a Next 14 lint configuration. Track that upstream developer-tool advisory separately from the deployed runtime.
+
+Full-repository lint changes from 34 errors/16 warnings to zero errors/14 warnings. React state derived from route/selection props is reconciled before commit; browser-only readiness is hydration-safe; committed refs remain in event/effect owners. The remaining warnings are native-image optimization recommendations, the typed alt forwarding wrapper, existing unused declarations and the documented native-touch subscription dependency warning. The zoom modal also opts out of the parent kinetic gesture: a browser comparison reproduced pointer-capture theft on the approved baseline, caused by React portal event bubbling. No rule is globally disabled. Next production build, TypeScript and 123 static pages pass.
+
+The portrait and landscape motion engines, touch adapters, geometry/material/CSS, canonical catalogue, assets, translations, legal/consent definitions and API handlers remain unchanged. Browser regressions cover the complete portrait interaction, native history/orientation, Standard/Glass zoom ownership, Home/Series selection, menu focus and localized newsletter feedback. The delivery README records the exact executed checks and limitations.
+
+Apply and commit this increment on the existing feature branch so PR #1 updates; check its new Vercel build before merging. Local verification does not prove configured email delivery, physical-device/screen-reader behavior or legal sufficiency. Spanish indexing remains gated and legal drafts remain drafts. Database, confirmed offers/cart, sales PDF and later immersive Home/Series work retain their sequence. This review does not itself merge or publish production.

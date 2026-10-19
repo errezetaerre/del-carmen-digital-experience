@@ -1,9 +1,9 @@
 # Internationalization
 
-Version: 1.5
+Version: 1.6
 Document ID: DOC-I18N
 Project: Del Carmen Digital Experience
-Status: Foundation/Artwork approved/pushed; Home/Collections, About/Artist and Journal approved; forms/legal implemented for review
+Status: EN/ES and portrait Glass Artbook approved; pre-merge maintenance prepared for integration
 Last Updated: 2026-10-18
 
 ## Decision and source
@@ -213,3 +213,11 @@ No dependency installation or new environment variable is required. Preserve unr
 Validation: build/TypeScript pass with 123 static pages; 16 functional groups exercise actual compiled components/routes/helpers through explicit hook/transport/provider/Redis fixtures; five source/invariance checks preserve approved classes/motion/data/settings; nine production-server groups cover 15 real GET requests. English Contact/Privacy/Terms/Home, hydrated form fixtures and mail wording remain exact. Previously approved Spanish Home/Journal/About/Artist visible responses remain exact. Tests cover language-bound consent, translated errors/results, forged or mismatched consent rejection with no delivery/write, correct stored statements/mail, legacy English, rate/honeypot/active/provider-cleanup contracts and result redirects.
 
 Focused lint retains the existing NewsletterForm `react-hooks/set-state-in-effect` error in query-result synchronization, confirmed against v5 without a new finding. Earlier JourneyNavigator/SeriesGallery debt and inherited dependency release gates remain open. The 30 groups do not establish real-provider persistence/delivery, rendered device/screen-reader/reduced-motion/native-validation behavior or legal sufficiency. Spanish stays noindex; legal drafts stay noindex in both languages.
+
+## Pre-merge engineering maintenance after owner approval — 2026-10-18
+
+The owner approved the forms/legal translation and the portrait Glass Artbook, including its subsequent insignia and onboarding corrections, and pushed `6cb8e49`. PR #1 collects the five feature-branch commits over `main` for review. The maintenance increment updates the paired Next.js/ESLint configuration to 16.4.2 and clears full-repository lint errors without changing dictionaries, content, locale routing, metadata policy, consent definitions or providers.
+
+Newsletter result state is initialized from the recognized query value and reconciled when that scalar changes. Editing still clears feedback; unrelated renders do not restore a dismissed result. Browser tests exercise both languages, recognized success/error/unsubscribe results and language/version-bound consent through a mocked submission transport. No real email or subscriber write is performed by those tests.
+
+The production dependency audit reports zero known vulnerabilities; five full-audit findings remain in development-only lint tooling with no patched braces release. The default lint command succeeds with 14 documented warnings. Build/TypeScript and 123 static pages pass. Browser/HTTP regression details and application instructions accompany the maintenance patch. A successful local review is followed by the owner's application/push and a new Vercel check on the existing PR. Production branch/protection/domain/provider settings are not changed here. Spanish remains noindex and legal content remains draft/noindex; broader editorial, physical-device, accessibility, domain and configured-provider verification retain their existing owners.

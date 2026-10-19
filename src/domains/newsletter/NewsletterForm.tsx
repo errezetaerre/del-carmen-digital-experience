@@ -3,7 +3,6 @@ import { useLocale, useTranslations } from "next-intl";
 
 import {
     FormEvent,
-    useEffect,
     useState,
 } from "react";
 
@@ -26,6 +25,16 @@ type NewsletterStatus =
     | "alreadySubscribed"
     | "rateLimited";
 
+function statusFromQuery(result: string | null): NewsletterStatus | undefined {
+    switch (result) {
+        case "success": return "confirmed";
+        case "invalid": return "invalidConfirmation";
+        case "unsubscribed": return "unsubscribed";
+        case "invalid-unsubscribe": return "invalidUnsubscribe";
+        default: return undefined;
+    }
+}
+
 export default function NewsletterForm() {
     const locale = useLocale();
     const t = useTranslations("Newsletter");
@@ -40,36 +49,18 @@ export default function NewsletterForm() {
     const consent = acceptedNotice === noticeKey;
     const setConsent = (checked: boolean) => setAcceptedNotice(checked ? noticeKey : null);
     const [consentError, setConsentError] = useState<"consentRequired" | "consentOutdated">();
+    const result = searchParams.get("newsletter");
+    const [previousResult, setPreviousResult] = useState(result);
     const [status, setStatus] =
-        useState<NewsletterStatus>("idle");
+        useState<NewsletterStatus>(() => statusFromQuery(result) ?? "idle");
+
+    if (previousResult !== result) {
+        setPreviousResult(result);
+        const feedback = statusFromQuery(result);
+        if (feedback) setStatus(feedback);
+    }
 
     const isSubmitting = status === "submitting";
-
-    /*
-     * ======================================================
-     * URL FEEDBACK
-     * ======================================================
-     */
-
-    useEffect(() => {
-        const result = searchParams.get("newsletter");
-
-        if (result === "success") {
-            setStatus("confirmed");
-        }
-
-        if (result === "invalid") {
-            setStatus("invalidConfirmation");
-        }
-
-        if (result === "unsubscribed") {
-            setStatus("unsubscribed");
-        }
-
-        if (result === "invalid-unsubscribe") {
-            setStatus("invalidUnsubscribe");
-        }
-    }, [searchParams]);
 
     /*
      * ======================================================

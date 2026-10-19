@@ -36,27 +36,31 @@ export default function KineticCarousel({
     previousButtonClassName = "left-3 top-[40%]",
     nextButtonClassName = "right-5 top-[40%]",
 }: KineticCarouselProps) {
-    const kinetic = useKineticCarousel(itemCount);
+    const {
+        viewportRef, trackRef, dragging, canMoveLeft, canMoveRight,
+        handlePointerDown, handlePointerMove, handlePointerUp,
+        handleWheel, handleClickCapture, move,
+    } = useKineticCarousel(itemCount);
 
     return (
         <div className="relative min-w-0">
             <div
                 {...viewportProps}
-                ref={kinetic.viewportRef}
-                onPointerDown={kinetic.handlePointerDown}
-                onPointerMove={kinetic.handlePointerMove}
-                onPointerUp={kinetic.handlePointerUp}
-                onPointerCancel={kinetic.handlePointerUp}
-                onWheel={kinetic.handleWheel}
-                onClickCapture={kinetic.handleClickCapture}
+                ref={viewportRef}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onWheel={handleWheel}
+                onClickCapture={handleClickCapture}
                 className={[
                     "relative select-none overflow-hidden overscroll-x-contain touch-pan-y",
-                    kinetic.dragging ? "cursor-grabbing" : "cursor-grab",
+                    dragging ? "cursor-grabbing" : "cursor-grab",
                     viewportClassName,
                 ].join(" ")}
             >
                 <div
-                    ref={kinetic.trackRef}
+                    ref={trackRef}
                     className={[
                         "flex w-max items-start will-change-transform",
                         trackClassName,
@@ -69,11 +73,11 @@ export default function KineticCarousel({
             <button
                 type="button"
                 aria-label={previousLabel}
-                onClick={() => kinetic.move(-1)}
+                onClick={() => move(-1)}
                 className={[
                     buttonClassName,
                     previousButtonClassName,
-                    kinetic.canMoveLeft
+                    canMoveLeft
                         ? "pointer-events-auto opacity-100"
                         : "pointer-events-none opacity-0",
                 ].join(" ")}
@@ -84,11 +88,11 @@ export default function KineticCarousel({
             <button
                 type="button"
                 aria-label={nextLabel}
-                onClick={() => kinetic.move(1)}
+                onClick={() => move(1)}
                 className={[
                     buttonClassName,
                     nextButtonClassName,
-                    kinetic.canMoveRight
+                    canMoveRight
                         ? "pointer-events-auto opacity-100"
                         : "pointer-events-none opacity-0",
                 ].join(" ")}

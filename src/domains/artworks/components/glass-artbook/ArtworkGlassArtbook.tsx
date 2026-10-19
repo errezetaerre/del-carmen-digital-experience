@@ -5,7 +5,8 @@ import { localizeHref } from "@/i18n/config";
 import { localizeArtwork } from "@/i18n/artworkCopy";
 import LanguageSwitcher from "@/i18n/LanguageSwitcher";
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import useClientReady from "@/shared/hooks/useClientReady";
 import { createPortal } from "react-dom";
 import Link from "@/i18n/navigation";
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -37,20 +38,29 @@ export default function ArtworkGlassArtbook({
     const initialIdRef = useRef(initialArtworkId);
     const onNavigateRef = useRef<(artwork: Artwork) => void>(() => {});
     const dataKey = useMemo(() => JSON.stringify(artworks), [artworks]);
-    const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
+    const clientReady = useClientReady();
+    const portalHost = clientReady ? document.body : null;
+    const [experienceHost, setExperienceHost] = useState<HTMLElement | null>(null);
+    const captureExperience = useCallback((host: HTMLElement | null) => {
+        experienceRef.current = host;
+        setExperienceHost(host);
+    }, []);
     const [bookEligible, setBookEligible] = useState<boolean | null>(null);
     const [actionsHost, setActionsHost] = useState<HTMLElement | null>(null);
     const [highlightsHosts, setHighlightsHosts] = useState<HTMLElement[]>([]);
-    const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(
-        () => artworks.find((item) => item.id === initialArtworkId) ?? artworks[0] ?? null,
-    );
+    const routedArtwork = useMemo(() => {
+        if (!pathname?.startsWith("/artworks/")) return null;
+        try {
+            const slug = decodeURIComponent(pathname.slice("/artworks/".length).replace(/\/$/, ""));
+            return artworks.find((item) => item.slug === slug) ?? null;
+        } catch { return null; }
+    }, [pathname, artworks]);
+    const selectedArtwork = routedArtwork ?? artworks.find((item) => item.id === initialArtworkId) ?? artworks[0] ?? null;
     const [highlightArtworks, setHighlightArtworks] = useState<[Artwork | null, Artwork | null]>([null, null]);
     const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId, kind: "entrance" });
     const standardHref = selectedArtwork
         ? artworkExperienceHref(selectedArtwork.slug, navigationQuery, "standard")
         : "/artworks";
-
-    useEffect(() => { setPortalHost(document.body); }, []);
 
     useEffect(() => {
         const viewport = window.matchMedia(GLASS_BOOK_QUERY);
@@ -98,7 +108,6 @@ export default function ArtworkGlassArtbook({
 
     useEffect(() => {
         onNavigateRef.current = (artwork) => {
-            setSelectedArtwork(artwork);
             const query = new URLSearchParams(navigationQuery);
             query.set("experience", "glass");
             window.history.pushState(null, "", localizeHref(`/artworks/${artwork.slug}?${query.toString()}`, locale));
@@ -135,16 +144,11 @@ export default function ArtworkGlassArtbook({
     }, [dataKey, instanceId, portalHost, bookEligible, locale]);
 
     useEffect(() => {
-        if (!pathname?.startsWith("/artworks/")) return;
-        let slug: string;
-        try { slug = decodeURIComponent(pathname.slice("/artworks/".length).replace(/\/$/, "")); }
-        catch { return; }
-        const item = artworks.find((artwork) => artwork.slug === slug);
+        const item = routedArtwork;
         if (!item) return;
         initialIdRef.current = item.id;
         controllerRef.current?.select(item.id);
-        setSelectedArtwork(item);
-    }, [pathname, dataKey, artworks]);
+    }, [routedArtwork]);
 
     useEffect(() => {
         if (!portalHost || !bookEligible) return;
@@ -170,7 +174,7 @@ export default function ArtworkGlassArtbook({
     }
 
     return createPortal(
-        <main ref={experienceRef} className={`${styles.experience} bg-surface-deep text-white`} data-lenis-prevent aria-label={t("immersive")}>
+        <main ref={captureExperience} className={`${styles.experience} bg-surface-deep text-white`} data-lenis-prevent aria-label={t("immersive")}>
             <div className={`${styles.exit} flex items-center gap-5`}>
                 <LanguageSwitcher className="text-white/60" />
                 <Link href={standardHref} data-glass-exit className="font-sans text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60" aria-label={t("exitLabel")}>
@@ -188,8 +192,8 @@ export default function ArtworkGlassArtbook({
                     <Link href={standardHref} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-brand-gold">{t("standard")}</Link>
                 </div>}
             </div>}
-            {actionsHost && experienceRef.current && createPortal(
-                <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly portalTarget={experienceRef.current} />,
+            {actionsHost && experienceHost && createPortal(
+                <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly portalTarget={experienceHost} />,
                 actionsHost,
             )}
             {highlightsHosts.map((host, slot) => {

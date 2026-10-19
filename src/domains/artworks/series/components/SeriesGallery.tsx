@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 
@@ -55,20 +55,12 @@ export default function SeriesGallery({
             ),
         );
 
-    /*
-     * Keep the lightbox synchronized with
-     * artwork supplied by the Series route.
-     */
-    useEffect(() => {
-        setSelectedIndex(
-            getArtworkIndex(
-                initialArtworkSlug,
-            ),
-        );
-    }, [
-        initialArtworkSlug,
-        artworks,
-    ]);
+    // Reconcile a new route selection before committing the lightbox.
+    const [selectionSource, setSelectionSource] = useState({ artworks, initialArtworkSlug });
+    if (selectionSource.artworks !== artworks || selectionSource.initialArtworkSlug !== initialArtworkSlug) {
+        setSelectionSource({ artworks, initialArtworkSlug });
+        setSelectedIndex(getArtworkIndex(initialArtworkSlug));
+    }
 
     const handleOpen = (
         artwork: Artwork,

@@ -1,4 +1,4 @@
-Version: 1.38
+Version: 1.39
 
 Document ID:
 DOC-RS
@@ -660,3 +660,11 @@ Contact metadata, both legal page/layout copies and shared notices follow locale
 ArtworkDetailScene supplies an opt-in editorial-only view of the existing artwork presentation; its default preserves Standard. ArtworkPage wraps default/Glass entry with the portrait selector, while explicit Standard bypasses it. The portrait Standard Open Artbook action is visible for comparison and return. Global navigation remains outside all turn surfaces. The original seven-file landscape/desktop glass module, both existing input adapters, Standard kinetic controller, shared Home/Series lightbox, approved Bronze accent helpers, dust renderer, canonical catalogue, translation dictionaries, assets and environment/dependencies remain in their existing owners. Collections still uses canonical ArtworkSeries and no parallel grouping/domain is created.
 
 DOC-ART-IMP records the plane construction, readiness, history, validation and physical-device review limits. This is an incremental portrait experiment over approved bilingual Forms/Legal v6; it does not replace prior packages or promote production.
+
+### Browser readiness and committed interaction state — 2026-10-18
+
+`shared/hooks/useClientReady.ts` owns the shared server/hydration boundary for browser-only values. It uses React's external-store hydration snapshots without a mount effect that merely writes React state. Route loading reads its existing Standard navigation snapshot only after that boundary. The landscape entry keeps a cached, single-entry media decision; the portrait selector continues to own later orientation changes.
+
+Glass keeps its native motion controller as the owner of gestures/physics. Its React wrapper derives selected-artwork presentation from the locale-aware pathname and captures the portal target as committed state. Viewer pointer ids remain imperative refs; the rendered zoom transition uses corresponding React state. Its zoom portal declares the existing kinetic-ignore boundary so React portal event bubbling cannot transfer pointer capture to the background artwork carousel. Artist proximity measurements run in pointer handlers, and dialog callbacks are refreshed after commit. Gallery, badge, menu and newsletter state that depends on changed props or URL feedback is reconciled before commit. KineticCarousel passes destructured refs directly to ref attributes.
+
+Next.js and its ESLint configuration are paired at 16.4.2. Existing module boundaries, catalogue/ArtworkSeries ownership, API/consent contracts and the portrait/landscape engines are retained. DOC-IR records release status and the remaining developer-tool advisory.
