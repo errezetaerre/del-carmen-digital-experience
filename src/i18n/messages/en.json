@@ -1,0 +1,651 @@
+{
+  "Navigation": {
+    "artworks": "Artworks",
+    "collections": "Collections",
+    "about": "About",
+    "journal": "Journal",
+    "contact": "Contact",
+    "language": "Language",
+    "switchToSpanish": "Read this page in Spanish",
+    "switchToEnglish": "Read this page in English",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "main": "Main navigation",
+    "mobile": "Mobile navigation",
+    "legal": "Legal",
+    "footer": "Footer navigation",
+    "social": "Social media",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "newsletter": "Newsletter",
+    "rights": "All rights reserved."
+  },
+  "Artwork": {
+    "original": "Original Artwork",
+    "masterCopy": "Master Copy",
+    "studyAfter": "Study After",
+    "year": "Year",
+    "plannedYear": "Planned year",
+    "medium": "Medium",
+    "dimensions": "Dimensions",
+    "status": "Status",
+    "previous": "Previous",
+    "next": "Next",
+    "back": "Back to artworks",
+    "backToSeries": "Back to {title}",
+    "openArtbook": "Open Artbook ↗",
+    "openingArtbook": "Opening Artbook…",
+    "orientationHint": "Artbook in landscape",
+    "openArtworkArtbook": "Open {title} in Glass Artbook",
+    "information": "{title} — artwork information",
+    "swipe": "Swipe to explore",
+    "swipeDrag": "Swipe / drag to explore",
+    "swipeDragDock": "Swipe / Drag to explore",
+    "available": "Available",
+    "reserved": "Reserved",
+    "sold": "Sold",
+    "unavailable": "Not available",
+    "comingSoon": "Coming soon",
+    "inProgress": "In progress",
+    "plannedFor": "Planned for {year}",
+    "plannedPreview": "Planned artwork preview",
+    "progressPreview": "Work in progress",
+    "cover": "Cover Artwork",
+    "coverDetail": "Selected for the Home cover",
+    "featured": "Featured",
+    "curatorial": "Curatorial selection",
+    "selection": "Official Selection",
+    "honourableMention": "Honourable Mention",
+    "award": "Award",
+    "featuredCollection": "Featured Collection",
+    "distinctions": "Artwork distinctions",
+    "pauseRibbon": "Pause distinction ribbon",
+    "resumeRibbon": "Resume distinction ribbon",
+    "closeDistinction": "Close distinction details",
+    "loading": "Loading artwork…",
+    "opening": "Opening…",
+    "openingArtwork": "Opening artwork…",
+    "expand": "Expand artwork",
+    "close": "Close",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "resetZoom": "Reset zoom",
+    "oil": "Oil",
+    "graphite": "Graphite",
+    "charcoal": "Charcoal",
+    "mixedMedia": "Mixed Media",
+    "on": "on",
+    "canvas": "Canvas",
+    "paper": "Paper",
+    "tonalStrathmore": "Tonal Paper Strathmore",
+    "tonalCanson": "Tonal Paper Canson",
+    "whitePencil": "Using White Pencil",
+    "colorPencils": "Using Color Pencils",
+    "expandNamed": "Expand {title}",
+    "zoomed": "Zoomed view of {title}",
+    "closeZoom": "Close zoom viewer",
+    "closeViewer": "Close artwork viewer",
+    "previousArtwork": "Previous artwork",
+    "nextArtwork": "Next artwork",
+    "position": "Artwork {index} of {total}",
+    "viewArtwork": "View artwork {index}",
+    "viewNamed": "View {title}",
+    "discover": "Discover →",
+    "descriptionOf": "Description of {title}",
+    "readLess": "Read less ↓",
+    "readMore": "Read more ↑",
+    "viewDetails": "View details",
+    "exploreDetail": "Explore in detail",
+    "viewAll": "View all works",
+    "previewDescription": "{title} — {label}. Planned for {year}. Preview colours behind frosted glass."
+  },
+  "Archive": {
+    "metadataTitle": "Artworks",
+    "metadataDescription": "Explore original artworks, master copies and studies by Rolando Del Carmen, with artwork details, series and planned works.",
+    "eyebrow": "Artwork Archive",
+    "titleFirst": "The complete",
+    "titleSecond": "body of work",
+    "description": "An evolving archive of original works, studies and selected pieces across different periods and subjects.",
+    "selection": "Artwork selection",
+    "allWorks": "All works",
+    "allCategories": "All Works",
+    "featured": "Featured",
+    "category": "Category",
+    "year": "Year",
+    "medium": "Medium",
+    "allYears": "All",
+    "allMediums": "All",
+    "resultCount": "{count, plural, one {# work} other {# works}}",
+    "clearFilters": "Clear filters",
+    "empty": "No works match the selected filters."
+  },
+  "Recognitions": {
+    "sendero_del_sol_la_no_bienal_2024": { "event": "La No Bienal — 5th edition" }
+  },
+  "Glass": {
+    "viewer": "Glass Artbook artwork viewer",
+    "immersive": "Immersive Glass Artbook",
+    "previous": "Previous",
+    "next": "Next",
+    "dragDock": "Drag to explore · ← →",
+    "buttonDock": "Previous / Next to explore",
+    "swipeGlass": "Swipe / drag the glass · ← → to explore",
+    "useButtons": "Use Previous / Next to explore",
+    "previousArtwork": "Previous artwork:",
+    "nextArtwork": "Next artwork:",
+    "noPrevious": "No previous artwork",
+    "noNext": "No next artwork",
+    "opening": "Opening Artbook…",
+    "preparing": "Preparing Artbook…",
+    "loadingArtwork": "Loading artwork…",
+    "error": "This artwork could not finish loading.",
+    "retry": "Try again",
+    "standard": "Continue in standard view →",
+    "openStandard": "Open {title} in standard view",
+    "exit": "Exit",
+    "exitLabel": "Exit Artbook and return to standard view",
+    "year": "Year",
+    "plannedYear": "Planned year",
+    "medium": "Medium",
+    "dimensions": "Dimensions",
+    "status": "Status",
+    "original": "Original Artwork",
+    "masterCopy": "Master Copy",
+    "studyAfter": "Study After",
+    "on": "on",
+    "restoring": "Restoring the artwork reflection."
+  },
+  "Home": {
+    "tagline": "Painting the Eternal Essence Within",
+    "taglineFirst": "Painting the Eternal",
+    "taglineSecond": "Essence Within",
+    "scroll": "Scroll",
+    "exploreCollection": "Explore Collection",
+    "featuredWork": "Featured Work",
+    "discoverWork": "Discover the work",
+    "artistPortrait": "Artist portrait",
+    "artistTitle": "Art as eternal memory",
+    "artistParagraphFirst": "My works are born from a vow with heaven: to capture the beauty that the soul recognizes, but the world has forgotten.",
+    "artistParagraphSecond": "I paint to awaken consciousness, to remind us that what is essential is not seen, but felt.",
+    "artistStory": "Discover my story →",
+    "selectedEyebrow": "Selected Works",
+    "selectedTitleFirst": "Works that speak",
+    "selectedTitleSecond": "in silence",
+    "selectedDescription": "Each painting is a threshold. Each gaze, a story.",
+    "selectedAll": "View all works →",
+    "journalEyebrow": "Journal",
+    "journalTitleFirst": "Thoughts, stories",
+    "journalTitleSecond": "and quiet observations.",
+    "journalRead": "Read Journal →",
+    "invitationJourneyFirst": "Let's continue",
+    "invitationJourneySecond": "the journey.",
+    "newsletterLabel": "Newsletter",
+    "newsletterDescription": "Receive occasional news about upcoming artworks, exhibitions, and the evolving world of Rolando Del Carmen's art.",
+    "contact": "Contact"
+  },
+  "Collections": {
+    "metadataTitle": "Collections",
+    "metadataDescription": "Explore the artwork series of Del Carmen: connected paintings, shared themes and the stories behind each collection.",
+    "eyebrow": "Collections",
+    "heading": "Bodies of work shaped by time, memory, and contemplation.",
+    "scroll": "Scroll to explore ↓"
+  },
+  "Series": {
+    "label": "Artwork Series",
+    "statement": "Series Statement",
+    "continue": "Continue Exploring",
+    "back": "← Back to Collections",
+    "home": "Return Home →",
+    "workCount": "{count, plural, one {# work} other {# works}}",
+    "ongoing": "ongoing",
+    "completed": "completed",
+    "archived": "archived",
+    "exploreNamed": "Explore {title} artwork series",
+    "exploreCollection": "Explore Collection",
+    "exploreCollectionArrow": "Explore collection →",
+    "exploreSeries": "Explore series",
+    "worksInCollection": "Works in this collection",
+    "previousArtworks": "Previous artworks",
+    "nextArtworks": "Next artworks",
+    "metadataFallback": "Explore the {title} artwork series by Del Carmen."
+  },
+  "Categories": {
+    "figurative": "Figurative", "spiritual": "Spiritual", "study": "Study", "portrait": "Portrait", "symbolic": "Symbolic", "animal-lover": "Animal Lover", "still-life": "Still Life", "cast": "Cast", "academic": "Academic", "landscape": "Landscape", "classic": "Classic", "contemporary": "Contemporary", "nude": "Nude", "impasto": "Impasto", "lithography": "Lithography", "bargue": "Bargue"
+  },
+  "About": {
+    "metadataTitle": "About",
+    "metadataDescription": "Discover the artistic vision behind Del Carmen: painting, memory, contemplation and the human experience.",
+    "hero": {
+      "eyebrow": "The Experience",
+      "titleFirst": "Where art meets",
+      "titleSecond": "experience.",
+      "description": "Del Carmen is a contemplative space where painting, memory and technology meet without competing for attention.",
+      "filmLabel": "The Encounter film",
+      "comingSoon": "Coming soon"
+    },
+    "essence": {
+      "statement": "Art invites us to slow down, to observe, and to discover what remains when everything unnecessary disappears.",
+      "eyebrow": "The Essence",
+      "description": "Del Carmen creates encounters between physical painting and digital experience while preserving the silence, humanity and intimacy of the original work."
+    },
+    "ecosystem": {
+      "eyebrow": "The Ecosystem",
+      "titleFirst": "One philosophy.",
+      "titleSecond": "Distinct expressions.",
+      "parent": "Parent Creative Identity",
+      "fineArt": "Fine Art",
+      "fineArtDescription": "Painting, artistic practice and contemplative experiences centered on the artwork.",
+      "digital": "Digital Innovation",
+      "digitalDescription": "Technology and experimentation extending how creative work can be experienced."
+    },
+    "continue": {
+      "eyebrow": "Continue",
+      "titleFirst": "The encounter",
+      "titleSecond": "continues.",
+      "artist": "Discover the Artist",
+      "artistDescription": "The life and practice behind the work.",
+      "artworks": "Explore the Artworks",
+      "artworksDescription": "Paintings, collections and their stories."
+    },
+    "film": {
+      "journey": "A sixty-second journey.",
+      "duration": "Film · 01:00",
+      "comingSoon": "Film coming soon",
+      "production": "Film in production"
+    }
+  },
+  "Artist": {
+    "metadataTitle": "Rolando Del Carmen",
+    "metadataDescription": "Meet Rolando Del Carmen, a Costa Rican artist exploring memory, light and the human experience through painting.",
+    "hero": {
+      "eyebrow": "The Artist",
+      "statement": "A life shaped by curiosity, observation and",
+      "light": "light.",
+      "description": "Nothing arrived all at once. Each encounter became the cause of what came next.",
+      "scroll": "Scroll"
+    },
+    "biography": {
+      "eyebrow": "The Artist",
+      "titleFirst": "Long before painting",
+      "titleSecond": "became a practice,",
+      "titleThird": "there was",
+      "observation": "observation.",
+      "childhood": "Growing up in El Carmen, Puntarenas, Costa Rica, Rolando Rojas would sit on a bench facing the sea and draw palm trees, boats and sunsets. At the time, drawing was simply curiosity — a quiet fascination with the world and with those who seemed naturally capable of translating it onto paper.",
+      "digital": "For many years, that fascination remained dormant. His professional path led instead toward computer science, programming and eventually digital design. Yet through multimedia, animation, color and composition, the visual world quietly returned. What appeared to be a different path was already shaping another way of seeing.",
+      "return": "It was not until adulthood that drawing re-entered his life with intention. An interest in the intricate illustrations of Johanna Basford led him to pen-and-ink work and to a short course that would become unexpectedly decisive. After only a few weeks, his teacher recognized a progression he had never imagined in himself and encouraged him to continue.",
+      "turningPoint": "That encounter changed the question. It was no longer whether he had been born knowing how to draw, but how far curiosity, discipline and time might take him.",
+      "training": "The search eventually led to academic realism and to Atelier del Sol in San José, where he trained under Emilia Cantor and immersed himself in drawing and painting methods rooted in the academic tradition. He later graduated as an academic painter — not as the conclusion of a journey, but as the foundation for a more personal one.",
+      "present": "Today, his practice exists between discipline and discovery: between everything technique can teach and everything that can only emerge through experience."
+    },
+    "work": {
+      "eyebrow": "The Work",
+      "titleFirst": "The journey continues",
+      "titleSecond": "on the canvas.",
+      "description": "Every painting carries something from what came before — observation, memory, discipline, questions — while opening the possibility of something not yet discovered.",
+      "artistStory": "The story of the artist is only one way into the work.",
+      "encounter": "The rest belongs to the encounter between the painting and the viewer.",
+      "explore": "Explore the Works",
+      "imageAlt": "Detail from Epifanía Nupcial"
+    },
+    "practice": {
+      "eyebrow": "The Practice",
+      "titleFirst": "Between",
+      "titleSecond": "observation",
+      "titleThird": "and",
+      "canvas": "the canvas.",
+      "intro": "Painting begins long before the first brushstroke.",
+      "looking": "It begins in looking — in noticing how light changes a face, how a gesture alters the balance of a figure, how color shifts beside another color, or how a seemingly insignificant detail can hold the emotional weight of an entire composition.",
+      "training": "Academic training gave Rolando a structure through which to understand what he was seeing: drawing, proportion, value, anatomy, composition, color and the patient construction of form. These principles remain present in his work, not as rules to be displayed, but as tools that allow intuition to become visible.",
+      "easelAlt": "Rolando Rojas working at the easel",
+      "environment": "Environment",
+      "paletteAlt": "Oil paint color mixtures prepared on the artist's palette",
+      "material": "Material",
+      "portraitAlt": "Portrait painting in progress",
+      "work": "Work",
+      "process": "At the easel, the process becomes a continuous conversation between intention and discovery. A painting may begin with a clear idea, yet the canvas inevitably asks its own questions. Forms are reconsidered. Light is adjusted. Colors are built, removed and rebuilt. Some decisions are deliberate; others emerge only through the act of painting.",
+      "highlightFirst": "This is where",
+      "highlightSecond": "discipline and",
+      "highlightThird": "intuition meet.",
+      "objective": "The objective is not simply to reproduce what the eye can see, but to understand what makes a moment worth preserving — and then to search for the visual language capable of carrying that feeling.",
+      "attention": "Each painting therefore becomes both an image and a record of attention: layers of observation, correction, patience and time.",
+      "continuity": "And perhaps the process never truly ends with the final brushstroke. Every finished work leaves behind another question — something to carry into the next canvas.",
+      "placeholder": "Practice Media"
+    },
+    "philosophy": {
+      "paragraphFirst": "A sunset dissolving into violet and orange. The unguarded smile of a child. A face marked by years of struggle and wisdom. Light entering a room and transforming, for a moment, everything it touches.",
+      "paragraphSecond": "These passing encounters are at the center of Rolando's way of seeing.",
+      "paragraphThird": "Painting becomes a means of remaining with them a little longer — of exploring the point where the exterior world awakens something within us, and where observation becomes contemplation.",
+      "paragraphFourth": "Light is therefore more than illumination. It reveals, conceals, expands and draws the viewer inward. The human figure becomes more than anatomy. A gesture, a posture or a face can carry memory, silence, vulnerability and presence.",
+      "paragraphFifth": "The search is not for a fixed style, but for an increasingly authentic language: a way of painting in which technique gradually becomes invisible and something more intimate can emerge.",
+      "paragraphSixth": "Perhaps this is why the journey continues to feel unfinished.",
+      "paragraphSeventh": "Not because something is missing, but because discovery itself is part of the work.",
+      "eyebrow": "Artistic Philosophy",
+      "titleFirst": "To observe is to discover",
+      "titleSecond": "that nothing is truly",
+      "ordinary": "ordinary."
+    },
+    "journey": {
+      "milestones": {
+        "item1": {
+          "period": "Around 2015–2017",
+          "title": "Curiosity returns",
+          "copy": {
+            "item1": "Years after leaving drawing behind, an unexpected fascination with the intricate illustrations of Johanna Basford brought Rolando back to paper.",
+            "item2": "Color led to pen and ink. Pen and ink led to a course. And a course of only eight classes became a turning point.",
+            "item3": "He entered believing that drawing was an ability one was simply born with. He left wondering what might happen if curiosity were given time, discipline and permission to grow."
+          }
+        },
+        "item2": {
+          "period": "2017–2018",
+          "title": "Learning to see",
+          "copy": {
+            "item1": "Curiosity soon demanded greater structure.",
+            "item2": "Rolando entered Atelier del Sol in San José with no previous academic training in drawing or painting. Under the guidance of Emilia Cantor, he began studying the foundations of academic realism: drawing, proportion, value, form, composition and eventually oil painting.",
+            "item3": "The atelier transformed admiration into practice.",
+            "item4": "What had once seemed like an inaccessible ability began to reveal itself as something that could be studied, practiced and continually refined."
+          }
+        },
+        "item3": {
+          "period": "2018–2021",
+          "title": "The work enters the world",
+          "copy": {
+            "item1": "As study became practice, the work gradually moved beyond the atelier.",
+            "item2": "In 2018, Rolando participated in Academicismo del Siglo XXI at the Museo del Jade in San José, followed by collective exhibitions in cultural spaces across Costa Rica.",
+            "item3": "Recognition during these formative years — from drawing and cast studies to portraiture and painting — became less a destination than confirmation that the years of quiet practice were beginning to leave a visible trace."
+          }
+        },
+        "item4": {
+          "period": "2022",
+          "title": "A foundation, not an arrival",
+          "copy": {
+            "item1": "In 2022, Rolando became the second student to graduate as an academic painter from Atelier del Sol.",
+            "item2": "The achievement marked years of disciplined study, but it did not resolve the central question of the practice.",
+            "item3": "If technique teaches an artist how to see and how to construct an image, what remains when technique is no longer the destination?",
+            "item4": "Graduation became less an ending than the beginning of another search: for a brushstroke, a language and a visual identity that could become unmistakably his own."
+          }
+        },
+        "item5": {
+          "period": "2023 — Present",
+          "title": "Toward a language of his own",
+          "copy": {
+            "item1": "The years that followed brought new exhibitions, new bodies of work and a deeper attention to the relationship between figure, light and inner presence.",
+            "item2": "In 2024, Sendero del Sol received an Honourable Mention at the fifth edition of La No Bienal — a work in which landscape, figure and light converge around precisely the kind of fleeting human presence that continues to shape Rolando's practice.",
+            "item3": "Yet recognition remains secondary to the question that has followed the journey from the beginning:"
+          },
+          "question": "What is still waiting to be discovered?",
+          "closing": {
+            "item1": "The answer is not fixed.",
+            "item2": "It lives somewhere between everything already learned and everything the next painting may reveal."
+          }
+        }
+      },
+      "eyebrow": "The Journey",
+      "titleFirst": "Nothing arrived",
+      "titleSecond": "all at once.",
+      "intro": "Looking back, the path toward painting does not appear as a straight line.",
+      "encounters": "It is a sequence of encounters — some seemingly small at the time — that gradually revealed what the next step could become.",
+      "cause": "One experience became the cause of another.",
+      "search": "What began as curiosity became practice. Practice became discipline. And discipline opened the possibility of a more personal search.",
+      "continues": "The journey continues.",
+      "closingFirst": "Each encounter became the cause of",
+      "closingSecond": "what came next.",
+      "navigation": {
+        "item1": {
+          "date": "2015–2017",
+          "label": "Return to Drawing"
+        },
+        "item2": {
+          "date": "2017–2018",
+          "label": "Entering the Atelier"
+        },
+        "item3": {
+          "date": "2018–2021",
+          "label": "From Study to Exhibition"
+        },
+        "item4": {
+          "date": "2022",
+          "label": "Academic Painter"
+        },
+        "item5": {
+          "date": "2023–Present",
+          "label": "A Voice in Formation"
+        }
+      },
+      "navigationLabel": "Journey timeline navigation",
+      "images": {
+        "item1": {
+          "alt": "Early painting stage of Epifanía"
+        },
+        "item2": {
+          "alt": "Early painting stage of El Misionero"
+        },
+        "item3": {
+          "alt": "Early painting stage of Rose"
+        },
+        "item4": {
+          "alt": "Developing stage of Epifanía"
+        },
+        "item5": {
+          "alt": "Developing stage of El Misionero"
+        },
+        "item6": {
+          "alt": "Developing stage of Rose"
+        },
+        "item7": {
+          "alt": "Painting process of Epifanía"
+        },
+        "item8": {
+          "alt": "Painting process of El Misionero"
+        },
+        "item9": {
+          "alt": "Painting process of Rose"
+        },
+        "item10": {
+          "alt": "Advanced painting stage of Epifanía"
+        },
+        "item11": {
+          "alt": "Advanced painting stage of El Misionero"
+        },
+        "item12": {
+          "alt": "Advanced painting stage of Rose"
+        },
+        "item13": {
+          "alt": "Later painting stage of Epifanía"
+        },
+        "item14": {
+          "alt": "Later painting stage of El Misionero"
+        },
+        "item15": {
+          "alt": "Later painting stage of Rose"
+        },
+        "item16": {
+          "alt": "Advanced painting process of Epifanía"
+        },
+        "item17": {
+          "alt": "Advanced painting process of Rose"
+        }
+      }
+    }
+  },
+  "Journal": {
+    "metadataTitle": "Journal",
+    "metadataDescription": "Reflections, studio notes and conversations about painting, memory and the creative practice of Del Carmen.",
+    "readNamed": "Read {title}",
+    "label": "Journal",
+    "titleFirst": "Thoughts, stories",
+    "titleSecond": "and quiet observations.",
+    "description": "Reflections on art, memory, creation and the quiet moments that shape the work.",
+    "read": "Read Journal",
+    "collectionTitleFirst": "Journal",
+    "collectionTitleSecond": "Collection",
+    "continue": "Continue through the remaining reflections.",
+    "index": "Journal Index →",
+    "drag": "Drag or swipe to explore ↔",
+    "previous": "Explore previous journals",
+    "next": "Explore more journals",
+    "explore": "Explore →",
+    "scroll": "Scroll to explore ↓"
+  },
+  "Contact": {
+    "metadataTitle": "Contact",
+    "metadataDescription": "Contact Del Carmen about artworks, exhibitions, collaborations and other enquiries.",
+    "nameRequired": "Please enter your name.",
+    "emailRequired": "Please enter your email.",
+    "emailInvalid": "Please enter a valid email address.",
+    "subjectRequired": "Please select a subject.",
+    "messageRequired": "Please enter your message.",
+    "consentRequired": "Please give your consent before sending this enquiry.",
+    "consentOutdated": "Please reload this page, review the current privacy notice and give your consent again.",
+    "sending": "Sending...",
+    "sent": "Message sent",
+    "send": "Send message",
+    "subjectArtworks": "Artworks",
+    "subjectArtworksDescription": "Questions about original works, availability, collecting or commissions.",
+    "subjectCollaboration": "Collaboration",
+    "subjectCollaborationDescription": "Exhibitions, creative partnerships, editorial projects or professional proposals.",
+    "subjectGeneral": "General",
+    "subjectGeneralDescription": "Questions or messages that do not fit the categories above.",
+    "label": "Contact",
+    "titleFirst": "Begin a",
+    "titleSecond": "conversation.",
+    "description": "Whether you are interested in an artwork, a collaboration, or simply wish to connect, you are welcome to write.",
+    "website": "Website",
+    "name": "Your name",
+    "email": "Email",
+    "subject": "I'm writing about",
+    "subjectHint": "Choose the option that best matches your reason for writing.",
+    "message": "Message",
+    "success": "Thank you. Your message has been sent successfully.",
+    "rateLimited": "Too many messages have been sent. Please wait a few minutes before trying again.",
+    "error": "Your message could not be sent. Please try again.",
+    "direct": "For direct correspondence"
+  },
+  "Newsletter": {
+    "consentRequired": "Please give your consent before requesting a subscription.",
+    "consentOutdated": "Please reload this page, review the current privacy notice and give your consent again.",
+    "subscribing": "Subscribing...",
+    "subscribe": "Subscribe",
+    "emailPlaceholder": "you@example.com",
+    "website": "Website",
+    "email": "Email",
+    "idle": "Occasional notes about new works, exhibitions and studio updates. You can unsubscribe at any time.",
+    "pending": "Check your inbox to confirm your subscription.",
+    "confirmed": "Your subscription is confirmed. Welcome to the journey.",
+    "unsubscribed": "You've been unsubscribed successfully.",
+    "invalidConfirmation": "This confirmation link is invalid or has expired.",
+    "invalidUnsubscribe": "This unsubscribe link is invalid or no longer available.",
+    "alreadySubscribed": "This email is already subscribed.",
+    "error": "Something went wrong. Please try again.",
+    "rateLimited": "Too many attempts. Please wait a few minutes before trying again."
+  },
+  "FormPrivacy": {
+    "handler": "handles these details for",
+    "privacyLink": "Privacy notice (opens in a new tab)",
+    "details": "How your details are handled",
+    "rights": "You can browse the artwork without using this form. For access, correction, deletion or withdrawal, email"
+  },
+  "Legal": {
+    "navigation": "Legal and contact pages",
+    "back": "← Back to Home",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact"
+  },
+  "Privacy": {
+    "metadataTitle": "Privacy Notice | Del Carmen",
+    "metadataDescription": "A draft notice about contact enquiries, newsletter subscriptions and personal data at Del Carmen.",
+    "label": "Del Carmen · Legal",
+    "title": "Privacy Notice",
+    "description": "Information about the details you share when you contact us or subscribe to studio updates.",
+    "draftDate": "Draft for review · 15 October 2026",
+    "draft": "This notice is being prepared for publication. For questions about your personal data, please contact us.",
+    "aboutTitle": "About this notice",
+    "aboutFirst": "Del Carmen Digital Experience presents the work of Rolando Del Carmen under",
+    "aboutAnd": "and",
+    "aboutLast": ". This draft describes the contact and newsletter features of the website.",
+    "responsibleTitle": "Who is responsible",
+    "responsibleFirst": "is the individual responsible for the contact and newsletter information described in this notice.",
+    "responsibleAnd": "and",
+    "responsibleLast": "are the project's artistic and commercial identities.",
+    "informationTitle": "Information you share",
+    "contactData": "Contact enquiries: your name, email address, enquiry topic and message.",
+    "newsletterData": "Newsletter requests: your email address, subscription source, request and confirmation dates, and subscription status.",
+    "consentData": "Consent records: the statement you agree to, its version and the date of your request, kept with the corresponding enquiry or subscription.",
+    "protectionData": "Form protection: an IP address or request identifier is used to limit repeated requests and protect the forms from abuse.",
+    "voluntary": "Both forms are voluntary. Contact requires your name, email, subject, message and consent; Newsletter requires your email and consent. Without the required details and consent, the requested form cannot be processed. You can browse the artwork without completing either form.",
+    "consentTitle": "Your consent and choices",
+    "consentDescription": "Each form explains its purpose before asking for your details and includes a consent checkbox that starts unselected. Consent to an enquiry covers responding to that enquiry; newsletter consent covers occasional artwork, exhibition and studio updates. A newsletter request still requires email confirmation before the subscription becomes active.",
+    "withdrawFirst": "You can withdraw consent or ask us about your information by emailing",
+    "withdrawLast": ". Consent records follow the retention period of the corresponding enquiry or subscription.",
+    "purposeTitle": "How the information is used",
+    "purposeDescription": "Contact details and messages are used to receive and respond to your enquiry. Newsletter details are used to confirm and manage your subscription. Request identifiers help protect the contact and newsletter forms.",
+    "separateConsent": "Sending a contact enquiry does not subscribe you to the newsletter.",
+    "retentionTitle": "Contact enquiries and retention",
+    "contactRetention": "Ordinary closed enquiries are kept for up to 12 months after the last substantive exchange or closure, as applicable. Correspondence needed for an ongoing transaction, accounting requirement or dispute is assessed separately. A valid personal-data request is handled independently of these routine retention periods.",
+    "providerRetention": "These periods concern the records we manage. Email-service and infrastructure providers may retain separate copies under their applicable terms; contact us if you need information about a specific record.",
+    "providersTitle": "Services involved",
+    "providersDescription": "Email delivery uses Resend. Newsletter records and form-protection controls use Upstash. These providers process information under their respective service and data-processing terms.",
+    "providersFirst": "You can read the",
+    "resendPrivacy": "Resend privacy policy",
+    "providersAnd": "and the",
+    "upstashPrivacy": "Upstash privacy policy",
+    "providersLast": "for information about their services. Contact us if you have questions about processing locations or recipients of your information.",
+    "newsletterTitle": "Newsletter choices and records",
+    "pendingRetention": "A subscription becomes active after email confirmation. An unconfirmed request and its confirmation link expire after 24 hours from the latest valid request. A new request requires a new confirmation.",
+    "activeRetention": "We keep active subscription details while the subscription and its purpose continue, with an annual review of whether they are still needed. Unsubscribing immediately removes the address from the active list. We retain only the email address, unsubscribe date and status for up to 30 days to resolve unsubscribe incidents; that record then expires. Unsubscribing and requesting deletion are separate actions.",
+    "newsletterWithdrawFirst": "To withdraw a subscription or ask about an existing record, email",
+    "newsletterWithdrawOr": "or use our",
+    "newsletterContact": "Contact page",
+    "requestsTitle": "Questions and personal-data requests",
+    "requestsDescription": "You can contact us about access to your information, correction, deletion or withdrawal of consent. Tell us which request you would like us to review. We may need to confirm that the request concerns your own information.",
+    "requestsFirst": "Please email",
+    "requestsOr": "or use the",
+    "requestsContact": "Contact page",
+    "requestsLast": "for these enquiries.",
+    "linksTitle": "External websites",
+    "linksDescription": "Links to social platforms and other websites lead to services with their own privacy practices. Review their notices when you choose to visit them."
+  },
+  "Terms": {
+    "metadataTitle": "Terms of Use | Del Carmen",
+    "metadataDescription": "Draft terms for viewing artwork, making enquiries and using the Del Carmen website.",
+    "label": "Del Carmen · Legal",
+    "title": "Terms of Use",
+    "description": "Viewing the work, making enquiries and respecting the content of this digital space.",
+    "draftDate": "Draft for review · 15 October 2026",
+    "draft": "These terms are being prepared for publication. Questions are welcome through our Contact page.",
+    "experienceTitle": "The experience",
+    "experienceDescription": "Del Carmen Digital Experience is a space for discovering the work of Rolando Del Carmen, reading editorial material and contacting the studio. These draft terms concern browsing and enquiries.",
+    "operatorTitle": "Website operator",
+    "operatorFirst": "The website is operated by",
+    "operatorMiddle": "as an individual. The artistic and commercial identities used for this project are",
+    "operatorAnd": "and",
+    "imagesTitle": "Artwork and digital presentation",
+    "imagesDescription": "Photographs and digital displays can differ from the physical artwork in colour, scale and surface detail. If you are considering an artwork, ask us to confirm its medium, dimensions, condition and availability.",
+    "rightsTitle": "Content and permissions",
+    "rightsDescription": "Artwork, photographs, film, text and other content may be protected by intellectual-property rights. Rights in works by other artists remain with their respective rights holders.",
+    "permissionsFirst": "Viewing the website does not grant a licence to reproduce, modify or commercially use its content beyond what applicable law permits. Please",
+    "permissionsContact": "contact us",
+    "permissionsLast": "about permission requests.",
+    "enquiriesTitle": "Enquiries and future purchases",
+    "enquiriesDescription": "A message about an artwork is an enquiry. Availability, the item being offered, its price, payment and delivery arrangements need to be confirmed before an order is accepted.",
+    "offerings": "A physical painting and a printed reproduction are different offerings. Where either is offered, its description and any applicable edition or reproduction rights must be confirmed separately.",
+    "conditions": "Sale, commission, shipping and return conditions will be specified for the relevant offering. Any purchase or commission requires its own confirmed terms.",
+    "useTitle": "Responsible use",
+    "useDescription": "Please use the website and its forms respectfully. Do not submit spam, attempt unauthorised access or interfere with the experience or its security controls.",
+    "privacyTitle": "Privacy and external links",
+    "privacyFirst": "Our",
+    "privacyLink": "Privacy Notice",
+    "privacyLast": "describes contact and newsletter information. External websites and social platforms have their own terms and privacy practices.",
+    "questionsTitle": "Questions",
+    "questionsFirst": "For questions about the website, artwork or permissions, please email",
+    "questionsOr": "or use our",
+    "questionsContact": "Contact page"
+  },
+  "NewsletterEmail": {
+    "subject": "Confirm your subscription — Del Carmen",
+    "heading": "Continue the journey.",
+    "description": "Confirm your email address to receive occasional news about new artworks, exhibitions and studio updates.",
+    "confirm": "Confirm subscription",
+    "expiry": "This confirmation link expires in 24 hours. If you did not request this subscription, you can ignore this email."
+  }
+}

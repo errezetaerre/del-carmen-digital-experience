@@ -1,10 +1,10 @@
 # Conservación y eliminación: procedimiento operativo
 
-Version: 1.1
+Version: 1.2
 Document ID: DOC-DATA-RET-OPS
 Project: Del Carmen Digital Experience
 Owner: Rolando Rojas Zapata
-Last Updated: 2026-10-15
+Last Updated: 2026-10-18
 Status: Plazos confirmados; código preparado, instalación y comprobación de producción pendientes.
 
 ## Plazos aprobados
@@ -105,3 +105,11 @@ Las nuevas solicitudes incluyen una casilla inicialmente vacía y una revisión 
 - Si cambian finalidad, destinatarios, conservación, texto de consentimiento o datos del responsable, revisar la información previa, archivar la redacción anterior e incrementar la revisión. No reinterpretar una constancia antigua como aceptación de un nuevo fin.
 
 La interfaz, la configuración compartida y los endpoints deben instalarse juntos. Validar el aviso desplegado y sus errores antes de retirar el estado de borrador de las páginas legales. Esta entrega no configura el buzón ni sustituye la revisión de las copias de los proveedores.
+
+## Idioma de la constancia EN/ES — 2026-10-18
+
+Las nuevas solicitudes identifican el idioma de la declaración aceptada: en Contact forma parte de la constancia del correo; en Newsletter es `consent.language` junto a versión, finalidad, texto y fecha. Inglés conserva `2026-10-15.1`; español utiliza `2026-10-18.1-es`. La revisión y declaración se seleccionan/validan en el servidor. No se infiere retrospectivamente un idioma o aceptación para registros antiguos.
+
+Esta metadata sigue exactamente la conservación de su consulta/suscripción. Pendientes: 24 horas; activos: mientras continúen suscripción/finalidad y revisión anual; baja: solo email/estado/fecha durante 30 días. La confirmación conserva la constancia, la baja la elimina del registro mínimo. Los scripts Redis, TTL, audiencia, limpieza protegida de fallos y procedimiento manual del buzón mantienen sus bytes/reglas. No se accede, elimina, reenvía, reconfirma ni migra información real en esta entrega.
+
+Revisar el idioma/revisión/texto efectivamente registrados durante las pruebas operativas posteriores, sin duplicar correos o datos en una nueva planilla. Las copias de proveedores y los requerimientos individuales continúan tratándose según este procedimiento. Ver DOC-FORM-PRIVACY-CONSENT y DOC-I18N para copias archivadas y verificación.

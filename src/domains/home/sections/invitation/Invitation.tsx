@@ -2,10 +2,12 @@ import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
 import { NewsletterForm } from "@/domains/newsletter";
 import InvitationMotion from "./InvitationMotion";
+import { useTranslations } from "next-intl";
 
 import { Suspense } from "react";
 
 export default function Invitation() {
+  const t = useTranslations("Home");
   return (
     <section
       id="invitation"
@@ -60,9 +62,9 @@ export default function Invitation() {
               lg:text-7xl
             "
           >
-            Painting the Eternal
+            {t("taglineFirst")}
             <br />
-            Essence Within
+            {t("taglineSecond")}
           </h2>
 
           <p
@@ -80,9 +82,9 @@ export default function Invitation() {
               md:text-3xl
             "
           >
-            Let&apos;s continue
+            {t("invitationJourneyFirst")}
             <br />
-            the journey.
+            {t("invitationJourneySecond")}
           </p>
 
           {/* Newsletter */}
@@ -99,7 +101,7 @@ export default function Invitation() {
                 text-white/45
               "
             >
-              Newsletter
+              {t("newsletterLabel")}
             </p>
 
             <p
@@ -114,9 +116,7 @@ export default function Invitation() {
                 md:text-lg
               "
             >
-              Receive occasional news about upcoming artworks,
-              exhibitions, and the evolving world of Rolando Del
-              Carmen&apos;s art.
+              {t("newsletterDescription")}
             </p>
 
             <Suspense fallback={null}>
@@ -146,7 +146,7 @@ export default function Invitation() {
                 tracking-[0.28em]
               "
             >
-              Contact
+              {t("contact")}
             </LinkButton>
           </div>
         </div>

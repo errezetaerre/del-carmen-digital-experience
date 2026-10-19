@@ -1,5 +1,8 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+import { localizeArtwork } from "@/i18n/artworkCopy";
+
 
 
 import Image from "next/image";
@@ -11,6 +14,8 @@ import useDialogFocus from "@/shared/hooks/useDialogFocus";
 
 
 import {
+
+    useCallback,
 
     useEffect,
 
@@ -64,10 +69,13 @@ interface PanPosition {
 
 
 export default function ArtworkDetailViewer({
-    artwork,
+    artwork: sourceArtwork,
     triggerOnly = false,
     portalTarget,
 }: ArtworkDetailViewerProps) {
+    const locale = useLocale();
+    const t = useTranslations("Artwork");
+    const artwork = localizeArtwork(sourceArtwork, locale);
 
 
 
@@ -120,6 +128,12 @@ export default function ArtworkDetailViewer({
         useRef<number | null>(null);
 
 
+
+    const [zoomDragging, setZoomDragging] = useState(false);
+    const setZoomPointer = useCallback((pointerId: number | null) => {
+        zoomPointerId.current = pointerId;
+        setZoomDragging(pointerId !== null);
+    }, []);
 
     const panStartPointer =
 
@@ -190,21 +204,17 @@ export default function ArtworkDetailViewer({
     const zoomDialogRef = useRef<HTMLDivElement>(null);
     useDialogFocus(zoomDialogRef, isZoomOpen);
 
-    useEffect(() => {
-
+    // Reconcile the next artwork before paint while preserving the image node.
+    const [zoomArtworkId, setZoomArtworkId] = useState(artwork.id);
+    if (zoomArtworkId !== artwork.id) {
+        setZoomArtworkId(artwork.id);
         setIsZoomOpen(false);
-
         setZoom(MIN_ZOOM);
+        setPan({ x: 0, y: 0 });
+        setZoomDragging(false);
+    }
 
-
-
-        setPan({
-
-            x: 0,
-
-            y: 0,
-
-        });
+    useEffect(() => {
 
         zoomPointers.current.clear();
 
@@ -310,57 +320,7 @@ export default function ArtworkDetailViewer({
 
 
 
-    useEffect(() => {
 
-        if (!isZoomOpen) {
-
-            return;
-
-        }
-
-
-
-        const handleResize = () => {
-
-            setPan((currentPan) =>
-
-                clampPan(
-
-                    currentPan,
-
-                    zoom,
-
-                ),
-
-            );
-
-        };
-
-
-
-        window.addEventListener(
-
-            "resize",
-
-            handleResize,
-
-        );
-
-
-
-        return () => {
-
-            window.removeEventListener(
-
-                "resize",
-
-                handleResize,
-
-            );
-
-        };
-
-    }, [isZoomOpen, zoom]);
 
 
 
@@ -418,7 +378,7 @@ export default function ArtworkDetailViewer({
 
 
 
-        zoomPointerId.current = null;
+        setZoomPointer(null);
 
         zoomPointers.current.clear();
 
@@ -532,7 +492,7 @@ export default function ArtworkDetailViewer({
 
 
 
-    const getPanBounds = (
+    const getPanBounds = useCallback((
 
         targetZoom: number,
 
@@ -660,11 +620,11 @@ export default function ArtworkDetailViewer({
 
         };
 
-    };
+    }, []);
 
 
 
-    const clampPan = (
+    const clampPan = useCallback((
 
         position: PanPosition,
 
@@ -730,7 +690,59 @@ export default function ArtworkDetailViewer({
 
         };
 
-    };
+    }, [getPanBounds]);
+
+    useEffect(() => {
+
+        if (!isZoomOpen) {
+
+            return;
+
+        }
+
+
+
+        const handleResize = () => {
+
+            setPan((currentPan) =>
+
+                clampPan(
+
+                    currentPan,
+
+                    zoom,
+
+                ),
+
+            );
+
+        };
+
+
+
+        window.addEventListener(
+
+            "resize",
+
+            handleResize,
+
+        );
+
+
+
+        return () => {
+
+            window.removeEventListener(
+
+                "resize",
+
+                handleResize,
+
+            );
+
+        };
+
+    }, [clampPan, isZoomOpen, zoom]);
 
 
 
@@ -818,7 +830,7 @@ export default function ArtworkDetailViewer({
 
 
 
-            zoomPointerId.current = null;
+            setZoomPointer(null);
 
 
 
@@ -838,9 +850,7 @@ export default function ArtworkDetailViewer({
 
         if (zoom > MIN_ZOOM) {
 
-            zoomPointerId.current =
-
-                event.pointerId;
+            setZoomPointer(event.pointerId);
 
 
 
@@ -1164,9 +1174,7 @@ export default function ArtworkDetailViewer({
 
 
 
-                    zoomPointerId.current =
-
-                        pointerId;
+                    setZoomPointer(pointerId);
 
 
 
@@ -1190,9 +1198,7 @@ export default function ArtworkDetailViewer({
 
                 } else {
 
-                    zoomPointerId.current =
-
-                        null;
+                    setZoomPointer(null);
 
                 }
 
@@ -1214,7 +1220,7 @@ export default function ArtworkDetailViewer({
 
         ) {
 
-            zoomPointerId.current = null;
+            setZoomPointer(null);
 
         }
 
@@ -1244,7 +1250,7 @@ export default function ArtworkDetailViewer({
 
         ) {
 
-            zoomPointerId.current = null;
+            setZoomPointer(null);
 
         }
 
@@ -1329,7 +1335,7 @@ export default function ArtworkDetailViewer({
 
                     type="button"
 
-                    aria-label={`Expand ${artwork.title}`}
+                    aria-label={t("expandNamed", { title: artwork.title })}
 
                     onClick={() =>
 
@@ -1617,7 +1623,7 @@ export default function ArtworkDetailViewer({
 
                     type="button"
 
-                    aria-label="Expand artwork"
+                    aria-label={t("expand")}
 
                     onClick={() =>
 
@@ -1817,10 +1823,11 @@ export default function ArtworkDetailViewer({
 
                     ref={zoomDialogRef}
                     role="dialog"
+                    data-artwork-kinetic-ignore
 
                     aria-modal="true"
 
-                    aria-label={`Zoomed view of ${artwork.title}`}
+                    aria-label={t("zoomed", { title: artwork.title })}
 
                     className="
 
@@ -1972,7 +1979,7 @@ export default function ArtworkDetailViewer({
 
                             type="button"
 
-                            aria-label="Close zoom viewer"
+                            aria-label={t("closeZoom")}
 
                             onClick={
 
@@ -2198,9 +2205,7 @@ export default function ArtworkDetailViewer({
 
                                 transition:
 
-                                    zoomPointerId.current ===
-
-                                        null
+                                    !zoomDragging
 
                                         ? "transform 320ms cubic-bezier(0.22, 1, 0.36, 1)"
 
@@ -2272,7 +2277,7 @@ export default function ArtworkDetailViewer({
 
                                 type="button"
 
-                                aria-label="Zoom out"
+                                aria-label={t("zoomOut")}
 
                                 disabled={
 
@@ -2346,7 +2351,7 @@ export default function ArtworkDetailViewer({
 
                                 type="button"
 
-                                aria-label="Reset zoom"
+                                aria-label={t("resetZoom")}
 
                                 onClick={() => {
                                    setZoom(MIN_ZOOM);
@@ -2354,7 +2359,7 @@ export default function ArtworkDetailViewer({
                                        x: 0,
                                        y: 0,
                                    });
-                                   zoomPointerId.current = null;
+                                   setZoomPointer(null);
                                    zoomPointers.current.clear();
                                    isPinching.current = false;
                                }}
@@ -2410,7 +2415,7 @@ export default function ArtworkDetailViewer({
 
                                 type="button"
 
-                                aria-label="Zoom in"
+                                aria-label={t("zoomIn")}
 
                                 disabled={
 

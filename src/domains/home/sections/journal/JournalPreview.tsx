@@ -1,12 +1,16 @@
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
 import { getJournalEntries } from "@/domains/journal";
+import { useLocale, useTranslations } from "next-intl";
+import { journalEntryTextLocale, localizeJournalEntry } from "@/i18n/journalCopy";
 
 import JournalPreviewMotion from "./JournalPreviewMotion";
 
 
 export default function JournalPreview() {
-  const entries = getJournalEntries().slice(0, 4);
+  const locale = useLocale();
+  const t = useTranslations("Home");
+  const entries = getJournalEntries().slice(0, 4).map((entry) => localizeJournalEntry(entry, locale));
 
   if (entries.length === 0) {
     return null;
@@ -49,7 +53,7 @@ export default function JournalPreview() {
               text-brand-gold
             "
           >
-            Journal
+            {t("journalEyebrow")}
           </p>
 
           <h2
@@ -68,9 +72,9 @@ export default function JournalPreview() {
 
             "
           >
-            Thoughts, stories
+            {t("journalTitleFirst")}
             <br />
-            and quiet observations.
+            {t("journalTitleSecond")}
           </h2>
         </div>
 
@@ -149,7 +153,7 @@ export default function JournalPreview() {
                     text-white/45
                   "
                 >
-                  <span>{entry.category}</span>
+                  <span lang={journalEntryTextLocale(entry, locale)}>{entry.category}</span>
 
                   <span className="h-px w-6 bg-brand-gold/50" />
 
@@ -158,6 +162,7 @@ export default function JournalPreview() {
 
                 {/* Entry title */}
                 <h3
+                  lang={journalEntryTextLocale(entry, locale)}
                   className="
                     font-display
                     text-3xl
@@ -174,6 +179,7 @@ export default function JournalPreview() {
                 {/* Excerpt */}
                 <div data-journal-copy>
                   <p
+                    lang={journalEntryTextLocale(entry, locale)}
                     className="
                       mt-6
                       font-sans
@@ -201,7 +207,7 @@ export default function JournalPreview() {
                       tracking-[0.28em]
                     "
                   >
-                    Read Journal →
+                    {t("journalRead")}
                   </LinkButton>
                 </div>
               </div>

@@ -1,0 +1,651 @@
+{
+  "Navigation": {
+    "artworks": "Obras",
+    "collections": "Colecciones",
+    "about": "Acerca de",
+    "journal": "Diario",
+    "contact": "Contacto",
+    "language": "Idioma",
+    "switchToSpanish": "Leer esta página en español",
+    "switchToEnglish": "Leer esta página en inglés",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "main": "Navegación principal",
+    "mobile": "Navegación móvil",
+    "legal": "Información legal",
+    "footer": "Navegación del pie de página",
+    "social": "Redes sociales",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "newsletter": "Boletín",
+    "rights": "Todos los derechos reservados."
+  },
+  "Artwork": {
+    "original": "Obra original",
+    "masterCopy": "Copia de maestro",
+    "studyAfter": "Estudio a partir de una obra",
+    "year": "Año",
+    "plannedYear": "Año previsto",
+    "medium": "Técnica",
+    "dimensions": "Dimensiones",
+    "status": "Estado",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "back": "Volver a las obras",
+    "backToSeries": "Volver a {title}",
+    "openArtbook": "Abrir Artbook ↗",
+    "openingArtbook": "Abriendo Artbook…",
+    "orientationHint": "Artbook en horizontal",
+    "openArtworkArtbook": "Abrir {title} en Glass Artbook",
+    "information": "{title} — información de la obra",
+    "swipe": "Desliza para explorar",
+    "swipeDrag": "Desliza / arrastra para explorar",
+    "swipeDragDock": "Desliza / arrastra para explorar",
+    "available": "Disponible",
+    "reserved": "Reservada",
+    "sold": "Vendida",
+    "unavailable": "No disponible",
+    "comingSoon": "Próximamente",
+    "inProgress": "En proceso",
+    "plannedFor": "Prevista para {year}",
+    "plannedPreview": "Vista preliminar de una obra prevista",
+    "progressPreview": "Obra en proceso",
+    "cover": "Obra de portada",
+    "coverDetail": "Seleccionada para la portada de inicio",
+    "featured": "Destacada",
+    "curatorial": "Selección curatorial",
+    "selection": "Selección oficial",
+    "honourableMention": "Mención honorífica",
+    "award": "Premio",
+    "featuredCollection": "Colección destacada",
+    "distinctions": "Distinciones de la obra",
+    "pauseRibbon": "Pausar cinta de distinciones",
+    "resumeRibbon": "Reanudar cinta de distinciones",
+    "closeDistinction": "Cerrar detalles de la distinción",
+    "loading": "Cargando obra…",
+    "opening": "Abriendo…",
+    "openingArtwork": "Abriendo obra…",
+    "expand": "Ampliar obra",
+    "close": "Cerrar",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "resetZoom": "Restablecer zoom",
+    "oil": "Óleo",
+    "graphite": "Grafito",
+    "charcoal": "Carboncillo",
+    "mixedMedia": "Técnica mixta",
+    "on": "sobre",
+    "canvas": "Lienzo",
+    "paper": "Papel",
+    "tonalStrathmore": "Papel tonal Strathmore",
+    "tonalCanson": "Papel tonal Canson",
+    "whitePencil": "Con lápiz blanco",
+    "colorPencils": "Con lápices de color",
+    "expandNamed": "Ampliar {title}",
+    "zoomed": "Vista ampliada de {title}",
+    "closeZoom": "Cerrar visor ampliado",
+    "closeViewer": "Cerrar visor de obras",
+    "previousArtwork": "Obra anterior",
+    "nextArtwork": "Obra siguiente",
+    "position": "Obra {index} de {total}",
+    "viewArtwork": "Ver obra {index}",
+    "viewNamed": "Ver {title}",
+    "discover": "Descubrir →",
+    "descriptionOf": "Descripción de {title}",
+    "readLess": "Leer menos ↓",
+    "readMore": "Leer más ↑",
+    "viewDetails": "Ver detalles",
+    "exploreDetail": "Explorar en detalle",
+    "viewAll": "Ver todas las obras",
+    "previewDescription": "{title} — {label}. Prevista para {year}. Colores preliminares tras el vidrio empañado."
+  },
+  "Archive": {
+    "metadataTitle": "Obras",
+    "metadataDescription": "Explora las obras originales, copias de maestros y estudios de Rolando Del Carmen, con sus fichas, series y obras previstas.",
+    "eyebrow": "Archivo de obras",
+    "titleFirst": "La obra",
+    "titleSecond": "completa",
+    "description": "Un archivo en evolución de obras originales, estudios y piezas seleccionadas de distintas épocas y temáticas.",
+    "selection": "Selección de obras",
+    "allWorks": "Todas las obras",
+    "allCategories": "Todas las obras",
+    "featured": "Destacadas",
+    "category": "Categoría",
+    "year": "Año",
+    "medium": "Técnica",
+    "allYears": "Todos",
+    "allMediums": "Todas",
+    "resultCount": "{count, plural, one {# obra} other {# obras}}",
+    "clearFilters": "Limpiar filtros",
+    "empty": "No hay obras que coincidan con los filtros seleccionados."
+  },
+  "Recognitions": {
+    "sendero_del_sol_la_no_bienal_2024": { "event": "La No Bienal — 5.ª edición" }
+  },
+  "Glass": {
+    "viewer": "Visor de obras Glass Artbook",
+    "immersive": "Glass Artbook inmersivo",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "dragDock": "Arrastra para explorar · ← →",
+    "buttonDock": "Anterior / Siguiente para explorar",
+    "swipeGlass": "Desliza / arrastra el vidrio · ← → para explorar",
+    "useButtons": "Usa Anterior / Siguiente para explorar",
+    "previousArtwork": "Obra anterior:",
+    "nextArtwork": "Obra siguiente:",
+    "noPrevious": "No hay una obra anterior",
+    "noNext": "No hay una obra siguiente",
+    "opening": "Abriendo Artbook…",
+    "preparing": "Preparando Artbook…",
+    "loadingArtwork": "Cargando obra…",
+    "error": "No se pudo terminar de cargar esta obra.",
+    "retry": "Reintentar",
+    "standard": "Continuar en vista estándar →",
+    "openStandard": "Abrir {title} en vista estándar",
+    "exit": "Salir",
+    "exitLabel": "Salir del Artbook y volver a la vista estándar",
+    "year": "Año",
+    "plannedYear": "Año previsto",
+    "medium": "Técnica",
+    "dimensions": "Dimensiones",
+    "status": "Estado",
+    "original": "Obra original",
+    "masterCopy": "Copia de maestro",
+    "studyAfter": "Estudio a partir de una obra",
+    "on": "sobre",
+    "restoring": "Restaurando el reflejo de la obra."
+  },
+  "Home": {
+    "tagline": "Pintando la esencia eterna del ser",
+    "taglineFirst": "Pintando la esencia",
+    "taglineSecond": "eterna del ser",
+    "scroll": "Desplázate",
+    "exploreCollection": "Explorar colección",
+    "featuredWork": "Obra destacada",
+    "discoverWork": "Descubrir la obra",
+    "artistPortrait": "Retrato del artista",
+    "artistTitle": "El arte como memoria eterna",
+    "artistParagraphFirst": "Mis obras nacen de un pacto con el cielo: capturar la belleza que el alma reconoce, pero que el mundo ha olvidado.",
+    "artistParagraphSecond": "Pinto para despertar la conciencia, para recordar que lo esencial no se ve, sino que se siente.",
+    "artistStory": "Descubre mi historia →",
+    "selectedEyebrow": "Obras seleccionadas",
+    "selectedTitleFirst": "Obras que hablan",
+    "selectedTitleSecond": "en silencio",
+    "selectedDescription": "Cada pintura es un umbral. Cada mirada, una historia.",
+    "selectedAll": "Ver todas las obras →",
+    "journalEyebrow": "Diario",
+    "journalTitleFirst": "Pensamientos, historias",
+    "journalTitleSecond": "y observaciones serenas.",
+    "journalRead": "Leer el diario →",
+    "invitationJourneyFirst": "Sigamos",
+    "invitationJourneySecond": "el viaje.",
+    "newsletterLabel": "Boletín",
+    "newsletterDescription": "Recibe noticias ocasionales sobre próximas obras, exposiciones y el universo artístico de Rolando Del Carmen, siempre en evolución.",
+    "contact": "Contacto"
+  },
+  "Collections": {
+    "metadataTitle": "Colecciones",
+    "metadataDescription": "Explora las series de obras de Del Carmen: pinturas conectadas, temas compartidos y las historias que dan vida a cada colección.",
+    "eyebrow": "Colecciones",
+    "heading": "Conjuntos de obras que toman forma a través del tiempo, la memoria y la contemplación.",
+    "scroll": "Desplázate para explorar ↓"
+  },
+  "Series": {
+    "label": "Serie de obras",
+    "statement": "Declaración de la serie",
+    "continue": "Sigue explorando",
+    "back": "← Volver a Colecciones",
+    "home": "Volver al inicio →",
+    "workCount": "{count, plural, one {# obra} other {# obras}}",
+    "ongoing": "en curso",
+    "completed": "completada",
+    "archived": "archivada",
+    "exploreNamed": "Explorar la serie de obras {title}",
+    "exploreCollection": "Explorar colección",
+    "exploreCollectionArrow": "Explorar colección →",
+    "exploreSeries": "Explorar serie",
+    "worksInCollection": "Obras de esta colección",
+    "previousArtworks": "Obras anteriores",
+    "nextArtworks": "Obras siguientes",
+    "metadataFallback": "Explora la serie de obras {title}, de Del Carmen."
+  },
+  "Categories": {
+    "figurative": "Figurativo", "spiritual": "Espiritual", "study": "Estudio", "portrait": "Retrato", "symbolic": "Simbólico", "animal-lover": "Amor por los animales", "still-life": "Naturaleza muerta", "cast": "Yeso", "academic": "Académico", "landscape": "Paisaje", "classic": "Clásico", "contemporary": "Contemporáneo", "nude": "Desnudo", "impasto": "Empaste", "lithography": "Litografía", "bargue": "Bargue"
+  },
+  "About": {
+    "metadataTitle": "La experiencia",
+    "metadataDescription": "Descubre la visión artística de Del Carmen: pintura, memoria, contemplación y experiencia humana.",
+    "hero": {
+      "eyebrow": "La experiencia",
+      "titleFirst": "Donde el arte encuentra",
+      "titleSecond": "la experiencia.",
+      "description": "Del Carmen es un espacio contemplativo donde la pintura, la memoria y la tecnología se encuentran sin competir por la atención.",
+      "filmLabel": "Filme The Encounter",
+      "comingSoon": "Próximamente"
+    },
+    "essence": {
+      "statement": "El arte nos invita a detenernos, a observar y a descubrir lo que permanece cuando desaparece todo lo innecesario.",
+      "eyebrow": "La esencia",
+      "description": "Del Carmen crea encuentros entre la pintura física y la experiencia digital, preservando el silencio, la humanidad y la intimidad de la obra original."
+    },
+    "ecosystem": {
+      "eyebrow": "El ecosistema",
+      "titleFirst": "Una filosofía.",
+      "titleSecond": "Distintas expresiones.",
+      "parent": "Identidad creativa principal",
+      "fineArt": "Bellas artes",
+      "fineArtDescription": "Pintura, práctica artística y experiencias contemplativas centradas en la obra.",
+      "digital": "Innovación digital",
+      "digitalDescription": "Tecnología y experimentación que amplían las formas de vivir la creación."
+    },
+    "continue": {
+      "eyebrow": "Continúa",
+      "titleFirst": "El encuentro",
+      "titleSecond": "continúa.",
+      "artist": "Descubre al artista",
+      "artistDescription": "La vida y la práctica detrás de la obra.",
+      "artworks": "Explora las obras",
+      "artworksDescription": "Pinturas, colecciones y sus historias."
+    },
+    "film": {
+      "journey": "Un viaje de sesenta segundos.",
+      "duration": "Filme · 01:00",
+      "comingSoon": "Filme próximamente",
+      "production": "Filme en producción"
+    }
+  },
+  "Artist": {
+    "metadataTitle": "Rolando Del Carmen",
+    "metadataDescription": "Conoce a Rolando Del Carmen, artista costarricense que explora la memoria, la luz y la experiencia humana a través de la pintura.",
+    "hero": {
+      "eyebrow": "El artista",
+      "statement": "Una vida moldeada por la curiosidad, la observación y la",
+      "light": "luz.",
+      "description": "Nada llegó de una sola vez. Cada encuentro dio origen a lo que vino después.",
+      "scroll": "Desplázate"
+    },
+    "biography": {
+      "eyebrow": "El artista",
+      "titleFirst": "Mucho antes de que pintar",
+      "titleSecond": "se convirtiera en una práctica,",
+      "titleThird": "existía la",
+      "observation": "observación.",
+      "childhood": "Durante su infancia en El Carmen, Puntarenas, Costa Rica, Rolando Rojas se sentaba en una banca frente al mar y dibujaba palmeras, botes y atardeceres. En aquel entonces, dibujar era simplemente curiosidad: una fascinación silenciosa por el mundo y por quienes parecían capaces de plasmarlo en el papel de forma natural.",
+      "digital": "Durante muchos años, esa fascinación permaneció latente. Su camino profesional lo llevó hacia la informática, la programación y, más tarde, el diseño digital. Sin embargo, a través de la multimedia, la animación, el color y la composición, el mundo visual regresó silenciosamente. Lo que parecía un camino distinto ya estaba formando otra manera de mirar.",
+      "return": "No fue hasta la edad adulta cuando el dibujo volvió a su vida con una intención clara. El interés por las detalladas ilustraciones de Johanna Basford lo acercó al dibujo con pluma y tinta y a un curso breve que resultaría inesperadamente decisivo. Después de unas pocas semanas, su profesora reconoció un progreso que él nunca había imaginado y lo animó a continuar.",
+      "turningPoint": "Aquel encuentro cambió la pregunta. Ya no se trataba de saber si había nacido sabiendo dibujar, sino de descubrir hasta dónde podían llevarlo la curiosidad, la disciplina y el tiempo.",
+      "training": "La búsqueda lo condujo al realismo académico y a Atelier del Sol, en San José, donde se formó bajo la guía de Emilia Cantor y se sumergió en métodos de dibujo y pintura arraigados en la tradición académica. Más tarde se graduó como pintor académico: no como culminación de un recorrido, sino como base para uno más personal.",
+      "present": "Hoy, su práctica se sitúa entre la disciplina y el descubrimiento: entre todo lo que la técnica puede enseñar y todo lo que solo puede surgir de la experiencia."
+    },
+    "work": {
+      "eyebrow": "La obra",
+      "titleFirst": "El recorrido continúa",
+      "titleSecond": "sobre el lienzo.",
+      "description": "Cada pintura lleva consigo algo de lo que la precedió —observación, memoria, disciplina, preguntas— y abre, al mismo tiempo, la posibilidad de algo aún por descubrir.",
+      "artistStory": "La historia del artista es solo una de las formas de acercarse a la obra.",
+      "encounter": "Lo demás pertenece al encuentro entre la pintura y quien la contempla.",
+      "explore": "Explora las obras",
+      "imageAlt": "Detalle de Epifanía Nupcial"
+    },
+    "practice": {
+      "eyebrow": "La práctica",
+      "titleFirst": "Entre la",
+      "titleSecond": "observación",
+      "titleThird": "y",
+      "canvas": "el lienzo.",
+      "intro": "La pintura comienza mucho antes de la primera pincelada.",
+      "looking": "Comienza al mirar: al notar cómo la luz transforma un rostro, cómo un gesto altera el equilibrio de una figura, cómo cambia un color junto a otro o cómo un detalle aparentemente insignificante puede sostener el peso emocional de toda una composición.",
+      "training": "La formación académica le dio a Rolando una estructura para comprender lo que veía: dibujo, proporción, valor tonal, anatomía, composición, color y la construcción paciente de la forma. Estos principios siguen presentes en su obra, no como reglas que deban exhibirse, sino como herramientas que permiten hacer visible la intuición.",
+      "easelAlt": "Rolando Rojas trabajando frente al caballete",
+      "environment": "Entorno",
+      "paletteAlt": "Mezclas de óleo preparadas en la paleta del artista",
+      "material": "Materia",
+      "portraitAlt": "Retrato en proceso de pintura",
+      "work": "Obra",
+      "process": "Frente al caballete, el proceso se convierte en una conversación continua entre la intención y el descubrimiento. Una pintura puede comenzar con una idea clara, pero el lienzo inevitablemente plantea sus propias preguntas. Las formas se reconsideran. La luz se ajusta. Los colores se construyen, se retiran y se reconstruyen. Algunas decisiones son deliberadas; otras surgen únicamente al pintar.",
+      "highlightFirst": "Aquí es donde",
+      "highlightSecond": "la disciplina y",
+      "highlightThird": "la intuición se encuentran.",
+      "objective": "El objetivo no es simplemente reproducir lo que el ojo ve, sino comprender qué hace que un instante merezca conservarse y buscar el lenguaje visual capaz de transmitir esa sensación.",
+      "attention": "Cada pintura se convierte así en una imagen y en un registro de atención: capas de observación, corrección, paciencia y tiempo.",
+      "continuity": "Y quizá el proceso nunca termine del todo con la última pincelada. Cada obra concluida deja una nueva pregunta: algo que llevar al siguiente lienzo.",
+      "placeholder": "Imágenes de la práctica"
+    },
+    "philosophy": {
+      "paragraphFirst": "Un atardecer que se disuelve en violeta y naranja. La sonrisa espontánea de un niño. Un rostro marcado por años de lucha y sabiduría. La luz que entra en una habitación y transforma, por un instante, todo lo que toca.",
+      "paragraphSecond": "Estos encuentros fugaces ocupan el centro de la manera de mirar de Rolando.",
+      "paragraphThird": "La pintura se convierte en una forma de permanecer con ellos un poco más: de explorar el punto donde el mundo exterior despierta algo en nuestro interior y la observación se vuelve contemplación.",
+      "paragraphFourth": "La luz es, por tanto, más que iluminación. Revela, oculta, expande y atrae al espectador hacia el interior. La figura humana es más que anatomía. Un gesto, una postura o un rostro pueden contener memoria, silencio, vulnerabilidad y presencia.",
+      "paragraphFifth": "La búsqueda no es la de un estilo fijo, sino la de un lenguaje cada vez más auténtico: una forma de pintar en la que la técnica se vuelve gradualmente invisible y permite que surja algo más íntimo.",
+      "paragraphSixth": "Quizá por eso el recorrido sigue sintiéndose inconcluso.",
+      "paragraphSeventh": "No porque falte algo, sino porque el descubrimiento mismo forma parte de la obra.",
+      "eyebrow": "Filosofía artística",
+      "titleFirst": "Observar es descubrir",
+      "titleSecond": "que nada es realmente",
+      "ordinary": "ordinario."
+    },
+    "journey": {
+      "milestones": {
+        "item1": {
+          "period": "Hacia 2015–2017",
+          "title": "La curiosidad regresa",
+          "copy": {
+            "item1": "Años después de haber dejado atrás el dibujo, una fascinación inesperada por las detalladas ilustraciones de Johanna Basford devolvió a Rolando al papel.",
+            "item2": "El color lo llevó a la pluma y la tinta. La pluma y la tinta lo llevaron a un curso. Y un curso de apenas ocho clases marcó un punto de inflexión.",
+            "item3": "Entró creyendo que dibujar era una habilidad con la que simplemente se nacía. Salió preguntándose qué podría ocurrir si a la curiosidad se le dieran tiempo, disciplina y permiso para crecer."
+          }
+        },
+        "item2": {
+          "period": "2017–2018",
+          "title": "Aprender a mirar",
+          "copy": {
+            "item1": "La curiosidad pronto exigió una estructura más sólida.",
+            "item2": "Rolando ingresó a Atelier del Sol, en San José, sin formación académica previa en dibujo ni pintura. Bajo la guía de Emilia Cantor comenzó a estudiar los fundamentos del realismo académico: dibujo, proporción, valor tonal, forma, composición y, más adelante, pintura al óleo.",
+            "item3": "El atelier convirtió la admiración en práctica.",
+            "item4": "Lo que antes parecía una habilidad inaccesible empezó a revelarse como algo que podía estudiarse, practicarse y perfeccionarse continuamente."
+          }
+        },
+        "item3": {
+          "period": "2018–2021",
+          "title": "La obra sale al mundo",
+          "copy": {
+            "item1": "A medida que el estudio se convirtió en práctica, la obra fue saliendo del atelier.",
+            "item2": "En 2018, Rolando participó en Academicismo del Siglo XXI en el Museo del Jade, en San José, y posteriormente en exposiciones colectivas en espacios culturales de Costa Rica.",
+            "item3": "Los reconocimientos de aquellos años de formación —desde el dibujo y los estudios de yesos hasta el retrato y la pintura— fueron menos una meta que la confirmación de que los años de práctica silenciosa empezaban a dejar una huella visible."
+          }
+        },
+        "item4": {
+          "period": "2022",
+          "title": "Una base, no una llegada",
+          "copy": {
+            "item1": "En 2022, Rolando se convirtió en el segundo estudiante en graduarse como pintor académico de Atelier del Sol.",
+            "item2": "El logro marcó años de estudio disciplinado, pero no resolvió la pregunta central de la práctica.",
+            "item3": "Si la técnica le enseña a un artista a mirar y a construir una imagen, ¿qué permanece cuando la técnica deja de ser el destino?",
+            "item4": "La graduación fue menos un final que el comienzo de otra búsqueda: la de una pincelada, un lenguaje y una identidad visual que pudieran volverse inconfundiblemente propios."
+          }
+        },
+        "item5": {
+          "period": "2023 — Actualidad",
+          "title": "Hacia un lenguaje propio",
+          "copy": {
+            "item1": "Los años siguientes trajeron nuevas exposiciones, nuevos conjuntos de obras y una atención más profunda a la relación entre la figura, la luz y la presencia interior.",
+            "item2": "En 2024, Sendero del Sol recibió una Mención Honorífica en la quinta edición de La No Bienal: una obra en la que el paisaje, la figura y la luz convergen en torno a esa presencia humana fugaz que sigue dando forma a la práctica de Rolando.",
+            "item3": "Sin embargo, el reconocimiento sigue en segundo plano frente a la pregunta que ha acompañado el recorrido desde el principio:"
+          },
+          "question": "¿Qué queda aún por descubrir?",
+          "closing": {
+            "item1": "La respuesta no es fija.",
+            "item2": "Vive en algún lugar entre todo lo aprendido y todo lo que la siguiente pintura pueda revelar."
+          }
+        }
+      },
+      "eyebrow": "El recorrido",
+      "titleFirst": "Nada llegó",
+      "titleSecond": "de una sola vez.",
+      "intro": "Al mirar atrás, el camino hacia la pintura no parece una línea recta.",
+      "encounters": "Es una sucesión de encuentros —algunos aparentemente pequeños en su momento— que fueron revelando en qué podía convertirse el siguiente paso.",
+      "cause": "Una experiencia dio origen a otra.",
+      "search": "Lo que comenzó como curiosidad se convirtió en práctica. La práctica se volvió disciplina. Y la disciplina abrió la posibilidad de una búsqueda más personal.",
+      "continues": "El recorrido continúa.",
+      "closingFirst": "Cada encuentro dio origen a",
+      "closingSecond": "lo que vino después.",
+      "navigation": {
+        "item1": {
+          "date": "2015–2017",
+          "label": "Regreso al dibujo"
+        },
+        "item2": {
+          "date": "2017–2018",
+          "label": "Ingreso al atelier"
+        },
+        "item3": {
+          "date": "2018–2021",
+          "label": "Del estudio a la exposición"
+        },
+        "item4": {
+          "date": "2022",
+          "label": "Pintor académico"
+        },
+        "item5": {
+          "date": "2023–Actualidad",
+          "label": "Una voz en formación"
+        }
+      },
+      "navigationLabel": "Navegación cronológica del recorrido",
+      "images": {
+        "item1": {
+          "alt": "Etapa inicial de pintura de Epifanía"
+        },
+        "item2": {
+          "alt": "Etapa inicial de pintura de El Misionero"
+        },
+        "item3": {
+          "alt": "Etapa inicial de pintura de Rose"
+        },
+        "item4": {
+          "alt": "Etapa de desarrollo de Epifanía"
+        },
+        "item5": {
+          "alt": "Etapa de desarrollo de El Misionero"
+        },
+        "item6": {
+          "alt": "Etapa de desarrollo de Rose"
+        },
+        "item7": {
+          "alt": "Proceso de pintura de Epifanía"
+        },
+        "item8": {
+          "alt": "Proceso de pintura de El Misionero"
+        },
+        "item9": {
+          "alt": "Proceso de pintura de Rose"
+        },
+        "item10": {
+          "alt": "Etapa avanzada de pintura de Epifanía"
+        },
+        "item11": {
+          "alt": "Etapa avanzada de pintura de El Misionero"
+        },
+        "item12": {
+          "alt": "Etapa avanzada de pintura de Rose"
+        },
+        "item13": {
+          "alt": "Etapa posterior de pintura de Epifanía"
+        },
+        "item14": {
+          "alt": "Etapa posterior de pintura de El Misionero"
+        },
+        "item15": {
+          "alt": "Etapa posterior de pintura de Rose"
+        },
+        "item16": {
+          "alt": "Proceso avanzado de pintura de Epifanía"
+        },
+        "item17": {
+          "alt": "Proceso avanzado de pintura de Rose"
+        }
+      }
+    }
+  },
+  "Journal": {
+    "metadataTitle": "Diario",
+    "metadataDescription": "Reflexiones, notas del estudio y conversaciones sobre la pintura, la memoria y la práctica creativa de Del Carmen.",
+    "readNamed": "Leer {title}",
+    "label": "Diario",
+    "titleFirst": "Pensamientos, historias",
+    "titleSecond": "y observaciones serenas.",
+    "description": "Reflexiones sobre el arte, la memoria, la creación y los momentos serenos que dan forma a la obra.",
+    "read": "Leer el diario",
+    "collectionTitleFirst": "Colección",
+    "collectionTitleSecond": "del diario",
+    "continue": "Continúa con las demás reflexiones.",
+    "index": "Índice del diario →",
+    "drag": "Arrastra o desliza para explorar ↔",
+    "previous": "Explorar artículos anteriores",
+    "next": "Explorar más artículos",
+    "explore": "Explorar →",
+    "scroll": "Desplázate para explorar ↓"
+  },
+  "Contact": {
+    "metadataTitle": "Contacto",
+    "metadataDescription": "Contacta con Del Carmen para consultar sobre obras, exposiciones, colaboraciones y otros temas.",
+    "nameRequired": "Escribe tu nombre.",
+    "emailRequired": "Escribe tu correo electrónico.",
+    "emailInvalid": "Escribe una dirección de correo electrónico válida.",
+    "subjectRequired": "Selecciona un asunto.",
+    "messageRequired": "Escribe tu mensaje.",
+    "consentRequired": "Da tu consentimiento antes de enviar esta consulta.",
+    "consentOutdated": "Recarga esta página, revisa el aviso de privacidad actual y vuelve a dar tu consentimiento.",
+    "sending": "Enviando...",
+    "sent": "Mensaje enviado",
+    "send": "Enviar mensaje",
+    "subjectArtworks": "Obras",
+    "subjectArtworksDescription": "Consultas sobre obras originales, disponibilidad, coleccionismo o encargos.",
+    "subjectCollaboration": "Colaboración",
+    "subjectCollaborationDescription": "Exposiciones, colaboraciones creativas, proyectos editoriales o propuestas profesionales.",
+    "subjectGeneral": "General",
+    "subjectGeneralDescription": "Preguntas o mensajes que no corresponden a las categorías anteriores.",
+    "label": "Contacto",
+    "titleFirst": "Comienza una",
+    "titleSecond": "conversación.",
+    "description": "Si te interesa una obra, una colaboración o simplemente deseas conectar, puedes escribirnos.",
+    "website": "Sitio web",
+    "name": "Tu nombre",
+    "email": "Correo electrónico",
+    "subject": "Escribo sobre",
+    "subjectHint": "Elige la opción que mejor describa el motivo de tu mensaje.",
+    "message": "Mensaje",
+    "success": "Gracias. Tu mensaje se ha enviado correctamente.",
+    "rateLimited": "Se han enviado demasiados mensajes. Espera unos minutos antes de volver a intentarlo.",
+    "error": "Tu mensaje no se pudo enviar. Inténtalo de nuevo.",
+    "direct": "Para escribir directamente"
+  },
+  "Newsletter": {
+    "consentRequired": "Da tu consentimiento antes de solicitar la suscripción.",
+    "consentOutdated": "Recarga esta página, revisa el aviso de privacidad actual y vuelve a dar tu consentimiento.",
+    "subscribing": "Solicitando...",
+    "subscribe": "Suscribirme",
+    "emailPlaceholder": "tu@example.com",
+    "website": "Sitio web",
+    "email": "Correo electrónico",
+    "idle": "Novedades ocasionales sobre nuevas obras, exposiciones y el estudio. Puedes darte de baja en cualquier momento.",
+    "pending": "Revisa tu correo para confirmar la suscripción.",
+    "confirmed": "Tu suscripción está confirmada. Te damos la bienvenida a este recorrido.",
+    "unsubscribed": "Tu baja se ha realizado correctamente.",
+    "invalidConfirmation": "Este enlace de confirmación no es válido o ha caducado.",
+    "invalidUnsubscribe": "Este enlace de baja no es válido o ya no está disponible.",
+    "alreadySubscribed": "Este correo electrónico ya está suscrito.",
+    "error": "Ha ocurrido un error. Inténtalo de nuevo.",
+    "rateLimited": "Demasiados intentos. Espera unos minutos antes de volver a intentarlo."
+  },
+  "FormPrivacy": {
+    "handler": "gestiona estos datos para",
+    "privacyLink": "Aviso de privacidad (se abre en una pestaña nueva)",
+    "details": "Cómo se gestionan tus datos",
+    "rights": "Puedes consultar las obras sin utilizar este formulario. Para solicitar acceso, rectificación, eliminación o retirar tu consentimiento, escribe a"
+  },
+  "Legal": {
+    "navigation": "Páginas legales y de contacto",
+    "back": "← Volver al inicio",
+    "privacy": "Privacidad",
+    "terms": "Condiciones",
+    "contact": "Contacto"
+  },
+  "Privacy": {
+    "metadataTitle": "Aviso de privacidad | Del Carmen",
+    "metadataDescription": "Borrador del aviso sobre consultas de contacto, suscripciones al boletín y datos personales en Del Carmen.",
+    "label": "Del Carmen · Información legal",
+    "title": "Aviso de privacidad",
+    "description": "Información sobre los datos que compartes cuando nos contactas o te suscribes a las novedades del estudio.",
+    "draftDate": "Borrador para revisión · 15 de octubre de 2026",
+    "draft": "Este aviso se está preparando para su publicación. Si tienes preguntas sobre tus datos personales, contáctanos.",
+    "aboutTitle": "Acerca de este aviso",
+    "aboutFirst": "Del Carmen Digital Experience presenta la obra de Rolando Del Carmen bajo las identidades",
+    "aboutAnd": "y",
+    "aboutLast": ". Este borrador describe las funciones de contacto y boletín del sitio web.",
+    "responsibleTitle": "Quién es responsable",
+    "responsibleFirst": "es la persona física responsable de la información de contacto y del boletín descrita en este aviso.",
+    "responsibleAnd": "y",
+    "responsibleLast": "son las identidades artísticas y comerciales del proyecto.",
+    "informationTitle": "Información que compartes",
+    "contactData": "Consultas de contacto: tu nombre, dirección de correo electrónico, asunto y mensaje.",
+    "newsletterData": "Solicitudes al boletín: tu correo electrónico, origen de la suscripción, fechas de solicitud y confirmación, y estado de la suscripción.",
+    "consentData": "Registros de consentimiento: la declaración que aceptas, su versión y la fecha de tu solicitud, conservados con la consulta o suscripción correspondiente.",
+    "protectionData": "Protección de formularios: se utiliza una dirección IP o un identificador de solicitud para limitar las solicitudes repetidas y proteger los formularios contra el abuso.",
+    "voluntary": "Ambos formularios son voluntarios. Contacto requiere tu nombre, correo electrónico, asunto, mensaje y consentimiento; el boletín requiere tu correo electrónico y consentimiento. Sin los datos obligatorios y el consentimiento, no se puede procesar el formulario solicitado. Puedes consultar las obras sin completar ninguno de los formularios.",
+    "consentTitle": "Tu consentimiento y tus opciones",
+    "consentDescription": "Cada formulario explica su finalidad antes de solicitar tus datos e incluye una casilla de consentimiento inicialmente desmarcada. El consentimiento para una consulta cubre la respuesta a esa consulta; el consentimiento para el boletín cubre novedades ocasionales sobre obras, exposiciones y el estudio. La solicitud al boletín requiere, además, confirmar el correo electrónico antes de que la suscripción se active.",
+    "withdrawFirst": "Puedes retirar tu consentimiento o consultar sobre tu información escribiendo a",
+    "withdrawLast": ". Los registros de consentimiento siguen el plazo de conservación de la consulta o suscripción correspondiente.",
+    "purposeTitle": "Cómo se utiliza la información",
+    "purposeDescription": "Los datos y mensajes de contacto se utilizan para recibir y responder a tu consulta. Los datos del boletín se utilizan para confirmar y gestionar tu suscripción. Los identificadores de solicitud ayudan a proteger los formularios de contacto y boletín.",
+    "separateConsent": "Enviar una consulta de contacto no te suscribe al boletín.",
+    "retentionTitle": "Consultas de contacto y conservación",
+    "contactRetention": "Las consultas ordinarias cerradas se conservan hasta 12 meses después del último intercambio sustancial o del cierre, según corresponda. La correspondencia necesaria para una transacción en curso, una obligación contable o una controversia se evalúa por separado. Las solicitudes válidas relativas a datos personales se atienden con independencia de estos plazos habituales de conservación.",
+    "providerRetention": "Estos plazos se refieren a los registros que gestionamos. Los proveedores de correo electrónico e infraestructura pueden conservar copias por separado conforme a sus condiciones aplicables; contáctanos si necesitas información sobre un registro específico.",
+    "providersTitle": "Servicios utilizados",
+    "providersDescription": "El envío de correos utiliza Resend. Los registros del boletín y los controles de protección de formularios utilizan Upstash. Estos proveedores tratan la información conforme a sus respectivos términos de servicio y tratamiento de datos.",
+    "providersFirst": "Puedes consultar la",
+    "resendPrivacy": "política de privacidad de Resend",
+    "providersAnd": "y la",
+    "upstashPrivacy": "política de privacidad de Upstash",
+    "providersLast": "para obtener información sobre sus servicios. Contáctanos si tienes preguntas sobre los lugares de tratamiento o los destinatarios de tu información.",
+    "newsletterTitle": "Opciones y registros del boletín",
+    "pendingRetention": "Una suscripción se activa después de confirmar el correo electrónico. Una solicitud sin confirmar y su enlace de confirmación caducan a las 24 horas desde la última solicitud válida. Una nueva solicitud requiere una nueva confirmación.",
+    "activeRetention": "Conservamos los datos de las suscripciones activas mientras continúen la suscripción y su finalidad, con una revisión anual de si siguen siendo necesarios. La baja retira inmediatamente la dirección de la lista activa. Conservamos únicamente el correo electrónico, la fecha de baja y el estado durante un máximo de 30 días para resolver incidencias relacionadas con la baja; después, ese registro caduca. Darse de baja y solicitar la eliminación son acciones distintas.",
+    "newsletterWithdrawFirst": "Para retirar una suscripción o consultar sobre un registro existente, escribe a",
+    "newsletterWithdrawOr": "o utiliza nuestra",
+    "newsletterContact": "página de Contacto",
+    "requestsTitle": "Preguntas y solicitudes sobre datos personales",
+    "requestsDescription": "Puedes contactarnos para solicitar acceso a tu información, su rectificación, su eliminación o retirar el consentimiento. Indica qué solicitud deseas que revisemos. Es posible que necesitemos confirmar que la solicitud se refiere a tu propia información.",
+    "requestsFirst": "Escribe a",
+    "requestsOr": "o utiliza la",
+    "requestsContact": "página de Contacto",
+    "requestsLast": "para estas consultas.",
+    "linksTitle": "Sitios web externos",
+    "linksDescription": "Los enlaces a plataformas sociales y otros sitios web conducen a servicios con sus propias prácticas de privacidad. Revisa sus avisos cuando decidas visitarlos."
+  },
+  "Terms": {
+    "metadataTitle": "Condiciones de uso | Del Carmen",
+    "metadataDescription": "Borrador de las condiciones para consultar obras, realizar consultas y utilizar el sitio web de Del Carmen.",
+    "label": "Del Carmen · Información legal",
+    "title": "Condiciones de uso",
+    "description": "Consultar las obras, realizar consultas y respetar el contenido de este espacio digital.",
+    "draftDate": "Borrador para revisión · 15 de octubre de 2026",
+    "draft": "Estas condiciones se están preparando para su publicación. Puedes enviar tus preguntas a través de nuestra página de Contacto.",
+    "experienceTitle": "La experiencia",
+    "experienceDescription": "Del Carmen Digital Experience es un espacio para descubrir la obra de Rolando Del Carmen, leer contenido editorial y contactar con el estudio. Estas condiciones en borrador se refieren a la navegación y las consultas.",
+    "operatorTitle": "Responsable del sitio web",
+    "operatorFirst": "El sitio web está a cargo de",
+    "operatorMiddle": "como persona física. Las identidades artísticas y comerciales utilizadas para este proyecto son",
+    "operatorAnd": "y",
+    "imagesTitle": "Obras y presentación digital",
+    "imagesDescription": "Las fotografías y las presentaciones digitales pueden diferir de la obra física en color, escala y detalles de la superficie. Si te interesa una obra, solicita que confirmemos su técnica, dimensiones, estado y disponibilidad.",
+    "rightsTitle": "Contenido y permisos",
+    "rightsDescription": "Las obras, fotografías, filmes, textos y otros contenidos pueden estar protegidos por derechos de propiedad intelectual. Los derechos sobre las obras de otros artistas pertenecen a sus respectivos titulares.",
+    "permissionsFirst": "Consultar el sitio web no concede una licencia para reproducir, modificar o utilizar comercialmente su contenido más allá de lo permitido por la legislación aplicable. Por favor,",
+    "permissionsContact": "contáctanos",
+    "permissionsLast": "para solicitar permisos.",
+    "enquiriesTitle": "Consultas y compras futuras",
+    "enquiriesDescription": "Un mensaje sobre una obra es una consulta. La disponibilidad, el artículo que se ofrece, su precio y las condiciones de pago y entrega deben confirmarse antes de aceptar un pedido.",
+    "offerings": "Una pintura física y una reproducción impresa son ofertas distintas. Cuando se ofrezca alguna de ellas, su descripción y los derechos de edición o reproducción que correspondan deberán confirmarse por separado.",
+    "conditions": "Las condiciones de venta, encargo, envío y devolución se especificarán para la oferta correspondiente. Cualquier compra o encargo requiere sus propias condiciones confirmadas.",
+    "useTitle": "Uso responsable",
+    "useDescription": "Utiliza el sitio web y sus formularios con respeto. No envíes mensajes no solicitados, intentes acceder sin autorización ni interfieras con la experiencia o sus controles de seguridad.",
+    "privacyTitle": "Privacidad y enlaces externos",
+    "privacyFirst": "Nuestro",
+    "privacyLink": "Aviso de privacidad",
+    "privacyLast": "describe la información de contacto y del boletín. Los sitios web externos y las plataformas sociales tienen sus propias condiciones y prácticas de privacidad.",
+    "questionsTitle": "Preguntas",
+    "questionsFirst": "Si tienes preguntas sobre el sitio web, las obras o los permisos, escribe a",
+    "questionsOr": "o utiliza nuestra",
+    "questionsContact": "página de Contacto"
+  },
+  "NewsletterEmail": {
+    "subject": "Confirma tu suscripción — Del Carmen",
+    "heading": "Continúa el recorrido.",
+    "description": "Confirma tu dirección de correo electrónico para recibir novedades ocasionales sobre nuevas obras, exposiciones y el estudio.",
+    "confirm": "Confirmar suscripción",
+    "expiry": "Este enlace de confirmación caduca en 24 horas. Si no solicitaste esta suscripción, puedes ignorar este correo."
+  }
+}

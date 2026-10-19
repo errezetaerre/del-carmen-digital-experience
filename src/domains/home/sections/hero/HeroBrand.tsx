@@ -1,9 +1,10 @@
 import { LinkButton } from "@/shared/ui/button";
 import { brand } from "@/config/brand";
 import { getHeroArtwork } from "@/domains/home/services";
-import { HERO_CTA } from "./constants";
+import { useTranslations } from "next-intl";
 
 export default function HeroBrand() {
+  const t = useTranslations("Home");
   const heroArtwork = getHeroArtwork();
 
   const heroHref =
@@ -72,9 +73,9 @@ export default function HeroBrand() {
           md:hidden
         "
       >
-        Painting the Eternal
+        {t("taglineFirst")}
         <br />
-        Essence Within
+        {t("taglineSecond")}
       </p>
 
       {/* Tablet / Desktop / Mobile landscape tagline */}
@@ -99,7 +100,7 @@ export default function HeroBrand() {
           [@media(orientation:landscape)_and_(max-height:600px)]:!text-base
         "
       >
-        {brand.tagline}
+        {t("tagline")}
       </p>
 
       {/* CTA */}
@@ -126,7 +127,7 @@ export default function HeroBrand() {
             [@media(orientation:landscape)_and_(max-height:600px)]:!mt-2
           "
         >
-          {HERO_CTA}
+          {t("exploreCollection")}
         </LinkButton>
       </div>
 
@@ -149,7 +150,7 @@ export default function HeroBrand() {
         "
       >
         <span className="h-px w-12 bg-white/30" />
-        <span>Scroll</span>
+        <span>{t("scroll")}</span>
       </div>
     </div>
   );

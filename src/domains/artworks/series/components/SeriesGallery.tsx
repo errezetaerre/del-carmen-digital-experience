@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 
-import {
-    usePathname,
-    useRouter,
-} from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 import type { Artwork } from "@/domains/artworks";
-import { ArtworkLightbox } from "@/shared/ui/artwork";
 import { KineticCarousel } from "@/shared/ui/kinetic-carousel";
 
 import CollectionArtwork from "@/domains/home/sections/collection/CollectionArtwork";
+
+// The selected-work deep link can open this portal on the first render.
+// Its document.body target exists only in the browser.
+const ArtworkLightbox = dynamic(() => import("@/shared/ui/artwork/ArtworkLightbox"), { ssr: false });
 
 interface SeriesGalleryProps {
     artworks: Artwork[];
@@ -24,6 +26,8 @@ export default function SeriesGallery({
     seriesSlug,
     initialArtworkSlug,
 }: SeriesGalleryProps) {
+    const t = useTranslations("Series");
+    const artworkT = useTranslations("Artwork");
     const router = useRouter();
     const pathname = usePathname();
 
@@ -51,20 +55,12 @@ export default function SeriesGallery({
             ),
         );
 
-    /*
-     * Keep the lightbox synchronized with
-     * artwork supplied by the Series route.
-     */
-    useEffect(() => {
-        setSelectedIndex(
-            getArtworkIndex(
-                initialArtworkSlug,
-            ),
-        );
-    }, [
-        initialArtworkSlug,
-        artworks,
-    ]);
+    // Reconcile a new route selection before committing the lightbox.
+    const [selectionSource, setSelectionSource] = useState({ artworks, initialArtworkSlug });
+    if (selectionSource.artworks !== artworks || selectionSource.initialArtworkSlug !== initialArtworkSlug) {
+        setSelectionSource({ artworks, initialArtworkSlug });
+        setSelectedIndex(getArtworkIndex(initialArtworkSlug));
+    }
 
     const handleOpen = (
         artwork: Artwork,
@@ -199,8 +195,8 @@ export default function SeriesGallery({
                             gap-5
                             xl:gap-8
                         "
-                        previousLabel="Previous artworks"
-                        nextLabel="Next artworks"
+                        previousLabel={t("previousArtworks")}
+                        nextLabel={t("nextArtworks")}
                         previousButtonClassName="
                             left-6
                             top-[40%]
@@ -251,7 +247,7 @@ export default function SeriesGallery({
                 onClose={handleClose}
                 showDetailsCta
                 showAllWorksCta={false}
-                detailsCtaLabel="Explore in detail"
+                detailsCtaLabel={artworkT("exploreDetail")}
                 detailsQuery={`series=${seriesSlug}`}
             />
         </>

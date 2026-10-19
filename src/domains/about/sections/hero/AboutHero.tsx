@@ -1,8 +1,12 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Container } from "@/shared/layout/container";
 import AboutHeroMotion from "./AboutHeroMotion";
 
 export default function AboutHero() {
+    const t = useTranslations("About");
+
+
     return (
         <section className="about-hero-scene relative min-h-[calc(100svh-5rem)] overflow-hidden border-b border-white/5 bg-neutral-950">
             {/* Poster / future video */}
@@ -39,26 +43,25 @@ export default function AboutHero() {
                 <div className="relative z-20 flex min-h-[calc(100svh-5rem)] items-center py-28 md:py-32">
                     <div className="max-w-4xl">
                         <p className="about-hero-eyebrow mb-7 font-sans text-[11px] uppercase tracking-[0.34em] text-brand-gold/80">
-                            The Experience
+                            {t("hero.eyebrow")}
                         </p>
 
                         <h1 className="font-display text-[clamp(3.4rem,7.5vw,7rem)] font-light leading-[0.9] tracking-[-0.035em] text-stone-100">
                             <span className="about-hero-line block overflow-hidden">
                                 <span className="about-hero-line-inner block">
-                                    Where art meets
+                                    {t("hero.titleFirst")}
                                 </span>
                             </span>
 
                             <span className="about-hero-line block overflow-hidden">
                                 <span className="about-hero-line-inner block italic text-brand-gold/90">
-                                    experience.
+                                    {t("hero.titleSecond")}
                                 </span>
                             </span>
                         </h1>
 
                         <p className="about-hero-copy mt-9 max-w-xl font-sans text-sm font-light leading-7 text-stone-300 md:text-base md:leading-8">
-                            Del Carmen is a contemplative space where painting, memory
-                            and technology meet without competing for attention.
+                            {t("hero.description")}
                         </p>
 
                     </div>
@@ -69,7 +72,7 @@ export default function AboutHero() {
                 <button
                     type="button"
                     disabled
-                    aria-label="The Encounter film"
+                    aria-label={t("hero.filmLabel")}
                     aria-describedby="about-hero-film-status"
                     className="flex h-20 w-20 cursor-default items-center justify-center rounded-full border border-amber-200/30 bg-black/25 backdrop-blur-sm md:h-24 md:w-24"
                 >
@@ -81,7 +84,7 @@ export default function AboutHero() {
                 >
                     The Encounter
                     <span aria-hidden="true"> · </span>
-                    <span className="text-brand-gold/80">Coming soon</span>
+                    <span className="text-brand-gold/80">{t("hero.comingSoon")}</span>
                 </p>
             </div>
 

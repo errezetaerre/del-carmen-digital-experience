@@ -1,20 +1,22 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/i18n/LanguageSwitcher";
 
 import { useNavigationScroll } from "../hooks";
 import { Container } from "@/shared/layout";
 import { brand } from "@/config/brand";
 import {
-  DEFAULT_LANGUAGE,
   NAVIGATION_ITEMS,
 } from "../constants";
 import MobileMenu from "./MobileMenu";
 import { isNavigationItemActive } from "../utils/isNavigationItemActive";
 
 export default function Navigation() {
+  const t = useTranslations("Navigation");
   const pathname = usePathname();
   const isScrolled = useNavigationScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -51,7 +53,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop / Tablet Navigation */}
-          <nav className="hidden lg:block">
+          <nav className="hidden lg:block" aria-label={t("main")}>
             <ul className="flex items-center gap-12">
               {NAVIGATION_ITEMS.map((item) => {
                 const isActive =
@@ -74,7 +76,7 @@ export default function Navigation() {
                           text-brand-gold
                         "
                       >
-                        {item.label}
+                        {t(item.key)}
                       </span>
                     ) : (
                       <Link
@@ -89,7 +91,7 @@ export default function Navigation() {
                               : "text-white/65 hover:text-white",
                         ].join(" ")}
                       >
-                        {item.label}
+                        {t(item.key)}
                       </Link>
                     )}
                   </li>
@@ -99,23 +101,20 @@ export default function Navigation() {
           </nav>
 
           {/* Desktop / Tablet Language */}
-          <button
-            type="button"
+          <LanguageSwitcher
             className={[
               "hidden text-sm uppercase tracking-[0.12em] transition-colors duration-300 lg:block",
               isScrolled
                 ? "text-[#2F2E2C]/75 hover:text-brand-gold"
                 : "text-white/65 hover:text-white",
             ].join(" ")}
-          >
-            {DEFAULT_LANGUAGE}
-          </button>
+          />
 
           {/* Mobile Menu Trigger */}
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open menu"
+            aria-label={t("openMenu")}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-navigation"
             className={[
@@ -125,7 +124,7 @@ export default function Navigation() {
                 : "text-white",
             ].join(" ")}
           >
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{t("openMenu")}</span>
 
             <span className="flex w-5 flex-col gap-[5px]">
               <span className="h-px w-full bg-current" />

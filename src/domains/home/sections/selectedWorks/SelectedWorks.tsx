@@ -1,3 +1,5 @@
+import Link from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import {
     getSelectedWorks,
 } from "@/domains/home/services";
@@ -8,6 +10,7 @@ import CollectionGallery from "../collection/CollectionGallery";
 import SelectedWorksMotion from "./SelectedWorksMotion";
 
 export default function SelectedWorks() {
+    const t = useTranslations("Home");
     const artworks =
         getSelectedWorks();
 
@@ -64,7 +67,7 @@ export default function SelectedWorks() {
                             text-brand-gold
                             "
                     >
-                        Selected Works
+                        {t("selectedEyebrow")}
                     </p>
 
                     <h2
@@ -81,9 +84,9 @@ export default function SelectedWorks() {
               lg:text-6xl
             "
                     >
-                        Works that speak
+                        {t("selectedTitleFirst")}
                         <br />
-                        in silence
+                        {t("selectedTitleSecond")}
                     </h2>
 
                     <p
@@ -101,8 +104,7 @@ export default function SelectedWorks() {
               md:text-base
             "
                     >
-                        Each painting is a threshold.
-                        Each gaze, a story.
+                        {t("selectedDescription")}
                     </p>
                 </div>
 
@@ -125,7 +127,7 @@ export default function SelectedWorks() {
             md:mt-20
           "
                 >
-                    <a
+                    <Link
                         href="/artworks"
                         className="
               font-sans
@@ -140,8 +142,8 @@ export default function SelectedWorks() {
               hover:opacity-70
             "
                     >
-                        View all works →
-                    </a>
+                        {t("selectedAll")}
+                    </Link>
                 </div>
             </Container>
         </section>

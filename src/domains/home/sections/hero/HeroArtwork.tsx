@@ -6,7 +6,8 @@ import { getHeroArtwork } from "@/domains/home/services";
 import { Button } from "@/shared/ui/button";
 
 import ArtworkInfo from "./ArtworkInfo";
-import { HERO_CTA } from "./constants";
+import { useLocale, useTranslations } from "next-intl";
+import { localizeArtwork } from "@/i18n/artworkCopy";
 
 type HeroArtworkMode =
   | "mobile"
@@ -20,7 +21,10 @@ interface HeroArtworkProps {
 export default function HeroArtwork({
   mode = "desktop",
 }: HeroArtworkProps) {
-  const artwork = getHeroArtwork();
+  const locale = useLocale();
+  const t = useTranslations("Home");
+  const sourceArtwork = getHeroArtwork();
+  const artwork = sourceArtwork ? localizeArtwork(sourceArtwork, locale) : undefined;
 
   if (!artwork) {
     return null;
@@ -134,7 +138,7 @@ export default function HeroArtwork({
             type="button"
             variant="bronzeUnderline"
           >
-            {HERO_CTA}
+            {t("exploreCollection")}
           </Button>
         </div>
       </div>

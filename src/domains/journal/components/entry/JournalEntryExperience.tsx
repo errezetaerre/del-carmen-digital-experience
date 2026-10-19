@@ -1,4 +1,8 @@
-import Link from "next/link";
+import { journalSceneTextLocale } from "@/i18n/journalStoryCopy";
+import type { SiteLocale } from "@/i18n/config";
+import { useLocale, useTranslations } from "next-intl";
+import { journalEntryTextLocale } from "@/i18n/journalCopy";
+import Link from "@/i18n/navigation";
 
 import JournalCollection from "./JournalCollection";
 
@@ -332,11 +336,15 @@ function JournalSceneBlock({
 
     index,
 
+    textLocale,
+
 }: {
 
     scene: JournalScene;
 
     index: number;
+
+    textLocale: SiteLocale;
 
 }) {
 
@@ -361,6 +369,8 @@ function JournalSceneBlock({
             <section
 
                 data-journal-scene
+
+                lang={textLocale}
 
                 className="
 
@@ -524,6 +534,8 @@ function JournalSceneBlock({
 
                 data-journal-scene
 
+                lang={textLocale}
+
                 className="
 
                     relative
@@ -666,6 +678,8 @@ function JournalSceneBlock({
 
                 data-journal-scene
 
+                lang={textLocale}
+
                 className="
 
                     grid
@@ -799,6 +813,9 @@ export default function JournalEntryExperience({
     entries,
 
 }: JournalEntryExperienceProps) {
+    const locale = useLocale();
+    const t = useTranslations("Journal");
+
 
     return (
 
@@ -898,7 +915,7 @@ export default function JournalEntryExperience({
 
                             >
 
-                                Journal
+                                {t("label")}
 
                             </Link>
 
@@ -910,7 +927,7 @@ export default function JournalEntryExperience({
 
                             />
 
-                            <span className="text-white/45">
+                            <span className="text-white/45" lang={journalEntryTextLocale(entry, locale)}>
 
                                 {entry.category}
 
@@ -946,7 +963,7 @@ export default function JournalEntryExperience({
 
                                 lg:text-[7rem]
 
-                            "
+                            " lang={journalEntryTextLocale(entry, locale)}
 
                         >
 
@@ -976,7 +993,7 @@ export default function JournalEntryExperience({
 
                                 md:text-lg
 
-                            "
+                            " lang={journalEntryTextLocale(entry, locale)}
 
                         >
 
@@ -1006,7 +1023,7 @@ export default function JournalEntryExperience({
 
                         >
 
-                            Scroll to explore ↓
+                            {t("scroll")}
 
                         </p>
 
@@ -1027,6 +1044,8 @@ export default function JournalEntryExperience({
                     scene={scene}
 
                     index={index}
+
+                    textLocale={journalSceneTextLocale(story.slug, scene, locale)}
 
                 />
 

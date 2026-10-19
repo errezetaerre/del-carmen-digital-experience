@@ -1,3 +1,4 @@
+import { createNewsletterConfirmationEmail } from "@/domains/newsletter/server/confirmationEmail";
 import { createHash, randomBytes } from "crypto";
 
 import { NextResponse } from "next/server";
@@ -5,7 +6,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { Resend } from "resend";
 
-import { formPrivacy } from "@/config/formPrivacy";
+import { getFormPrivacy, resolveFormLocale } from "@/i18n/formPrivacyCopy";
 
 import {
     cleanFailedSubscriptionRequest,
@@ -31,6 +32,7 @@ type NewsletterRequestBody = {
     source?: unknown;
     consent?: unknown;
     consentVersion?: unknown;
+    locale?: unknown;
 };
 
 function hashToken(token: string) {
@@ -147,6 +149,10 @@ export async function POST(request: Request) {
      * ======================================================
      */
 
+    const locale = resolveFormLocale(body.locale);
+    if (!locale) return NextResponse.json({ error: "Invalid language.", code: "invalid_locale" }, { status: 400 });
+    const privacy = getFormPrivacy(locale);
+
     if (
         !email ||
         email.length > 254 ||
@@ -176,7 +182,7 @@ export async function POST(request: Request) {
         );
     }
 
-    if (body.consentVersion !== formPrivacy.version) {
+    if (body.consentVersion !== privacy.version) {
         return NextResponse.json(
             { error: "Please reload the form and review the current privacy notice.", code: "consent_outdated" },
             { status: 400 },
@@ -193,6 +199,7 @@ export async function POST(request: Request) {
             source,
             tokenHash,
             new Date().toISOString(),
+            locale,
         );
 
         if (status === "active") {
@@ -219,13 +226,15 @@ export async function POST(request: Request) {
     const confirmationUrl =
         `${getBaseUrl(request)}` +
         `/api/newsletter/confirm?token=` +
-        encodeURIComponent(token);
+        encodeURIComponent(token) + (locale === "es" ? "&locale=es" : "");
 
     /*
      * ======================================================
      * 09 — SEND CONFIRMATION EMAIL
      * ======================================================
      */
+
+    const confirmationEmail = createNewsletterConfirmationEmail(locale, confirmationUrl);
 
     try {
         const { error } =
@@ -235,102 +244,8 @@ export async function POST(request: Request) {
                         .NEWSLETTER_EMAIL_FROM ||
                     "Del Carmen <onboarding@resend.dev>",
                 to: email,
-                subject:
-                    "Confirm your subscription — Del Carmen",
-                html: `
-                    <!doctype html>
-                    <html lang="en">
-                        <body
-                            style="
-                                margin:0;
-                                padding:0;
-                                background:#0B0B0B;
-                                color:#f5f5f5;
-                                font-family:Arial,sans-serif;
-                            "
-                        >
-                            <div
-                                style="
-                                    max-width:600px;
-                                    margin:0 auto;
-                                    padding:64px 32px;
-                                "
-                            >
-                                <p
-                                    style="
-                                        margin:0 0 24px;
-                                        color:#C9A35A;
-                                        font-size:11px;
-                                        letter-spacing:4px;
-                                        text-transform:uppercase;
-                                    "
-                                >
-                                    Del Carmen
-                                </p>
-
-                                <h1
-                                    style="
-                                        margin:0 0 24px;
-                                        color:#f5f5f5;
-                                        font-family:Georgia,serif;
-                                        font-size:36px;
-                                        font-weight:400;
-                                        line-height:1.15;
-                                    "
-                                >
-                                    Continue the journey.
-                                </h1>
-
-                                <p
-                                    style="
-                                        margin:0 0 36px;
-                                        color:#A1A1AA;
-                                        font-size:16px;
-                                        line-height:1.7;
-                                    "
-                                >
-                                    Confirm your email address
-                                    to receive occasional news
-                                    about new artworks,
-                                    exhibitions and studio
-                                    updates.
-                                </p>
-
-                                <a
-                                    href="${confirmationUrl}"
-                                    style="
-                                        display:inline-block;
-                                        border:1px solid rgba(201,163,90,0.65);
-                                        padding:14px 22px;
-                                        color:#C9A35A;
-                                        font-size:12px;
-                                        font-weight:600;
-                                        letter-spacing:2px;
-                                        text-decoration:none;
-                                        text-transform:uppercase;
-                                    "
-                                >
-                                    Confirm subscription
-                                </a>
-
-                                <p
-                                    style="
-                                        margin:36px 0 0;
-                                        color:#6f6f73;
-                                        font-size:12px;
-                                        line-height:1.6;
-                                    "
-                                >
-                                    This confirmation link
-                                    expires in 24 hours. If you
-                                    did not request this
-                                    subscription, you can
-                                    ignore this email.
-                                </p>
-                            </div>
-                        </body>
-                    </html>
-                `,
+                subject: confirmationEmail.subject,
+                html: confirmationEmail.html,
             });
 
         if (error) {

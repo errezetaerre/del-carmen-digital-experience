@@ -4,7 +4,7 @@ import { Resend } from "resend";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-import { formPrivacy } from "@/config/formPrivacy";
+import { getFormPrivacy, resolveFormLocale } from "@/i18n/formPrivacyCopy";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -27,6 +27,7 @@ type ContactPayload = {
     contactField?: unknown;
     consent?: unknown;
     consentVersion?: unknown;
+    locale?: unknown;
 };
 
 export async function POST(request: Request) {
@@ -92,6 +93,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true });
         }
 
+        const locale = resolveFormLocale(body.locale);
+        if (!locale) return NextResponse.json({ error: "Invalid language.", code: "invalid_locale" }, { status: 400 });
+        const privacy = getFormPrivacy(locale);
+
         if (!name || name.length > 100) {
             return NextResponse.json(
                 { error: "Invalid name." },
@@ -135,7 +140,7 @@ export async function POST(request: Request) {
             );
         }
 
-        if (body.consentVersion !== formPrivacy.version) {
+        if (body.consentVersion !== privacy.version) {
             return NextResponse.json(
                 { error: "Please reload the form and review the current privacy notice.", code: "consent_outdated" },
                 { status: 400 },
@@ -173,11 +178,12 @@ export async function POST(request: Request) {
                 message,
                 "",
                 "--- Consent record ---",
-                `Statement: ${formPrivacy.contact.consentLabel}`,
-                `Purpose: ${formPrivacy.contact.purpose}`,
-                `Notice version: ${formPrivacy.version}`,
+                `Statement: ${privacy.contact.consentLabel}`,
+                `Purpose: ${privacy.contact.purpose}`,
+                `Notice version: ${privacy.version}`,
+                `Consent language: ${locale}`,
                 `Accepted at (server UTC): ${consentAcceptedAt}`,
-                "Source: Contact form /contact",
+                "Source: Contact form " + (locale === "es" ? "/es/contact" : "/contact"),
             ].join("\n"),
         });
 

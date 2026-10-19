@@ -1,0 +1,87 @@
+.entryChecking, .entryFallback { display: contents; }
+.entryPortrait { display: none; }
+.entryLoading { display: grid; min-height: 100svh; place-items: center; background: var(--surface-deep, #090908); }
+.noScript { position: fixed; z-index: 100; bottom: 2rem; left: 1.5rem; right: 1.5rem; display: block; padding: 1rem; background: #090908; text-align: center; }
+@media (orientation: portrait) and (max-width: 1366px), (orientation: portrait) and (any-pointer: coarse) {
+    .entryChecking > .entryFallback { display: none; }
+    .entryChecking > .entryPortrait { display: contents; }
+}
+
+.experience {
+    position: fixed; inset: 0; z-index: 40; box-sizing: border-box;
+    display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: .75rem;
+    height: 100vh; height: 100dvh; min-height: 0;
+    padding: max(4.5rem, calc(env(safe-area-inset-top) + 4.25rem)) clamp(1rem, 3.2vw, 2.75rem) max(.75rem, env(safe-area-inset-bottom));
+    background: var(--surface-deep, #090908); color: white; isolation: isolate;
+    --portrait-reflection: .60; --portrait-corner-light: .90;
+}
+.toolbar { position: relative; z-index: 25; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-width: 0; min-height: 44px; }
+.toolbar a { display: inline-flex; align-items: center; min-height: 44px; }
+.back { min-width: 0; max-width: 62%; }
+.back span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exit { flex-shrink: 0; gap: .5rem; }
+.exit span { font-size: 1.1rem; font-weight: 300; }
+.frame { position: relative; width: 100%; height: 100%; min-height: 0; min-width: 0; overflow: visible; }
+.slot { position: absolute; inset: 0; min-width: 0; min-height: 0; }
+/* Halo descendants deliberately set visibility: visible once measured.
+   Opacity hides the complete cached surface, including those descendants. */
+.cached { opacity: 0; visibility: hidden; pointer-events: none; }
+.page { position: relative; box-sizing: border-box; width: 100%; height: 100%; border: .6px solid rgb(201 154 91 / .42); border-radius: 14px; background: rgb(0 0 0 / .05); box-shadow: inset 0 1px 1px rgb(240 213 163 / .12), inset 0 -1px 1px rgb(201 154 91 / .10); }
+.reading { position: relative; z-index: 1; height: 100%; min-height: 0; overflow-x: hidden; overflow-y: auto; border-radius: inherit; touch-action: pan-y pinch-zoom; overscroll-behavior: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.reading::-webkit-scrollbar { display: none; }
+.reading:focus-visible { outline: 1px solid rgb(201 154 91 / .5); outline-offset: -3px; }
+.page :global([data-artwork-editorial]) { min-height: 0; background: transparent; }
+.page :global([data-artwork-editorial] > div) { max-width: none; padding: clamp(1.25rem, 3.6vw, 2.5rem); }
+.page :global([data-artwork-detail-layout]) { margin-top: 0; grid-template-columns: minmax(0, 1fr); align-items: start; gap: clamp(1.75rem, 3.5vh, 2.5rem); }
+.page :global([data-artwork-detail-image]) { min-width: 0; }
+.page :global([data-artwork-detail-image] > div > div:first-child) { min-height: 0 !important; }
+.page :global([data-artwork-detail-photo]) { width: min(100%, calc(52svh * var(--artwork-photo-aspect, 1))); height: auto; max-width: 100% !important; max-height: 52svh !important; }
+.page :global([data-artwork-detail-info]) { width: 100%; max-width: none; transform: none; translate: none; }
+.page :global([data-artwork-detail-reading]) { display: block; min-height: 0; overflow: visible; padding: 0; margin-top: 0; }
+.rim { position: absolute; inset: 0; z-index: 6; opacity: var(--portrait-corner-light); pointer-events: none; }
+.rim svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.reflection { position: absolute; inset: 0; z-index: 5; border-radius: inherit; pointer-events: none; opacity: var(--portrait-reflection); background: linear-gradient(116deg, transparent 24%, rgb(225 187 128 / .035) 42%, rgb(240 213 163 / .075) 48%, transparent 60%); }
+
+/* Only these visual copies turn. Global navigation and live content sit outside. */
+.overlay { position: absolute; inset: 0; z-index: 10; pointer-events: none; transform-style: preserve-3d; perspective: 1040px; perspective-origin: 50% 50%; }
+.overlay[hidden] { display: none; }
+.half, .face { position: absolute; top: 0; width: 50%; height: 100%; overflow: hidden; }
+.half { z-index: 1; }
+.leftHalf { left: 0; }
+.rightHalf { left: 50%; }
+.canvas { position: absolute; top: 0; height: 100%; }
+.leaf { position: absolute; top: 0; width: 50%; height: 100%; z-index: 3; transform-style: preserve-3d; will-change: transform; }
+.leafNext { left: 50%; transform-origin: left center; }
+.leafPrevious { left: 0; transform-origin: right center; }
+.face { width: 100%; left: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.front { transform: translateZ(var(--portrait-depth, 0px)); }
+.reverse { transform: rotateY(180deg) translateZ(var(--portrait-depth, 0px)); }
+.edge { position: absolute; top: 0; width: 2px; height: 100%; opacity: var(--portrait-fold, 0); background: linear-gradient(90deg, #6f4b2db3, #e1bb80c9, #a77943b3); transform: rotateY(90deg); transform-origin: center; backface-visibility: visible; }
+.leafNext .edge { right: -1px; }
+.leafPrevious .edge { left: -1px; }
+.spine { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; z-index: 4; opacity: var(--portrait-fold, 0); background: linear-gradient(transparent, rgb(167 121 67 / .24) 16%, rgb(225 187 128 / .38) 50%, rgb(167 121 67 / .24) 84%, transparent); pointer-events: none; }
+.experience[data-portrait-turning] .frame, .experience[data-portrait-turning] .frame * { user-select: none !important; -webkit-user-select: none !important; }
+.controls { position: relative; z-index: 25; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: .75rem; min-height: 68px; }
+.controls a { min-width: 0; min-height: 44px; display: flex; flex-direction: column; gap: .3rem; justify-content: center; }
+.next { align-items: flex-end; text-align: right; }
+.title { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: rgb(255 255 255 / .50); transition: color 180ms; }
+.controls a:is(:hover, :focus-visible) .title { color: white; }
+.center { display: flex; flex-direction: column; align-items: center; gap: .4rem; }
+.hintDock { white-space: nowrap; }
+.reminder { position: absolute; z-index: 15; left: 50%; top: 45%; transform: translate(-50%, -50%); box-sizing: border-box; width: max-content; max-width: calc(100% - 3rem); border-radius: 999px; padding: .75rem 1rem; border: 1px solid rgb(255 255 255 / .08); background: rgb(0 0 0 / .3); backdrop-filter: blur(12px); pointer-events: none; text-align: center; white-space: normal; text-wrap: balance; line-height: 1.7; opacity: 0; visibility: hidden; filter: blur(5px); transition: opacity .25s, filter .25s, visibility 0s .25s; }
+.experience[data-portrait-hint-visible]:not([data-portrait-learned]) .reminder { opacity: 1; visibility: visible; filter: blur(0); transition-delay: 0s; }
+.reminder[data-sealing] { transition: none; }
+.experience[data-portrait-learned] .reminder:not([data-sealing]) { visibility: hidden; }
+.experience:not([data-portrait-ready="true"]) .frame { visibility: hidden; }
+.status { position: absolute; z-index: 20; left: 50%; bottom: 5.75rem; transform: translateX(-50%); width: max-content; max-width: calc(100% - 3rem); padding: .8rem 1rem; background: rgb(9 9 8 / .94); border-radius: 8px; }
+.error { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .6rem 1rem; }
+.error button { min-height: 44px; }
+@media (min-width: 768px) {
+    .experience { gap: 1.1rem; }
+    .page :global([data-artwork-detail-photo]) { width: min(100%, calc(58svh * var(--artwork-photo-aspect, 1))); max-height: 58svh !important; }
+    .controls { min-height: 76px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .reminder { transition: none; }
+    .leaf { will-change: auto; }
+}

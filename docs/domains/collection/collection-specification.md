@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.13
+Version: 1.14
 
 Document ID: DOC-COL-SPEC
 
@@ -708,7 +708,7 @@ Shared artwork buttons acknowledge a press with a transient outline. Programmati
 
 SeriesGallery explicitly uses the shared ArtworkLightbox's glass presentation, matching Home's approved viewer and its responsive masks, description expansion, native scrolling, swipe/zoom and keyboard controls. Series supplies only its own artworks and retains its scoped position dots, previous/next, Close route and Explore in detail link carrying the Series query. Gallery/carousel composition, atmosphere and CollectionHeroMotion are unchanged.
 
-The owner-supplied current catalogue marks Yasemi II, III and IV as planned/unavailable while retaining their 2026 year; Yasemi I remains completed/available. All four remain members of Yasemi and use the shared completed/frosted preview rules according to their explicit status. The Featured Collection reference and cover remain Yasemi/Yasemi I.
+The latest owner-confirmed catalogue marks Yasemi I, III and IV as planned/unavailable while retaining their 2026 year; Yasemi II is completed/available. All four remain members of Yasemi and use the shared completed/frosted preview rules according to their explicit status. The Featured Collection reference and cover remain Yasemi/Yasemi I.
 
 Home, Archive and Series cards now place their descriptive Halo rail inside the main artwork button. The whole thumbnail, including expanded symbols, labels and distinction detail, activates that single artwork action. Hover/focus expansion, technical rollover, frame geometry and loading guards remain intact; thumbnail badges no longer consume clicks as separate disclosure buttons. Below-image ribbons retain interactive details/ticker behaviour, and linked Collections previews keep their existing passive single-link treatment.
 
@@ -731,3 +731,9 @@ Each CollectionPreviewArtwork link fills that changing height with a zero minimu
 The selected-artwork viewer reused by Home and Series adds the shared `ArtworkArrivalAccent` component from `ArtworkArrivalEffect.tsx`, using `artworkArrivalLifecycle.ts` for readiness and cleanup, for completed works with Cover/Featured/recognition insignias. The selected Artwork ID keys a single warm contour-comet and fairy-dust sequence after the image decodes, fonts settle and the band is measured. Its path follows the complete glass panel, including image and information, with the existing rounded corners; the painting outline is not used as the contour. Dust follows the four panel edges and remains at the insignia band. The pointer-transparent canvas is mounted above the rim and outside the image mask. Portrait, landscape and desktop viewer layouts use the same effect. Standard detail extends its existing portrait effect to tablet landscape, retaining archive/Series navigation context.
 
 The lightbox permits its own modal while suppressing decoration for another modal, zoom or expanded reading. Pointer/swipe starts, navigation controls and closing clean up the decoration. Existing datasets, arbitrary Series sizes, thumbnail hover expansion, frame/image/insignia sizing, swipe/zoom/button/scroll handlers and the approved Collections hero motion remain unchanged. Actual browser/device and project-build review remains required; compiled-source/event/drawing validation is recorded in the canonical Artwork Implementation document.
+
+## EN/ES Home and Collections — 2026-10-18
+
+The foundation and Artwork block are owner-approved and pushed as `d56b772` on the review branch. The next incremental patch translates Home's featured collection, Collections introduction/metadata/hero/preview controls, and the four series' descriptions, statements, state/count labels, navigation and metadata. `src/i18n/content/series.es.json` is joined immutably by canonical ID; original series names, years, cover/member facts, image/video/layout settings and filenames are unchanged. Completed/planned thumbnails still derive from the latest canonical Artwork record, now with localized alt/year text.
+
+The selected-artwork deep link exposed the existing portal's server-side document access. SeriesGallery now loads the same ArtworkLightbox client-side; selection/Close handlers, shared viewer, geometry, approved CollectionHeroMotion and hover expansion CSS retain their exact source. All four selected-work links render successfully in both languages. English Home/Collections/Series normalized visible copy and metadata match the previous production build. Native scrolling, lazy-viewer hydration/focus and device layout still require browser review. Spanish stays noindex during the remaining language/legal release work. Full scope, checks and v3 incremental installation are in `docs/architecture/internationalization.md`.

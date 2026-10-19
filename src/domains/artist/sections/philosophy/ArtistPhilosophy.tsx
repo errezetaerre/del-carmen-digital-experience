@@ -1,45 +1,33 @@
+import { useTranslations } from "next-intl";
 import { Container } from "@/shared/layout/container";
 import ArtistPhilosophyMotion from "./ArtistPhilosophyMotion";
 
-const philosophyParagraphs = [
-    <>
-        A sunset dissolving into violet and orange. The unguarded smile
-        of a child. A face marked by years of struggle and wisdom.
-        Light entering a room and transforming, for a moment,
-        everything it touches.
-    </>,
-    <>
-        These passing encounters are at the center of
-        Rolando&apos;s way of seeing.
-    </>,
-    <>
-        Painting becomes a means of remaining with them a little
-        longer — of exploring the point where the exterior world
-        awakens something within us, and where observation becomes
-        contemplation.
-    </>,
-    <>
-        Light is therefore more than illumination. It reveals,
-        conceals, expands and draws the viewer inward. The human
-        figure becomes more than anatomy. A gesture, a posture or a
-        face can carry memory, silence, vulnerability and presence.
-    </>,
-    <>
-        The search is not for a fixed style, but for an increasingly
-        authentic language: a way of painting in which technique
-        gradually becomes invisible and something more intimate can
-        emerge.
-    </>,
-    <>
-        Perhaps this is why the journey continues to feel unfinished.
-    </>,
-    <>
-        Not because something is missing, but because discovery itself
-        is part of the work.
-    </>,
-];
-
 export default function ArtistPhilosophy() {
+    const t = useTranslations("Artist");
+    const philosophyParagraphs = [
+        <>
+            {t("philosophy.paragraphFirst")}
+        </>,
+        <>
+            {t("philosophy.paragraphSecond")}
+        </>,
+        <>
+            {t("philosophy.paragraphThird")}
+        </>,
+        <>
+            {t("philosophy.paragraphFourth")}
+        </>,
+        <>
+            {t("philosophy.paragraphFifth")}
+        </>,
+        <>
+            {t("philosophy.paragraphSixth")}
+        </>,
+        <>
+            {t("philosophy.paragraphSeventh")}
+        </>,
+    ];
+
     return (
         <section
             id="artist-philosophy"
@@ -164,7 +152,7 @@ export default function ArtistPhilosophy() {
                                             text-[#F5EFE6]/50
                                         "
                                     >
-                                        Artistic Philosophy
+                                        {t("philosophy.eyebrow")}
                                     </p>
 
                                     <span
@@ -211,11 +199,11 @@ export default function ArtistPhilosophy() {
                                         xl:text-[5.5rem]
                                     "
                                 >
-                                    To observe is to discover
+                                    {t("philosophy.titleFirst")}
                                     <br className="hidden md:block" />
-                                    {" "}that nothing is truly{" "}
+                                    {" "}{t("philosophy.titleSecond")}{" "}
                                     <span className="text-brand-gold">
-                                        ordinary.
+                                        {t("philosophy.ordinary")}
                                     </span>
                                 </h2>
                             </header>
@@ -462,7 +450,7 @@ export default function ArtistPhilosophy() {
                                 text-[#F5EFE6]/50
                             "
                         >
-                            Artistic Philosophy
+                            {t("philosophy.eyebrow")}
                         </p>
 
                         <span
@@ -491,11 +479,11 @@ export default function ArtistPhilosophy() {
                             xl:text-[5.5rem]
                         "
                     >
-                        To observe is to discover
+                        {t("philosophy.titleFirst")}
                         <br className="hidden md:block" />
-                        {" "}that nothing is truly{" "}
+                        {" "}{t("philosophy.titleSecond")}{" "}
                         <span className="text-brand-gold">
-                            ordinary.
+                            {t("philosophy.ordinary")}
                         </span>
                     </h2>
 

@@ -1,20 +1,24 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import Link from "@/i18n/navigation";
 import { Container } from "@/shared/layout/container";
 import AboutContinueMotion from "./AboutContinueMotion";
 
 export default function AboutContinue() {
+    const t = useTranslations("About");
+
+
     return (
         <section className="about-continue-scene relative overflow-hidden bg-neutral-950 py-28 md:py-36 lg:py-40">
             <Container>
                 <div className="about-continue-motion">
                     <div className="max-w-3xl">
                         <p className="about-continue-eyebrow font-sans text-[10px] uppercase tracking-[0.34em] text-brand-gold/70">
-                            Continue
+                            {t("continue.eyebrow")}
                         </p>
 
                         <h2 className="about-continue-heading mt-5 font-display text-5xl font-light leading-[0.95] tracking-[-0.03em] text-stone-100 md:text-6xl lg:text-7xl">
-                            The encounter
-                            <span className="block italic text-stone-500">continues.</span>
+                            {t("continue.titleFirst")}
+                            <span className="block italic text-stone-500">{t("continue.titleSecond")}</span>
                         </h2>
                     </div>
 
@@ -31,11 +35,11 @@ export default function AboutContinue() {
                                 </p>
 
                                 <h3 className="about-continue-title mt-4 font-display text-3xl font-light text-stone-100 transition-colors duration-500 group-hover:text-brand-gold md:text-4xl">
-                                    Discover the Artist
+                                    {t("continue.artist")}
                                 </h3>
 
                                 <p className="about-continue-copy mt-4 max-w-sm font-sans text-sm font-light leading-6 text-stone-500">
-                                    The life and practice behind the work.
+                                    {t("continue.artistDescription")}
                                 </p>
 
                                 <span className="about-continue-arrow mt-7 inline-block font-sans text-lg text-stone-500 transition duration-500 group-hover:translate-x-2 group-hover:text-brand-gold">
@@ -56,11 +60,11 @@ export default function AboutContinue() {
                                 </p>
 
                                 <h3 className="about-continue-title mt-4 font-display text-3xl font-light text-stone-100 transition-colors duration-500 group-hover:text-brand-gold md:text-4xl">
-                                    Explore the Artworks
+                                    {t("continue.artworks")}
                                 </h3>
 
                                 <p className="about-continue-copy mt-4 max-w-sm font-sans text-sm font-light leading-6 text-stone-500">
-                                    Paintings, collections and their stories.
+                                    {t("continue.artworksDescription")}
                                 </p>
 
                                 <span className="about-continue-arrow mt-7 inline-block font-sans text-lg text-stone-500 transition duration-500 group-hover:translate-x-2 group-hover:text-brand-gold">

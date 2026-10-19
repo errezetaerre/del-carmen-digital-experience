@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import {
     useEffect,
@@ -6,47 +7,48 @@ import {
     useState,
 } from "react";
 
-const JOURNEY_ITEMS = [
-    {
-        index: 0,
-        number: "01",
-        date: "2015–2017",
-        label: "Return to Drawing",
-    },
-    {
-        index: 1,
-        number: "02",
-        date: "2017–2018",
-        label: "Entering the Atelier",
-    },
-    {
-        index: 2,
-        number: "03",
-        date: "2018–2021",
-        label: "From Study to Exhibition",
-    },
-    {
-        index: 3,
-        number: "04",
-        date: "2022",
-        label: "Academic Painter",
-    },
-    {
-        index: 4,
-        number: "05",
-        date: "2023–Present",
-        label: "A Voice in Formation",
-    },
-];
-
 const MAX_DISTANCE = 82;
 
 export default function JourneyNavigator() {
+    const t = useTranslations("Artist");
+    const JOURNEY_ITEMS = [
+        {
+            index: 0,
+            number: "01",
+            date: t("journey.navigation.item1.date"),
+            label: t("journey.navigation.item1.label"),
+        },
+        {
+            index: 1,
+            number: "02",
+            date: t("journey.navigation.item2.date"),
+            label: t("journey.navigation.item2.label"),
+        },
+        {
+            index: 2,
+            number: "03",
+            date: t("journey.navigation.item3.date"),
+            label: t("journey.navigation.item3.label"),
+        },
+        {
+            index: 3,
+            number: "04",
+            date: t("journey.navigation.item4.date"),
+            label: t("journey.navigation.item4.label"),
+        },
+        {
+            index: 4,
+            number: "05",
+            date: t("journey.navigation.item5.date"),
+            label: t("journey.navigation.item5.label"),
+        },
+    ];
+
     const [activeIndex, setActiveIndex] =
         useState<number | null>(0);
 
-    const [pointerY, setPointerY] =
-        useState<number | null>(null);
+    const [proximities, setProximities] =
+        useState<number[]>([]);
 
     const navigatorRef =
         useRef<HTMLDivElement | null>(null);
@@ -113,52 +115,29 @@ export default function JourneyNavigator() {
     const handlePointerMove = (
         event: React.PointerEvent<HTMLDivElement>,
     ) => {
-        setPointerY(event.clientY);
+        setProximities(buttonRefs.current.map((button) => {
+            if (!button) return 0;
+            const rect = button.getBoundingClientRect();
+            const distance = Math.abs(event.clientY - (rect.top + rect.height / 2));
+            return Math.max(0, 1 - distance / MAX_DISTANCE);
+        }));
     };
 
     const handlePointerLeave = () => {
-        setPointerY(null);
+        setProximities([]);
     };
 
     const getProximity = (
         index: number,
     ) => {
-        if (pointerY === null) {
-            return 0;
-        }
-
-        const button =
-            buttonRefs.current[index];
-
-        if (!button) {
-            return 0;
-        }
-
-        const rect =
-            button.getBoundingClientRect();
-
-        const centerY =
-            rect.top +
-            rect.height / 2;
-
-        const distance =
-            Math.abs(
-                pointerY - centerY,
-            );
-
-        return Math.max(
-            0,
-            1 -
-            distance /
-            MAX_DISTANCE,
-        );
+        return proximities[index] ?? 0;
     };
 
     return (
         <div
             ref={navigatorRef}
             data-journey-navigator
-            aria-label="Journey timeline navigation"
+            aria-label={t("journey.navigationLabel")}
             onPointerMove={
                 handlePointerMove
             }

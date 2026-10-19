@@ -2,6 +2,8 @@
 
 import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
+import { useLocale, useTranslations } from "next-intl";
+import { artworkTextLocale, formatArtworkTechnique, localizeArtwork } from "@/i18n/artworkCopy";
 
 //import { useEffect, useRef } from "react";
 import { useLayoutEffect, useRef } from "react";
@@ -19,9 +21,12 @@ import { LinkButton } from "@/shared/ui/button";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function FeaturedArtwork() {
+  const locale = useLocale();
+  const t = useTranslations("Home");
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const artwork = getFeaturedWorkArtwork();
+  const sourceArtwork = getFeaturedWorkArtwork();
+  const artwork = sourceArtwork ? localizeArtwork(sourceArtwork, locale) : undefined;
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -214,7 +219,7 @@ export default function FeaturedArtwork() {
   const primaryImage = artwork.images.primary;
 
   const techniqueLabel =
-    `${artwork.medium} on ${artwork.support}`;
+    locale === "es" ? formatArtworkTechnique(artwork, locale) : `${artwork.medium} on ${artwork.support}`;
 
   return (
     <section
@@ -317,7 +322,7 @@ export default function FeaturedArtwork() {
               md:text-xs
             "
           >
-            Featured Work
+            {t("featuredWork")}
           </p>
 
           <h2
@@ -438,6 +443,7 @@ export default function FeaturedArtwork() {
 
             {artwork.description && (
               <p
+                lang={artworkTextLocale(artwork, locale)}
                 className="
                   max-w-lg
                   font-sans
@@ -459,7 +465,7 @@ export default function FeaturedArtwork() {
                 href={`/artworks/${artwork.slug}`}
                 variant="bronzeUnderline"
               >
-                Discover the work
+                {t("discoverWork")}
                 <ArtworkLinkFeedback />
               </LinkButton>
             </div>

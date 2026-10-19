@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 
 type FocusOptions = { initialFocus?: HTMLElement | null; onEscape?: () => void };
 type DialogEntry = { root: HTMLElement };
@@ -81,7 +81,7 @@ export default function useDialogFocus(
     options: { initialFocusRef?: RefObject<HTMLElement | null>; onEscape?: () => void } = {},
 ) {
     const latest = useRef(options);
-    latest.current = options;
+    useLayoutEffect(() => { latest.current = options; });
     const handlesEscape = Boolean(options.onEscape);
     useEffect(() => {
         const root = dialogRef.current;

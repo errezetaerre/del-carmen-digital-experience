@@ -1,9 +1,13 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import LinkButton from "@/shared/ui/button/LinkButton";
 import { Container } from "@/shared/layout/container/Container";
 import TheWorkMotion from "./TheWorkMotion";
 
 export default function TheWork() {
+    const t = useTranslations("Artist");
+
+
     return (
         <section
             id="the-work"
@@ -56,7 +60,7 @@ export default function TheWork() {
                                 text-brand-gold/70
                             "
                         >
-                            The Work
+                            {t("work.eyebrow")}
                         </p>
 
                         <h2
@@ -79,9 +83,9 @@ export default function TheWork() {
                                 xl:text-[5.6rem]
                             "
                         >
-                            The journey continues
+                            {t("work.titleFirst")}
                             <span className="block text-brand-gold">
-                                on the canvas.
+                                {t("work.titleSecond")}
                             </span>
                         </h2>
 
@@ -101,21 +105,15 @@ export default function TheWork() {
                             "
                         >
                             <p data-work-copy>
-                                Every painting carries something from
-                                what came before — observation, memory,
-                                discipline, questions — while opening
-                                the possibility of something not yet
-                                discovered.
+                                {t("work.description")}
                             </p>
 
                             <p data-work-copy>
-                                The story of the artist is only one way
-                                into the work.
+                                {t("work.artistStory")}
                             </p>
 
                             <p data-work-copy>
-                                The rest belongs to the encounter between
-                                the painting and the viewer.
+                                {t("work.encounter")}
                             </p>
                         </div>
 
@@ -126,7 +124,7 @@ export default function TheWork() {
                                 href="/artworks"
                                 variant="bronzeUnderline"
                             >
-                                Explore the Works
+                                {t("work.explore")}
                             </LinkButton>
                         </div>
                     </div>
@@ -159,7 +157,7 @@ export default function TheWork() {
                         >
                             <Image
                                 src="/artworks/epifania_nupcial_hero_portrait.png"
-                                alt="Detail from Epifanía Nupcial"
+                                alt={t("work.imageAlt")}
                                 fill
                                 sizes="
                                     (max-width: 1024px) 82vw,

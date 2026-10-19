@@ -1,6 +1,6 @@
 # Contact Implementation
 
-Version: 1.6
+Version: 1.7
 
 Document ID: DOC-CON-IMP
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved / Complete / Frozen
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-16
+Last Updated: 2026-10-18
 
 ---
 
@@ -24,7 +24,7 @@ Last Updated: 2026-10-16
 
 Public page:
 
-`src/app/contact/page.tsx`
+`src/app/[locale]/contact/page.tsx`
 
 Domain:
 
@@ -41,7 +41,7 @@ Shared Footer:
 ## Canonical Structure
 
 ```text
-src/app/contact/page.tsx
+src/app/[locale]/contact/page.tsx
 src/app/api/contact/route.ts
 src/domains/contact/index.tsx
 src/domains/contact/sections/contact/ContactExperience.tsx
@@ -167,7 +167,7 @@ The module remains **Approved / Complete / Frozen**.
 
 Public page:
 
-`src/app/contact/page.tsx`
+`src/app/[locale]/contact/page.tsx`
 
 Server endpoint:
 
@@ -381,3 +381,13 @@ The feedback region uses `role="status"`, polite live announcements and atomic c
 Only `ContactForm.tsx` changes in source. The Contact API, email body/consent evidence, Newsletter lifecycle, notice revision and all other modules retain their bytes. No visitor acknowledgement email or extra provider call is added.
 
 The 17 existing isolated consent/submission scenarios pass with the updated component and current success wording. All 210 code files parse. The other 214 source files are byte-identical to the preceding consent patch. These checks use the previously documented stand-ins; browser rendering, native scrolling, real provider delivery and full-project build/typecheck remain to be verified in the complete application.
+
+## EN/ES Contact and consent metadata — 2026-10-18
+
+The shared public route is `src/app/[locale]/contact/page.tsx`, serving `/contact` and `/es/contact` with localized metadata. ContactExperience/Form labels, subject descriptions, errors and feedback use the same typed message system. Classes, fields, canonical subject values, endpoint, animation, honeypot and rate-limit settings retain the approved implementation. Source user text is never automatically translated.
+
+Client field errors store message keys and resolve them at render time. Checkbox acceptance references its selected language and notice revision, so switching language cannot carry acceptance into a differently worded notice. Payloads add `locale` with existing consent/version fields. Shared notice/checkbox text and the approved address are rendered in the same language.
+
+The server accepts omitted locale as legacy English, or exact `en`/`es`. Unsupported locale returns 400 `invalid_locale`. Consent must remain boolean true and the version must match the server's registered language copy; otherwise the existing consent-required/outdated contract blocks delivery. Contact records the exact server-selected statement, purpose, version, language, UTC time and localized source path in the operator email. It does not translate the visitor's message, change recipient/sender, create Contact persistence or send a new auto-reply.
+
+English revision `2026-10-15.1` remains exact; Spanish revision `2026-10-18.1-es` is archived in DOC-FORM-PRIVACY-CONSENT. Retention and operator facts are unchanged. Build/TypeScript, actual compiled form/API fixtures and production GETs verify both languages, old English compatibility and no delivery on invalid consent. Existing English visible copy is exact. Real provider delivery, native browser validation, physical layout/accessibility and final legal draft review remain production/editorial QA.

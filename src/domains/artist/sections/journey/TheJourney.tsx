@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Container } from "@/shared/layout/container";
 import JourneyMedia from "./JourneyMedia";
 
@@ -5,62 +6,63 @@ import JourneyMotion from "./JourneyMotion";
 
 import JourneyNavigator from "./JourneyNavigator";
 
-const milestones = [
-    {
-        period: "Around 2015–2017",
-        title: "Curiosity returns",
-        copy: [
-            "Years after leaving drawing behind, an unexpected fascination with the intricate illustrations of Johanna Basford brought Rolando back to paper.",
-            "Color led to pen and ink. Pen and ink led to a course. And a course of only eight classes became a turning point.",
-            "He entered believing that drawing was an ability one was simply born with. He left wondering what might happen if curiosity were given time, discipline and permission to grow.",
-        ],
-    },
-    {
-        period: "2017–2018",
-        title: "Learning to see",
-        copy: [
-            "Curiosity soon demanded greater structure.",
-            "Rolando entered Atelier del Sol in San José with no previous academic training in drawing or painting. Under the guidance of Emilia Cantor, he began studying the foundations of academic realism: drawing, proportion, value, form, composition and eventually oil painting.",
-            "The atelier transformed admiration into practice.",
-            "What had once seemed like an inaccessible ability began to reveal itself as something that could be studied, practiced and continually refined.",
-        ],
-    },
-    {
-        period: "2018–2021",
-        title: "The work enters the world",
-        copy: [
-            "As study became practice, the work gradually moved beyond the atelier.",
-            "In 2018, Rolando participated in Academicismo del Siglo XXI at the Museo del Jade in San José, followed by collective exhibitions in cultural spaces across Costa Rica.",
-            "Recognition during these formative years — from drawing and cast studies to portraiture and painting — became less a destination than confirmation that the years of quiet practice were beginning to leave a visible trace.",
-        ],
-    },
-    {
-        period: "2022",
-        title: "A foundation, not an arrival",
-        copy: [
-            "In 2022, Rolando became the second student to graduate as an academic painter from Atelier del Sol.",
-            "The achievement marked years of disciplined study, but it did not resolve the central question of the practice.",
-            "If technique teaches an artist how to see and how to construct an image, what remains when technique is no longer the destination?",
-            "Graduation became less an ending than the beginning of another search: for a brushstroke, a language and a visual identity that could become unmistakably his own.",
-        ],
-    },
-    {
-        period: "2023 — Present",
-        title: "Toward a language of his own",
-        copy: [
-            "The years that followed brought new exhibitions, new bodies of work and a deeper attention to the relationship between figure, light and inner presence.",
-            "In 2024, Sendero del Sol received an Honourable Mention at the fifth edition of La No Bienal — a work in which landscape, figure and light converge around precisely the kind of fleeting human presence that continues to shape Rolando's practice.",
-            "Yet recognition remains secondary to the question that has followed the journey from the beginning:",
-        ],
-        question: "What is still waiting to be discovered?",
-        closing: [
-            "The answer is not fixed.",
-            "It lives somewhere between everything already learned and everything the next painting may reveal.",
-        ],
-    },
-];
-
 export default function TheJourney() {
+    const t = useTranslations("Artist");
+    const milestones = [
+        {
+            period: t("journey.milestones.item1.period"),
+            title: t("journey.milestones.item1.title"),
+            copy: [
+                t("journey.milestones.item1.copy.item1"),
+                t("journey.milestones.item1.copy.item2"),
+                t("journey.milestones.item1.copy.item3"),
+            ],
+        },
+        {
+            period: t("journey.milestones.item2.period"),
+            title: t("journey.milestones.item2.title"),
+            copy: [
+                t("journey.milestones.item2.copy.item1"),
+                t("journey.milestones.item2.copy.item2"),
+                t("journey.milestones.item2.copy.item3"),
+                t("journey.milestones.item2.copy.item4"),
+            ],
+        },
+        {
+            period: t("journey.milestones.item3.period"),
+            title: t("journey.milestones.item3.title"),
+            copy: [
+                t("journey.milestones.item3.copy.item1"),
+                t("journey.milestones.item3.copy.item2"),
+                t("journey.milestones.item3.copy.item3"),
+            ],
+        },
+        {
+            period: t("journey.milestones.item4.period"),
+            title: t("journey.milestones.item4.title"),
+            copy: [
+                t("journey.milestones.item4.copy.item1"),
+                t("journey.milestones.item4.copy.item2"),
+                t("journey.milestones.item4.copy.item3"),
+                t("journey.milestones.item4.copy.item4"),
+            ],
+        },
+        {
+            period: t("journey.milestones.item5.period"),
+            title: t("journey.milestones.item5.title"),
+            copy: [
+                t("journey.milestones.item5.copy.item1"),
+                t("journey.milestones.item5.copy.item2"),
+                t("journey.milestones.item5.copy.item3"),
+            ],
+            question: t("journey.milestones.item5.question"),
+            closing: [
+                t("journey.milestones.item5.closing.item1"),
+                t("journey.milestones.item5.closing.item2"),
+            ],
+        },
+    ];
+
     return (
         <section
             id="the-journey"
@@ -114,7 +116,7 @@ export default function TheJourney() {
                                 text-brand-gold/70
                             "
                         >
-                            The Journey
+                            {t("journey.eyebrow")}
                         </p>
 
                         <h2
@@ -136,9 +138,9 @@ export default function TheJourney() {
                                 xl:text-7xl
                             "
                         >
-                            Nothing arrived{" "}
+                            {t("journey.titleFirst")}{" "}
                             <span className="text-brand-gold">
-                                all at once.
+                                {t("journey.titleSecond")}
                             </span>
                         </h2>
                     </header>
@@ -164,8 +166,7 @@ export default function TheJourney() {
                                 md:text-3xl
                             "
                         >
-                            Looking back, the path toward painting does
-                            not appear as a straight line.
+                            {t("journey.intro")}
                         </p>
 
                         <p
@@ -181,9 +182,7 @@ export default function TheJourney() {
                                 md:text-base
                             "
                         >
-                            It is a sequence of encounters — some
-                            seemingly small at the time — that gradually
-                            revealed what the next step could become.
+                            {t("journey.encounters")}
                         </p>
 
                         <p
@@ -199,7 +198,7 @@ export default function TheJourney() {
                                 md:text-base
                             "
                         >
-                            One experience became the cause of another.
+                            {t("journey.cause")}
                         </p>
 
                         <p
@@ -215,10 +214,7 @@ export default function TheJourney() {
                                 md:text-base
                             "
                         >
-                            What began as curiosity became practice.
-                            Practice became discipline. And discipline
-                            opened the possibility of a more personal
-                            search.
+                            {t("journey.search")}
                         </p>
 
                         <p
@@ -232,7 +228,7 @@ export default function TheJourney() {
                                 text-brand-gold/85
                             "
                         >
-                            The journey continues.
+                            {t("journey.continues")}
                         </p>
                     </div>
                 </div>
@@ -493,9 +489,9 @@ export default function TheJourney() {
                             lg:text-5xl
                         "
                     >
-                        Each encounter became the cause of{" "}
+                        {t("journey.closingFirst")}{" "}
                         <span className="text-brand-gold">
-                            what came next.
+                            {t("journey.closingSecond")}
                         </span>
                     </p>
                 </div>

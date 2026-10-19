@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "@/shared/ui/artwork/ArtworkNavigationFeedback.module.css";
+import { stripLocalePrefix } from "@/i18n/config";
 
 type PendingView = {
     element: HTMLElement;
@@ -38,7 +39,7 @@ export function hasStandardNavigationSnapshot() {
 // App Router's next payload. It never becomes an interactive second viewer.
 export function captureStandardNavigation(viewport: HTMLElement, href: string) {
     const target = new URL(href, window.location.href);
-    if (target.origin !== window.location.origin || !target.pathname.startsWith("/artworks/") || target.searchParams.get("experience") !== "standard") return;
+    if (target.origin !== window.location.origin || !stripLocalePrefix(target.pathname).startsWith("/artworks/") || target.searchParams.get("experience") !== "standard") return;
     clearPendingView();
     const source = routeKey(new URL(window.location.href));
     const destination = routeKey(target);

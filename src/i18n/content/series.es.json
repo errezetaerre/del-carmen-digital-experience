@@ -1,0 +1,23 @@
+{
+  "yasemi": {
+    "description": "Una exploración contemplativa de la serenidad, la transformación y el lenguaje cambiante del color.",
+    "statement": "Yasemi se despliega como un espacio de contemplación: en lo más profundo del océano habita lo que el mundo necesita de ahora en adelante.",
+    "featuredAlt": "Yasemi, colección destacada",
+    "hero": { "desktopAlt": "Yasemi", "mobileAlt": "Yasemi" }
+  },
+  "epifanias": {
+    "description": "Un estudio de la presencia, el silencio y el carácter emocional de la luz.",
+    "statement": "Esta colección explora la relación entre la figura humana, la atmósfera y el espacio contemplativo.",
+    "hero": { "desktopAlt": "Epifanias, presentación horizontal", "mobileAlt": "Epifanias, presentación vertical" }
+  },
+  "the_inner_treasury": {
+    "description": "Una serie contemplativa que explora los tesoros invisibles que reunimos en nuestro interior: la sabiduría, la fe, el autoconocimiento y la transformación silenciosa del alma.",
+    "statement": "The Inner Treasury explora la idea de que nuestros tesoros más profundos no son las cosas que poseemos, sino aquellos que descubrimos poco a poco en nuestro interior. A través de objetos simbólicos, espacios íntimos, luz, silencio y ritual, la serie transforma el mundo visible en un lenguaje de la experiencia interior. Cofres, libros, velas, figuras sagradas y superficies reflectantes aparecen como algo más que objetos: son umbrales que sugieren algo oculto, recordado, aprendido o a la espera de ser revelado. En el corazón de la colección hay un viaje que va de la búsqueda al reconocimiento. El conocimiento puede abrir una puerta y la fe, otra; el silencio invita a la contemplación, mientras que la luz se convierte en una metáfora de la conciencia. Algunos misterios permanecen sellados hasta que estamos preparados para encontrarlos. Las obras no pretenden prescribir un camino espiritual. En cambio, crean espacios de quietud e interpretación personal donde lo material y lo intangible conviven en silencio. En última instancia, The Inner Treasury propone que el mayor descubrimiento no está escondido en algún lugar más allá de nosotros. Es el instante en que quien busca vuelve la mirada hacia dentro y reconoce lo que siempre ha estado allí: el alma que se encuentra consigo misma.",
+    "hero": { "desktopAlt": "The Inner Treasury, presentación horizontal", "mobileAlt": "The Inner Treasury, presentación vertical" }
+  },
+  "the_discipline_of_seeing": {
+    "description": "Estudios de la intimidad: antes de que la mano cree, el ojo debe aprender a ver.",
+    "statement": "The Discipline of Seeing reúne obras creadas a lo largo de mi formación académica en el taller. Más que ejercicios técnicos, representan una práctica sostenida de observación: un proceso de aprendizaje para reconocer la proporción, la estructura, la anatomía, la luz y las relaciones sutiles que dan presencia a la forma.",
+    "hero": { "desktopAlt": "The Discipline of Seeing, presentación horizontal", "mobileAlt": "The Discipline of Seeing, presentación vertical" }
+  }
+}

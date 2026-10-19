@@ -1,6 +1,8 @@
 import type { Artwork } from "../model/artwork";
 import { artworkRecognitions } from "../data/artworkRecognitions";
 import { homeCuration } from "@/domains/home/curation/homeCuration";
+import type { SiteLocale } from "@/i18n/config";
+import { getSiteMessages } from "@/i18n/messages";
 
 export interface ArtworkBadge {
     id: string;
@@ -34,7 +36,9 @@ export function isFeaturedArtworkSeries(seriesId: string): boolean {
 
 // This derived presentation joins existing Home curation with artwork state/history.
 // Featured is not duplicated as a persisted boolean on Artwork.
-export function getArtworkPresentation(artwork: Artwork): ArtworkPresentation {
+export function getArtworkPresentation(artwork: Artwork, locale: SiteLocale = "en"): ArtworkPresentation {
+    const copy = getSiteMessages(locale).Artwork;
+    const plannedFor = copy.plannedFor.replace("{year}", String(artwork.year));
     const planned = artwork.creationStatus === "planned";
     const inProgress = artwork.creationStatus === "in-progress";
     const badges: ArtworkBadge[] = [];
@@ -43,46 +47,51 @@ export function getArtworkPresentation(artwork: Artwork): ArtworkPresentation {
         badges.push({
             id: "creation-status",
             kind: planned ? "planned" : "in-progress",
-            label: planned ? "Coming soon" : "In progress",
-            detail: `Planned for ${artwork.year}`,
+            label: planned ? copy.comingSoon : copy.inProgress,
+            detail: plannedFor,
         });
     }
 
     if (isCoverArtwork(artwork)) {
-        badges.push({ id: "cover", kind: "cover", label: "Cover Artwork", detail: "Selected for the Home cover" });
+        badges.push({ id: "cover", kind: "cover", label: copy.cover, detail: copy.coverDetail });
     }
 
     if (isFeaturedArtwork(artwork)) {
-        badges.push({ id: "featured", kind: "featured", label: "Featured", detail: "Curatorial selection" });
+        badges.push({ id: "featured", kind: "featured", label: copy.featured, detail: copy.curatorial });
     }
 
     for (const recognition of artworkRecognitions) {
         if (recognition.artworkId !== artwork.id) continue;
+        const translatedEvents = getSiteMessages(locale).Recognitions;
+        const event = locale === "es" && Object.prototype.hasOwnProperty.call(translatedEvents, recognition.id)
+            ? translatedEvents[recognition.id as keyof typeof translatedEvents].event
+            : recognition.event;
 
         const label = recognition.kind === "selection"
-            ? "Official Selection"
-            : recognition.kind === "honourable-mention" ? "Honourable Mention" : "Award";
+            ? copy.selection
+            : recognition.kind === "honourable-mention" ? copy.honourableMention : copy.award;
+        const originalLabel = recognition.kind === "selection" ? "Official Selection" : recognition.kind === "honourable-mention" ? "Honourable Mention" : "Award";
 
         badges.push({
             id: recognition.id,
             kind: recognition.kind,
             label,
-            detail: [recognition.title === label ? "" : recognition.title, recognition.event, recognition.year]
+            detail: [recognition.title === originalLabel ? "" : recognition.title, event, recognition.year]
                 .filter(Boolean).join(" · "),
         });
     }
 
     const availability = {
-        available: "Available",
-        reserved: "Reserved",
-        sold: "Sold",
-        unavailable: "Not available",
+        available: copy.available,
+        reserved: copy.reserved,
+        sold: copy.sold,
+        unavailable: copy.unavailable,
     };
 
     return {
         badges,
-        statusLabel: planned ? "Coming soon" : inProgress ? "In progress" : availability[artwork.availability],
-        yearLabel: planned || inProgress ? `Planned for ${artwork.year}` : String(artwork.year),
-        previewLabel: planned ? "Planned artwork preview" : inProgress ? "Work in progress" : undefined,
+        statusLabel: planned ? copy.comingSoon : inProgress ? copy.inProgress : availability[artwork.availability],
+        yearLabel: planned || inProgress ? plannedFor : String(artwork.year),
+        previewLabel: planned ? copy.plannedPreview : inProgress ? copy.progressPreview : undefined,
     };
 }

@@ -1,6 +1,10 @@
+import { useTranslations } from "next-intl";
 import { Container } from "@/shared/layout/container";
 
 export default function AboutFilm() {
+    const t = useTranslations("About");
+
+
     return (
         <section className="relative bg-neutral-950 py-20 md:py-28 lg:py-36">
             <Container>
@@ -11,12 +15,12 @@ export default function AboutFilm() {
                         </p>
 
                         <h2 className="mt-3 font-display text-3xl font-light text-stone-100 md:text-4xl">
-                            A sixty-second journey.
+                            {t("film.journey")}
                         </h2>
                     </div>
 
                     <p className="hidden font-sans text-xs uppercase tracking-[0.22em] text-stone-600 md:block">
-                        Film · 01:00
+                        {t("film.duration")}
                     </p>
                 </div>
 
@@ -33,7 +37,7 @@ export default function AboutFilm() {
                     <div className="absolute inset-0 flex items-center justify-center">
                         <button
                             type="button"
-                            aria-label="Film coming soon"
+                            aria-label={t("film.comingSoon")}
                             className="group flex h-20 w-20 items-center justify-center rounded-full border border-stone-300/30 bg-black/20 backdrop-blur-sm transition duration-500 hover:border-amber-200/70 hover:bg-black/40 md:h-24 md:w-24"
                         >
                             <span className="ml-1 block h-0 w-0 border-b-[8px] border-l-[13px] border-t-[8px] border-b-transparent border-l-stone-200 border-t-transparent transition-colors group-hover:border-l-amber-200" />
@@ -47,7 +51,7 @@ export default function AboutFilm() {
                             </p>
 
                             <p className="mt-1 font-sans text-[10px] uppercase tracking-[0.24em] text-stone-500">
-                                Film in production
+                                {t("film.production")}
                             </p>
                         </div>
 

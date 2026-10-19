@@ -4,6 +4,7 @@ import {
     useEffect,
     useState,
 } from "react";
+import useClientReady from "@/shared/hooks/useClientReady";
 
 interface InteractionHintProps {
     active: boolean;
@@ -25,16 +26,18 @@ export default function InteractionHint({
     className = "",
     visibility = "all",
 }: InteractionHintProps) {
+    const clientReady = useClientReady();
+    const showHint = clientReady && active && !dismissed;
     const [phase, setPhase] =
         useState<HintPhase>(null);
+    const [previousActive, setPreviousActive] = useState(showHint);
+    if (previousActive !== showHint) {
+        setPreviousActive(showHint);
+        setPhase(showHint ? "primary" : null);
+    }
 
     useEffect(() => {
-        if (!active || dismissed) {
-            setPhase(null);
-            return;
-        }
-
-        setPhase("primary");
+        if (!showHint) return;
 
         const hidePrimary =
             window.setTimeout(() => {
@@ -65,8 +68,7 @@ export default function InteractionHint({
             );
         };
     }, [
-        active,
-        dismissed,
+        showHint,
     ]);
 
     if (!phase) {

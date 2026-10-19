@@ -1,4 +1,6 @@
-import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { journalEntryTextLocale } from "@/i18n/journalCopy";
+import Link from "@/i18n/navigation";
 
 import { Container } from "@/shared/layout";
 
@@ -13,6 +15,9 @@ interface JournalIndexProps {
 export default function JournalIndex({
     entries,
 }: JournalIndexProps) {
+    const locale = useLocale();
+    const t = useTranslations("Journal");
+
     return (
         <section
             data-journal-index
@@ -53,7 +58,7 @@ export default function JournalIndex({
                             text-brand-gold
                             "
                     >
-                        Journal
+                        {t("label")}
                     </p>
 
                     <h1
@@ -68,10 +73,10 @@ export default function JournalIndex({
                             lg:text-[6.5rem]
                                         "
                     >
-                        Thoughts, stories
+                        {t("titleFirst")}
                         <br />
                         <span className="italic text-white/75">
-                            and quiet observations.
+                            {t("titleSecond")}
                         </span>
                     </h1>
 
@@ -87,9 +92,7 @@ export default function JournalIndex({
                             md:text-lg
                             "
                     >
-                        Reflections on art, memory, creation
-                        and the quiet moments that shape the
-                        work.
+                        {t("description")}
                     </p>
                 </div>
             </Container>
@@ -116,6 +119,7 @@ export default function JournalIndex({
                             {/* Media */}
                             <Link
                                 href={`/journal/${entry.slug}`}
+                                aria-label={t("readNamed", { title: entry.title })}
                                 data-journal-index-media
                                 className={[
                                     `
@@ -206,7 +210,7 @@ export default function JournalIndex({
                                             tracking-[0.3em]
                                         "                                    >
                                         <div className="flex items-center gap-4">
-                                            <span className="text-brand-gold">
+                                            <span className="text-brand-gold" lang={journalEntryTextLocale(entry, locale)}>
                                                 {entry.category}
                                             </span>
 
@@ -242,7 +246,7 @@ export default function JournalIndex({
                                             tracking-[0.01em]
                                             md:text-5xl
                                             xl:text-6xl
-                                            "
+                                            " lang={journalEntryTextLocale(entry, locale)}
                                     >
                                         {entry.title}
                                     </h2>
@@ -257,7 +261,7 @@ export default function JournalIndex({
                                             leading-[1.8]
                                             text-white/50
                                             md:text-lg
-                                            "
+                                            " lang={journalEntryTextLocale(entry, locale)}
                                     >
                                         {entry.excerpt}
                                     </p>
@@ -280,7 +284,7 @@ export default function JournalIndex({
                                             hover:text-brand-gold
                                             "
                                     >
-                                        Read Journal
+                                        {t("read")}
 
                                         <span
                                             aria-hidden="true"

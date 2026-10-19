@@ -1,6 +1,7 @@
 import type { Redis } from "@upstash/redis";
 
-import { formPrivacy } from "@/config/formPrivacy";
+import { getFormPrivacy } from "@/i18n/formPrivacyCopy";
+import type { SiteLocale } from "@/i18n/config";
 
 export const PENDING_TTL_SECONDS = 24 * 60 * 60;
 export const UNSUBSCRIBED_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -105,7 +106,9 @@ export async function requestPendingSubscription(
     source: string,
     tokenHash: string,
     requestedAt: string,
+    language: SiteLocale = "en",
 ): Promise<"pending" | "active"> {
+    const privacy = getFormPrivacy(language);
     const subscriber = {
         email,
         source,
@@ -115,9 +118,10 @@ export async function requestPendingSubscription(
         status: "pending",
         confirmationTokenHash: tokenHash,
         consent: {
-            noticeVersion: formPrivacy.version,
-            purpose: formPrivacy.newsletter.purpose,
-            statement: formPrivacy.newsletter.consentLabel,
+            language,
+            noticeVersion: privacy.version,
+            purpose: privacy.newsletter.purpose,
+            statement: privacy.newsletter.consentLabel,
             acceptedAt: requestedAt,
         },
     };

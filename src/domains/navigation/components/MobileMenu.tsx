@@ -1,6 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/i18n/LanguageSwitcher";
+
+import Link from "@/i18n/navigation";
 import {
   useEffect,
   useRef,
@@ -9,17 +12,13 @@ import {
 
 import { brand } from "@/config/brand";
 import {
-  DEFAULT_LANGUAGE,
   NAVIGATION_ITEMS,
 } from "../constants";
 
 import { ParticleField } from "@/shared/ui/particle-field";
 import useDialogFocus from "@/shared/hooks/useDialogFocus";
 
-import {
-  usePathname,
-  useRouter,
-} from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 import { isNavigationItemActive } from "../utils/isNavigationItemActive";
 
@@ -32,6 +31,7 @@ export default function MobileMenu({
   isOpen,
   onClose,
 }: MobileMenuProps) {
+  const t = useTranslations("Navigation");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -50,6 +50,12 @@ export default function MobileMenu({
 
   const [activeItem, setActiveItem] =
     useState<string | null>(null);
+
+  const [previousOpen, setPreviousOpen] = useState(isOpen);
+  if (previousOpen !== isOpen) {
+    setPreviousOpen(isOpen);
+    if (!isOpen) setActiveItem(null);
+  }
 
   const activeItemRef =
     useRef<HTMLAnchorElement | null>(null);
@@ -84,8 +90,6 @@ export default function MobileMenu({
 
   useEffect(() => {
     if (!isOpen) {
-      setActiveItem(null);
-
       activeItemRef.current = null;
 
       pointerRef.current.active = false;
@@ -241,7 +245,7 @@ export default function MobileMenu({
       "
       role="dialog"
       aria-modal="true"
-      aria-label="Mobile navigation"
+      aria-label={t("mobile")}
     >
       {/* Particle atmosphere */}
       <ParticleField
@@ -285,7 +289,7 @@ export default function MobileMenu({
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            aria-label="Close menu"
+            aria-label={t("closeMenu")}
             className="
               flex
               h-11
@@ -449,7 +453,7 @@ export default function MobileMenu({
                     ].join(" ")}
 
                   >
-                    {item.label}
+                    {t(item.key)}
 
                   </Link>
                 </li>
@@ -468,8 +472,8 @@ export default function MobileMenu({
             [@media(orientation:landscape)_and_(max-height:600px)]:pb-5
           "
         >
-          <button
-            type="button"
+          <LanguageSwitcher
+            onNavigate={onClose}
             className="
               font-sans
               text-xs
@@ -480,9 +484,7 @@ export default function MobileMenu({
               duration-300
               hover:opacity-60
             "
-          >
-            {DEFAULT_LANGUAGE}
-          </button>
+          />
         </div>
       </div>
     </div>

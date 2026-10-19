@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Container } from "@/shared/layout/container";
 import ThePracticeMotion from "./ThePracticeMotion";
@@ -5,6 +6,9 @@ import ThePracticeMotion from "./ThePracticeMotion";
 const hasPracticeImages = true;
 
 export default function ThePractice() {
+    const t = useTranslations("Artist");
+
+
     return (
         <section
             id="the-practice"
@@ -61,7 +65,7 @@ export default function ThePractice() {
                                 text-brand-gold/70
                             "
                         >
-                            The Practice
+                            {t("practice.eyebrow")}
                         </p>
 
                         <h2
@@ -85,23 +89,23 @@ export default function ThePractice() {
                                 data-practice-title-line
                                 className="practice-motion block"
                             >
-                                Between
+                                {t("practice.titleFirst")}
                             </span>
 
                             <span
                                 data-practice-title-line
                                 className="practice-motion block"
                             >
-                                observation
+                                {t("practice.titleSecond")}
                             </span>
 
                             <span
                                 data-practice-title-line
                                 className="practice-motion block"
                             >
-                                and{" "}
+                                {t("practice.titleThird")}{" "}
                                 <span className="text-brand-gold">
-                                    the canvas.
+                                    {t("practice.canvas")}
                                 </span>
                             </span>
                         </h2>
@@ -131,8 +135,7 @@ export default function ThePractice() {
                                 md:text-3xl
                             "
                         >
-                            Painting begins long before the first
-                            brushstroke.
+                            {t("practice.intro")}
                         </p>
 
                         <p
@@ -148,12 +151,7 @@ export default function ThePractice() {
                                 md:text-base
                             "
                         >
-                            It begins in looking — in noticing how
-                            light changes a face, how a gesture alters
-                            the balance of a figure, how color shifts
-                            beside another color, or how a seemingly
-                            insignificant detail can hold the emotional
-                            weight of an entire composition.
+                            {t("practice.looking")}
                         </p>
 
                         <p
@@ -170,14 +168,7 @@ export default function ThePractice() {
                                 md:text-base
                             "
                         >
-                            Academic training gave Rolando a structure
-                            through which to understand what he was
-                            seeing: drawing, proportion, value,
-                            anatomy, composition, color and the patient
-                            construction of form. These principles
-                            remain present in his work, not as rules to
-                            be displayed, but as tools that allow
-                            intuition to become visible.
+                            {t("practice.training")}
                         </p>
                     </div>
                 </div>
@@ -220,7 +211,7 @@ export default function ThePractice() {
                         {hasPracticeImages ? (
                             <Image
                                 src="/artist/practice/rolando_at_easel.jpg"
-                                alt="Rolando Rojas working at the easel"
+                                alt={t("practice.easelAlt")}
                                 fill
                                 sizes="
                                     (max-width: 1024px) 100vw,
@@ -232,7 +223,7 @@ export default function ThePractice() {
                                 "
                             />
                         ) : (
-                            <PracticePlaceholder label="Environment" />
+                            <PracticePlaceholder label={t("practice.environment")} />
                         )}
 
                         {/* subtle photographic treatment */}
@@ -281,7 +272,7 @@ export default function ThePractice() {
                                 text-[#F5EFE6]/35
                             "
                         >
-                            Environment
+                            {t("practice.environment")}
                         </span>
                     </div>
                 </div>
@@ -332,7 +323,7 @@ export default function ThePractice() {
                             >
                                 <Image
                                     src="/artist/practice/palette_color_study.jpg"
-                                    alt="Oil paint color mixtures prepared on the artist's palette"
+                                    alt={t("practice.paletteAlt")}
                                     fill
                                     sizes="
                                         (max-width: 768px) 100vw,
@@ -390,7 +381,7 @@ export default function ThePractice() {
                                         text-[#F5EFE6]/35
                                     "
                                 >
-                                    Material
+                                    {t("practice.material")}
                                 </span>
                             </div>
                         </div>
@@ -437,7 +428,7 @@ export default function ThePractice() {
                             {hasPracticeImages ? (
                                 <Image
                                     src="/artist/practice/portrait_in_progress.jpg"
-                                    alt="Portrait painting in progress"
+                                    alt={t("practice.portraitAlt")}
                                     fill
                                     sizes="
                                         (max-width: 768px) 100vw,
@@ -472,7 +463,7 @@ export default function ThePractice() {
                                     text-[#F5EFE6]/35
                                 "
                             >
-                                Work
+                                {t("practice.work")}
                             </span>
 
                             <span
@@ -510,15 +501,7 @@ export default function ThePractice() {
                                 md:text-base
                             "
                         >
-                            At the easel, the process becomes a
-                            continuous conversation between intention
-                            and discovery. A painting may begin with a
-                            clear idea, yet the canvas inevitably asks
-                            its own questions. Forms are reconsidered.
-                            Light is adjusted. Colors are built,
-                            removed and rebuilt. Some decisions are
-                            deliberate; others emerge only through the
-                            act of painting.
+                            {t("practice.process")}
                         </p>
 
                         {/* =========================================
@@ -561,14 +544,14 @@ export default function ThePractice() {
                                     data-practice-highlight-line
                                     className="practice-motion block"
                                 >
-                                    This is where
+                                    {t("practice.highlightFirst")}
                                 </span>
 
                                 <span
                                     data-practice-highlight-line
                                     className="practice-motion block"
                                 >
-                                    discipline and
+                                    {t("practice.highlightSecond")}
                                 </span>
 
                                 <span
@@ -579,7 +562,7 @@ export default function ThePractice() {
                                         text-brand-gold
                                     "
                                 >
-                                    intuition meet.
+                                    {t("practice.highlightThird")}
                                 </span>
                             </p>
                         </div>
@@ -597,11 +580,7 @@ export default function ThePractice() {
                                 md:text-base
                             "
                         >
-                            The objective is not simply to reproduce
-                            what the eye can see, but to understand what
-                            makes a moment worth preserving — and then
-                            to search for the visual language capable of
-                            carrying that feeling.
+                            {t("practice.objective")}
                         </p>
 
                         <p
@@ -618,9 +597,7 @@ export default function ThePractice() {
                                 md:text-base
                             "
                         >
-                            Each painting therefore becomes both an
-                            image and a record of attention: layers of
-                            observation, correction, patience and time.
+                            {t("practice.attention")}
                         </p>
 
                         <p
@@ -637,10 +614,7 @@ export default function ThePractice() {
                                 md:text-base
                             "
                         >
-                            And perhaps the process never truly ends
-                            with the final brushstroke. Every finished
-                            work leaves behind another question —
-                            something to carry into the next canvas.
+                            {t("practice.continuity")}
                         </p>
                     </div>
                 </div>
@@ -659,6 +633,8 @@ function PracticePlaceholder({
 }: {
     label: string;
 }) {
+    const t = useTranslations("Artist");
+
     return (
         <div
             className="
@@ -684,7 +660,7 @@ function PracticePlaceholder({
                         text-brand-gold/35
                     "
                 >
-                    Practice Media
+                    {t("practice.placeholder")}
                 </span>
 
                 <p

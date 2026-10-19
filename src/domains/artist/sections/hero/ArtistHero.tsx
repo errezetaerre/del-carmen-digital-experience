@@ -1,9 +1,13 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Container } from "@/shared/layout/container";
 
 import ArtistHeroMotion from "./ArtistHeroMotion";
 
 export default function ArtistHero() {
+    const t = useTranslations("Artist");
+
+
     return (
         <section
             id="artist-hero"
@@ -172,7 +176,7 @@ export default function ArtistHero() {
                                     lg:text-[0.72rem]
                                 "
                             >
-                                The Artist
+                                {t("hero.eyebrow")}
                             </p>
 
                             <span
@@ -269,9 +273,9 @@ export default function ArtistHero() {
                                 [@media(min-width:1300px)_and_(min-height:650px)]:text-xl
                             "
                         >
-                            A life shaped by curiosity, observation and{" "}
+                            {t("hero.statement")}{" "}
                             <span className="text-brand-gold">
-                                light.
+                                {t("hero.light")}
                             </span>
                         </h1>
 
@@ -336,8 +340,7 @@ export default function ArtistHero() {
                                 xl:text-[1.12rem]
                                 "
                         >
-                            Nothing arrived all at once. Each encounter became
-                            the cause of what came next.
+                            {t("hero.description")}
                         </p>
 
                         {/* =================================================
@@ -371,7 +374,7 @@ export default function ArtistHero() {
                                     text-[#F5EFE6]/45
                                 "
                             >
-                                Scroll
+                                {t("hero.scroll")}
                             </span>
 
                             <span

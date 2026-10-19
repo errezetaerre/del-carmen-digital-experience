@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.4
+Version: 1.12
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -522,3 +522,49 @@ The next implemented increment is the page-metadata foundation, ready for owner 
 8. Later visual enrichment: subtle animated atmospheres and the proposed Houdini/3D background, after the core public site is finished and those visual studies are approved.
 
 These items preserve the requested cart, distinctions, planned-work differentiation, prices, original/print choice, bilingual experience, database and PDF catalogue. Insignias, featured/recognition treatment and Coming soon differentiation are already implemented; remaining work must not reopen them without a concrete defect or a new approved requirement. The next major functional block after metadata review is EN/ES.
+
+
+14. EN/ES — Shared Foundation and First Editorial Pilot — 2026-10-18
+
+The owner approved shared EN/ES routing, English by default, manual selection, shared media/code, original artwork titles and stored/reviewed translations. The current implementation is based on the actual approved upstream commit `f2cf5b1` and is prepared on an isolated local review branch.
+
+Implemented for review: one `[locale]` public route tree; unchanged English URLs plus `/es`; typed common messages; localized navigation/footer/selector; Home hero and Epifanía Nupcial editorial pilot; technical/creation-state/distinction controls in the viewers and Glass engine; preserved selected-work/query/view context; localized Standard snapshot destinations; explicit language boundaries for English content that is not yet translated. The native touch/physics/material/dust contracts and owner catalogue remain intact.
+
+This does not complete the Spanish edition. The first pilot was positively reviewed by the owner, including Standard and Glass, on 2026-10-18. The next Artwork block is implemented for review: translated archive/filter/result states and shared cards, plus stored quote/description/alt translations for all 45 current works, shared by the viewers. The owner catalogue and approved movement/layout remain intact.
+
+The owner approved/pushed the foundation and complete Artwork block as `d56b772` on `feat/i18n-en-es`. The Home/Collections increment is now implemented for review: remaining Home editorial sections and both published Journal teasers, Collections, four full series' copy/metadata and their shared controls. A direct selected-artwork Series SSR error is corrected by mounting the existing portal viewer only in the browser; approved movement/selection/geometry stay intact.
+
+The owner subsequently approved Home/Collections. About/Artist is now implemented for review over that v3 content: both pages' editorial/accessibility copy and metadata, six existing Artist scenes, five milestones, Journey navigation/process alternatives and both philosophy reading modes. Canonical dates/recognitions, names and approved motion/layout remain intact. Build/TypeScript, 11 content checks and 12 real-server checks pass. English About/Artist and the approved Spanish Home remain visibly equivalent. Focused lint confirms the existing JourneyNavigator refs error against the approved v3 baseline without a new finding.
+
+About/Artist was subsequently approved by the owner, who requested its commit together with Home/Collections. Journal is now implemented for review: translated index, two published articles/seven narrative scenes, related-entry ribbon and metadata. The five catalogue records without stories remain unpublished/not-found. A named accessible label is added to previously unnamed index image links; scene geometry, assets/playback and motion/carousel/input source remain exact. Build/TypeScript, 11 content checks and 11 HTTP checks (21 GET requests) pass. English Journal and approved Spanish Home/About/Artist visible copy remains exact. Focused Journal lint has no errors/new findings and retains three existing image warnings.
+
+Those remaining forms/legal translations are now implemented for review in the following addendum, including correct language/version records. The translated newsletter form now retains its existing Suspense boundary without an English wrapper. Review new Spanish wording and both-language responsive/keyboard/touch behavior. Spanish remains noindex and language alternates remain off until the complete content/domain review. A controlled update for inherited dependency security findings and baseline lint debt remains part of release QA. The owner is using Vercel Preview on the feature branch; production follows its actual configured branch/promotion workflow, not translation completion alone. No production deployment or merge is performed here. See DOC-I18N for scope, installation and verification.
+
+The real project passes its production build and TypeScript; 60 focused content/URL/continuity/HTTP checks and focused i18n lint pass. The build/server use placeholder email/Redis credentials without submitting forms. Physical devices, rendered browser/screen-reader review, real provider delivery and production indexing remain open. Earlier source-only limitations are historical; root config, package lock and compiler are available for this increment.
+
+Next: review forms/legal and actual configured email delivery, then complete bilingual responsive/accessibility/editorial/SEO and inherited security/lint verification. Database, confirmed offers/prices, sales/cart, catalogue PDF, domain/email/deployment and later visual atmospheres retain their place in section 13. Marketing can be planned as its own workstream with actual campaign/content/measurement requirements; this increment adds no marketing tracking or public marketing section.
+
+### Forms/legal localization after Journal approval — 2026-10-18
+
+Journal was approved. Contact/newsletter, all validation/feedback, shared privacy notices/checkboxes, confirmation mail and both legal drafts are now prepared in Spanish. English wording stays exact. Spanish acceptance uses its own revision and a language-bound checkbox; APIs validate the registered pair and derive recorded statements/purposes. Old English forms/links remain compatible without historical consent rewrites. Transaction scripts, retention, rate/honeypot and all approved visual/input code stay intact.
+
+Build/TypeScript and 30 source/component/server groups pass. The existing NewsletterForm effect lint finding is confirmed against v5 with no new finding. Current remaining release work is review of this block, actual configured email delivery, complete bilingual editorial/responsive/accessibility/SEO review, inherited dependency/security update and baseline lint fixes. Spanish remains noindex; legal drafts remain drafts/noindex. Database, commerce/cart and PDF catalogue follow their existing sequence. No production promotion, merge or push is performed here. DOC-I18N owns installation and detailed limits.
+
+
+### Portrait Glass Artbook experiment after bilingual form approval — 2026-10-18
+
+The owner approved the Journal/forms/legal block and reports its push in progress. At the owner's request, a bounded portrait-only Glass Artbook experiment precedes the remaining global release review. Mobile/tablet portrait turns the complete editorial surface around its vertical centre: A-right on the front, B-left on the reverse, and B-right underneath. Fixed navigation, the existing Standard fallback and desktop/landscape engines retain their owners. The approved shared bronze material, catalogue, translations and Series/filter identity are retained. Only adjacent artwork pages are mounted/decoded; an inert full-width split avoids reflow or a content swap on landing.
+
+Production build/TypeScript, focused lint, source/markup invariants and headless Chromium touch/viewport/continuity checks are performed for this increment. The owner must review its actual visual feel on phone/tablet portrait and physical Safari/Android/iPad, including vertical reading, slow media, cancellation, return to Standard, orientation changes and reduced motion. This experiment is not approval to change desktop/landscape or the Home/Series lightbox.
+
+After portrait review, resume configured-provider delivery and the remaining complete EN/ES editorial/responsive/accessibility/SEO, inherited dependency security and baseline lint verification. Spanish remains noindex and legal drafts remain drafts/noindex. Database, confirmed commerce offers/cart and the sales PDF retain their sequence. No production promotion, merge, commit or upstream push is performed by this increment.
+
+### Pre-merge engineering review after portrait approval — 2026-10-18
+
+The owner approved the portrait follow-up and pushed `6cb8e49` on `feat/i18n-en-es`; PR #1 targets `main`. The next integration increment pins Next.js and eslint-config-next to 16.4.2 and refreshes compatible vulnerable transitive dependencies. The production dependency audit reports zero known vulnerabilities. The full audit retains five development-only findings in the ESLint/fast-glob/micromatch/braces chain; braces 3.0.3 has no patched release at this review. Do not use the suggested forced downgrade to a Next 14 lint configuration. Track that upstream developer-tool advisory separately from the deployed runtime.
+
+Full-repository lint changes from 34 errors/16 warnings to zero errors/14 warnings. React state derived from route/selection props is reconciled before commit; browser-only readiness is hydration-safe; committed refs remain in event/effect owners. The remaining warnings are native-image optimization recommendations, the typed alt forwarding wrapper, existing unused declarations and the documented native-touch subscription dependency warning. The zoom modal also opts out of the parent kinetic gesture: a browser comparison reproduced pointer-capture theft on the approved baseline, caused by React portal event bubbling. No rule is globally disabled. Next production build, TypeScript and 123 static pages pass.
+
+The portrait and landscape motion engines, touch adapters, geometry/material/CSS, canonical catalogue, assets, translations, legal/consent definitions and API handlers remain unchanged. Browser regressions cover the complete portrait interaction, native history/orientation, Standard/Glass zoom ownership, Home/Series selection, menu focus and localized newsletter feedback. The delivery README records the exact executed checks and limitations.
+
+Apply and commit this increment on the existing feature branch so PR #1 updates; check its new Vercel build before merging. Local verification does not prove configured email delivery, physical-device/screen-reader behavior or legal sufficiency. Spanish indexing remains gated and legal drafts remain drafts. Database, confirmed offers/cart, sales PDF and later immersive Home/Series work retain their sequence. This review does not itself merge or publish production.

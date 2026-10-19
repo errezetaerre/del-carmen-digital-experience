@@ -2,6 +2,8 @@
 // Deliberately local to the experimental artwork-detail view.
 import { bindGlassTouchNavigation } from './glassTouchNavigation';
 import { burstDust, burstGlassDust } from '@/shared/ui/particle-field/dust';
+import { getSiteMessages } from '@/i18n/messages';
+import { artworkTextLocale, formatArtworkCategory, formatArtworkAuthorship, formatArtworkTechnique } from '@/i18n/artworkCopy';
 let wheelMomentumLocked=false;
 let wheelMomentumUnlockTimer=null;
 
@@ -14,6 +16,8 @@ export function createGlassArtbook(root,options){
  if(!options.artworks.length)throw Error('Glass Artbook requires an artwork');
  const instance=options.instanceId.replace(/[^a-zA-Z0-9_-]/g,'');
  if(!instance)throw Error('Glass Artbook requires a stable instance identifier');
+ const locale=options.locale??'en';
+ const copy=getSiteMessages(locale).Glass;
  const nativeDocument=window.document;
  root.dataset.phase='loading';
  delete root.dataset.glassGesturing;
@@ -34,7 +38,7 @@ export function createGlassArtbook(root,options){
    cleanups.push(()=>nativeDocument.removeEventListener(type,guarded));
   }
  };
- root.innerHTML=`<section class="scene" id="${instance}-scene" aria-label="Glass Artbook artwork viewer"><div class="stage" id="${instance}-stage"><div class="book" id="${instance}-book"><div class="leaf left" id="${instance}-baseLeft"></div><div class="leaf right" id="${instance}-baseRight"></div><div class="turn" id="${instance}-turn"><div class="face front" id="${instance}-turnFront"></div><div class="face back" id="${instance}-turnBack"></div></div><div class="hinge"></div><div class="ga-artwork-actions" data-glass-artwork-actions></div></div></div></section><div class="controls font-sans"><button type="button" id="${instance}-prev" class="previous-control text-white/60 transition-colors hover:text-brand-gold"><span class="nav-label text-[9px] uppercase tracking-[0.28em]">← Previous</span><span class="nav-title font-display" id="${instance}-previousTitle"></span></button><div class="control-center"><span class="meta text-[9px] tracking-[0.24em] text-white/35" id="${instance}-counter" aria-live="polite"></span><span class="guide-dock text-[9px] uppercase tracking-[0.14em] text-white/35" id="${instance}-guideDock" aria-hidden="true">Drag to explore · ← →</span></div><button type="button" id="${instance}-next" class="next-control text-white/60 transition-colors hover:text-brand-gold"><span class="nav-label text-[9px] uppercase tracking-[0.28em]">Next →</span><span class="nav-title font-display" id="${instance}-nextTitle"></span></button></div><div class="guide-bubble" id="${instance}-guide" aria-hidden="true"><span class="guide-arrow font-display">‹</span><span class="guide-text font-sans text-[9px] font-medium uppercase tracking-[0.3em] text-white/70" id="${instance}-guideText"><span class="guide-wide">Swipe / drag the glass · ← → to explore</span><span class="guide-narrow">Use Previous / Next to explore</span></span><span class="guide-arrow font-display">›</span></div><div hidden><input id="${instance}-optical" type="range" value="60"/><output id="${instance}-opticalValue"></output><input id="${instance}-cornerOptical" type="range" value="90"/><output id="${instance}-cornerValue"></output><input id="${instance}-persp" type="number" value="1040"/><span id="${instance}-perspValue"></span><p id="${instance}-glstatus"></p></div>`;
+ root.innerHTML=`<section class="scene" id="${instance}-scene" aria-label="${escapeHtml(copy.viewer)}"><div class="stage" id="${instance}-stage"><div class="book" id="${instance}-book"><div class="leaf left" id="${instance}-baseLeft"></div><div class="leaf right" id="${instance}-baseRight"></div><div class="turn" id="${instance}-turn"><div class="face front" id="${instance}-turnFront"></div><div class="face back" id="${instance}-turnBack"></div></div><div class="hinge"></div><div class="ga-artwork-actions" data-glass-artwork-actions></div></div></div></section><div class="controls font-sans"><button type="button" id="${instance}-prev" class="previous-control text-white/60 transition-colors hover:text-brand-gold"><span class="nav-label text-[9px] uppercase tracking-[0.28em]">← ${escapeHtml(copy.previous)}</span><span class="nav-title font-display" id="${instance}-previousTitle"></span></button><div class="control-center"><span class="meta text-[9px] tracking-[0.24em] text-white/35" id="${instance}-counter" aria-live="polite"></span><span class="guide-dock text-[9px] uppercase tracking-[0.14em] text-white/35" id="${instance}-guideDock" aria-hidden="true">${escapeHtml(copy.dragDock)}</span></div><button type="button" id="${instance}-next" class="next-control text-white/60 transition-colors hover:text-brand-gold"><span class="nav-label text-[9px] uppercase tracking-[0.28em]">${escapeHtml(copy.next)} →</span><span class="nav-title font-display" id="${instance}-nextTitle"></span></button></div><div class="guide-bubble" id="${instance}-guide" aria-hidden="true"><span class="guide-arrow font-display">‹</span><span class="guide-text font-sans text-[9px] font-medium uppercase tracking-[0.3em] text-white/70" id="${instance}-guideText"><span class="guide-wide">${escapeHtml(copy.swipeGlass)}</span><span class="guide-narrow">${escapeHtml(copy.useButtons)}</span></span><span class="guide-arrow font-display">›</span></div><div hidden><input id="${instance}-optical" type="range" value="60"/><output id="${instance}-opticalValue"></output><input id="${instance}-cornerOptical" type="range" value="90"/><output id="${instance}-cornerValue"></output><input id="${instance}-persp" type="number" value="1040"/><span id="${instance}-perspValue"></span><p id="${instance}-glstatus"></p></div>`;
  root.dataset.renderer='webgl';
 
  // Load and decode before revealing a spread. Cached/broken images can both
@@ -303,8 +307,8 @@ function art(w){
 }
 function info(w,id){
  const presentation=options.getPresentation?.(w);
- const authorship=w.authorship==='original'?'Original Artwork':w.authorship==='master-copy'?'Master Copy':'Study After';
- return `<div tabindex="0" class="info max-w-xl -translate-y-1 md:-translate-y-2 lg:max-w-md lg:translate-y-0"><small class="font-sans text-[10px] font-medium uppercase tracking-[0.34em] text-brand-gold">${escapeHtml(presentation?.yearLabel??String(w.year))} · ${authorship}</small><h2 class="mt-5 font-display text-4xl font-light leading-[0.98] tracking-[0.01em] text-white md:text-5xl xl:text-6xl">${escapeHtml(w.title)}</h2>${presentation?.previewLabel?`<p class="mt-3 font-sans text-xs text-white/50">${escapeHtml(presentation.previewLabel)}</p>`:''}${w.quote?`<p class="ga-quote mt-6 font-display text-lg font-light italic leading-relaxed text-white/65 md:text-xl">“${escapeHtml(w.quote)}”</p>`:''}<div class="rule" aria-hidden="true">${glintMarkup(id+'-glint')}</div><dl class="ga-metadata mt-8 grid grid-cols-[110px_1fr] gap-x-6 gap-y-4 font-sans text-sm"><dt class="text-white/35">Medium</dt><dd class="text-white/75">${escapeHtml(formatLabel(w.medium)+' on '+formatLabel(w.support))}</dd><dt class="text-white/35">Dimensions</dt><dd class="text-white/75">${w.dimensions.width} × ${w.dimensions.height} ${escapeHtml(w.dimensions.unit)}</dd><dt class="text-white/35">Status</dt><dd class="text-white/75">${escapeHtml(presentation?.statusLabel??formatLabel(w.availability))}</dd></dl>${w.description?`<p class="ga-description mt-10 font-sans text-sm font-light leading-[1.9] text-white/55 md:text-[15px]">${escapeHtml(w.description)}</p>`:''}${w.categories.length?`<div class="ga-categories mt-10 gap-x-5 gap-y-3">${w.categories.map(category=>`<span class="font-sans text-[9px] uppercase tracking-[0.24em] text-white/35">${escapeHtml(formatLabel(category))}</span>`).join('')}</div>`:''}</div>`;
+ const authorship=escapeHtml(formatArtworkAuthorship(w,locale));
+ return `<div tabindex="0" class="info max-w-xl -translate-y-1 md:-translate-y-2 lg:max-w-md lg:translate-y-0"><small class="font-sans text-[10px] font-medium uppercase tracking-[0.34em] text-brand-gold">${escapeHtml(presentation?.yearLabel??String(w.year))} · ${authorship}</small><h2 class="mt-5 font-display text-4xl font-light leading-[0.98] tracking-[0.01em] text-white md:text-5xl xl:text-6xl">${escapeHtml(w.title)}</h2>${presentation?.previewLabel?`<p class="mt-3 font-sans text-xs text-white/50">${escapeHtml(presentation.previewLabel)}</p>`:''}${w.quote?`<p lang="${artworkTextLocale(w,locale)}" class="ga-quote mt-6 font-display text-lg font-light italic leading-relaxed text-white/65 md:text-xl">“${escapeHtml(w.quote)}”</p>`:''}<div class="rule" aria-hidden="true">${glintMarkup(id+'-glint')}</div><dl class="ga-metadata mt-8 grid grid-cols-[110px_1fr] gap-x-6 gap-y-4 font-sans text-sm"><dt class="text-white/35">${escapeHtml(copy.medium)}</dt><dd class="text-white/75">${escapeHtml(formatArtworkTechnique(w,locale))}</dd><dt class="text-white/35">${escapeHtml(copy.dimensions)}</dt><dd class="text-white/75">${w.dimensions.width} × ${w.dimensions.height} ${escapeHtml(w.dimensions.unit)}</dd><dt class="text-white/35">${escapeHtml(copy.status)}</dt><dd class="text-white/75">${escapeHtml(presentation?.statusLabel??formatLabel(w.availability))}</dd></dl>${w.description?`<p lang="${artworkTextLocale(w,locale)}" class="ga-description mt-10 font-sans text-sm font-light leading-[1.9] text-white/55 md:text-[15px]">${escapeHtml(w.description)}</p>`:''}${w.categories.length?`<div class="ga-categories mt-10 gap-x-5 gap-y-3">${w.categories.map(category=>`<span class="font-sans text-[9px] uppercase tracking-[0.24em] text-white/35">${escapeHtml(formatArtworkCategory(category,locale))}</span>`).join('')}</div>`:''}</div>`;
 }
 // DOM labels and shader uniforms share these descriptors. Never infer the
 // artwork again from the current index while a different spread is exposed.
@@ -430,7 +434,7 @@ for(const el of [baseLeft,baseRight,front,back]){
  canvas.addEventListener('webglcontextlost',e=>{
   if(disposed)return;
   e.preventDefault();resources.delete(glassStates.get(canvas));glassStates.delete(canvas);state.initialized=true;
-  $('#glstatus').textContent='Restoring the artwork reflection.';
+  $('#glstatus').textContent=copy.restoring;
  });
  canvas.addEventListener('webglcontextrestored',()=>{
   if(disposed)return;
@@ -937,12 +941,12 @@ function updateNavigation(){
  const previous=works[index-1],next=works[index+1];
  $('#previousTitle').textContent=previous?.title??'';
  $('#nextTitle').textContent=next?.title??'';
- $('#prev').setAttribute('aria-label',previous?'Previous artwork: '+previous.title:'No previous artwork');
- $('#next').setAttribute('aria-label',next?'Next artwork: '+next.title:'No next artwork');
+ $('#prev').setAttribute('aria-label',previous?copy.previousArtwork+' '+previous.title:copy.noPrevious);
+ $('#next').setAttribute('aria-label',next?copy.nextArtwork+' '+next.title:copy.noNext);
  $('#prev').title=previous?.title??'';$('#next').title=next?.title??'';
 }
 function updateGuideCopy(){
- guideDock.textContent=wideLayout.matches?'Drag to explore · ← →':'Previous / Next to explore';
+ guideDock.textContent=wideLayout.matches?copy.dragDock:copy.buttonDock;
 }
 function positionGuide(){
  if(disposed||guideLearned||guideSealing||entrancePlaying)return;

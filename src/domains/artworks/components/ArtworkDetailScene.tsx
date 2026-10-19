@@ -1,4 +1,6 @@
-import Link from "next/link";
+import Link from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { artworkTextLocale, formatArtworkCategory, formatArtworkAuthorship, formatArtworkTechnique, localizeArtwork } from "@/i18n/artworkCopy";
 import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "../presentation/getArtworkPresentation";
@@ -16,25 +18,7 @@ interface ArtworkDetailSceneProps {
     nextArtwork?: Artwork;
     navigationQuery: string;
     priority?: boolean;
-}
-
-function formatLabel(value: string) {
-    return value
-        .replace(/[-_]/g, " ")
-        .replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-function formatAuthorship(authorship: string) {
-    switch (authorship) {
-        case "original":
-            return "Original Artwork";
-        case "master-copy":
-            return "Master Copy";
-        case "study-after":
-            return "Study After";
-        default:
-            return formatLabel(authorship);
-    }
+    editorialOnly?: boolean;
 }
 
 function createArtworkHref(
@@ -47,28 +31,35 @@ function createArtworkHref(
 }
 
 export default function ArtworkDetailScene({
-    artwork,
+    artwork: sourceArtwork,
     previousArtwork,
     nextArtwork,
     navigationQuery,
+    editorialOnly = false,
 }: ArtworkDetailSceneProps) {
+    const locale = useLocale();
+    const t = useTranslations("Artwork");
+    const artwork = localizeArtwork(sourceArtwork, locale);
+    const textLocale = artworkTextLocale(artwork, locale);
     const artbookParams = new URLSearchParams(navigationQuery);
     artbookParams.set("experience", "glass");
     const artbookHref = `/artworks/${artwork.slug}?${artbookParams.toString()}`;
 
     const techniqueLabel =
-        `${formatLabel(artwork.medium)} on ${formatLabel(artwork.support)}`;
+        formatArtworkTechnique(artwork, locale);
 
-    const presentation = getArtworkPresentation(artwork);
+    const presentation = getArtworkPresentation(artwork, locale);
     const availabilityLabel = presentation.statusLabel;
 
     const authorshipLabel =
-        formatAuthorship(artwork.authorship);
+        formatArtworkAuthorship(artwork, locale);
 
     const hasHighlights = presentation.badges.some((badge) => badge.kind !== "planned" && badge.kind !== "in-progress");
+    const SceneElement = editorialOnly ? "section" : "main";
 
     return (
-        <main
+        <SceneElement
+            data-artwork-editorial={editorialOnly || undefined}
             className={`
                 ${glassStyles.standardScene}
                 ${sceneStyles.scene}
@@ -110,7 +101,7 @@ export default function ArtworkDetailScene({
                         <ArtworkDetailViewer
                             artwork={artwork}
                         />
-                        {hasHighlights && artwork.creationStatus === "completed" && <ArtworkStandardPortraitAccent artworkId={artwork.id} />}
+                        {!editorialOnly && hasHighlights && artwork.creationStatus === "completed" && <ArtworkStandardPortraitAccent artworkId={artwork.id} />}
                         </ArtworkImageHighlights>
                     </div>
 
@@ -142,16 +133,17 @@ export default function ArtworkDetailScene({
                             {authorshipLabel}
                         </p>
 
-                            <Link
+                            {!editorialOnly && <><Link
                                 href={artbookHref}
                                 data-artwork-kinetic-ignore
-                                aria-label={`Open ${artwork.title} in Glass Artbook`}
+                                data-artwork-open-artbook
+                                aria-label={t("openArtworkArtbook", { title: artwork.title })}
                                 className={`${glassStyles.entryLink} relative font-sans text-[9px] uppercase tracking-[0.20em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60`}
                             >
-                                Open Artbook ↗
-                                <ArtworkLinkFeedback label="Opening Artbook…" />
+                                {t("openArtbook")}
+                                <ArtworkLinkFeedback label={t("openingArtbook")} />
                             </Link>
-                            <span className={`${glassStyles.orientationHint} font-sans text-[9px] uppercase tracking-[0.20em] text-white/35`}>Artbook in landscape</span>
+                            <span data-artwork-orientation-hint className={`${glassStyles.orientationHint} font-sans text-[9px] uppercase tracking-[0.20em] text-white/35`}>{t("orientationHint")}</span></>}
                         </div>
 
                         <h1
@@ -171,7 +163,7 @@ export default function ArtworkDetailScene({
                         </h1>
                         </header>
 
-                        <div key={artwork.id} className={sceneStyles.reading} data-artwork-detail-reading data-lenis-prevent tabIndex={0} role="region" aria-label={`${artwork.title} — artwork information`}>
+                        <div key={artwork.id} className={sceneStyles.reading} data-artwork-detail-reading data-lenis-prevent tabIndex={0} role="region" aria-label={t("information", { title: artwork.title })}>
 
                         {presentation.previewLabel && (
                             <p className="mt-3 font-sans text-xs text-white/50">{presentation.previewLabel}</p>
@@ -191,7 +183,7 @@ export default function ArtworkDetailScene({
                                     md:text-xl
                                 "
                             >
-                                “{artwork.quote}”
+                                <span lang={textLocale}>“{artwork.quote}”</span>
                             </p>
                         )}
 
@@ -218,21 +210,21 @@ export default function ArtworkDetailScene({
                             "
                         >
                             <dt className="text-white/35">
-                                {artwork.creationStatus === "completed" ? "Year" : "Planned year"}
+                                {t(artwork.creationStatus === "completed" ? "year" : "plannedYear")}
                             </dt>
                             <dd className="text-white/75">
                                 {artwork.year}
                             </dd>
 
                             <dt className="text-white/35">
-                                Medium
+                                {t("medium")}
                             </dt>
                             <dd className="text-white/75">
                                 {techniqueLabel}
                             </dd>
 
                             <dt className="text-white/35">
-                                Dimensions
+                                {t("dimensions")}
                             </dt>
                             <dd className="text-white/75">
                                 {artwork.dimensions.width} ×{" "}
@@ -241,7 +233,7 @@ export default function ArtworkDetailScene({
                             </dd>
 
                             <dt className="text-white/35">
-                                Status
+                                {t("status")}
                             </dt>
                             <dd className="text-white/75">
                                 {availabilityLabel}
@@ -261,7 +253,7 @@ export default function ArtworkDetailScene({
                                     md:text-[15px]
                                 "
                             >
-                                {artwork.description}
+                                <span lang={textLocale}>{artwork.description}</span>
                             </p>
                         )}
 
@@ -287,7 +279,7 @@ export default function ArtworkDetailScene({
                                                 text-white/35
                                             "
                                         >
-                                            {formatLabel(category)}
+                                            {formatArtworkCategory(category, locale)}
                                         </span>
                                     ),
                                 )}
@@ -295,7 +287,7 @@ export default function ArtworkDetailScene({
                         )}
                         </div>
 
-                        {(previousArtwork || nextArtwork) && (
+                        {!editorialOnly && (previousArtwork || nextArtwork) && (
                             <div
                                 className={`
                                     ${sceneStyles.navigation}
@@ -342,7 +334,7 @@ export default function ArtworkDetailScene({
                                                     group-hover:text-brand-gold/60
                                                 "
                                             >
-                                                ← Previous
+                                                ← {t("previous")}
                                             </span>
                                             <span
                                                 className="
@@ -392,7 +384,7 @@ export default function ArtworkDetailScene({
                                                     group-hover:text-brand-gold/60
                                                 "
                                             >
-                                                Next →
+                                                {t("next")} →
                                             </span>
                                             <span
                                                 className="
@@ -420,6 +412,6 @@ export default function ArtworkDetailScene({
                     </div>
                 </div>
             </Container>
-        </main>
+        </SceneElement>
     );
 }

@@ -1,5 +1,8 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+import { localizeHref } from "@/i18n/config";
+
 import {
     useCallback,
     useEffect,
@@ -8,7 +11,7 @@ import {
     useState,
     type ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import gsap from "gsap";
 import { LinkButton } from "@/shared/ui/button";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
@@ -71,6 +74,8 @@ export default function ArtworkDetailKineticExperience({
     backHref,
     backLabel,
 }: ArtworkDetailKineticExperienceProps) {
+    const locale = useLocale();
+    const t = useTranslations("Artwork");
     const router = useRouter();
     const [nativePortrait, setNativePortrait] = useState(false);
     useEffect(() => {
@@ -109,11 +114,11 @@ export default function ArtworkDetailKineticExperience({
     const onboardingBubbleRef = useRef<HTMLDivElement>(null);
     const onboardingTargetRef = useRef<HTMLDivElement>(null);
     const onboardingIntervalRef = useRef<number | null>(null);
-    const onboardingLearnedRef = useRef(false);
+    const onboardingLearnedRef = useRef(artworkOnboardingLearnedInCurrentDocument);
     const onboardingSealUntilRef = useRef(0);
     const navigationRouteTimerRef = useRef<number | null>(null);
     const [onboardingPhase, setOnboardingPhase] =
-        useState<OnboardingPhase>("reminding");
+        useState<OnboardingPhase>(() => artworkOnboardingLearnedInCurrentDocument ? "learned" : "reminding");
 
     const hasPrevious = Boolean(previousScene && previousHref);
     const hasNext = Boolean(nextScene && nextHref);
@@ -253,13 +258,6 @@ export default function ArtworkDetailKineticExperience({
                 "-=0.18",
             );
     }, [clearOnboardingTimers, positionOnboardingBubble]);
-
-    useLayoutEffect(() => {
-        if (artworkOnboardingLearnedInCurrentDocument) {
-            onboardingLearnedRef.current = true;
-            setOnboardingPhase("learned");
-        }
-    }, []);
 
     useEffect(() => {
         if (onboardingLearnedRef.current) return;
@@ -472,7 +470,7 @@ export default function ArtworkDetailKineticExperience({
                 onComplete() {
                     // Navigation timing belongs to the artwork motion itself.
                     // Never hold the route for onboarding decoration.
-                    if (viewportRef.current) captureStandardNavigation(viewportRef.current, href);
+                    if (viewportRef.current) captureStandardNavigation(viewportRef.current, localizeHref(href, locale));
                     router.replace(href, { scroll: false });
                 },
             });
@@ -482,6 +480,7 @@ export default function ArtworkDetailKineticExperience({
             getHref,
             resetToCurrent,
             router,
+            locale,
         ],
     );
 
@@ -1162,8 +1161,8 @@ export default function ArtworkDetailKineticExperience({
                         aria-hidden
                         className="font-sans text-[8px] uppercase tracking-[0.22em] text-white/30 md:text-[9px] md:tracking-[0.26em]"
                     >
-                        <span className="md:hidden">‹&nbsp; Swipe to explore &nbsp;›</span>
-                        <span className="hidden md:inline">‹&nbsp;&nbsp; Swipe / Drag to explore &nbsp;&nbsp;›</span>
+                        <span className="md:hidden">‹&nbsp; {t("swipe")} &nbsp;›</span>
+                        <span className="hidden md:inline">‹&nbsp;&nbsp; {t("swipeDragDock")} &nbsp;&nbsp;›</span>
                     </div>
                 </div>
             </div>
@@ -1190,8 +1189,8 @@ export default function ArtworkDetailKineticExperience({
                     <div className="flex items-center gap-5 whitespace-nowrap">
                         <span className="font-display text-lg text-white/40">‹</span>
                         <span className="font-sans text-[9px] font-medium uppercase tracking-[0.3em] text-white/70">
-                            <span className="md:hidden">Swipe to explore</span>
-                            <span className="hidden md:inline">Swipe / drag to explore</span>
+                            <span className="md:hidden">{t("swipe")}</span>
+                            <span className="hidden md:inline">{t("swipeDrag")}</span>
                         </span>
                         <span className="font-display text-lg text-white/40">›</span>
                     </div>

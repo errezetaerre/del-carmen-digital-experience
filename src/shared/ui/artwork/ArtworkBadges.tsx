@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+
 import { useEffect, useId, useRef, useState } from "react";
 import type { Artwork } from "@/domains/artworks/model/artwork";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
@@ -15,7 +17,9 @@ interface Props {
 }
 
 export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = false, passive = false, className = "" }: Props) {
-    const { badges: allBadges } = getArtworkPresentation(artwork);
+    const locale = useLocale();
+    const t = useTranslations("Artwork");
+    const { badges: allBadges } = getArtworkPresentation(artwork, locale);
     const badges = allBadges.filter((badge) => badge.kind !== "planned" && badge.kind !== "in-progress");
     const id = useId();
     const trackRef = useRef<HTMLDivElement>(null);
@@ -30,10 +34,17 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
     const direction = useRef(1);
     const selected = badges.find((badge) => badge.id === openId);
     const expandedThumbnail = variant === "thumbnail" && (expanded || !!selected);
-    const signature = badges.map((badge) => badge.id).join("|");
+    const signature = badges.map((badge) => [badge.id, badge.label, badge.detail].join(":")).join("|");
+    const resetKey = `${artwork.id}:${signature}`;
+    const [previousKey, setPreviousKey] = useState(resetKey);
+    if (previousKey !== resetKey) {
+        setPreviousKey(resetKey);
+        setOpenId(null);
+        setPaused(false);
+    }
 
     useEffect(() => {
-        setOpenId(null); setPaused(false); direction.current = 1;
+        direction.current = 1;
         if (trackRef.current) trackRef.current.scrollLeft = 0;
     }, [artwork.id, signature]);
 
@@ -78,7 +89,7 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
 
     // The enclosing thumbnail link/button owns the single artwork action.
     // Descriptive insignias preserve the rollover without nested controls.
-    if (passive) return <div className={`${styles.root} ${styles.thumbnail} ${styles.passive} ${className}`} data-expanded={expanded || undefined} role="img" aria-label={badges.map((badge) => [badge.label, badge.detail].filter(Boolean).join(": ")).join(". ")}>
+    if (passive) return <div lang={locale} className={`${styles.root} ${styles.thumbnail} ${styles.passive} ${className}`} data-expanded={expanded || undefined} role="img" aria-label={badges.map((badge) => [badge.label, badge.detail].filter(Boolean).join(": ")).join(". ")}>
         <ul className={styles.list}>{badges.map((badge) => <li key={badge.id}><span className={styles.badge}>
             <span className={styles.symbol} dangerouslySetInnerHTML={{ __html: artworkHaloSymbol(badge.kind) }} />
             <span className={styles.copy}><span className={styles.label}>{badge.label}</span>{badge.detail && <span className={styles.detail}>{badge.detail}</span>}</span>
@@ -86,7 +97,7 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
     </div>;
 
     return (
-        <div className={`${styles.root} ${variant === "thumbnail" ? styles.thumbnail : styles.ribbon} ${className}`}
+        <div lang={locale} className={`${styles.root} ${variant === "thumbnail" ? styles.thumbnail : styles.ribbon} ${className}`}
             data-expanded={expandedThumbnail || undefined} data-artwork-kinetic-ignore data-artwork-highlights
             onPointerDown={(event) => event.stopPropagation()} onClick={(event) => event.stopPropagation()}
             onPointerMove={(event) => event.stopPropagation()} onWheel={(event) => event.stopPropagation()}
@@ -119,7 +130,7 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
                 onPointerUp={() => { pan.current = null; setDragging(false); }}
                 onPointerCancel={() => { pan.current = null; setDragging(false); }}
                 onClickCapture={(event) => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
-                <ul className={styles.list} aria-label="Artwork distinctions">
+                <ul className={styles.list} aria-label={t("distinctions")}>
                     {badges.map((badge, index) => (
                         <li key={badge.id}>
                             <button type="button" className={styles.badge} data-badge-id={badge.id}
@@ -137,10 +148,10 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
                     ))}
                 </ul>
             </div>
-            {variant === "ribbon" && overflow && <button type="button" className={styles.pause} aria-label={paused ? "Resume distinction ribbon" : "Pause distinction ribbon"} aria-pressed={paused} onClick={() => setPaused((value) => !value)}>{paused ? "▷" : "Ⅱ"}</button>}
+            {variant === "ribbon" && overflow && <button type="button" className={styles.pause} aria-label={t(paused ? "resumeRibbon" : "pauseRibbon")} aria-pressed={paused} onClick={() => setPaused((value) => !value)}>{paused ? "▷" : "Ⅱ"}</button>}
             {variant === "ribbon" && selected && <div id={`${id}-detail`} role="region" aria-label={selected.label} className={styles.popover} data-artwork-highlight-detail>
-                <p>{selected.label}</p><span>{selected.detail ?? "Curatorial selection"}</span>
-                <button type="button" aria-label="Close distinction details" onClick={() => {
+                <p>{selected.label}</p><span>{selected.detail ?? t("curatorial")}</span>
+                <button type="button" aria-label={t("closeDistinction")} onClick={() => {
                     setOpenId(null); trackRef.current?.querySelectorAll<HTMLButtonElement>("button")[badges.findIndex((badge) => badge.id === selected.id)]?.focus();
                 }}>×</button>
             </div>}

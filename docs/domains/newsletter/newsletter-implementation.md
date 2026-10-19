@@ -1,5 +1,5 @@
 # Newsletter Implementation
-Version: 1.4
+Version: 1.5
 Document ID: DOC-NEWS-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,7 +7,7 @@ Document Type: Technical Implementation
 Authority Level: High
 Status: 🟢 Approved / Complete / Frozen
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-15
+Last Updated: 2026-10-18
 
 ---
 
@@ -321,3 +321,15 @@ Existing subscriptions and previously issued confirmation links are not assigned
 The frontend blocks missing consent before fetch even if native validation is bypassed. Success clears the checkbox; stale-version responses preserve the email and request a reload/new choice. Generic failures retain user input for retry. Existing Home result feedback and the confirmation email template retain their behavior/content.
 
 See `docs/architecture/form-privacy-consent.md` for revision wording, validation and operational limits. The form, shared components/configuration, API and helper must be installed together. Full project compilation, provider delivery, live unsubscribe distribution and final publication checks remain outstanding.
+
+# EN/ES Newsletter, confirmation copy and consent — 2026-10-18
+
+Newsletter remains inside Home Invitation/Suspense, with no standalone route. All form labels, privacy details, consent, validation feedback, pending/confirmed/unsubscribed/invalid/active/rate/error states and submit copy now follow locale. The temporary English wrapper is removed. Checkbox acceptance is tied to language/version; error keys resolve at render time. Form geometry, endpoint field names and existing result-state keys remain exact.
+
+POST accepts an optional `locale`: omitted means legacy English; only exact `en`/`es` otherwise. It validates boolean consent and the matching server registry version: unchanged English `2026-10-15.1` or Spanish `2026-10-18.1-es`. Stored consent is generated from server copy, including language/version/purpose/statement/acceptedAt. The subscriber helper's sixth language argument defaults to English. No historical subscription is rewritten or given invented language.
+
+The extracted `server/confirmationEmail.ts` retains email geometry/styles and English visible wording, provides Spanish copy/HTML language, and escapes translated content/confirmation URL attributes. Sender configuration and confirmation expiry stay unchanged. Spanish confirmation URLs append `locale=es`. Confirm/unsubscribe redirects localize their Home destination while preserving `newsletter` result keys and `#invitation`. Allowed query locale is presentation only; it does not change the accepted notice or subscription authorization.
+
+All Redis scripts, pending/active TTL rules, active Set, token/hash/lookup lifecycle, race-safe cleanup, rate/honeypot and minimal 30-day unsubscribe record stay byte-exact. Existing English links remain valid. Future newsletter-delivery code should carry the stored language (with legacy English fallback) into content/result links; this increment does not implement campaigns or deliver a new welcome email.
+
+Production build/TypeScript and compiled component/route/helper/provider fixtures plus GET verification pass. Tests use a simulated mail/Redis transport, never real subscribers or mail. Current lint retains the pre-existing query-result synchronization `react-hooks/set-state-in-effect` finding, verified against v5 with no new finding. Browser hydration/native validation/accessibility, real delivery/persistence and domain/sender QA remain open. Refer to DOC-I18N for installation and the overall release gate.

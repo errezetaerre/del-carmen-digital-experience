@@ -1,0 +1,41 @@
+{
+  "the-art-of-remembering": {
+    "memory": {
+      "eyebrow": "I — Memoria",
+      "title": "¿Qué permanece cuando desaparece un instante?",
+      "text": "La memoria no conserva la vida tal como sucedió. Transforma fragmentos, sensaciones y ausencias en algo que sigue viviendo en nuestro interior."
+    },
+    "presence": {
+      "eyebrow": "II — Presencia",
+      "title": "Hay cosas que permanecen sin ser vistas.",
+      "text": "Un gesto, un lugar, un rostro o cierta cualidad de la luz pueden volver de forma inesperada. La pintura se convierte en una manera de dar otra forma a esas presencias invisibles."
+    },
+    "light": {
+      "eyebrow": "III — Luz",
+      "title": "Quizá recordar sea otra forma de iluminar.",
+      "text": "No para reconstruir lo que ha desaparecido, sino para reconocer la huella que dejó."
+    }
+  },
+  "inside-the-studio": {
+    "the-studio": {
+      "eyebrow": "I — El estudio",
+      "title": "Antes de que una pintura comience, hay un lugar que la espera.",
+      "text": "El estudio está en silencio antes del primer gesto. La luz entra, los objetos permanecen donde quedaron y un lienzo vacío aún no ofrece respuestas. Por un momento, todo existe solo como posibilidad."
+    },
+    "the-ritual": {
+      "eyebrow": "II — El ritual",
+      "title": "La creación suele comenzar con gestos cotidianos.",
+      "text": "Preparar la paleta. Elegir un pincel. Mezclar el color. Ajustar la luz. Estas pequeñas repeticiones no están separadas de la pintura; son parte del ritual que permite que la atención se asiente y la obra comience."
+    },
+    "the-conversation": {
+      "eyebrow": "III — La conversación",
+      "title": "En algún momento, la pintura comienza a responder.",
+      "text": "Me acerco y luego me alejo. Cambio algo, espero, observo y regreso. Pintar se vuelve menos un acto de imponer una imagen y más una conversación con algo que revela lentamente su propia presencia."
+    },
+    "what-remains": {
+      "eyebrow": "IV — Lo que permanece",
+      "title": "La obra se detiene. El estudio recuerda.",
+      "text": "Queda pintura en la paleta. Los pinceles conservan rastros de color. El lienzo ya no es el mismo de aquella mañana, y tampoco lo es quien estuvo frente a él. Mañana la conversación comenzará de nuevo."
+    }
+  }
+}
