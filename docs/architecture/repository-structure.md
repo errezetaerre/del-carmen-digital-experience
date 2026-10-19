@@ -1,4 +1,4 @@
-Version: 1.39
+Version: 1.40
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-18
+2026-10-19
 
 ---
 
@@ -668,3 +668,7 @@ DOC-ART-IMP records the plane construction, readiness, history, validation and p
 Glass keeps its native motion controller as the owner of gestures/physics. Its React wrapper derives selected-artwork presentation from the locale-aware pathname and captures the portal target as committed state. Viewer pointer ids remain imperative refs; the rendered zoom transition uses corresponding React state. Its zoom portal declares the existing kinetic-ignore boundary so React portal event bubbling cannot transfer pointer capture to the background artwork carousel. Artist proximity measurements run in pointer handlers, and dialog callbacks are refreshed after commit. Gallery, badge, menu and newsletter state that depends on changed props or URL feedback is reconciled before commit. KineticCarousel passes destructured refs directly to ref attributes.
 
 Next.js and its ESLint configuration are paired at 16.4.2. Existing module boundaries, catalogue/ArtworkSeries ownership, API/consent contracts and the portrait/landscape engines are retained. DOC-IR records release status and the remaining developer-tool advisory.
+
+### Detail-view teaching motion — 2026-10-19
+
+`ArtworkDetailKineticExperience.tsx` owns the Standard reminder and its bounded current-panel demonstration. The current panel receives a temporary offset; the actual kinetic track and input engine retain their state. `glass-artbook/runtime.mjs` owns a separate resting-leaf teaching tween beside its existing proximity/entrance controllers. It cancels before native drag ownership and never configures a real turn. `portrait-artbook/ArtworkPortraitArtbook.tsx` keeps learning in the current document, ignoring former persistent flags while its existing motion controller supplies the synchronized popup and rigid lift. No new module, preference storage, data source, translation key, dependency or stylesheet is introduced. DOC-ART-IMP records lifecycle and scope; the shared Home/Series lightbox remains with its existing owner.

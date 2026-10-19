@@ -1,13 +1,25 @@
 # Artwork Implementation
 
-Version: 1.31
+Version: 1.32
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
 Document Type: Implementation
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-18
+Last Updated: 2026-10-19
 Status: Implemented; production build and emulated browser verification completed for the portrait increment. Physical-device visual review remains pending.
+
+## Interaction teaching motion — 2026-10-19
+
+This increment starts at the production merge `b2d2976`. The owner requested a small sliding demonstration with the Standard reminder and a rigid lift/fall in Glass on mobile, tablet and desktop. Catalogue, copy, layout, materials, navigation destinations and the approved gesture/release physics retain their owners.
+
+`ArtworkDetailKineticExperience` animates only the current editorial panel by at most 26px (5.5% of a narrower viewport) and returns it to zero while its existing localized popup is readable. The real kinetic track and its logical position/velocity are not animated by the lesson. First press, native touch, Wheel, reading scroll, focus, resize, visibility changes and reduced-motion changes cancel this decorative offset. An intentional navigation stops the repeated lesson. Reduced motion retains the text without automatic displacement or the animated dock handoff.
+
+The landscape/desktop `glass-artbook/runtime.mjs` lifts its resting right leaf by 16 degrees, pauses briefly, and falls with a small rigid rebound. At the end of a multi-work sequence the left leaf demonstrates the reverse direction. The five-second idle clock starts after entrance/image/font readiness, does not run in a hidden document, and waits during loading, reading selection, held input, real turns or a modal. Passive capture of the first press stops the teaching transform before native gesture ownership is decided. The existing turn surface, spring, angle, URL, current artwork and loaded-neighbour window never become a fake turn. Proximity yields during teaching and retains its existing behaviour afterward. Closing a modal or returning to the tab starts a fresh idle wait. Reduced motion keeps the instruction without an automatic lift.
+
+Portrait retains its approved synchronized 28.8-degree half-page lift, popup and drop. Its learned flag now lives only in the current document, like Standard, rather than in localStorage. Client-side artwork navigation remembers the lesson; a real reload/new visit teaches again. The former persistent `del-carmen:portrait-artbook:learned` and `del-carmen:portrait-artbook:turn-learned:v1` values are neither read nor deleted. This resolves the inconsistent repeated testing on a stable production domain versus a fresh Preview domain without clearing other site preferences. Standard and the two Glass implementations keep independent lesson state.
+
+The shared Home/Series lightbox is outside this detail-view increment. Global logo/menu, toolbar and book navigation controls stay outside the demonstration surface. Validation and the remaining physical Safari/Android/iPad visual review are recorded in the delivery README; this source change does not deploy itself.
 
 ## Ownership and scope
 
