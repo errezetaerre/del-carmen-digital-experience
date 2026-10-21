@@ -1,4 +1,4 @@
-Version: 1.43
+Version: 1.44
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-21
+2026-10-20
 
 ---
 
@@ -693,3 +693,9 @@ Next.js and its ESLint configuration are paired at 16.4.2. Existing module bound
 `ArtworkMovingDescription.tsx` owns one portrait paragraph and its controlled reading state. `artworkReadingMotion.ts` measures preview/reading rectangles and owns reversible text/background motion, preserved scroll offsets, click/selection ownership and cleanup. `ArtworkReadingPanel.tsx` remains the existing landscape/native reading component; its CSS module also styles the moving portrait paragraph. These are shared UI presentation helpers, not a second artwork data source or a new motion engine for the book.
 
 `artworkStandardNavigation.ts` moves the actual glass frame and manages a short-lived inert outgoing snapshot. The landscape dots and global toolbar remain outside that motion. Both book controllers keep their approved gesture/physics implementations; portrait guards merely postpone turns and idle demonstrations during expanded reading. Catalogue, media, dependencies, translations and legal/contact configuration remain unchanged.
+
+## Shared Standard artwork kinetics — 2026-10-20
+
+`src/shared/ui/artwork/artworkKinetics.ts` owns pure motion calculations shared by the routed Standard detail and embedded Standard gallery. It is shared UI behavior for artworks, not a new domain model or a generic utilities directory. `ArtworkDetailKineticExperience` retains route/native-gesture/teaching ownership and calls the same extracted equations. `artworkStandardNavigation` adapts those equations to the gallery's three-page track, queued controls, trackpad tail and lifecycle.
+
+`ArtworkLightbox` reuses one panel renderer for Previous / Current / Next, with bounded adjacent artwork data and inactive neighbour slots. Its CSS module owns track/slot placement; existing panel/editorial CSS retains resting dimensions. `ArtworkViewerEditorial` adds a default-true active flag so only the selected Standard page emits arrival particles. Book callers retain their current behavior without a new prop. The complete-frame snapshot implementation documented for v3 is superseded by these live adjacent slots; no new renderer or replacement Glass engine is introduced.

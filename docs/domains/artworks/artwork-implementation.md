@@ -1,13 +1,25 @@
 # Artwork Implementation
 
-Version: 1.35
+Version: 1.36
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
 Document Type: Implementation
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-21
+Last Updated: 2026-10-20
 Status: Implemented; production build and emulated browser verification completed for the portrait increment. Physical-device visual review remains pending.
+
+## Shared Standard motion for detail and gallery — 2026-10-20
+
+Base: production main `efa532c68eaaebd7aa5aa6961d22a88130992650` (merged PR #3). The owner approved the shared gallery composition and requested that its Standard movement match `/artworks/[slug]`. This increment changes the Standard gallery's motion rather than its frame, typography, reading surface or Glass Artbook engines.
+
+`shared/ui/artwork/artworkKinetics.ts` owns the approved detail equations: direct pointer displacement, 1.05 axis lock, smoothed pointer/trackpad velocity, .24 momentum projection, 12% release distance, 420px/s flick threshold, 72px wheel commit, 140ms momentum-tail guard, .55s return and distance/velocity-dependent settlement. `ArtworkDetailKineticExperience` imports these pure calculations with the same input values; its route, current-scene snapshot, native input adapter, teaching motion and geometry retain their existing owners.
+
+`ArtworkLightbox` renders its existing framed composition into Previous / Current / Next slots. Current alone owns active reading, zoom refs, guidance and arrival particles. Neighbours have their own artwork, title, facts, recognitions and full rim; they remain inert and aria-hidden until selection. Only this three-page window is mounted. The frame accompanies its artwork during a grip, and the adjacent page is visible before release. The page step is the complete viewport width, matching detail's motion unit without changing the resting frame dimensions.
+
+`artworkStandardNavigation` adapts the shared calculations to that gallery track. A short flick can commit through velocity; an incomplete movement returns with the approved easing; horizontal trackpad navigation commits during the gesture and consumes its remaining momentum. Buttons and keys use the same track motion. On landing, the selected artwork/query updates and the three-page window re-centres before paint. Rapid buttons retain a bounded queue. Native vertical reading, expanded-copy centring/reversal, image zoom and reduced motion retain their own input ownership. Resize and teardown remove timers, captures and tweens; height-only changes do not reset a horizontal grip.
+
+Home keeps its curated sequence; Series and Collections entry keep their canonical Series membership. Explicit Standard, locale and URL context persist. The two Glass Artbook controllers/materials, source assets, catalogue, text, EN/ES messages, legal/contact configuration and dependencies are unchanged. This increment supersedes the v3 gallery's fixed .48-second frame-snapshot transition. It does not commit, push, merge or deploy. Build/lint, exact equation comparisons and emulated-browser evidence are recorded in the delivery README; physical-device and owner visual review remain required.
 
 ## Shared gallery reading, matching portrait geometry and moving frames — 2026-10-21
 
