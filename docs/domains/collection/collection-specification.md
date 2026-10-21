@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.14
+Version: 1.17
 
 Document ID: DOC-COL-SPEC
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-18
+Last Updated: 2026-10-21
 
 ---
 
@@ -737,3 +737,19 @@ The lightbox permits its own modal while suppressing decoration for another moda
 The foundation and Artwork block are owner-approved and pushed as `d56b772` on the review branch. The next incremental patch translates Home's featured collection, Collections introduction/metadata/hero/preview controls, and the four series' descriptions, statements, state/count labels, navigation and metadata. `src/i18n/content/series.es.json` is joined immutably by canonical ID; original series names, years, cover/member facts, image/video/layout settings and filenames are unchanged. Completed/planned thumbnails still derive from the latest canonical Artwork record, now with localized alt/year text.
 
 The selected-artwork deep link exposed the existing portal's server-side document access. SeriesGallery now loads the same ArtworkLightbox client-side; selection/Close handlers, shared viewer, geometry, approved CollectionHeroMotion and hover expansion CSS retain their exact source. All four selected-work links render successfully in both languages. English Home/Collections/Series normalized visible copy and metadata match the previous production build. Native scrolling, lazy-viewer hydration/focus and device layout still require browser review. Spanish stays noindex during the remaining language/legal release work. Full scope, checks and v3 incremental installation are in `docs/architecture/internationalization.md`.
+
+## Gallery experience continuity — 2026-10-20
+
+Home Selected Works and Series artwork dialogs share Standard / Glass modes while retaining the approved thumbnails, compact caption order, curated/series boundaries and original image proportions. Collections preview links continue to open a selected member through `/series/[slug]?artwork=...`; the shared Series host supplies the same two experiences.
+
+Phone/tablet entry uses the existing portrait book or landscape 11B-23 engine according to orientation; desktop defaults to Standard with an Open Artbook control. A chosen Standard mode remains explicit. Mode changes keep the current artwork; X returns to the gallery with unrelated query/hash context preserved. No catalogue status, recognition, curation or collection model is introduced or changed.
+
+## Shared viewer review refinement — 2026-10-20
+
+Home Selected Works and Series keep their existing entry/selection paths. The shared viewer aligns Standard's desktop landscape/compact portrait composition with the selected book renderer. Standard's border stays fixed during internal vertical reading; landscape position dots remain outside it. The v3 refinement below supersedes v2's content-only horizontal navigation. Expanded reading covers the caption area while leaving the painting visible, with the same English/Spanish controls in both modes. Thumbnail layouts, curation, membership and Collections hero motion are unchanged.
+
+## Matching portrait modes and complete-frame navigation — 2026-10-21
+
+The Home/Series shared dialog now renders the same portrait photo/caption composition and frame dimensions in Standard and Artbook. Landscape retains approximately 60/40 image/information columns; a compact fine-pointer desktop switches both modes to portrait before the image column becomes unusable. The existing Collections previews and their destinations remain unchanged.
+
+Portrait Read more moves the existing paragraph upward over an expanding black surface below the painting, preserving the painting and current scroll position. Clicking inside or outside reverses that same text; long copy has internal scrolling. Standard horizontal exploration carries each artwork's complete glass border, while the fixed toolbar and landscape dots retain their positions. Catalogue membership, thumbnail hover, curation, Coming Soon and Collections hero motion remain unchanged.

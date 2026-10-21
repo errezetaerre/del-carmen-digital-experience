@@ -17,14 +17,19 @@ import { artworkExperienceHref } from "../../presentation/artworkExperience";
 import ArtworkDetailViewer from "../ArtworkDetailViewer";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
 import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
+import { bindArtworkReadingPanels } from "@/shared/ui/artwork/bindArtworkReadingPanels";
 import { artworkPreviewMarkup } from "@/shared/ui/artwork/artworkPreviewMarkup";
 import { createGlassArtbook, GLASS_BOOK_QUERY } from "./runtime.mjs";
 import type { ArtworkGlassArtbookProps, GlassArtbookController, GlassArtbookLoadState } from "./types";
 import styles from "./ArtworkGlassArtbook.module.css";
 
 export default function ArtworkGlassArtbook({
-    artworks: sourceArtworks, initialArtworkId, navigationQuery,
+    artworks: sourceArtworks, initialArtworkId, navigationQuery, host,
 }: ArtworkGlassArtbookProps) {
+    const embedded = Boolean(host);
+    const hostedArtworkId = host?.artworkId;
+    const latestHost = useRef(host);
+    useLayoutEffect(() => { latestHost.current = host; });
     const locale = useLocale();
     const t = useTranslations("Glass");
     const artworks = useMemo(() => sourceArtworks.map((artwork) => localizeArtwork(artwork, locale)), [sourceArtworks, locale]);
@@ -45,16 +50,17 @@ export default function ArtworkGlassArtbook({
         experienceRef.current = host;
         setExperienceHost(host);
     }, []);
-    const [bookEligible, setBookEligible] = useState<boolean | null>(null);
+    const [bookEligible, setBookEligible] = useState<boolean | null>(embedded ? true : null);
     const [actionsHost, setActionsHost] = useState<HTMLElement | null>(null);
     const [highlightsHosts, setHighlightsHosts] = useState<HTMLElement[]>([]);
     const routedArtwork = useMemo(() => {
+        if (hostedArtworkId) return artworks.find(item => item.id === hostedArtworkId) ?? null;
         if (!pathname?.startsWith("/artworks/")) return null;
         try {
             const slug = decodeURIComponent(pathname.slice("/artworks/".length).replace(/\/$/, ""));
             return artworks.find((item) => item.slug === slug) ?? null;
         } catch { return null; }
-    }, [pathname, artworks]);
+    }, [pathname, artworks, hostedArtworkId]);
     const selectedArtwork = routedArtwork ?? artworks.find((item) => item.id === initialArtworkId) ?? artworks[0] ?? null;
     const [highlightArtworks, setHighlightArtworks] = useState<[Artwork | null, Artwork | null]>([null, null]);
     const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId, kind: "entrance" });
@@ -63,6 +69,7 @@ export default function ArtworkGlassArtbook({
         : "/artworks";
 
     useEffect(() => {
+        if (embedded) return;
         const viewport = window.matchMedia(GLASS_BOOK_QUERY);
         let pendingDialog: MutationObserver | null = null;
         const update = () => {
@@ -83,14 +90,14 @@ export default function ArtworkGlassArtbook({
             viewport.removeEventListener("change", update);
             pendingDialog?.disconnect();
         };
-    }, []);
+    }, [embedded]);
 
     useEffect(() => {
-        if (bookEligible === false) router.replace(standardHref, { scroll: false });
-    }, [bookEligible, router, standardHref]);
+        if (!embedded && bookEligible === false) router.replace(standardHref, { scroll: false });
+    }, [bookEligible, embedded, router, standardHref]);
 
     useEffect(() => {
-        if (!portalHost || !bookEligible) return;
+        if (embedded || !portalHost || !bookEligible) return;
         const previousOverflow = document.documentElement.style.overflow;
         document.documentElement.style.overflow = "hidden";
         const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -104,10 +111,11 @@ export default function ArtworkGlassArtbook({
             siblings.forEach(({ node, inert }) => { node.inert = inert; });
             if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
         };
-    }, [portalHost, bookEligible]);
+    }, [portalHost, bookEligible, embedded]);
 
     useEffect(() => {
         onNavigateRef.current = (artwork) => {
+            if (latestHost.current) { latestHost.current.onNavigate(artwork); return; }
             const query = new URLSearchParams(navigationQuery);
             query.set("experience", "glass");
             window.history.pushState(null, "", localizeHref(`/artworks/${artwork.slug}?${query.toString()}`, locale));
@@ -129,19 +137,21 @@ export default function ArtworkGlassArtbook({
             motion: gsap,
             getPresentation: (artwork) => getArtworkPresentation(artwork, locale),
             renderPreview: (artwork) => artworkPreviewMarkup(artwork, locale),
+            renderInformation: embedded ? (artwork, id) => latestHost.current!.renderInformation(artwork, id) : undefined,
             onHighlightArtwork: (slot, artwork) => setHighlightArtworks((previous) => {
                 const next: [Artwork | null, Artwork | null] = [...previous];
                 next[slot] = artwork;
                 return next;
             }),
             onNavigate: (artwork) => onNavigateRef.current(artwork),
-            onLoadStateChange: setLoadState,
+            onLoadStateChange: state => { setLoadState(state); latestHost.current?.onLoadStateChange?.(state); },
         });
         controllerRef.current = controller;
         setActionsHost(host.querySelector<HTMLElement>("[data-glass-artwork-actions]"));
         setHighlightsHosts(Array.from(host.querySelectorAll<HTMLElement>("[data-glass-artwork-highlights]")));
-        return () => { controller.dispose(); controllerRef.current = null; setActionsHost(null); setHighlightsHosts([]); setHighlightArtworks([null, null]); };
-    }, [dataKey, instanceId, portalHost, bookEligible, locale]);
+        const unbindReading = embedded ? bindArtworkReadingPanels(host) : () => {};
+        return () => { unbindReading(); controller.dispose(); controllerRef.current = null; setActionsHost(null); setHighlightsHosts([]); setHighlightArtworks([null, null]); };
+    }, [dataKey, instanceId, portalHost, bookEligible, locale, embedded]);
 
     useEffect(() => {
         const item = routedArtwork;
@@ -151,7 +161,7 @@ export default function ArtworkGlassArtbook({
     }, [routedArtwork]);
 
     useEffect(() => {
-        if (!portalHost || !bookEligible) return;
+        if (embedded || !portalHost || !bookEligible) return;
         const onKeyDown = (event: KeyboardEvent) => {
             if (event.key !== "Escape" || document.querySelector('[role="dialog"][aria-modal="true"]')) return;
             event.preventDefault();
@@ -159,7 +169,7 @@ export default function ArtworkGlassArtbook({
         };
         document.addEventListener("keydown", onKeyDown);
         return () => { document.removeEventListener("keydown", onKeyDown); };
-    }, [portalHost, bookEligible, router, standardHref]);
+    }, [portalHost, bookEligible, embedded, router, standardHref]);
 
     if (!selectedArtwork) return null;
     if (!portalHost || !bookEligible) {
@@ -173,14 +183,14 @@ export default function ArtworkGlassArtbook({
         );
     }
 
-    return createPortal(
-        <main ref={captureExperience} className={`${styles.experience} bg-surface-deep text-white`} data-lenis-prevent aria-label={t("immersive")}>
-            <div className={`${styles.exit} flex items-center gap-5`}>
+    const content = (
+        <main ref={captureExperience} className={`${styles.experience} ${embedded ? styles.embedded : ""} bg-surface-deep text-white`} data-lenis-prevent aria-label={t("immersive")}>
+            {!embedded && <div className={`${styles.exit} flex items-center gap-5`}>
                 <LanguageSwitcher className="text-white/60" />
                 <Link href={standardHref} data-glass-exit className="font-sans text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60" aria-label={t("exitLabel")}>
                     {t("exit")} <span aria-hidden="true">×</span>
                 </Link>
-            </div>
+            </div>}
             <h1 className="sr-only">{selectedArtwork.title}</h1>
             <div className={styles.bookViewport} data-lenis-prevent aria-busy={loadState.status === "loading"}>
                 <div ref={hostRef} className={`${styles.root} font-sans`} inert={loadState.status !== "ready" && !(loadState.status === "loading" && loadState.kind === "turn")} aria-label={t("viewer")} />
@@ -189,7 +199,7 @@ export default function ArtworkGlassArtbook({
                 {loadState.status === "loading" ? <ArtworkLoading label={t(loadState.kind === "turn" ? "loadingArtwork" : "preparing")} /> : <div className={styles.loadError}>
                     <p role="alert" className="font-sans text-sm text-white/70">{t("error")}</p>
                     <button type="button" onClick={() => controllerRef.current?.retry()} className="font-sans text-[10px] uppercase tracking-[0.2em] text-brand-gold transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60">{t("retry")}</button>
-                    <Link href={standardHref} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-brand-gold">{t("standard")}</Link>
+                    <>{host ? <button type="button" onClick={host.onStandardView} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-brand-gold">{t("standard")}</button> : <Link href={standardHref} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-brand-gold">{t("standard")}</Link>}</>
                 </div>}
             </div>}
             {actionsHost && experienceHost && createPortal(
@@ -206,7 +216,7 @@ export default function ArtworkGlassArtbook({
                     `highlights-${slot}`,
                 ) : null;
             })}
-        </main>,
-        portalHost,
+        </main>
     );
+    return embedded ? content : createPortal(content, portalHost);
 }

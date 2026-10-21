@@ -21,6 +21,7 @@
     "rights": "All rights reserved."
   },
   "Artwork": {
+    "standardView": "Standard View",
     "original": "Original Artwork",
     "masterCopy": "Master Copy",
     "studyAfter": "Study After",

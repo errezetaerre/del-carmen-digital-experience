@@ -184,3 +184,9 @@
 }
 @media (prefers-reduced-motion: reduce) { .root :global(.turn), .root :global(.left) { will-change: auto; } }
 
+
+/* Gallery focus and toolbar belong to the shared parent dialog. */
+.embedded { z-index: 1; }
+
+/* The gallery never gives the information leaf a minimum that steals image area. */
+.embedded .root :global(.book) { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }

@@ -1,3 +1,4 @@
+import { hasBlockingArtworkDialog } from "@/shared/ui/artwork/hasBlockingArtworkDialog";
 import gsap from "gsap";
 import { bindArtworkTouchNavigation, type ArtworkDragInput } from "../artworkTouchNavigation";
 import type { GlassArtbookLoadState } from "../glass-artbook/types";
@@ -93,7 +94,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     let frameWidth = frame.getBoundingClientRect().width;
 
     function neighbour(direction: Direction) { return direction === 1 ? options.next : options.previous; }
-    function blocked() { return !!doc.querySelector('[role="dialog"][aria-modal="true"]'); }
+    function blocked() { return hasBlockingArtworkDialog(root); }
     function load(status: GlassArtbookLoadState["status"], page = current, kind: GlassArtbookLoadState["kind"] = "turn") {
         root.dataset.portraitLoading = String(status === "loading");
         options.onLoad({ status, artworkId: page.dataset.portraitPage ?? "", kind });
@@ -173,7 +174,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
             demonstrationTimer = undefined;
             if (disposed || root.hasAttribute("data-portrait-learned")) return;
             const selection = doc.getSelection();
-            if (doc.hidden || blocked() || grip || turn || settling || root.dataset.portraitLoading === "true" ||
+            if (doc.hidden || blocked() || grip || turn || settling || current.querySelector("[data-artwork-reading-open]") || root.dataset.portraitLoading === "true" ||
                 (selection?.toString() && current.contains(selection.anchorNode))) {
                 scheduleDemonstration(); return;
             }
@@ -319,11 +320,11 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         scheduleDemonstration();
     }
     function start(input: ArtworkDragInput): boolean {
-        if (!ready || settling || grip || blocked() || input.button !== 0) return false;
+        if (!ready || settling || grip || blocked() || current.querySelector("[data-artwork-reading-open]") || input.button !== 0) return false;
         activity();
         if (turn) return false;
         const target = input.target as Element | null;
-        if (target?.closest("a, button, input, textarea, select, [contenteditable='true'], [data-artwork-highlights]")) return false;
+        if (target?.closest("a, button, input, textarea, select, [contenteditable='true'], [data-artwork-highlights], [data-lightbox-native-scroll]")) return false;
         clearWheel(); ++request;
         grip = { id: input.pointerId, x: input.clientX, y: input.clientY, lastX: input.clientX,
             lastTime: performance.now(), delta: 0, velocity: 0, direction: null, ended: false };
@@ -405,13 +406,14 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     function keyDown(event: KeyboardEvent) {
         if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || blocked()) return;
         if (event.key === "Escape") { event.preventDefault(); cancel(); options.onExit(); return; }
-        if ((event.target as Element)?.closest("input, textarea, select, [contenteditable='true']")) return;
+        if ((event.target as Element)?.closest("input, textarea, select, [contenteditable='true'], [data-lightbox-native-scroll]")) return;
         const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : null;
         if (direction && neighbour(direction)) { event.preventDefault(); navigate(direction); }
     }
     view.addEventListener("keydown", keyDown);
     cleanup.push(() => view.removeEventListener("keydown", keyDown));
     function wheel(event: WheelEvent) {
+        if ((event.target as Element)?.closest("[data-lightbox-native-scroll]")) return;
         if (!event.ctrlKey && ready && !blocked()) activity();
         if (event.ctrlKey || blocked() || Math.abs(event.deltaX) <= Math.abs(event.deltaY) || !event.deltaX) return;
         if (wheelLocked) { event.preventDefault(); holdWheelTail(); return; }

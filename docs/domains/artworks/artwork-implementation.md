@@ -1,13 +1,27 @@
 # Artwork Implementation
 
-Version: 1.32
+Version: 1.35
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
 Document Type: Implementation
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-19
+Last Updated: 2026-10-21
 Status: Implemented; production build and emulated browser verification completed for the portrait increment. Physical-device visual review remains pending.
+
+## Shared gallery reading, matching portrait geometry and moving frames — 2026-10-21
+
+Incremental base: Shared Artwork Experience v2 (source patch SHA256 `0375852e7dcab622dd381b4fdc6578c8728e9ff7ab20fcc20e69d9d66f646ab6`). This refinement applies to the shared Home and Series dialog. Collections previews inherit the Series viewer. The original standalone detail composition remains with its existing owner.
+
+The host selects a common layout before rendering either mode. Wide Standard and hosted landscape Glass use 60/40 image/information columns with zero minimum widths, so a shrinking image never yields to an implicit information column. A fine-pointer desktop below 1120px with at least 600px of height switches both modes to one portrait column. Short landscape phones and touch landscape tablets retain their two-page eligibility. Explicit Standard remains Standard through resizing and navigation.
+
+`ArtworkViewerEditorial` supplies the same portrait composition to Standard and the rigid-page book. Host CSS owns the identical frame rectangle, 760px maximum width, 940px maximum height, photo stage, caption rows and responsive spacing. The book keeps its own fixed navigation and approved rigid 180-degree controller. On short screens, only the frame's interior scrolls vertically; the frame and global controls stay fixed. Native detail geometry is unaffected by the host-only styles.
+
+`ArtworkMovingDescription` renders one paragraph, not a second expanded copy. `artworkReadingMotion.ts` measures its preview slot and animates that same text upward into the reading surface below the actual painting's current lower edge. The black background expands from the preview paragraph's vertical centre. Opening freezes internal vertical overflow without changing scrollTop or the painting's screen position. A non-control click inside the black surface or elsewhere in the dialog reverses the background and paragraph to their measured original positions; Escape and Read less do the same. Selected text and reading drags are not mistaken for dismissal. The covered caption is inert until the reverse finishes; long text scrolls inside the reading surface. Reduced motion changes state immediately. The existing native landscape reading panel retains its information-page-only surface.
+
+`artworkStandardNavigation.ts` now translates the complete frame. On commit it retains an inert, aria-hidden outgoing frame while the incoming frame moves into place, so each artwork carries its own border. Snapshot IDs and local references are remapped; temporary copies and tweens are removed after settlement, resize or unmount. Landscape position dots remain outside and do not travel. Horizontal mouse, native touch, trackpad, buttons and arrows use the same navigation path; vertical scrolling stays inside the current frame. Approved rigid-book turn physics, spring constants, glass materials, catalogue, recognition facts and copy are unchanged.
+
+Mode-switch preparation feedback remains immediate and readiness-bound. The shared Halo pause, warm arrival light and particle renderer retain their previous owners. Opening expanded reading temporarily blocks page turning and idle teaching; normal gestures resume after reversal. This increment performs no commit, push, merge or deployment. Build, lint, patch checks and emulated browser evidence are recorded in the delivery README; artistic review on physical Safari/iPhone, Android and iPad remains with the owner.
 
 ## Interaction teaching motion — 2026-10-19
 
@@ -338,3 +352,15 @@ The demonstration waits while loading or another modal is open; hidden documents
 After reviewing v2, the owner requested the visible Glass instruction and reported that the idle leaf motion was not apparent. The controller now distinguishes reading activity from an intentional horizontal book turn. Taps, reading focus, vertical Wheel and native scrolling cancel the current demonstration and restart its five-second idle wait; they never persist a learned state. A valid horizontal turn, Previous/Next or keyboard navigation marks the lesson learned. The new `del-carmen:portrait-artbook:turn-learned:v1` key deliberately ignores the prematurely learned v2 flag, so the corrected lesson appears without manually clearing browser storage.
 
 The existing localized `Glass.swipeGlass` message appears in a small fixed popup at the same moment the leaf demonstrates. The popup wraps within narrow portrait viewports, fades with the teaching state and retains its approved animated move to the fixed dock when the user learns the turn. The teaching lift is now up to 16% (28.8 degrees), .8 seconds lifting, .5 seconds holding and 1 second returning; the user-driven book physics remain unchanged. Reduced-motion users receive the text instruction for 2.4 seconds without automatic rotation. A visible but unfocused document can teach the gesture; hidden tabs, modal dialogs, active grips, loading and selected editorial text postpone it. Blur cancels safely and restarts the idle wait only while eligible. Cached-page containment and the genuine artwork/insignia identity from v2 remain intact.
+
+## Home and Series: Standard / Glass host — 2026-10-20
+
+Home Selected Works and `/series/[slug]?artwork=...` now use the same lazily loaded gallery host. Home navigation remains limited to its eight curated works; Series navigation remains limited to that series. The underlying grid/carousel and thumbnail hover design remain unchanged. Collections previews enter this same Series flow.
+
+The dialog offers Standard View / Open Artbook plus a separate X returning to the source gallery. Switching modes retains the work. The native URL retains locale, source path, unrelated query parameters and hash while updating only `artwork` and `experience`. Thumbnail opening pushes an entry; navigation/mode selection replaces that entry. Closing removes only those two viewer parameters. Back/Forward follows the selected state. Explicit Standard survives orientation and reload. Default phone/tablet entry is Glass; desktop entry is Standard.
+
+Portrait embeds the approved rigid full-editorial 180-degree book. Each surface includes image, correct distinctions, title, year, technique/support, dimensions, compact description/read-more and existing detail links. All four visual halves use the full-width composition; fixed toolbar and navigation remain outside the rotating surface. The original source image is contained/masked, with image-only zoom. Reading scroll remains available when needed. Landscape/desktop embed the approved 11B-23 engine with compact gallery information instead of replacing it with the detail technical sheet.
+
+The parent owns focus, Escape, background inert state and scroll locking. A book's own containing dialog permits its gestures; a nested zoom or unrelated modal blocks them. Source focus/scroll state returns on closing. Existing loading/decoding/retry, Coming Soon, warm metal, badge ownership, dust, idle teaching, reduced motion, queues and native touch remain with the approved engines. No physics constants are changed. The detail route still renders its own default content and navigation.
+
+Validation records accompany the delivery: lint/build/type checks, emulated browser interactions across five formats, native-touch/wheel checks, locale/history/focus/zoom/retry cases and existing-detail regression checks. Emulation does not replace owner testing on Safari/iPhone, Android or physical iPad. No deployment or remote write is performed by this increment.

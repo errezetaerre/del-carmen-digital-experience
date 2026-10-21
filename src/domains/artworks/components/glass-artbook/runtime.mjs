@@ -1,5 +1,8 @@
 // The approved 11B-23 engine, adapted to real Artwork data and primary media.
 // Deliberately local to the experimental artwork-detail view.
+import { hasBlockingArtworkDialog } from '@/shared/ui/artwork/hasBlockingArtworkDialog';
+import { GLASS_BOOK_QUERY } from '../../presentation/artworkBookViewport';
+export { GLASS_BOOK_QUERY };
 import { bindGlassTouchNavigation } from './glassTouchNavigation';
 import { burstDust, burstGlassDust } from '@/shared/ui/particle-field/dust';
 import { getSiteMessages } from '@/i18n/messages';
@@ -10,7 +13,7 @@ let wheelMomentumUnlockTimer=null;
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function formatLabel(value){return value.replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}
 
-export const GLASS_BOOK_QUERY='(min-width:1024px) and (hover:hover) and (pointer:fine), (min-width:640px) and (min-height:300px) and (orientation:landscape)';
+
 
 export function createGlassArtbook(root,options){
  if(!options.artworks.length)throw Error('Glass Artbook requires an artwork');
@@ -27,7 +30,7 @@ export function createGlassArtbook(root,options){
  let mediaLoading=true,loadRequest=null,loadSignature='';
  let disposed=false,frameId=0,pendingPointer=null,wheelActive=false,wheelTimer=null,edgeTimer=null;
  let pendingDustIndex=null,dustCleanup=null;
- function inputBlocked(){return mediaLoading||entrancePlaying||!!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]');}
+ function inputBlocked(){return mediaLoading||entrancePlaying||hasBlockingArtworkDialog(root);}
  function requestAnimationFrame(callback){frameId=window.requestAnimationFrame(now=>{if(!disposed)callback(now);});return frameId;}
  const document={
   documentElement:root,
@@ -204,7 +207,7 @@ export function createGlassArtbook(root,options){
    onPointerCancel({pointerId:drag?.id??pendingPointer?.id});
    return;
   }
-  if(!wideLayout.matches||inputBlocked()||wheelActive||event.button!==0||event.target.closest('button,a,input,textarea,select,[contenteditable],[data-artwork-highlights]'))return;
+  if(!wideLayout.matches||inputBlocked()||wheelActive||event.button!==0||event.target.closest('button,a,input,textarea,select,[contenteditable],[data-artwork-highlights],[data-lightbox-native-scroll]'))return;
   if(drag||pendingPointer)return;
   // Letters own selection; padding, line gaps and free glass own page turns.
   if(!animating&&isReadingPress(event))return;
@@ -272,7 +275,7 @@ export function createGlassArtbook(root,options){
   wheelActive=false;wheelTimer=null;lockWheel();release({pointerId:-1});
  }
  function onWheel(event){
-  if(event.target.closest("[data-artwork-highlights]"))return;
+  if(event.target.closest("[data-artwork-highlights],[data-lightbox-native-scroll]"))return;
   if(!wideLayout.matches||inputBlocked())return;
   const horizontal=event.shiftKey&&Math.abs(event.deltaX)<1?event.deltaY:event.deltaX;
   if(!horizontal||(!event.shiftKey&&Math.abs(horizontal)<=Math.abs(event.deltaY)))return;
@@ -308,6 +311,7 @@ function art(w){
  return `<div class="art" role="img" aria-label="${escapeHtml(w.images.primary.alt)}"><img class="ga-image relative z-10 h-auto max-h-[58svh] w-auto max-w-full select-none object-contain shadow-[0_35px_100px_rgba(0,0,0,0.45)] md:max-h-[64svh] lg:max-h-[75vh] [@media(orientation:landscape)_and_(max-height:600px)]:!max-h-[78svh] [@media(orientation:landscape)_and_(max-height:600px)]:!max-w-[94vw]" src="${escapeHtml(w.images.primary.src)}" alt="${escapeHtml(w.images.primary.alt)}" width="${w.images.primary.width??1200}" height="${w.images.primary.height??1200}" decoding="async" draggable="false"/></div>`;
 }
 function info(w,id){
+ if(options.renderInformation)return `<div tabindex="0" class="info">${options.renderInformation(w,id)}</div>`;
  const presentation=options.getPresentation?.(w);
  const authorship=escapeHtml(formatArtworkAuthorship(w,locale));
  return `<div tabindex="0" class="info max-w-xl -translate-y-1 md:-translate-y-2 lg:max-w-md lg:translate-y-0"><small class="font-sans text-[10px] font-medium uppercase tracking-[0.34em] text-brand-gold">${escapeHtml(presentation?.yearLabel??String(w.year))} · ${authorship}</small><h2 class="mt-5 font-display text-4xl font-light leading-[0.98] tracking-[0.01em] text-white md:text-5xl xl:text-6xl">${escapeHtml(w.title)}</h2>${presentation?.previewLabel?`<p class="mt-3 font-sans text-xs text-white/50">${escapeHtml(presentation.previewLabel)}</p>`:''}${w.quote?`<p lang="${artworkTextLocale(w,locale)}" class="ga-quote mt-6 font-display text-lg font-light italic leading-relaxed text-white/65 md:text-xl">“${escapeHtml(w.quote)}”</p>`:''}<div class="rule" aria-hidden="true">${glintMarkup(id+'-glint')}</div><dl class="ga-metadata mt-8 grid grid-cols-[110px_1fr] gap-x-6 gap-y-4 font-sans text-sm"><dt class="text-white/35">${escapeHtml(copy.medium)}</dt><dd class="text-white/75">${escapeHtml(formatArtworkTechnique(w,locale))}</dd><dt class="text-white/35">${escapeHtml(copy.dimensions)}</dt><dd class="text-white/75">${w.dimensions.width} × ${w.dimensions.height} ${escapeHtml(w.dimensions.unit)}</dd><dt class="text-white/35">${escapeHtml(copy.status)}</dt><dd class="text-white/75">${escapeHtml(presentation?.statusLabel??formatLabel(w.availability))}</dd></dl>${w.description?`<p lang="${artworkTextLocale(w,locale)}" class="ga-description mt-10 font-sans text-sm font-light leading-[1.9] text-white/55 md:text-[15px]">${escapeHtml(w.description)}</p>`:''}${w.categories.length?`<div class="ga-categories mt-10 gap-x-5 gap-y-3">${w.categories.map(category=>`<span class="font-sans text-[9px] uppercase tracking-[0.24em] text-white/35">${escapeHtml(formatArtworkCategory(category,locale))}</span>`).join('')}</div>`:''}</div>`;
@@ -740,7 +744,7 @@ function onDocumentPointerUp(event){if(!usesNativeTouch(event))onPointerRelease(
 function onDocumentPointerCancel(event){if(!usesNativeTouch(event))onPointerCancel(event);}
 $('#next').onclick=()=>requestNavigation(1);$('#prev').onclick=()=>requestNavigation(-1);
 document.addEventListener('keydown',e=>{
- if(e.target.closest('input,textarea,select,[contenteditable],[data-artwork-highlights]'))return;
+ if(e.target.closest('input,textarea,select,[contenteditable],[data-artwork-highlights],[data-lightbox-native-scroll]'))return;
  if(e.key==='ArrowRight'){e.preventDefault();requestNavigation(1)}
  if(e.key==='ArrowLeft'){e.preventDefault();requestNavigation(-1)}
 });
@@ -1031,7 +1035,7 @@ function applyPreview(){
  baseRight.style.transform=preview.right?'rotateY('+preview.right+'deg)':'none';
 }
 function onProximity(event){
- if(event.target.closest("[data-artwork-highlights]"))return;
+ if(event.target.closest("[data-artwork-highlights],[data-lightbox-native-scroll]"))return;
  if(!motion||reducedMotion.matches||!wideLayout.matches||inputBlocked()||drag||animating||pendingPointer||demonstrationTween||guidePointerPressed||event.pointerType==='touch')return;
  const rect=stage.getBoundingClientRect(),position=(event.clientX-rect.left)/rect.width;
  let left=0,right=0;
@@ -1068,7 +1072,7 @@ function startExperience(){
  positionGuide();
 }
 function synchronizeMotionPause(){
- const pause=!!nativeDocument.querySelector('[role="dialog"][aria-modal="true"]');
+ const pause=hasBlockingArtworkDialog(root);
  if(pause===pausedForImage)return;
  pausedForImage=pause;
  postponeGuide();

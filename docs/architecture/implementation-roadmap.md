@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.13
+Version: 1.16
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,11 +7,11 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-19
+Last Updated: 2026-10-21
  
-Current increment — 2026-10-19
+Current increment — 2026-10-20
 
-PR #1 has been merged into main at `b2d2976`; the owner supplied a Vercel Production/Ready confirmation. The next bounded refinement adds an editorial slide with the Standard instruction and an idle rigid-leaf lift/fall in every artwork-detail Glass layout. Portrait learning now lasts for the current document instead of suppressing future visits through localStorage. User navigation, reading, zoom and reduced motion take precedence over teaching. This increment is prepared on a new branch from production; it does not publish itself. The existing Home/Series portrait integration, visitor book, database and commercial roadmap retain their separate scope.
+PR #2 is merged into production main at `5f7e34e`. The approved guidance motion is the baseline. The next authorized block integrates the existing Standard and Glass artwork experiences into Home Selected Works and Series dialogs on `feat/shared-artwork-experience`; details are appended below.
 
 1. Objective
 This document defines the official implementation sequence of the Del Carmen Digital Experience platform.
@@ -572,3 +572,19 @@ Full-repository lint changes from 34 errors/16 warnings to zero errors/14 warnin
 The portrait and landscape motion engines, touch adapters, geometry/material/CSS, canonical catalogue, assets, translations, legal/consent definitions and API handlers remain unchanged. Browser regressions cover the complete portrait interaction, native history/orientation, Standard/Glass zoom ownership, Home/Series selection, menu focus and localized newsletter feedback. The delivery README records the exact executed checks and limitations.
 
 Apply and commit this increment on the existing feature branch so PR #1 updates; check its new Vercel build before merging. Local verification does not prove configured email delivery, physical-device/screen-reader behavior or legal sufficiency. Spanish indexing remains gated and legal drafts remain drafts. Database, confirmed offers/cart, sales PDF and later immersive Home/Series work retain their sequence. This review does not itself merge or publish production.
+
+## Shared gallery experiences — 2026-10-20
+
+Base: production main `5f7e34e` (PR #2, approved artwork guidance). This increment is prepared on `feat/shared-artwork-experience`, without committing, pushing or publishing. Home Selected Works and Series gallery dialogs gain Standard and Glass modes; Collections previews inherit the Series viewer. Phone/tablet entries default to Glass, desktop to Standard; an explicit mode survives turns, reload and orientation changes.
+
+The existing portrait and 11B-23 landscape engines remain responsible for motion/materials. A shared host owns only gallery selection, native URL state, modal focus, source context and compact editorial rendering. Existing detail routes retain their behavior. Owner visual/physical-device review follows the checked patch; visitor book, site-wide immersive entry, database, commerce, PDF catalogue and remaining language/release tasks remain separate.
+
+## Shared gallery review refinement — 2026-10-20
+
+The owner's v1 review adds fixed Standard glass boundaries with internal reading, landscape dots outside the frame, mouse/trackpad navigation, one expanded-copy surface, matching Standard/book responsive layouts, immediate mode-switch loading feedback, working Halo pause and readiness-bound portrait arrival light. Prepared as an incremental patch over v1; no commit, remote write or production publication is implied. Physical-device and owner visual approval remain the next gate. Database, commerce, PDF catalogue, visitor book and site-wide immersion remain separate work.
+
+## Shared viewer portrait refinement — 2026-10-21
+
+Incremental v3 is based on the owner's v2 review: animate one existing paragraph into a reversible reading surface without shifting the painting or its scroll position; retain approximately 60/40 landscape columns and switch both modes to portrait when compact; give Standard and portrait Artbook identical frame/image/caption measurements; carry each Standard border with its artwork during horizontal navigation. Immediate loading feedback and landscape dots outside the frame remain approved. This supersedes v2's content-only horizontal motion; vertical reading still occurs inside a stationary frame.
+
+The canonical Artwork Implementation document records module ownership and lifecycle. Production build/TypeScript, lint and emulated browser checks precede delivery. No catalogue or dependency edits, commit, push or production promotion are included. Physical-device and owner visual review remain next; database, commerce, PDF catalogue, visitor book, site-wide immersion and Academy learning stay separate future blocks.

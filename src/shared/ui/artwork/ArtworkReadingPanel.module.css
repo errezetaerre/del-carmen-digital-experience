@@ -1,0 +1,34 @@
+.panel { position: absolute; z-index: 49; left: 0; right: 0; bottom: 0; min-height: 0; isolation: isolate; color: rgb(255 255 255 / .75); }
+.panel[hidden] { display: none; }
+.backdrop { position: absolute; z-index: -1; inset: 0; border-radius: inherit; background: #030303; transform-origin: center; animation: expand .32s cubic-bezier(.22, 1, .36, 1) both; }
+.scroll { box-sizing: border-box; height: 100%; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #a7794366 transparent; touch-action: pan-y; padding: 20px clamp(20px, 3vw, 40px); animation: copy .28s .1s both; }
+.scroll p { margin: 0; white-space: pre-line; font-size: 14px; font-weight: 300; line-height: 1.9; }
+.close { display: inline-flex; align-items: center; min-height: 44px; margin-top: 12px; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: rgb(255 255 255 / .65); }
+.close:hover, .close:focus-visible { color: #c99a5b; }
+.scroll:focus-visible, .close:focus-visible { outline: 1px solid #c99a5b; outline-offset: -3px; }
+.information { min-width: 0; }
+.information > .panel { top: 0; }
+.normal { min-width: 0; }
+.preview { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; max-height: 84px; }
+.toggle { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: rgb(255 255 255 / .65); }
+.toggle:hover { color: #c99a5b; }
+.information[data-reader-expanded] { position: absolute; inset: 0; z-index: 8; margin: 0 !important; }
+.information[data-reader-expanded] > .normal { visibility: hidden; }
+@keyframes expand { from { transform: scaleY(.02); } to { transform: scaleY(1); } }
+@keyframes copy { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .backdrop, .scroll { animation: none; } }
+
+/* The portrait paragraph exists once, including during both directions of motion. */
+.moving { overflow: visible; }
+.moving .backdrop, .moving .scroll { animation: none; }
+.moving .scroll { position: relative; transform-origin: 0 0; text-align: center; }
+.moving .movingCopy { margin: 0; font-size: 14px; font-weight: 300; line-height: 24px; white-space: pre-line; }
+.moving[data-reading-state="preview"] .movingCopy { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.moving[data-reading-state="preview"] .backdrop { visibility: hidden; }
+
+/* Centre the expanded reading group; auto margins yield to native long-copy scrolling. */
+.panel:not([data-reading-state="preview"]) .scroll { display: flex; flex-direction: column; text-align: center; }
+.panel:not([data-reading-state="preview"]) .scroll > * { flex-shrink: 0; }
+.panel:not([data-reading-state="preview"]) .scroll > :first-child { margin-top: auto; }
+.panel:not([data-reading-state="preview"]) .scroll > :last-child { margin-bottom: auto; }
+.panel:not([data-reading-state="preview"]) .close { align-self: center; }

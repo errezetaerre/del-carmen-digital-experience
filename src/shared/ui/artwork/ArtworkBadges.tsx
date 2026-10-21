@@ -65,12 +65,15 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
         const track = trackRef.current;
         if (variant !== "ribbon" || !overflow || !track || paused || hovered || focused || dragging || selected) return;
         const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-        let frame = 0, last = 0;
+        let frame = 0, last = 0, position = track.scrollLeft;
         const tick = (now: number) => {
             if (!motion.matches && !document.hidden && !track.closest("[inert]") && last) {
                 const limit = Math.max(0, track.scrollWidth - track.clientWidth);
-                const next = track.scrollLeft + direction.current * Math.min(now - last, 40) * .016;
-                track.scrollLeft = Math.max(0, Math.min(limit, next));
+                // Keep subpixel progress outside scrollLeft: browsers may round
+                // each assignment, otherwise slow motion never accumulates.
+                const next = position + direction.current * Math.min(now - last, 40) * .016;
+                position = Math.max(0, Math.min(limit, next));
+                track.scrollLeft = position;
                 if (next >= limit) direction.current = -1;
                 else if (next <= 0) direction.current = 1;
             }
@@ -101,9 +104,6 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
             data-expanded={expandedThumbnail || undefined} data-artwork-kinetic-ignore data-artwork-highlights
             onPointerDown={(event) => event.stopPropagation()} onClick={(event) => event.stopPropagation()}
             onPointerMove={(event) => event.stopPropagation()} onWheel={(event) => event.stopPropagation()}
-            onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-            onFocusCapture={() => setFocused(true)}
-            onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}
             onKeyDown={(event) => {
                 if (event.key === "Escape" && selected) {
                     event.preventDefault(); event.stopPropagation(); setOpenId(null);
@@ -115,6 +115,9 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
                 }
             }}>
             <div className={styles.track} ref={trackRef} data-lenis-prevent
+                onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+                onFocusCapture={() => setFocused(true)}
+                onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}
                 onPointerDown={(event) => {
                     suppressClick.current = false;
                     if (variant === "ribbon" && overflow && event.pointerType !== "mouse") {

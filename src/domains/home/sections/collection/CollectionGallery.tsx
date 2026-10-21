@@ -13,7 +13,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import type { Artwork } from "@/domains/artworks";
-import { ArtworkLightbox } from "@/shared/ui/artwork";
+import dynamic from "next/dynamic";
+import useArtworkViewerSelection from "@/shared/ui/artwork/useArtworkViewerSelection";
+const ArtworkExperienceViewer = dynamic(() => import("@/shared/ui/artwork/ArtworkExperienceViewer"), { ssr: false });
 
 import CollectionArtwork from "./CollectionArtwork";
 
@@ -47,8 +49,8 @@ export default function CollectionGallery({
     const galleryRef =
         useRef<HTMLDivElement | null>(null);
 
-    const [selectedIndex, setSelectedIndex] =
-        useState<number | null>(null);
+    const viewer = useArtworkViewerSelection(artworks);
+    const { selectedIndex } = viewer;
     const [isPending, startTransition] = useTransition();
     const [pendingArtworkId, setPendingArtworkId] = useState<string | null>(null);
     const pendingArtworkRef = useRef<string | null>(null);
@@ -128,7 +130,6 @@ export default function CollectionGallery({
 
     const handleOpen = (
         artwork: Artwork,
-        index: number,
     ) => {
         if (interaction === "detail") {
             if (pendingArtworkRef.current === artwork.id) return;
@@ -144,7 +145,7 @@ export default function CollectionGallery({
             return;
         }
 
-        setSelectedIndex(index);
+        viewer.open(artwork);
     };
 
     return (
@@ -170,7 +171,7 @@ export default function CollectionGallery({
         "
             >
                 {artworks.map(
-                    (artwork, index) => (
+                    (artwork) => (
                         <div
                             key={artwork.id}
                             data-collection-artwork
@@ -183,7 +184,6 @@ export default function CollectionGallery({
                                 onOpen={() =>
                                     handleOpen(
                                         artwork,
-                                        index,
                                     )
                                 }
                             />
@@ -192,19 +192,11 @@ export default function CollectionGallery({
                 )}
             </div>
 
-            {interaction === "lightbox" && (
-                <ArtworkLightbox
-                    presentation="glass"
+            {interaction === "lightbox" && selectedIndex !== null && (
+                <ArtworkExperienceViewer
                     artworks={artworks}
-                    initialIndex={
-                        selectedIndex ?? 0
-                    }
-                    isOpen={
-                        selectedIndex !== null
-                    }
-                    onClose={() => {
-                        setSelectedIndex(null);
-                    }}
+                    initialIndex={selectedIndex}
+                    onClose={viewer.close}
                     showDetailsCta
                 />
             )}
