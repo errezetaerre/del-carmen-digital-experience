@@ -1,4 +1,4 @@
-Version: 1.40
+Version: 1.43
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-19
+2026-10-21
 
 ---
 
@@ -672,3 +672,24 @@ Next.js and its ESLint configuration are paired at 16.4.2. Existing module bound
 ### Detail-view teaching motion — 2026-10-19
 
 `ArtworkDetailKineticExperience.tsx` owns the Standard reminder and its bounded current-panel demonstration. The current panel receives a temporary offset; the actual kinetic track and input engine retain their state. `glass-artbook/runtime.mjs` owns a separate resting-leaf teaching tween beside its existing proximity/entrance controllers. It cancels before native drag ownership and never configures a real turn. `portrait-artbook/ArtworkPortraitArtbook.tsx` keeps learning in the current document, ignoring former persistent flags while its existing motion controller supplies the synchronized popup and rigid lift. No new module, preference storage, data source, translation key, dependency or stylesheet is introduced. DOC-ART-IMP records lifecycle and scope; the shared Home/Series lightbox remains with its existing owner.
+
+## Shared artwork gallery host — 2026-10-20
+
+`src/shared/ui/artwork/ArtworkExperienceViewer.tsx` is the lazily loaded Home/Series dialog. `ArtworkViewerEditorial.tsx` renders its compact portrait composition; `artworkViewerInformation.ts` renders escaped native landscape information. `ArtworkExperienceViewer.module.css` owns only the new host/editorial styles. `artworkViewerLocation.ts` owns native gallery query/history updates and its subscription; `useArtworkViewerSelection.ts` resolves those slugs against the supplied artwork list. `hasBlockingArtworkDialog.ts` distinguishes the book's containing gallery from an actual blocking zoom/modal.
+
+`src/domains/artworks/presentation/artworkBookViewport.ts` selects existing portrait/landscape capabilities and initial gallery defaults. Optional `ArtworkBookHost` callbacks/renderers in `glass-artbook/types.ts` let both approved engines be embedded without adding another physics implementation. Standalone detail behavior remains the default when no host is passed. `ArtworkLightbox` retains its existing layout and gestures with optional controlled selection/embedded modal ownership. Catalogue/media/curation/recognition registries, shared materials, particle generation, legal settings and dependencies are unchanged.
+
+## Shared viewer polish ownership — 2026-10-20
+
+- `shared/ui/artwork/artworkStandardNavigation.ts`: Standard mouse/trackpad intent, whole-frame translation, inert outgoing snapshots, settlement and cleanup.
+- `shared/ui/artwork/ArtworkReadingPanel.tsx` and its CSS module: localized expanded reading below the portrait image or inside the landscape information page.
+- `shared/ui/artwork/bindArtworkReadingPanels.ts`: delegated reading controls for the native book's generated information faces.
+- `ArtworkExperienceViewer` owns responsive mode continuity and immediate switch feedback; book hosts optionally publish readiness. Existing detail physics, assets and catalogue remain with their previous owners.
+
+## Shared portrait reading and composition ownership — 2026-10-21
+
+`ArtworkViewerEditorial.tsx` now supplies both embedded Standard portrait and hosted portrait Glass. `ArtworkExperienceViewer.module.css` owns their common frame variables and single-column editorial grid; the native portrait stylesheet adds host-scoped frame/control placement without changing standalone detail geometry. `artworkBookViewport.ts` selects the same portrait/landscape layout for either mode, including the compact-desktop threshold. Hosted landscape grids retain 60/40 columns without intrinsic minimum-width expansion.
+
+`ArtworkMovingDescription.tsx` owns one portrait paragraph and its controlled reading state. `artworkReadingMotion.ts` measures preview/reading rectangles and owns reversible text/background motion, preserved scroll offsets, click/selection ownership and cleanup. `ArtworkReadingPanel.tsx` remains the existing landscape/native reading component; its CSS module also styles the moving portrait paragraph. These are shared UI presentation helpers, not a second artwork data source or a new motion engine for the book.
+
+`artworkStandardNavigation.ts` moves the actual glass frame and manages a short-lived inert outgoing snapshot. The landscape dots and global toolbar remain outside that motion. Both book controllers keep their approved gesture/physics implementations; portrait guards merely postpone turns and idle demonstrations during expanded reading. Catalogue, media, dependencies, translations and legal/contact configuration remain unchanged.

@@ -1,4 +1,5 @@
 import type gsap from "gsap";
+import type { ReactNode } from "react";
 import type { Artwork } from "@/domains/artworks";
 import type { SiteLocale } from "@/i18n/config";
 import type { ArtworkPresentation } from "../../presentation/getArtworkPresentation";
@@ -9,6 +10,18 @@ export interface ArtworkGlassArtbookProps {
     navigationQuery: string;
     backHref: string;
     backLabel: string;
+    host?: ArtworkBookHost;
+}
+
+// Optional gallery host; the detail routes retain their existing rendering.
+export interface ArtworkBookHost {
+    artworkId: string;
+    onNavigate(artwork: Artwork): void;
+    onStandardView(): void;
+    hrefFor(artwork: Artwork): string;
+    renderEditorial(artwork: Artwork): ReactNode;
+    renderInformation(artwork: Artwork, id: string): string;
+    onLoadStateChange?(state: GlassArtbookLoadState): void;
 }
 
 export interface GlassArtbookOptions {
@@ -19,6 +32,7 @@ export interface GlassArtbookOptions {
     motion?: typeof gsap;
     getPresentation?: (artwork: Artwork) => ArtworkPresentation;
     renderPreview?: (artwork: Artwork) => string;
+    renderInformation?: (artwork: Artwork, id: string) => string;
     onHighlightArtwork?: (slot: 0 | 1, artwork: Artwork) => void;
     onNavigate?: (artwork: Artwork) => void;
     onLoadStateChange?: (state: GlassArtbookLoadState) => void;

@@ -8,6 +8,7 @@ import { localizeHref } from "@/i18n/config";
 import { artworkExperienceHref } from "../../presentation/artworkExperience";
 import { getArtworkPresentation } from "../../presentation/getArtworkPresentation";
 import ArtworkDetailScene from "../ArtworkDetailScene";
+import { hasBlockingArtworkDialog } from "@/shared/ui/artwork/hasBlockingArtworkDialog";
 import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
 import { glassRimMarkup } from "@/shared/ui/artwork/glassAccents";
 import { burstArtworkDust } from "@/shared/ui/particle-field/dust";
@@ -41,7 +42,7 @@ function PortraitMaterial() {
     return <><div className={styles.reflection} aria-hidden="true" /><div ref={host} className={styles.rim} aria-hidden="true" /></>;
 }
 
-export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, navigationQuery, backHref, backLabel }: ArtworkGlassArtbookProps) {
+export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, navigationQuery, backHref, backLabel, host }: ArtworkGlassArtbookProps) {
     const locale = useLocale();
     const t = useTranslations("Artwork");
     const glass = useTranslations("Glass");
@@ -49,7 +50,9 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     const router = useRouter();
     let routeSlug = "";
     try { routeSlug = decodeURIComponent(pathname.replace(/^\/artworks\//, "").replace(/\/$/, "")); } catch { /* Keep the canonical initial ID. */ }
-    const routeIndex = artworks.findIndex(artwork => artwork.slug === routeSlug);
+    const hostRef = useRef(host);
+    useLayoutEffect(() => { hostRef.current = host; });
+    const routeIndex = host ? artworks.findIndex(artwork => artwork.id === host.artworkId) : artworks.findIndex(artwork => artwork.slug === routeSlug);
     const index = routeIndex >= 0 ? routeIndex : Math.max(0, artworks.findIndex(artwork => artwork.id === initialArtworkId));
     const currentArtwork = artworks[index];
     const previous = artworks[index - 1];
@@ -73,10 +76,34 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
         const hintBubble = bubbleRef.current;
         let loadingTimer: number | undefined;
         let stopDust: (() => void) | undefined;
+        let arrivalPending = false, arrivalFrame = 0;
+        function queueArrival() {
+            if (!arrivalFrame && arrivalPending) arrivalFrame = requestAnimationFrame(playArrival);
+        }
+        function playArrival() {
+            arrivalFrame = 0;
+            if (!arrivalPending || !root || !frame || !current || document.hidden ||
+                root.dataset.portraitReady !== "true" || hasBlockingArtworkDialog(root)) return;
+            const ribbon = current.querySelector<HTMLElement>("[data-artwork-highlights]");
+            const measured = ribbon?.closest<HTMLElement>("[data-halo-ready]");
+            if (!ribbon || (hostRef.current && measured?.dataset.haloReady !== "true")) return;
+            const origin = frame.getBoundingClientRect(), badge = ribbon.getBoundingClientRect();
+            if (!origin.width || !origin.height || !badge.width || !badge.height) return;
+            arrivalPending = false;
+            stopDust = burstArtworkDust(frame, { x: 1, y: 1, width: origin.width - 2, height: origin.height - 2, radius: 13 },
+                { x: badge.left - origin.left, y: badge.top - origin.top, width: badge.width, height: badge.height });
+        }
+        const arrivalGeometry = new ResizeObserver(queueArrival);
+        arrivalGeometry.observe(frame); arrivalGeometry.observe(current);
+        const arrivalContent = new MutationObserver(queueArrival);
+        arrivalContent.observe(current, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-halo-ready"] });
+        arrivalContent.observe(root, { attributes: true, attributeFilter: ["data-portrait-ready"] });
+        document.addEventListener("visibilitychange", queueArrival);
         const controller = createPortraitArtbookMotion({
             root, frame, overlay, current,
             previous: page(artworks[index - 1]?.id), next: page(artworks[index + 1]?.id),
             onLoad(state) {
+                hostRef.current?.onLoadStateChange?.(state);
                 window.clearTimeout(loadingTimer);
                 if (state.status === "ready") {
                     presentedRef.current = true;
@@ -86,6 +113,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
                 } else setLoadState(state);
             },
             onActivity() {
+                arrivalPending = false; cancelAnimationFrame(arrivalFrame); arrivalFrame = 0;
                 stopDust?.(); stopDust = undefined;
             },
             onInteraction() {
@@ -108,24 +136,22 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
             },
             onLand(direction) {
                 const artwork = artworks[index + direction];
-                if (artwork) window.history.pushState(null, "", localizeHref(artworkExperienceHref(artwork.slug, navigationQuery, "glass"), locale));
+                if (artwork && hostRef.current) hostRef.current.onNavigate(artwork);
+                else if (artwork) window.history.pushState(null, "", localizeHref(artworkExperienceHref(artwork.slug, navigationQuery, "glass"), locale));
             },
-            onExit() { router.push(artworkExperienceHref(currentArtwork.slug, navigationQuery, "standard"), { scroll: false }); },
+            onExit() { if (hostRef.current) { hostRef.current.onStandardView(); return; } router.push(artworkExperienceHref(currentArtwork.slug, navigationQuery, "standard"), { scroll: false }); },
             onArrival() {
                 const badges = getArtworkPresentation(currentArtwork, locale).badges;
                 if (currentArtwork.creationStatus !== "completed" || !badges.some(badge => badge.kind !== "planned" && badge.kind !== "in-progress") ||
-                    window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.querySelector('[role="dialog"][aria-modal="true"]')) return;
-                const ribbon = current.querySelector<HTMLElement>("[data-artwork-highlights]");
-                if (!ribbon) return;
-                const origin = frame.getBoundingClientRect(), badge = ribbon.getBoundingClientRect();
-                if (!badge.width || !badge.height) return;
-                stopDust = burstArtworkDust(frame, { x: 1, y: 1, width: origin.width - 2, height: origin.height - 2, radius: 13 },
-                    { x: badge.left - origin.left, y: badge.top - origin.top, width: badge.width, height: badge.height });
+                    window.matchMedia("(prefers-reduced-motion: reduce)").matches || hasBlockingArtworkDialog(root)) return;
+                arrivalPending = true; queueArrival();
             },
         });
         controllerRef.current = controller;
         return () => {
-            window.clearTimeout(loadingTimer); stopDust?.(); controller.dispose(); controllerRef.current = null;
+            window.clearTimeout(loadingTimer); cancelAnimationFrame(arrivalFrame); arrivalGeometry.disconnect(); arrivalContent.disconnect();
+            document.removeEventListener("visibilitychange", queueArrival);
+            stopDust?.(); controller.dispose(); controllerRef.current = null;
             if (hintBubble) {
                 gsap.killTweensOf(hintBubble);
                 delete hintBubble.dataset.sealing;
@@ -140,23 +166,23 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     }
 
     if (!currentArtwork) return null;
-    return <main ref={rootRef} className={styles.experience} data-portrait-artbook data-portrait-current={currentArtwork.id}
+    return <main ref={rootRef} className={`${styles.experience} ${host ? styles.embedded : ""}`} data-portrait-artbook data-portrait-current={currentArtwork.id}
         data-portrait-learned={learnedAtMount || undefined} data-lenis-prevent aria-label={glass("viewer")}>
-        <div className={styles.toolbar}>
+        {!host && <div className={styles.toolbar}>
             <Link href={backHref} className={`${styles.back} font-sans text-[10px] uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline focus-visible:outline-brand-gold`}>
                 <span>← {backLabel}</span>
             </Link>
             <Link href={artworkExperienceHref(currentArtwork.slug, navigationQuery, "standard")} className={`${styles.exit} font-sans text-[9px] uppercase tracking-[0.22em] text-white/60 transition-colors hover:text-brand-gold`} aria-label={glass("exitLabel")}>
                 {glass("exit")} <span aria-hidden="true">×</span>
             </Link>
-        </div>
+        </div>}
         <div ref={frameRef} className={styles.frame} data-portrait-frame aria-busy={loadState.status === "loading"}>
             {artworks.slice(Math.max(0, index - 1), index + 2).map(artwork => {
                 const active = artwork.id === currentArtwork.id;
                 return <div key={artwork.id} className={`${styles.slot} ${active ? "" : styles.cached}`} data-portrait-slot={active ? "current" : "cached"} inert={!active} aria-hidden={!active || undefined}>
-                    <div className={styles.page} data-portrait-page={artwork.id}>
+                    <div className={styles.page} data-portrait-page={artwork.id} data-lightbox-panel={host ? true : undefined} data-lightbox-layout={host ? "portrait" : undefined}>
                         <div className={styles.reading} data-portrait-reading data-lenis-prevent tabIndex={active ? 0 : -1} role="region" aria-label={t("information", { title: artwork.title })}>
-                            <ArtworkDetailScene artwork={artwork} navigationQuery={navigationQuery} editorialOnly />
+                            {host ? host.renderEditorial(artwork) : <ArtworkDetailScene artwork={artwork} navigationQuery={navigationQuery} editorialOnly />}
                         </div>
                         <PortraitMaterial />
                     </div>
@@ -165,7 +191,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
             <div ref={overlayRef} className={styles.overlay} data-portrait-overlay hidden inert aria-hidden="true" />
         </div>
         <nav className={styles.controls} aria-label={glass("viewer")}>
-            {previous ? <Link href={artworkExperienceHref(previous.slug, navigationQuery, "glass")} onClick={event => navigate(event, -1)}
+            {previous ? <Link href={host ? host.hrefFor(previous) : artworkExperienceHref(previous.slug, navigationQuery, "glass")} onClick={event => navigate(event, -1)}
                 className="group font-sans text-white/50 transition-colors hover:text-brand-gold focus-visible:outline focus-visible:outline-brand-gold">
                 <span className="text-[9px] uppercase tracking-[0.2em]">← {t("previous")}</span>
                 <span className={`${styles.title} font-display text-sm font-light md:text-base`}>{previous.title}</span>
@@ -174,7 +200,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
                 <span className="font-sans text-[9px] tracking-[0.2em] text-white/35" role="status" aria-label={t("position", { index: index + 1, total: artworks.length })}>{String(index + 1).padStart(2, "0")} / {String(artworks.length).padStart(2, "0")}</span>
                 <span ref={dockRef} className={`${styles.hintDock} font-sans text-[7px] uppercase tracking-[0.08em] text-white/35`} aria-hidden="true">‹ {t("swipe")} ›</span>
             </div>
-            {next ? <Link href={artworkExperienceHref(next.slug, navigationQuery, "glass")} onClick={event => navigate(event, 1)}
+            {next ? <Link href={host ? host.hrefFor(next) : artworkExperienceHref(next.slug, navigationQuery, "glass")} onClick={event => navigate(event, 1)}
                 className={`${styles.next} group font-sans text-white/50 transition-colors hover:text-brand-gold focus-visible:outline focus-visible:outline-brand-gold`}>
                 <span className="text-[9px] uppercase tracking-[0.2em]">{t("next")} →</span>
                 <span className={`${styles.title} font-display text-sm font-light md:text-base`}>{next.title}</span>

@@ -37,7 +37,7 @@ export default function ArtworkImageHighlights({ artwork, children, className = 
                 const gap = (dots?.getBoundingClientRect().top ?? caption?.getBoundingClientRect().top ?? parent.bottom) - bottom;
                 // Add only missing space below the painting. The panel and dots
                 // grow equally, keeping the image stage's dimensions unchanged.
-                panel.style.setProperty("--halo-clearance", `${Math.ceil(Math.max(0, 48 - gap))}px`);
+                panel.style.setProperty("--halo-clearance", panel.dataset.lightboxLayout === "landscape" ? "0px" : `${Math.ceil(Math.max(0, 48 - gap))}px`);
             } else {
                 root.style.setProperty("--halo-reserve", `${Math.ceil(Math.max(0, 48 - (parent.bottom - bottom)))}px`);
             }

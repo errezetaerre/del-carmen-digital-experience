@@ -1,0 +1,40 @@
+.dialog { --gallery-top: max(5rem, calc(env(safe-area-inset-top) + 4.5rem)); --gallery-inline: max(3.5rem, 6vw); --gallery-bottom: max(1rem, env(safe-area-inset-bottom)); --gallery-portrait-width: 760px; --gallery-portrait-height: 940px; position: fixed; inset: 0; z-index: 10000; isolation: isolate; background: #030303; color: white; }
+/* DOM ownership avoids competing inline overflow snapshots with nested zoom. */
+:global(html):has(.dialog), :global(body):has(> .dialog) { overflow: hidden; }
+.toolbar { position: absolute; z-index: 200; top: max(1rem, env(safe-area-inset-top)); right: max(1rem, env(safe-area-inset-right)); display: flex; align-items: center; gap: 1rem; }
+.mode { min-height: 44px; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: rgb(255 255 255 / .6); transition: color 180ms; }
+.mode:hover, .mode:focus-visible { color: var(--brand-gold, #c99a5b); }
+.close { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; font-size: 32px; font-weight: 300; color: rgb(255 255 255 / .75); }
+.close:hover { color: #c99a5b; background: rgb(201 154 91 / .06); }
+.toolbar button:focus-visible { outline: 1px solid #c99a5b; outline-offset: 3px; }
+/* Image zoom owns its own close control while it is the active dialog. */
+.dialog:has([role="dialog"][aria-modal="true"]) > .toolbar { visibility: hidden; }
+.checking { height: 100%; display: grid; place-items: center; }
+.editorial { --caption-height: 300px; position: relative; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(240px, 1fr) calc(32px + var(--halo-clearance, 0px)) var(--caption-height); height: 100%; min-height: calc(240px + 32px + var(--halo-clearance, 0px) + var(--caption-height) + 22px); min-width: 0; padding: 16px 20px 6px; }
+.caption[data-description-expanded], .caption[data-description-expanded] * { visibility: hidden; pointer-events: none; }
+.switching { position: absolute; inset: 0; z-index: 150; display: grid; place-items: center; background: rgb(3 3 3 / .95); }
+.artwork { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 100%; min-width: 0; min-height: 0; }
+.positionSpacer { height: calc(32px + var(--halo-clearance, 0px)); min-width: 0; }
+.caption { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 18px 64px 18px 1px 104px 36px; gap: 8px; align-content: start; min-width: 0; min-height: 0; padding: 8px 20px; text-align: center; }
+.caption > * { min-width: 0; margin: 0; }
+.caption h2 { display: flex; align-items: center; justify-content: center; overflow: auto; scrollbar-width: thin; }
+.metadata { align-self: center; }
+.separator { position: relative; justify-self: center; width: min(70%, 240px); height: 1px; pointer-events: none; }
+.separator svg { position: absolute; top: -32px; left: 0; width: 100%; height: 64px; overflow: visible; }
+.descriptionSlot { display: grid; grid-template-rows: 72px 32px; justify-items: center; width: min(100%, 620px); justify-self: center; min-height: 0; }
+.descriptionPlaceholder { width: 100%; height: 72px; min-width: 0; }
+.readButton { align-self: center; min-width: 88px; height: 32px; border: 0; background: transparent; padding: .25rem .5rem; cursor: pointer; }
+.actions { display: flex; align-items: center; justify-content: center; gap: 1.75rem; height: 36px; white-space: nowrap; }
+.actions a { display: inline-flex; align-items: center; min-height: 44px; transition: color 180ms; }
+.actions a:hover { color: #c99a5b; }
+@media (max-width: 767px) {
+    .dialog { --gallery-inline: 2.75rem; }
+    .editorial { --caption-height: 338px; padding: 12px 10px 4px; }
+    .caption { padding-inline: 4px; grid-template-rows: 18px 64px 32px 1px 104px 60px; }
+    .caption h2 { font-size: 1.375rem; }
+    .metadata { font-size: 8px; letter-spacing: .08em; }
+    .actions { flex-direction: column; gap: .25rem; height: 60px; }
+    .actions > span { display: none; }
+    .actions a { font-size: 8px; letter-spacing: .10em; }
+}
+@media (orientation: landscape) and (max-height: 600px) { .toolbar { top: .25rem; } }

@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 
-import { usePathname, useRouter } from "@/i18n/navigation";
+import useArtworkViewerSelection from "@/shared/ui/artwork/useArtworkViewerSelection";
 
 import type { Artwork } from "@/domains/artworks";
 import { KineticCarousel } from "@/shared/ui/kinetic-carousel";
@@ -13,7 +12,7 @@ import CollectionArtwork from "@/domains/home/sections/collection/CollectionArtw
 
 // The selected-work deep link can open this portal on the first render.
 // Its document.body target exists only in the browser.
-const ArtworkLightbox = dynamic(() => import("@/shared/ui/artwork/ArtworkLightbox"), { ssr: false });
+const ArtworkExperienceViewer = dynamic(() => import("@/shared/ui/artwork/ArtworkExperienceViewer"), { ssr: false });
 
 interface SeriesGalleryProps {
     artworks: Artwork[];
@@ -28,70 +27,8 @@ export default function SeriesGallery({
 }: SeriesGalleryProps) {
     const t = useTranslations("Series");
     const artworkT = useTranslations("Artwork");
-    const router = useRouter();
-    const pathname = usePathname();
-
-    const getArtworkIndex = (
-        artworkSlug?: string,
-    ) => {
-        if (!artworkSlug) {
-            return null;
-        }
-
-        const index = artworks.findIndex(
-            (artwork) =>
-                artwork.slug === artworkSlug,
-        );
-
-        return index >= 0
-            ? index
-            : null;
-    };
-
-    const [selectedIndex, setSelectedIndex] =
-        useState<number | null>(() =>
-            getArtworkIndex(
-                initialArtworkSlug,
-            ),
-        );
-
-    // Reconcile a new route selection before committing the lightbox.
-    const [selectionSource, setSelectionSource] = useState({ artworks, initialArtworkSlug });
-    if (selectionSource.artworks !== artworks || selectionSource.initialArtworkSlug !== initialArtworkSlug) {
-        setSelectionSource({ artworks, initialArtworkSlug });
-        setSelectedIndex(getArtworkIndex(initialArtworkSlug));
-    }
-
-    const handleOpen = (
-        artwork: Artwork,
-        index: number,
-    ) => {
-        setSelectedIndex(index);
-
-        router.replace(
-            `${pathname}?artwork=${encodeURIComponent(
-                artwork.slug,
-            )}`,
-            {
-                scroll: false,
-            },
-        );
-    };
-
-    const handleClose = () => {
-        setSelectedIndex(null);
-
-        /*
-         * Remove ?artwork= while remaining
-         * inside the current ArtworkSeries.
-         */
-        router.replace(
-            `/series/${seriesSlug}`,
-            {
-                scroll: false,
-            },
-        );
-    };
+    const viewer = useArtworkViewerSelection(artworks, initialArtworkSlug);
+    const { selectedIndex } = viewer;
 
     const mobileColumns =
         artworks.length === 1
@@ -150,15 +87,14 @@ export default function SeriesGallery({
                 `}
             >
                 {artworks.map(
-                    (artwork, index) => (
+                    (artwork) => (
                         <CollectionArtwork
                             key={artwork.id}
                             artwork={artwork}
                             presentation="series"
                             onOpen={() =>
-                                handleOpen(
+                                viewer.open(
                                     artwork,
-                                    index,
                                 )
                             }
                         />
@@ -209,7 +145,6 @@ export default function SeriesGallery({
                         {artworks.map(
                             (
                                 artwork,
-                                index,
                             ) => (
                                 <div
                                     key={artwork.id}
@@ -222,9 +157,8 @@ export default function SeriesGallery({
                                         artwork={artwork}
                                         presentation="series"
                                         onOpen={() =>
-                                            handleOpen(
+                                            viewer.open(
                                                 artwork,
-                                                index,
                                             )
                                         }
                                     />
@@ -235,21 +169,15 @@ export default function SeriesGallery({
                 </div>
             )}
 
-            <ArtworkLightbox
-                presentation="glass"
+            {selectedIndex !== null && <ArtworkExperienceViewer
                 artworks={artworks}
-                initialIndex={
-                    selectedIndex ?? 0
-                }
-                isOpen={
-                    selectedIndex !== null
-                }
-                onClose={handleClose}
+                initialIndex={selectedIndex}
+                onClose={viewer.close}
                 showDetailsCta
                 showAllWorksCta={false}
                 detailsCtaLabel={artworkT("exploreDetail")}
                 detailsQuery={`series=${seriesSlug}`}
-            />
+            />}
         </>
     );
 }
