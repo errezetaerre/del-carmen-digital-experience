@@ -1,6 +1,6 @@
 # Collections Specification
 
-Version: 1.17
+Version: 1.18
 
 Document ID: DOC-COL-SPEC
 
@@ -16,7 +16,7 @@ Status: 🟢 Approved
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-21
+Last Updated: 2026-10-20
 
 ---
 
@@ -753,3 +753,9 @@ Home Selected Works and Series keep their existing entry/selection paths. The sh
 The Home/Series shared dialog now renders the same portrait photo/caption composition and frame dimensions in Standard and Artbook. Landscape retains approximately 60/40 image/information columns; a compact fine-pointer desktop switches both modes to portrait before the image column becomes unusable. The existing Collections previews and their destinations remain unchanged.
 
 Portrait Read more moves the existing paragraph upward over an expanding black surface below the painting, preserving the painting and current scroll position. Clicking inside or outside reverses that same text; long copy has internal scrolling. Standard horizontal exploration carries each artwork's complete glass border, while the fixed toolbar and landscape dots retain their positions. Catalogue membership, thumbnail hover, curation, Coming Soon and Collections hero motion remain unchanged.
+
+## Shared Standard kinetic motion — 2026-10-20
+
+The approved Home/Series Standard dialog now shares the detail route's distance, velocity, momentum and settlement calculations. Its previous/current/next framed compositions slide together, revealing the neighbour during the gesture. Gallery selection updates on landing. Neighbour slots are inert; only the selected work owns reading controls, zoom and arrival effects. The window remains bounded to the current work and its two neighbours, with the Home/Series navigation sequences preserved.
+
+Collections preview destinations continue to use that Series dialog. Thumbnail expansion, `CollectionHeroMotion`, catalogue/Series membership, image/frame dimensions, centred expanded reading, external landscape dots, bilingual copy and Glass Artbook behavior remain unchanged. The fixed-duration v3 Standard snapshot transition is superseded by the shared kinetics and live three-page window.

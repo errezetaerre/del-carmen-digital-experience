@@ -1,142 +1,170 @@
 import gsap from "gsap";
+import { ARTWORK_KINETICS as motion, artworkKineticTween, artworkPointerDirection,
+    artworkPointerVelocity, artworkWheelOffset, artworkWheelVelocity, type ArtworkDirection } from "./artworkKinetics";
 
 export interface ArtworkStandardNavigation {
-    navigate(direction: -1 | 1): void;
+    navigate(direction: ArtworkDirection): void;
+    begin(): void;
     preview(distance: number): void;
+    release(): void;
     reset(): void;
+    selectionChanged(): void;
     dispose(): void;
 }
 
-/** Each artwork and its complete glass frame travel as one surface. */
-export function bindArtworkStandardNavigation(viewport: HTMLElement, frame: HTMLElement, options: {
-    navigate(direction: -1 | 1): void; zoomed(): boolean; onInteraction(): void;
+/** The gallery adapts the approved detail kinetics to three complete framed pages. */
+export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTMLElement, options: {
+    navigate(direction: ArtworkDirection): void; zoomed(): boolean; onInteraction(): void;
 }): ArtworkStandardNavigation {
     const view = viewport.ownerDocument.defaultView!;
     const reduced = view.matchMedia("(prefers-reduced-motion: reduce)");
-    let disposed = false, settling = false, queued = 0, suppressClick = false;
-    let pointer: { id: number; x: number; y: number; dx: number; axis: "pending" | "horizontal" | "vertical" } | null = null;
-    let wheelDistance = 0, wheelTimer = 0, wheelLocked = false;
+    let disposed = false, settling = false, queued = 0, suppressClickUntil = 0, queueFrame = 0;
+    let pointer: { id: number; x: number; y: number; axis: "pending" | "horizontal" | "vertical" } | null = null;
+    let pointerActive = false, pointerDistance = 0, pointerVelocity = 0, pointerTime = 0;
+    let wheelDistance = 0, wheelVelocity = 0, wheelTime = 0, wheelReset = 0, wheelUnlock = 0, wheelLocked = false;
+    const width = () => Math.max(1, viewport.getBoundingClientRect().width);
+    const position = () => Number(gsap.getProperty(track, "x")) || 0;
     const ignored = (target: EventTarget | null) => options.zoomed() || Boolean((target as Element | null)?.closest(
-        "a,button,input,textarea,select,[contenteditable],[data-artwork-highlights],[data-lightbox-native-scroll]"));
-    let outgoing: HTMLElement | null = null;
-    let snapshotSerial = 0;
-    const width = () => Math.max(1, frame.clientWidth + 32);
-    function snapshot(offset: number) {
-        const box = frame.getBoundingClientRect(), viewBox = viewport.getBoundingClientRect();
-        const copy = frame.cloneNode(true) as HTMLElement;
-        copy.inert = true; copy.setAttribute("aria-hidden", "true"); copy.dataset.standardNavigationSnapshot = "";
-        copy.querySelectorAll("canvas[data-artwork-dust]").forEach(node => node.remove());
-        // Every cloned gradient/description gets a distinct ID while both frames exist.
-        const ids = new Map<string, string>();
-        copy.querySelectorAll<HTMLElement>("[id]").forEach(node => { const old = node.id; node.id = `slide-${++snapshotSerial}-${old}`; ids.set(old, node.id); });
-        copy.querySelectorAll("*").forEach(node => {
-            for (const attribute of Array.from(node.attributes)) {
-                if (attribute.name === "id") continue;
-                let value = attribute.value;
-                for (const [old, id] of ids) value = value.replaceAll(`url(#${old})`, `url(#${id})`);
-                if (["aria-controls", "aria-labelledby", "aria-describedby"].includes(attribute.name)) value = value.split(" ").map(id => ids.get(id) ?? id).join(" ");
-                if (attribute.name === "href" && value.startsWith("#")) value = `#${ids.get(value.slice(1)) ?? value.slice(1)}`;
-                if (value !== attribute.value) node.setAttribute(attribute.name, value);
-            }
-        });
-        Object.assign(copy.style, { position: "absolute", left: `${box.left - viewBox.left - offset}px`, top: `${box.top - viewBox.top}px`, width: `${box.width}px`, height: `${box.height}px`, margin: "0", zIndex: "2", pointerEvents: "none" });
-        viewport.appendChild(copy); gsap.set(copy, { x: offset });
-        return copy;
+        "a,button,input,textarea,select,[contenteditable],[data-artwork-highlights],[data-lightbox-native-scroll],[data-artwork-kinetic-ignore]"));
+    function clearWheel() {
+        view.clearTimeout(wheelReset); wheelReset = 0;
+        wheelDistance = 0; wheelVelocity = 0; wheelTime = 0;
     }
-    function preview(distance: number) {
-        if (disposed || settling) return;
-        gsap.killTweensOf(frame);
-        gsap.set(frame, { x: Math.max(-width(), Math.min(width(), distance)) });
-        viewport.dataset.artworkDragging = "";
-    }
+    function render(x: number) { gsap.set(track, { x }); viewport.dataset.artworkDragging = ""; }
     function reset() {
-        if (!settling) gsap.to(frame, { x: 0, duration: reduced.matches ? 0 : .32, ease: "power3.out", overwrite: true,
+        if (disposed || settling) return;
+        pointerActive = false; clearWheel();
+        gsap.to(track, { x: 0, duration: reduced.matches ? 0 : motion.resetDuration, ease: "power3.out", overwrite: true,
             onComplete() { delete viewport.dataset.artworkDragging; } });
     }
-    function navigate(direction: -1 | 1) {
+    function begin() {
+        if (disposed || settling || options.zoomed()) return;
+        clearWheel(); gsap.killTweensOf(track);
+        pointerActive = true; pointerDistance = 0; pointerVelocity = 0; pointerTime = view.performance.now();
+    }
+    function preview(distance: number) {
+        if (disposed || settling || options.zoomed()) return;
+        if (!pointerActive) begin();
+        const now = view.performance.now();
+        pointerVelocity = artworkPointerVelocity(pointerVelocity, distance - pointerDistance, now - pointerTime);
+        pointerDistance = distance; pointerTime = now;
+        render(distance);
+    }
+    function navigate(direction: ArtworkDirection, releaseVelocity = 0, preserveReleaseVelocity = false) {
         if (disposed) return;
         options.onInteraction();
         if (settling) { queued = Math.max(-5, Math.min(5, queued + direction)); return; }
-        view.clearTimeout(wheelTimer); wheelDistance = 0;
-        if (reduced.matches) { gsap.set(frame, { x: 0 }); options.navigate(direction); reset(); return; }
-        settling = true; viewport.dataset.artworkDragging = "";
-        const start = Number(gsap.getProperty(frame, "x")) || 0, distance = width();
-        outgoing = snapshot(start);
-        options.navigate(direction);
-        gsap.set(frame, { x: start + direction * distance });
-        gsap.to(outgoing, { x: -direction * distance, duration: .48, ease: "power3.out", overwrite: true });
-        gsap.to(frame, { x: 0, duration: .48, ease: "power3.out", overwrite: true, onComplete() {
-            outgoing?.remove(); outgoing = null;
-            settling = false; delete viewport.dataset.artworkDragging;
-            if (queued) { const next = queued > 0 ? 1 : -1; queued -= next; navigate(next); }
-        } });
+        settling = true; pointerActive = false; clearWheel();
+        viewport.dataset.artworkDragging = "";
+        if (reduced.matches) { options.navigate(direction); return; }
+        const destination = -direction * width();
+        // The adjacent React page is already visible during the grip. Keep it
+        // on screen at landing until React re-centres the new three-page window.
+        gsap.to(track, { x: destination, ...artworkKineticTween(Math.abs(destination - position()), releaseVelocity, preserveReleaseVelocity),
+            overwrite: true, onComplete() { if (!disposed) options.navigate(direction); } });
+    }
+    function release() {
+        if (disposed || settling || !pointerActive) return;
+        pointerActive = false;
+        const displacement = position();
+        const direction = artworkPointerDirection(displacement, pointerVelocity, width(), true, true);
+        if (Math.abs(displacement) >= motion.intentDistance) suppressClickUntil = view.performance.now() + 350;
+        if (direction) navigate(direction, pointerVelocity); else reset();
+    }
+    function selectionChanged() {
+        if (disposed) return;
+        pointer = null; pointerActive = false; settling = false; clearWheel();
+        gsap.killTweensOf(track); gsap.set(track, { x: 0 }); delete viewport.dataset.artworkDragging;
+        if (queued) {
+            view.cancelAnimationFrame(queueFrame);
+            queueFrame = view.requestAnimationFrame(() => {
+                queueFrame = 0;
+                if (!disposed && queued) { const direction = queued > 0 ? 1 : -1; queued -= direction; navigate(direction); }
+            });
+        }
     }
     function down(event: PointerEvent) {
         if (event.pointerType !== "mouse" || event.button !== 0 || settling || ignored(event.target)) return;
-        pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, dx: 0, axis: "pending" };
+        begin();
+        pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, axis: "pending" };
         options.onInteraction();
     }
     function move(event: PointerEvent) {
         if (!pointer || event.pointerId !== pointer.id) return;
         const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
         if (pointer.axis === "pending") {
-            if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
-            pointer.axis = Math.abs(dx) > Math.abs(dy) * 1.05 ? "horizontal" : "vertical";
-            if (pointer.axis === "horizontal") {
-                try { viewport.setPointerCapture(event.pointerId); } catch { /* Outside document. */ }
-                viewport.ownerDocument.getSelection()?.removeAllRanges();
-            }
+            if (Math.max(Math.abs(dx), Math.abs(dy)) < motion.intentDistance) return;
+            pointer.axis = Math.abs(dx) >= Math.abs(dy) * motion.axisLockRatio ? "horizontal" : "vertical";
+            if (pointer.axis === "vertical") { pointerActive = false; return; }
+            try { viewport.setPointerCapture(event.pointerId); } catch { /* Outside document. */ }
+            viewport.ownerDocument.getSelection()?.removeAllRanges();
         }
         if (pointer.axis !== "horizontal") return;
-        event.preventDefault(); pointer.dx = dx; preview(dx);
+        event.preventDefault(); preview(dx);
     }
     function end(event: PointerEvent) {
         if (!pointer || event.pointerId !== pointer.id) return;
         const gesture = pointer; pointer = null;
         try { viewport.releasePointerCapture(event.pointerId); } catch { /* Already released. */ }
-        if (gesture.axis !== "horizontal") return;
-        suppressClick = true;
-        if (event.type !== "pointercancel" && Math.abs(gesture.dx) >= 55) navigate(gesture.dx < 0 ? 1 : -1);
-        else reset();
+        if (gesture.axis !== "horizontal") { pointerActive = false; return; }
+        if (event.type === "pointercancel") reset(); else release();
+    }
+    function holdWheelTail() {
+        wheelLocked = true; view.clearTimeout(wheelUnlock);
+        wheelUnlock = view.setTimeout(() => { wheelUnlock = 0; wheelLocked = false; }, motion.wheelGestureEndMs);
     }
     function wheel(event: WheelEvent) {
-        if (event.ctrlKey || ignored(event.target)) return;
-        const horizontal = event.shiftKey ? event.deltaY || event.deltaX : event.deltaX;
-        if (!event.shiftKey && Math.abs(horizontal) <= Math.abs(event.deltaY) * 1.05) return;
+        if (event.ctrlKey || pointerActive || ignored(event.target)) return;
+        const horizontal = event.shiftKey || (Math.abs(event.deltaX) > 0 && Math.abs(event.deltaX) >= Math.abs(event.deltaY) * motion.axisLockRatio);
+        if (!horizontal) return;
         event.preventDefault(); options.onInteraction();
-        view.clearTimeout(wheelTimer);
-        if (!settling && !wheelLocked) {
-            wheelDistance += horizontal * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? width() : 1);
-            preview(-wheelDistance);
-        }
-        wheelTimer = view.setTimeout(() => {
-            if (!wheelLocked && Math.abs(wheelDistance) >= 45) { wheelLocked = true; navigate(wheelDistance > 0 ? 1 : -1); }
-            else reset();
-            wheelDistance = 0;
-            wheelTimer = view.setTimeout(() => { wheelLocked = false; }, 160);
-        }, 100);
+        if (wheelLocked) { holdWheelTail(); return; }
+        if (settling) return;
+        const delta = event.shiftKey ? event.deltaY : event.deltaX;
+        if (!delta) return;
+        const now = view.performance.now();
+        if (wheelTime > 0) wheelVelocity = artworkWheelVelocity(wheelVelocity, delta, now - wheelTime);
+        wheelTime = now;
+        wheelDistance = wheelDistance && Math.sign(wheelDistance) !== Math.sign(delta) ? delta : wheelDistance + delta;
+        gsap.killTweensOf(track); render(artworkWheelOffset(wheelDistance, width(), true));
+        view.clearTimeout(wheelReset);
+        if (Math.abs(wheelDistance) >= motion.wheelTrigger) {
+            const direction = wheelDistance > 0 ? 1 : -1, velocity = wheelVelocity;
+            holdWheelTail(); navigate(direction, velocity, true);
+        } else wheelReset = view.setTimeout(reset, motion.wheelGestureEndMs);
     }
     function click(event: MouseEvent) {
-        if (!suppressClick) return;
-        suppressClick = false; event.preventDefault(); event.stopImmediatePropagation();
+        if (!suppressClickUntil) return;
+        const suppress = view.performance.now() <= suppressClickUntil;
+        suppressClickUntil = 0;
+        if (suppress) { event.preventDefault(); event.stopImmediatePropagation(); }
     }
-    let geometry = frame.clientWidth;
+    function cancel() {
+        if (disposed) return;
+        const id = pointer?.id; pointer = null; pointerActive = false; queued = 0;
+        if (id !== undefined) { try { viewport.releasePointerCapture(id); } catch { /* Already released. */ } }
+        view.cancelAnimationFrame(queueFrame); queueFrame = 0;
+        settling = false; reset();
+    }
+    let geometry = width();
+    track.style.setProperty("--artwork-kinetic-step", `${geometry}px`);
     const resize = new ResizeObserver(() => {
-        if (Math.abs(frame.clientWidth - geometry) < 1) return;
-        geometry = frame.clientWidth; pointer = null; settling = false; queued = 0;
-        gsap.killTweensOf(frame); if (outgoing) gsap.killTweensOf(outgoing); outgoing?.remove(); outgoing = null;
-        gsap.set(frame, { x: 0 }); delete viewport.dataset.artworkDragging;
+        if (Math.abs(width() - geometry) < .5) return;
+        geometry = width(); track.style.setProperty("--artwork-kinetic-step", `${geometry}px`);
+        queued = 0; selectionChanged();
     });
-    resize.observe(frame);
+    resize.observe(viewport);
     viewport.addEventListener("pointerdown", down);
     view.addEventListener("pointermove", move, { passive: false });
     view.addEventListener("pointerup", end); view.addEventListener("pointercancel", end);
-    viewport.addEventListener("wheel", wheel, { passive: false }); viewport.addEventListener("click", click, true);
-    return { navigate, preview, reset, dispose() {
-        disposed = true; resize.disconnect(); view.clearTimeout(wheelTimer); gsap.killTweensOf(frame); if (outgoing) gsap.killTweensOf(outgoing); outgoing?.remove(); gsap.set(frame, { clearProps: "transform" });
+    viewport.addEventListener("wheel", wheel, { passive: false, capture: true });
+    viewport.addEventListener("click", click, true); view.addEventListener("blur", cancel);
+    return { navigate, begin, preview, release, reset, selectionChanged, dispose() {
+        disposed = true; resize.disconnect(); clearWheel(); view.clearTimeout(wheelUnlock); view.cancelAnimationFrame(queueFrame);
+        gsap.killTweensOf(track); gsap.set(track, { clearProps: "transform" }); track.style.removeProperty("--artwork-kinetic-step");
         delete viewport.dataset.artworkDragging;
         viewport.removeEventListener("pointerdown", down); view.removeEventListener("pointermove", move);
         view.removeEventListener("pointerup", end); view.removeEventListener("pointercancel", end);
-        viewport.removeEventListener("wheel", wheel); viewport.removeEventListener("click", click, true);
+        viewport.removeEventListener("wheel", wheel, true); viewport.removeEventListener("click", click, true); view.removeEventListener("blur", cancel);
     } };
 }

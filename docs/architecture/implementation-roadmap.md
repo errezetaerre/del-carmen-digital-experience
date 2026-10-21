@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.16
+Version: 1.17
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,7 +7,7 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-21
+Last Updated: 2026-10-20
  
 Current increment — 2026-10-20
 
@@ -588,3 +588,9 @@ The owner's v1 review adds fixed Standard glass boundaries with internal reading
 Incremental v3 is based on the owner's v2 review: animate one existing paragraph into a reversible reading surface without shifting the painting or its scroll position; retain approximately 60/40 landscape columns and switch both modes to portrait when compact; give Standard and portrait Artbook identical frame/image/caption measurements; carry each Standard border with its artwork during horizontal navigation. Immediate loading feedback and landscape dots outside the frame remain approved. This supersedes v2's content-only horizontal motion; vertical reading still occurs inside a stationary frame.
 
 The canonical Artwork Implementation document records module ownership and lifecycle. Production build/TypeScript, lint and emulated browser checks precede delivery. No catalogue or dependency edits, commit, push or production promotion are included. Physical-device and owner visual review remain next; database, commerce, PDF catalogue, visitor book, site-wide immersion and Academy learning stay separate future blocks.
+
+## Match Standard detail and gallery movement — 2026-10-20
+
+The owner merged PR #3 into main (`efa532c`) and approved the shared gallery composition. The next requested correction shares the approved `/artworks/[slug]` Standard kinetic calculations with the Home/Series gallery rather than maintaining a second fixed-duration slide. Collections inherits the Series viewer. A three-page framed window reveals its neighbour during the grip; only current and adjacent work data are rendered, with inactive slots inaccessible to input and assistive technology.
+
+Prepared on `fix/standard-artwork-kinetics`, as an incremental patch against that merge. Frame/image dimensions, centred expanded reading, responsive selection, current artwork/locale/query continuity and both Glass variants retain their approved presentation. This block does not publish production. Build, lint, equation-preservation checks and emulated pointer/touch/trackpad/keyboard/layout review precede delivery; actual Safari/iPhone, Android and iPad review remains with the owner. Commerce, database, PDF catalogue, visitor book, global immersion and Academy coursework stay separate.

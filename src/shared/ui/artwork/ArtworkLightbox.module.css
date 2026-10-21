@@ -129,3 +129,10 @@
 .embedded .panelInterior::-webkit-scrollbar { display: none; }
 .embedded[data-viewer-layout="landscape"] .panelContent { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
 .embedded[data-viewer-layout="landscape"] .caption { min-width: 0; width: auto; max-width: 100%; }
+
+/* The same framed page renders in a bounded Previous / Current / Next window. */
+.standardTrack { position: relative; flex: 1 1 auto; width: 100%; height: 100%; min-height: 0; max-height: var(--gallery-portrait-height, 940px); will-change: transform; }
+.standardScene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; min-height: 0; }
+.standardScene[inert] { pointer-events: none; user-select: none; -webkit-user-select: none; }
+.embedded[data-viewer-layout="landscape"] .standardTrack { max-height: 800px; }
+@media (prefers-reduced-motion: reduce) { .standardTrack { will-change: auto; } }

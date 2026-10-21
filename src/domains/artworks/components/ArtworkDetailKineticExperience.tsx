@@ -13,6 +13,7 @@ import {
 } from "react";
 import { useRouter } from "@/i18n/navigation";
 import gsap from "gsap";
+import { ARTWORK_KINETICS, artworkKineticTween, artworkPointerDirection, artworkPointerOffset, artworkPointerVelocity, artworkWheelOffset, artworkWheelVelocity } from "@/shared/ui/artwork/artworkKinetics";
 import { LinkButton } from "@/shared/ui/button";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 import sceneStyles from "./ArtworkDetailScene.module.css";
@@ -31,14 +32,8 @@ interface ArtworkDetailKineticExperienceProps {
 
 type Direction = -1 | 1;
 
-const AXIS_LOCK_RATIO = 1.05;
-const EDGE_RESISTANCE = 0.18;
-const MOMENTUM_FACTOR = 0.24;
-const SNAP_DISTANCE_RATIO = 0.12;
-const SNAP_VELOCITY = 420;
-const WHEEL_TRIGGER = 72;
-const WHEEL_PREVIEW_MULTIPLIER = 1;
-const WHEEL_GESTURE_END_MS = 140;
+const { axisLockRatio: AXIS_LOCK_RATIO, wheelTrigger: WHEEL_TRIGGER,
+    wheelGestureEndMs: WHEEL_GESTURE_END_MS } = ARTWORK_KINETICS;
 
 /*
  * Trackpad momentum can survive a client-side route handoff. Keep this
@@ -429,7 +424,7 @@ export default function ArtworkDetailKineticExperience({
 
             gsap.to(track, {
                 x: baseXRef.current,
-                duration: 0.55,
+                duration: ARTWORK_KINETICS.resetDuration,
                 ease: "power3.out",
                 overwrite: true,
                 onUpdate() {
@@ -499,24 +494,11 @@ export default function ArtworkDetailKineticExperience({
              * instead of producing the old post-release acceleration spike.
              * Pointer drag keeps the already-approved timing below.
              */
-            const releaseSpeed = Math.abs(releaseVelocity);
-            const kineticDuration =
-                preserveReleaseVelocity && releaseSpeed > 1
-                    ? gsap.utils.clamp(
-                          0.14,
-                          0.95,
-                          (2 * remainingDistance) / releaseSpeed,
-                      )
-                    : gsap.utils.clamp(
-                          0.38,
-                          0.72,
-                          remainingDistance / 1500 + 0.28,
-                      );
+            const timing = artworkKineticTween(remainingDistance, releaseVelocity, preserveReleaseVelocity);
 
             gsap.to(track, {
                 x: destination,
-                duration: kineticDuration,
-                ease: preserveReleaseVelocity ? "power1.out" : "power3.out",
+                ...timing,
                 overwrite: true,
                 onUpdate() {
                     positionRef.current =
@@ -720,12 +702,9 @@ export default function ArtworkDetailKineticExperience({
             const now = performance.now();
             const previousWheelTime = wheelLastEventTimeRef.current;
             if (previousWheelTime > 0) {
-                const dt = Math.max(now - previousWheelTime, 8);
-                const instantaneousVelocity =
-                    (-delta * WHEEL_PREVIEW_MULTIPLIER * 1000) / dt;
-                wheelVelocityRef.current =
-                    wheelVelocityRef.current * 0.68 +
-                    instantaneousVelocity * 0.32;
+                wheelVelocityRef.current = artworkWheelVelocity(
+                    wheelVelocityRef.current, delta, now - previousWheelTime,
+                );
             }
             wheelLastEventTimeRef.current = now;
 
@@ -746,18 +725,9 @@ export default function ArtworkDetailKineticExperience({
             const accumulated = wheelDistanceRef.current;
             const direction: Direction = accumulated > 0 ? 1 : -1;
             const width = viewportWidthRef.current;
-            const previewLimit = width * 0.42;
             const hasDestination = Boolean(getHref(direction));
 
-            let previewOffset = gsap.utils.clamp(
-                -previewLimit,
-                previewLimit,
-                -accumulated * WHEEL_PREVIEW_MULTIPLIER,
-            );
-
-            if (!hasDestination) {
-                previewOffset *= EDGE_RESISTANCE;
-            }
+            const previewOffset = artworkWheelOffset(accumulated, width, hasDestination);
 
             /*
              * Direct rendering is intentional: wheel/trackpad movement must
@@ -972,8 +942,8 @@ export default function ArtworkDetailKineticExperience({
 
         if (!horizontalDragRef.current) {
             if (
-                Math.abs(deltaX) < 8 &&
-                Math.abs(deltaY) < 8
+                Math.abs(deltaX) < ARTWORK_KINETICS.intentDistance &&
+                Math.abs(deltaY) < ARTWORK_KINETICS.intentDistance
             ) {
                 return;
             }
@@ -1002,33 +972,14 @@ export default function ArtworkDetailKineticExperience({
 
         event.preventDefault();
 
-        let offset = deltaX;
-
-        if (offset > 0 && !previousHref) {
-            offset *= EDGE_RESISTANCE;
-        }
-
-        if (offset < 0 && !nextHref) {
-            offset *= EDGE_RESISTANCE;
-        }
+        const offset = artworkPointerOffset(deltaX, Boolean(previousHref), Boolean(nextHref));
 
         setTrackX(baseXRef.current + offset);
 
         const now = performance.now();
-        const elapsed = Math.max(
-            now - lastTimeRef.current,
-            1,
+        velocityRef.current = artworkPointerVelocity(
+            velocityRef.current, event.clientX - lastXRef.current, now - lastTimeRef.current,
         );
-
-        const pointerDelta =
-            event.clientX - lastXRef.current;
-
-        const instantaneousVelocity =
-            (pointerDelta / elapsed) * 1000;
-
-        velocityRef.current =
-            velocityRef.current * 0.72 +
-            instantaneousVelocity * 0.28;
 
         lastXRef.current = event.clientX;
         lastTimeRef.current = now;
@@ -1077,32 +1028,9 @@ export default function ArtworkDetailKineticExperience({
             positionRef.current - baseXRef.current;
 
         const velocity = velocityRef.current;
-
-        const projected =
-            displacement +
-            velocity * MOMENTUM_FACTOR;
-
-        const threshold =
-            viewportWidthRef.current *
-            SNAP_DISTANCE_RATIO;
-
-        if (
-            nextHref &&
-            (projected <= -threshold ||
-                velocity <= -SNAP_VELOCITY)
-        ) {
-            navigate(1, velocity);
-            return;
-        }
-
-        if (
-            previousHref &&
-            (projected >= threshold ||
-                velocity >= SNAP_VELOCITY)
-        ) {
-            navigate(-1, velocity);
-            return;
-        }
+        const direction = artworkPointerDirection(displacement, velocity, viewportWidthRef.current,
+            Boolean(previousHref), Boolean(nextHref));
+        if (direction) { navigate(direction, velocity); return; }
 
         resetToCurrent();
     }

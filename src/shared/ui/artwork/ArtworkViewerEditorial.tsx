@@ -18,9 +18,9 @@ import styles from "./ArtworkExperienceViewer.module.css";
 
 /** One portrait composition supplies identical geometry to both gallery modes. */
 export default function ArtworkViewerEditorial({ artwork, portalTarget, detailsQuery, detailsLabel, showDetails, showAllWorks,
-    standard = false, positionDots, zoomLayerRef, readingExpanded, onReadingChange, hint }: {
+    standard = false, active = true, positionDots, zoomLayerRef, readingExpanded, onReadingChange, hint }: {
     artwork: Artwork; portalTarget: HTMLElement | null; detailsQuery?: string; detailsLabel: string; showDetails: boolean; showAllWorks: boolean;
-    standard?: boolean; positionDots?: ReactNode; zoomLayerRef?: RefObject<HTMLDivElement | null>;
+    standard?: boolean; active?: boolean; positionDots?: ReactNode; zoomLayerRef?: RefObject<HTMLDivElement | null>;
     readingExpanded?: boolean; onReadingChange?(expanded: boolean): void; hint?: ReactNode;
 }) {
     const locale = useLocale(), t = useTranslations("Artwork");
@@ -49,7 +49,7 @@ export default function ArtworkViewerEditorial({ artwork, portalTarget, detailsQ
                         {standard && <div className={glass.imageReflection} aria-hidden="true" />}
                     </div>
                 </div>
-                {standard && hasHighlights && artwork.creationStatus === "completed" && <ArtworkArrivalAccent key={artwork.id} artworkId={artwork.id} surface="lightbox" />}
+                {standard && active && hasHighlights && artwork.creationStatus === "completed" && <ArtworkArrivalAccent key={artwork.id} artworkId={artwork.id} surface="lightbox" />}
             </ArtworkImageHighlights>
             {!standard && <ArtworkDetailViewer artwork={artwork} triggerOnly portalTarget={portalTarget} />}
             {hint}

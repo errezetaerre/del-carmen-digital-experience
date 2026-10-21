@@ -30,6 +30,7 @@ import useDialogFocus from "@/shared/hooks/useDialogFocus";
 import ArtworkReadingPanel from "./ArtworkReadingPanel";
 import ArtworkViewerEditorial from "./ArtworkViewerEditorial";
 import { bindArtworkStandardNavigation, type ArtworkStandardNavigation } from "./artworkStandardNavigation";
+import { ARTWORK_KINETICS } from "./artworkKinetics";
 
 export interface ArtworkLightboxProps {
     artworks: Artwork[];
@@ -196,18 +197,6 @@ export default function ArtworkLightbox({
     }, [artwork?.id, isOpen, onReady]);
     const dialogRef = useRef<HTMLDivElement>(null);
     useDialogFocus(dialogRef, !embedded && isOpen && Boolean(artwork && primaryImage), { initialFocusRef: closeButtonRef });
-
-    const techniqueLabel =
-        artwork
-            ? locale === "en" ? `${artwork.medium} on ${artwork.support}` : formatArtworkTechnique(artwork, locale)
-            : "";
-
-    const detailsHref = artwork
-        ? `/artworks/${artwork.slug}${detailsQuery
-            ? `?${detailsQuery}`
-            : ""
-        }`
-        : "/artworks";
 
     const readingKey = JSON.stringify([isOpen, isGlass, artwork?.id, artwork?.description]);
     const [previousReadingKey, setPreviousReadingKey] = useState(readingKey);
@@ -400,11 +389,11 @@ export default function ArtworkLightbox({
             onInteraction: () => setSwipeHintDismissed(true),
         };
     });
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!embedded || !isGlass || !isOpen || total < 2 || !viewportRef.current) return;
-        const frame = viewportRef.current.querySelector<HTMLElement>("[data-standard-frame]");
-        if (!frame) return;
-        const controller = bindArtworkStandardNavigation(viewportRef.current, frame, {
+        const track = viewportRef.current.querySelector<HTMLElement>("[data-standard-track]");
+        if (!track) return;
+        const controller = bindArtworkStandardNavigation(viewportRef.current, track, {
             navigate: direction => navigationOptions.current.navigate(direction),
             zoomed: () => navigationOptions.current.zoomed(),
             onInteraction: () => navigationOptions.current.onInteraction(),
@@ -412,6 +401,7 @@ export default function ArtworkLightbox({
         navigationRef.current = controller;
         return () => { controller.dispose(); navigationRef.current = null; };
     }, [embedded, isGlass, isOpen, total]);
+    useLayoutEffect(() => { navigationRef.current?.selectionChanged(); }, [currentIndex, artwork?.id]);
 
     /* =========================================================
        RESET WHEN OPENING
@@ -644,6 +634,7 @@ export default function ArtworkLightbox({
         if (
             pointers.size === 1
         ) {
+            navigationRef.current?.begin();
             swipeAxisRef.current = "pending";
             hadMultiTouchRef.current =
                 false;
@@ -748,8 +739,9 @@ export default function ArtworkLightbox({
             const dx = event.clientX - swipeStartRef.current.x;
             const dy = event.clientY - swipeStartRef.current.y;
             if (swipeAxisRef.current === "pending") {
-                if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
-                if (Math.abs(dx) < Math.abs(dy) * 1.05) {
+                if (Math.max(Math.abs(dx), Math.abs(dy)) < ARTWORK_KINETICS.intentDistance) return;
+                if (Math.abs(dx) < Math.abs(dy) * ARTWORK_KINETICS.axisLockRatio) {
+                    navigationRef.current?.reset();
                     swipeAxisRef.current = "vertical";
                     swipeStartRef.current = null;
                     panGestureRef.current = null;
@@ -961,11 +953,12 @@ export default function ArtworkLightbox({
         panGestureRef.current =
             null;
 
+        if (navigationRef.current) { navigationRef.current.release(); return; }
+
         if (
             Math.abs(distance) <
             SWIPE_THRESHOLD
         ) {
-            navigationRef.current?.reset();
             return;
         }
 
@@ -1016,15 +1009,15 @@ export default function ArtworkLightbox({
 
     const Panel = isGlass ? GlassArtworkFrame : "div";
 
-    const positionDots = (
+    const renderPositionDots = (selectedIndex: number) => (
                     total > 1 && (
                         <div
                             data-lightbox-position-dots
                             className={isGlass ? styles.positionDots : `${styles.standardDots} relative z-40 flex h-5 shrink-0 items-center justify-center gap-2 md:h-6 [@media(orientation:landscape)_and_(max-height:600px)]:h-4`}
-                            aria-label={t("position", { index: currentIndex + 1, total })}
+                            aria-label={t("position", { index: selectedIndex + 1, total })}
                         >
                             {artworks.map((item, index) => {
-                                const isActive = index === currentIndex;
+                                const isActive = index === selectedIndex;
 
                                 return (
                                     <button
@@ -1055,99 +1048,29 @@ export default function ArtworkLightbox({
                     )
     );
 
-    const content = (
-        <div
-            className={isGlass ? `${styles.dialog} ${embedded ? styles.embedded : ""}` : "fixed inset-0 z-[100] overflow-hidden bg-[#030303] text-white"}
-            data-lenis-prevent={isGlass || undefined}
-            ref={dialogRef}
-            role={embedded ? undefined : "dialog"}
-            aria-modal={embedded ? undefined : true}
-            data-lightbox-current={artwork.id}
-            data-viewer-layout={layout}
-            aria-label={`Artwork viewer — ${artwork.title}`}
-        >
-            {/* Fullscreen atmosphere — intentionally subtle */}
-            <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 overflow-hidden"
-            >
-                <div className="artwork-lightbox-aura absolute left-1/2 top-[43%] h-[58vh] w-[78vw] max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(190,145,72,0.18)_0%,rgba(125,91,52,0.10)_34%,rgba(71,55,39,0.04)_54%,transparent_74%)] blur-[42px]" />
-                <div className="artwork-lightbox-smoke-a absolute left-[-16%] top-[29%] h-[120px] w-[88%] rotate-[-4deg] rounded-[50%] bg-[linear-gradient(100deg,transparent_0%,rgba(117,157,166,0.025)_20%,rgba(220,210,190,0.06)_42%,rgba(190,147,82,0.055)_60%,transparent_100%)] blur-[24px]" />
-                <div className="artwork-lightbox-smoke-b absolute bottom-[22%] right-[-18%] h-[140px] w-[90%] rotate-[5deg] rounded-[50%] bg-[linear-gradient(80deg,transparent_0%,rgba(190,211,215,0.025)_20%,rgba(220,208,187,0.05)_42%,rgba(188,143,77,0.06)_62%,transparent_100%)] blur-[26px]" />
-                <span className="artwork-particle artwork-particle-1" />
-                <span className="artwork-particle artwork-particle-2" />
-                <span className="artwork-particle artwork-particle-3" />
-                <span className="artwork-particle artwork-particle-4" />
-                <span className="artwork-particle artwork-particle-5" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_28%,rgba(0,0,0,0.28)_68%,rgba(0,0,0,0.80)_100%)]" />
-            </div>
+    const positionDots = renderPositionDots(currentIndex);
 
-            {/* Counter — inset from viewport edges */}
-            <div className={isGlass ? `${styles.counter} fixed left-7 top-7 z-[140] font-sans text-[10px] uppercase tracking-[0.22em] text-white/35 md:left-10 md:top-9` : "fixed left-7 top-7 z-[140] font-sans text-[10px] uppercase tracking-[0.22em] text-white/35 md:left-10 md:top-9"}>
-                {String(currentIndex + 1).padStart(2, "0")}
-                {" / "}
-                {String(total).padStart(2, "0")}
-            </div>
-
-            {/* Close */}
-            {!embedded && <button
-                ref={closeButtonRef}
-                type="button"
-                onClick={onClose}
-                onPointerDown={(event) => event.stopPropagation()}
-                aria-label={t("closeViewer")}
-                className={isGlass ? `${styles.closeControl} fixed right-4 top-4 z-[150] flex h-11 w-11 items-center justify-center rounded-full border border-transparent font-sans text-[32px] font-light leading-none text-white/75 transition-all duration-300 hover:border-brand-gold/35 hover:bg-brand-gold/[0.06] hover:text-brand-gold focus-visible:border-brand-gold/35 focus-visible:bg-brand-gold/[0.06] focus-visible:text-brand-gold focus-visible:outline-none md:right-8 md:top-6` : "fixed right-4 top-4 z-[150] flex h-11 w-11 items-center justify-center rounded-full border border-transparent font-sans text-[32px] font-light leading-none text-white/75 transition-all duration-300 hover:border-brand-gold/35 hover:bg-brand-gold/[0.06] hover:text-brand-gold focus-visible:border-brand-gold/35 focus-visible:bg-brand-gold/[0.06] focus-visible:text-brand-gold focus-visible:outline-none md:right-8 md:top-6"}
-            >
-                ×
-            </button>}
-
-            {/* Fixed artwork navigation — visible on mobile too */}
-            {total > 1 && (
-                <>
-                    <button
-                        type="button"
-                        onClick={goPrevious}
-                        data-artwork-arrival-navigation
-                        onPointerDown={(event) => event.stopPropagation()}
-                        aria-label={t("previousArtwork")}
-                        className="fixed left-1 top-[42%] z-[145] flex h-12 w-12 -translate-y-1/2 items-center justify-center font-display text-4xl font-light text-white/45 transition-all duration-300 hover:scale-110 hover:text-brand-gold md:left-5 md:top-1/2 md:h-14 md:w-14 lg:left-10"
-                    >
-                        ‹
-                    </button>
-                    <button
-                        type="button"
-                        onClick={goNext}
-                        data-artwork-arrival-navigation
-                        onPointerDown={(event) => event.stopPropagation()}
-                        aria-label={t("nextArtwork")}
-                        className="fixed right-1 top-[42%] z-[145] flex h-12 w-12 -translate-y-1/2 items-center justify-center font-display text-4xl font-light text-white/45 transition-all duration-300 hover:scale-110 hover:text-brand-gold md:right-5 md:top-1/2 md:h-14 md:w-14 lg:right-10"
-                    >
-                        ›
-                    </button>
-                </>
-            )}
-
-            {/* Viewer */}
-            <div
-                ref={viewportRef}
-                className={isGlass ? styles.viewer : `${hasHighlights ? styles.standardViewer : ""} relative z-20 flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-3 md:px-20 md:py-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-3 [@media(orientation:landscape)_and_(max-height:600px)]:py-2`}
-                data-lenis-prevent={nativeScroll || undefined}
-                data-lightbox-scroll-viewport={nativeScroll || undefined}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerCancel={handlePointerCancel}
-                onClick={handleBackdropClick}
-            >
-                <Panel data-lightbox-content={isGlass ? "true" : undefined} data-lightbox-panel data-standard-frame={embedded || undefined} data-lightbox-layout={layout}
+    // All three slots use the same artwork markup; only Current owns controls,
+    // reading state, zoom refs, guidance and the arrival decoration.
+    function renderPanel(artwork: Artwork, frameIndex: number, slot: "previous" | "current" | "next" = "current") {
+        const active = slot === "current";
+        const primaryImage = artwork.images.primary;
+        const hasHighlights = active && getArtworkPresentation(artwork, locale).badges.some(badge => badge.kind !== "planned" && badge.kind !== "in-progress");
+        const techniqueLabel = locale === "en" ? `${artwork.medium} on ${artwork.support}` : formatArtworkTechnique(artwork, locale);
+        const detailsHref = `/artworks/${artwork.slug}${detailsQuery ? `?${detailsQuery}` : ""}`;
+        const frameDescriptionExpanded = active && descriptionExpanded;
+        const frameId = `${instanceId}-${slot}`;
+        const positionDots = renderPositionDots(frameIndex);
+        return (
+                <Panel data-lightbox-content={isGlass ? "true" : undefined} data-lightbox-panel data-standard-frame={embedded && active || undefined} data-standard-preview-frame={embedded && !active || undefined} data-standard-artwork={embedded ? artwork.id : undefined} data-lightbox-layout={layout}
                     className={isGlass ? styles.panelLayout : `${styles.standardPanel} relative flex h-[calc(100svh-24px)] w-full max-w-[1040px] flex-col lg:translate-x-[1.5vw] md:h-[min(90vh,900px)] [@media(orientation:landscape)_and_(max-height:600px)]:h-[calc(100svh-16px)] [@media(orientation:landscape)_and_(max-height:600px)]:max-w-none [@media(orientation:landscape)_and_(max-height:600px)]:translate-x-0`}
                 >
                     {embedded && layout === "portrait" ? <div className={styles.panelInterior} data-lightbox-interior>
                         <ArtworkViewerEditorial key={artwork.id} artwork={artwork} portalTarget={null}
-                            standard positionDots={positionDots} zoomLayerRef={zoomLayerRef} detailsQuery={detailsQuery}
+                            standard active={active} positionDots={positionDots} zoomLayerRef={active ? zoomLayerRef : undefined} detailsQuery={detailsQuery}
                             detailsLabel={detailsLabel} showDetails={showDetailsCta} showAllWorks={showAllWorksCta}
-                            readingExpanded={descriptionExpanded} onReadingChange={setDescriptionExpanded}
-                            hint={<InteractionHint active={isOpen} dismissed={swipeHintDismissed} label={t("swipe")} visibility="coarse" />} />
+                            readingExpanded={frameDescriptionExpanded} onReadingChange={active ? setDescriptionExpanded : undefined}
+                            hint={<InteractionHint active={isOpen && active} dismissed={swipeHintDismissed} label={t("swipe")} visibility="coarse" />} />
                     </div> : <>
                     <div className={embedded ? styles.panelInterior : styles.legacyInterior} data-lightbox-interior={embedded || undefined}>
                     <div className={embedded ? styles.panelContent : styles.legacyInterior}>
@@ -1163,7 +1086,7 @@ export default function ArtworkLightbox({
                         <ArtworkImageHighlights artwork={artwork} className={isGlass ? styles.imageWrapper : "relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center"}>
                             <div className={isGlass ? styles.imageMask : "contents"}>
                             <div
-                                ref={zoomLayerRef}
+                                ref={active ? zoomLayerRef : undefined}
                                 data-artwork-arrival-zoom
                                 data-lightbox-content="true"
                                 className={isGlass ? styles.zoomViewport : "relative flex h-full max-h-full w-full max-w-full origin-center items-center justify-center overflow-hidden will-change-transform"}
@@ -1196,7 +1119,7 @@ export default function ArtworkLightbox({
 
                         {/* Ephemeral touch guidance — shared interaction language */}
                         <InteractionHint
-                            active={isOpen}
+                            active={isOpen && active}
                             dismissed={swipeHintDismissed}
                             label={t("swipe")}
                             visibility="coarse"
@@ -1209,8 +1132,8 @@ export default function ArtworkLightbox({
                     <div
                         data-lightbox-content="true"
                         data-lightbox-caption
-                        data-description-expanded={descriptionExpanded || undefined}
-                        inert={descriptionExpanded}
+                        data-description-expanded={frameDescriptionExpanded || undefined}
+                        inert={frameDescriptionExpanded}
                         className={isGlass ? styles.caption : "relative z-30 w-full shrink-0 px-5 pb-4 pt-3 text-center md:px-10 md:pb-5 md:pt-4 [@media(orientation:landscape)_and_(max-height:600px)]:h-[92px] [@media(orientation:landscape)_and_(max-height:600px)]:px-6 [@media(orientation:landscape)_and_(max-height:600px)]:pb-2 [@media(orientation:landscape)_and_(max-height:600px)]:pt-1"}
                     >
                         <p className="font-sans text-[10px] font-medium uppercase tracking-[0.30em] text-brand-gold/90 md:text-xs [@media(orientation:landscape)_and_(max-height:600px)]:text-[8px]">
@@ -1229,25 +1152,25 @@ export default function ArtworkLightbox({
                             </span>
                         </div>
 
-                        {isGlass ? <div aria-hidden className={styles.separator} dangerouslySetInnerHTML={{ __html: glassSeparatorMarkup(instanceId + "-separator") }} /> : <div aria-hidden className="mx-auto mt-3 h-px w-16 bg-gradient-to-r from-transparent via-brand-gold/45 to-transparent [@media(orientation:landscape)_and_(max-height:600px)]:mt-1" />}
+                        {isGlass ? <div aria-hidden className={styles.separator} dangerouslySetInnerHTML={{ __html: glassSeparatorMarkup(frameId + "-separator") }} /> : <div aria-hidden className="mx-auto mt-3 h-px w-16 bg-gradient-to-r from-transparent via-brand-gold/45 to-transparent [@media(orientation:landscape)_and_(max-height:600px)]:mt-1" />}
 
                         {isGlass ? (
                             <div className={styles.descriptionSlot}>
-                                <p ref={descriptionRef} lang={artworkTextLocale(artwork, locale)} className={`${styles.descriptionPreview} font-sans text-sm font-light leading-6 text-white/45`} aria-hidden={descriptionExpanded || undefined}>
+                                <p ref={active ? descriptionRef : undefined} lang={artworkTextLocale(artwork, locale)} className={`${styles.descriptionPreview} font-sans text-sm font-light leading-6 text-white/45`} aria-hidden={frameDescriptionExpanded || undefined}>
                                     {artwork.description}
                                 </p>
-                                {(descriptionOverflows || descriptionExpanded || (embedded && Boolean(artwork.description?.trim()))) && (
+                                {(descriptionOverflows || frameDescriptionExpanded || (embedded && Boolean(artwork.description?.trim()))) && (
                                     <button
-                                        ref={descriptionButtonRef}
+                                        ref={active ? descriptionButtonRef : undefined}
                                         type="button"
                                         data-lightbox-description-toggle
-                                        aria-expanded={descriptionExpanded}
-                                        aria-controls={descriptionExpanded ? `${instanceId}-description` : undefined}
+                                        aria-expanded={frameDescriptionExpanded}
+                                        aria-controls={frameDescriptionExpanded ? `${frameId}-description` : undefined}
                                         className={`${styles.readButton} font-sans text-[9px] uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-brand-gold`}
                                         onPointerDown={(event) => event.stopPropagation()}
                                         onClick={() => { dismissSwipeHint(); setDescriptionExpanded((expanded) => !expanded); }}
                                     >
-                                        {t(descriptionExpanded ? "readLess" : "readMore")}
+                                        {t(frameDescriptionExpanded ? "readLess" : "readMore")}
                                     </button>
                                 )}
                             </div>
@@ -1351,12 +1274,110 @@ export default function ArtworkLightbox({
                     </div>
                     </div>
                     </div>
-                    <ArtworkReadingPanel id={`${instanceId}-description`} title={artwork.title} description={artwork.description}
-                        lang={artworkTextLocale(artwork, locale)} expanded={isGlass && descriptionExpanded}
+                    <ArtworkReadingPanel id={`${frameId}-description`} title={artwork.title} description={artwork.description}
+                        lang={artworkTextLocale(artwork, locale)} expanded={isGlass && frameDescriptionExpanded}
                         landscape={embedded && layout === "landscape"}
                         onClose={() => { setDescriptionExpanded(false); requestAnimationFrame(() => descriptionButtonRef.current?.focus({ preventScroll: true })); }} />
                     </>}
                 </Panel>
+        );
+    }
+
+    const content = (
+        <div
+            className={isGlass ? `${styles.dialog} ${embedded ? styles.embedded : ""}` : "fixed inset-0 z-[100] overflow-hidden bg-[#030303] text-white"}
+            data-lenis-prevent={isGlass || undefined}
+            ref={dialogRef}
+            role={embedded ? undefined : "dialog"}
+            aria-modal={embedded ? undefined : true}
+            data-lightbox-current={artwork.id}
+            data-viewer-layout={layout}
+            aria-label={`Artwork viewer — ${artwork.title}`}
+        >
+            {/* Fullscreen atmosphere — intentionally subtle */}
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 overflow-hidden"
+            >
+                <div className="artwork-lightbox-aura absolute left-1/2 top-[43%] h-[58vh] w-[78vw] max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(190,145,72,0.18)_0%,rgba(125,91,52,0.10)_34%,rgba(71,55,39,0.04)_54%,transparent_74%)] blur-[42px]" />
+                <div className="artwork-lightbox-smoke-a absolute left-[-16%] top-[29%] h-[120px] w-[88%] rotate-[-4deg] rounded-[50%] bg-[linear-gradient(100deg,transparent_0%,rgba(117,157,166,0.025)_20%,rgba(220,210,190,0.06)_42%,rgba(190,147,82,0.055)_60%,transparent_100%)] blur-[24px]" />
+                <div className="artwork-lightbox-smoke-b absolute bottom-[22%] right-[-18%] h-[140px] w-[90%] rotate-[5deg] rounded-[50%] bg-[linear-gradient(80deg,transparent_0%,rgba(190,211,215,0.025)_20%,rgba(220,208,187,0.05)_42%,rgba(188,143,77,0.06)_62%,transparent_100%)] blur-[26px]" />
+                <span className="artwork-particle artwork-particle-1" />
+                <span className="artwork-particle artwork-particle-2" />
+                <span className="artwork-particle artwork-particle-3" />
+                <span className="artwork-particle artwork-particle-4" />
+                <span className="artwork-particle artwork-particle-5" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_28%,rgba(0,0,0,0.28)_68%,rgba(0,0,0,0.80)_100%)]" />
+            </div>
+
+            {/* Counter — inset from viewport edges */}
+            <div className={isGlass ? `${styles.counter} fixed left-7 top-7 z-[140] font-sans text-[10px] uppercase tracking-[0.22em] text-white/35 md:left-10 md:top-9` : "fixed left-7 top-7 z-[140] font-sans text-[10px] uppercase tracking-[0.22em] text-white/35 md:left-10 md:top-9"}>
+                {String(currentIndex + 1).padStart(2, "0")}
+                {" / "}
+                {String(total).padStart(2, "0")}
+            </div>
+
+            {/* Close */}
+            {!embedded && <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={onClose}
+                onPointerDown={(event) => event.stopPropagation()}
+                aria-label={t("closeViewer")}
+                className={isGlass ? `${styles.closeControl} fixed right-4 top-4 z-[150] flex h-11 w-11 items-center justify-center rounded-full border border-transparent font-sans text-[32px] font-light leading-none text-white/75 transition-all duration-300 hover:border-brand-gold/35 hover:bg-brand-gold/[0.06] hover:text-brand-gold focus-visible:border-brand-gold/35 focus-visible:bg-brand-gold/[0.06] focus-visible:text-brand-gold focus-visible:outline-none md:right-8 md:top-6` : "fixed right-4 top-4 z-[150] flex h-11 w-11 items-center justify-center rounded-full border border-transparent font-sans text-[32px] font-light leading-none text-white/75 transition-all duration-300 hover:border-brand-gold/35 hover:bg-brand-gold/[0.06] hover:text-brand-gold focus-visible:border-brand-gold/35 focus-visible:bg-brand-gold/[0.06] focus-visible:text-brand-gold focus-visible:outline-none md:right-8 md:top-6"}
+            >
+                ×
+            </button>}
+
+            {/* Fixed artwork navigation — visible on mobile too */}
+            {total > 1 && (
+                <>
+                    <button
+                        type="button"
+                        onClick={goPrevious}
+                        data-artwork-arrival-navigation
+                        onPointerDown={(event) => event.stopPropagation()}
+                        aria-label={t("previousArtwork")}
+                        className="fixed left-1 top-[42%] z-[145] flex h-12 w-12 -translate-y-1/2 items-center justify-center font-display text-4xl font-light text-white/45 transition-all duration-300 hover:scale-110 hover:text-brand-gold md:left-5 md:top-1/2 md:h-14 md:w-14 lg:left-10"
+                    >
+                        ‹
+                    </button>
+                    <button
+                        type="button"
+                        onClick={goNext}
+                        data-artwork-arrival-navigation
+                        onPointerDown={(event) => event.stopPropagation()}
+                        aria-label={t("nextArtwork")}
+                        className="fixed right-1 top-[42%] z-[145] flex h-12 w-12 -translate-y-1/2 items-center justify-center font-display text-4xl font-light text-white/45 transition-all duration-300 hover:scale-110 hover:text-brand-gold md:right-5 md:top-1/2 md:h-14 md:w-14 lg:right-10"
+                    >
+                        ›
+                    </button>
+                </>
+            )}
+
+            {/* Viewer */}
+            <div
+                ref={viewportRef}
+                className={isGlass ? styles.viewer : `${hasHighlights ? styles.standardViewer : ""} relative z-20 flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-3 md:px-20 md:py-8 [@media(orientation:landscape)_and_(max-height:600px)]:px-3 [@media(orientation:landscape)_and_(max-height:600px)]:py-2`}
+                data-lenis-prevent={nativeScroll || undefined}
+                data-lightbox-scroll-viewport={nativeScroll || undefined}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerCancel}
+                onClick={handleBackdropClick}
+            >
+                {embedded && isGlass ? <div className={styles.standardTrack} data-standard-track>
+                    {(total > 1 ? [-1, 0, 1] as const : [0] as const).map(offset => {
+                        const index = (currentIndex + offset + total) % total;
+                        const slot = offset === -1 ? "previous" : offset === 1 ? "next" : "current";
+                        return <div key={slot} className={styles.standardScene} data-standard-scene={slot}
+                            inert={offset !== 0} aria-hidden={offset !== 0 || undefined}
+                            style={{ transform: `translateX(calc(${offset} * var(--artwork-kinetic-step, 100%)))` }}>
+                            {renderPanel(artworks[index], index, slot)}
+                        </div>;
+                    })}
+                </div> : renderPanel(artwork, currentIndex)}
                 {embedded && layout === "landscape" && <div className={styles.externalDots}>{positionDots}</div>}
             </div>
 
