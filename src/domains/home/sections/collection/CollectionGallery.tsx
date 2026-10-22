@@ -36,6 +36,8 @@ interface CollectionGalleryProps {
     imageVariant?: ArtworkImageVariant;
 
     detailQuery?: string;
+    className?: string;
+    artworkPresentation?: "default" | "archive";
 }
 
 export default function CollectionGallery({
@@ -43,6 +45,8 @@ export default function CollectionGallery({
     interaction = "lightbox",
     imageVariant = "thumbnail",
     detailQuery,
+    className,
+    artworkPresentation = "default",
 }: CollectionGalleryProps) {
     const router = useRouter();
 
@@ -54,6 +58,7 @@ export default function CollectionGallery({
     const [isPending, startTransition] = useTransition();
     const [pendingArtworkId, setPendingArtworkId] = useState<string | null>(null);
     const pendingArtworkRef = useRef<string | null>(null);
+    const revealedArchiveArtworks = useRef(new Set<string>());
 
     useEffect(() => {
         if (!isPending) {
@@ -99,6 +104,11 @@ export default function CollectionGallery({
             }
 
             cards.forEach((card) => {
+                const artworkId = card.dataset.collectionArtwork ?? "";
+                if (artworkPresentation === "archive" && revealedArchiveArtworks.current.has(artworkId)) {
+                    gsap.set(card, { clearProps: "opacity,visibility,transform" });
+                    return;
+                }
                 gsap.fromTo(
                     card,
                     {
@@ -112,6 +122,9 @@ export default function CollectionGallery({
                         scale: 1,
                         duration: 1,
                         ease: "power2.out",
+                        onComplete: () => {
+                            if (artworkPresentation === "archive") revealedArchiveArtworks.current.add(artworkId);
+                        },
 
                         scrollTrigger: {
                             trigger: card,
@@ -126,7 +139,7 @@ export default function CollectionGallery({
         return () => {
             context.revert();
         };
-    }, [artworks]);
+    }, [artworks, artworkPresentation]);
 
     const handleOpen = (
         artwork: Artwork,
@@ -152,7 +165,7 @@ export default function CollectionGallery({
         <>
             <div
                 ref={galleryRef}
-                className="
+                className={className ?? `
           grid
           grid-cols-2
           items-start
@@ -168,17 +181,18 @@ export default function CollectionGallery({
           [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-3
           [@media(orientation:landscape)_and_(max-height:600px)]:!gap-x-4
           [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
-        "
+        `}
             >
                 {artworks.map(
                     (artwork) => (
                         <div
                             key={artwork.id}
-                            data-collection-artwork
+                            data-collection-artwork={artwork.id}
                             className="w-full"
                         >
                             <CollectionArtwork
                                 artwork={artwork}
+                                presentation={artworkPresentation}
                                 loading={isPending && pendingArtworkId === artwork.id}
                                 imageVariant={imageVariant}
                                 onOpen={() =>

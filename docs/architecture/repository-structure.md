@@ -1,4 +1,4 @@
-Version: 1.44
+Version: 1.45
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-20
+2026-10-21
 
 ---
 
@@ -699,3 +699,17 @@ Next.js and its ESLint configuration are paired at 16.4.2. Existing module bound
 `src/shared/ui/artwork/artworkKinetics.ts` owns pure motion calculations shared by the routed Standard detail and embedded Standard gallery. It is shared UI behavior for artworks, not a new domain model or a generic utilities directory. `ArtworkDetailKineticExperience` retains route/native-gesture/teaching ownership and calls the same extracted equations. `artworkStandardNavigation` adapts those equations to the gallery's three-page track, queued controls, trackpad tail and lifecycle.
 
 `ArtworkLightbox` reuses one panel renderer for Previous / Current / Next, with bounded adjacent artwork data and inactive neighbour slots. Its CSS module owns track/slot placement; existing panel/editorial CSS retains resting dimensions. `ArtworkViewerEditorial` adds a default-true active flag so only the selected Standard page emits arrival particles. Book callers retain their current behavior without a new prop. The complete-frame snapshot implementation documented for v3 is superseded by these live adjacent slots; no new renderer or replacement Glass engine is introduced.
+
+
+## Artwork archive module ownership — 2026-10-21
+
+The approved Archive v5 is integrated into the existing localized route tree:
+
+- `src/app/[locale]/artworks/ArtworkArchive.tsx`: URL-bound filter/search/order state, counts, result disclosure and native mobile/tablet filter dialog.
+- `src/app/[locale]/artworks/ArtworkArchive.module.css`: archive introduction, desktop rail, responsive gallery, filter drawer and separators. Its styles are local to this route.
+- `src/domains/artworks/presentation/artworkArchive.ts`: canonical selection, input validation, faceted matching, title normalization, ordering and query serialization shared with detail navigation.
+- `src/domains/home/sections/collection/CollectionArtwork.module.css`: optional archive card presentation, compact gold corners and stable passive Halo rows. Default Home and Series styling stays under the existing component owners.
+- `CollectionGallery`/`CollectionArtwork`: reuse the existing reveal, rollover, loading and artwork activation; optional props select archive geometry without duplicating the interaction engine.
+- `CollectionArtworkFrame`: existing material/motion with per-instance SVG IDs. Passive `ArtworkBadges` expose stable data hooks for archive styling; badge content still comes from the canonical presentation service.
+
+Only the Archive message namespace is extended in EN/ES. The detail page consumes the shared archive query for Previous / Next and return context; its motion components and Glass runtime are unchanged. No database, API, dependency or source-media migration is included.

@@ -15,6 +15,7 @@ import ArtworkDetailResponsiveEntry from "@/domains/artworks/components/ArtworkD
 import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
 import { isFeaturedArtwork } from "@/domains/artworks/presentation/getArtworkPresentation";
+import { artworkArchiveQuery, readArtworkArchiveFilters, selectArtworkArchive } from "@/domains/artworks/presentation/artworkArchive";
 import { artworkExperienceHref } from "@/domains/artworks/presentation/artworkExperience";
 import ArtworkPortraitEntry from "@/domains/artworks/components/portrait-artbook/ArtworkPortraitEntry";
 
@@ -29,6 +30,8 @@ interface ArtworkPageProps {
         year?: string;
         medium?: string;
         featured?: string;
+        q?: string | string[];
+        sort?: string | string[];
         series?: string;
         experience?: string;
     }>;
@@ -59,6 +62,8 @@ export default async function ArtworkPage({
         year,
         medium,
         featured,
+        q,
+        sort,
         series: seriesSlug,
         experience,
     } = await searchParams;
@@ -118,30 +123,17 @@ export default async function ArtworkPage({
 
     const featuredOnly = featured === "true" && isFeaturedArtwork(artwork);
 
+    const archiveFilters = readArtworkArchiveFilters(artworks, new URLSearchParams({
+        category: activeCategory ?? "",
+        year: activeYear ? String(activeYear) : "",
+        medium: activeMedium ?? "",
+        featured: featuredOnly && !activeSeries ? "true" : "",
+        q: !activeSeries && typeof q === "string" ? q : "",
+        sort: !activeSeries && typeof sort === "string" ? sort : "",
+    }));
     const navigationArtworks = activeSeries
         ? seriesArtworks
-        : artworks.filter((item) => {
-              const matchesCategory =
-                  !activeCategory ||
-                  item.categories.includes(
-                      activeCategory,
-                  );
-
-              const matchesYear =
-                  !activeYear ||
-                  item.year === activeYear;
-
-              const matchesMedium =
-                  !activeMedium ||
-                  item.medium === activeMedium;
-
-              return (
-                  matchesCategory &&
-                  matchesYear &&
-                  matchesMedium &&
-                  (!featuredOnly || isFeaturedArtwork(item))
-              );
-          });
+        : selectArtworkArchive(artworks, archiveFilters, locale);
 
     const currentIndex =
         navigationArtworks.findIndex(
@@ -172,37 +164,8 @@ export default async function ArtworkPage({
             ? navigationArtworks[currentIndex + 2]
             : undefined;
 
-    const archiveParams = new URLSearchParams();
-
-    if (activeSeries) {
-        archiveParams.set(
-            "series",
-            activeSeries.slug,
-        );
-    }
-
-    if (activeCategory) {
-        archiveParams.set(
-            "category",
-            activeCategory,
-        );
-    }
-
-    if (activeYear) {
-        archiveParams.set(
-            "year",
-            String(activeYear),
-        );
-    }
-
-    if (activeMedium) {
-        archiveParams.set(
-            "medium",
-            activeMedium,
-        );
-    }
-
-    if (featuredOnly && !activeSeries) archiveParams.set("featured", "true");
+    const archiveParams = artworkArchiveQuery(archiveFilters);
+    if (activeSeries) archiveParams.set("series", activeSeries.slug);
 
     const navigationQuery =
         archiveParams.toString();
