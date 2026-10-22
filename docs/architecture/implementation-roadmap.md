@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.17
+Version: 1.18
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,11 +7,11 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-20
+Last Updated: 2026-10-21
  
-Current increment — 2026-10-20
+Current increment — 2026-10-21
 
-PR #2 is merged into production main at `5f7e34e`. The approved guidance motion is the baseline. The next authorized block integrates the existing Standard and Glass artwork experiences into Home Selected Works and Series dialogs on `feat/shared-artwork-experience`; details are appended below.
+PR #4 is merged into main at `49ed968`. The shared Standard/Glass experiences and motion are the baseline. The owner approved Archive visual prototype v5; the current bounded increment integrates that archive into the real EN/ES route on `feat/artworks-archive`. Details are appended below.
 
 1. Objective
 This document defines the official implementation sequence of the Del Carmen Digital Experience platform.
@@ -594,3 +594,12 @@ The canonical Artwork Implementation document records module ownership and lifec
 The owner merged PR #3 into main (`efa532c`) and approved the shared gallery composition. The next requested correction shares the approved `/artworks/[slug]` Standard kinetic calculations with the Home/Series gallery rather than maintaining a second fixed-duration slide. Collections inherits the Series viewer. A three-page framed window reveals its neighbour during the grip; only current and adjacent work data are rendered, with inactive slots inaccessible to input and assistive technology.
 
 Prepared on `fix/standard-artwork-kinetics`, as an incremental patch against that merge. Frame/image dimensions, centred expanded reading, responsive selection, current artwork/locale/query continuity and both Glass variants retain their approved presentation. This block does not publish production. Build, lint, equation-preservation checks and emulated pointer/touch/trackpad/keyboard/layout review precede delivery; actual Safari/iPhone, Android and iPad review remains with the owner. Commerce, database, PDF catalogue, visitor book, global immersion and Academy coursework stay separate.
+
+
+## Approved artwork archive — 2026-10-21
+
+Archive visual prototype v5 is approved. The real route now implements the left search/filter rail and right artwork gallery, actual facet counts, title search, All works / Featured, Archive order/newest/oldest/title sorting, removable filters, a mobile/tablet modal filter drawer and progressive groups of 12 cards. The approved existing rollover/reveal and frame remain the owners; the optional archive presentation adds two 22px gold corners, stable thumbnail insignias and the reviewed separator treatments. Search/order context continues into detail Previous / Next and Back to Artworks.
+
+The code is prepared as a checked patch against `49ed968`, without committing, pushing, merging or publishing. Owner review in the local application and its new Vercel Preview is next. Existing real-device, provider delivery, full bilingual/accessibility/SEO/security release verification remains active; source-only and static browser fixtures do not close those gates.
+
+Database/repository integration, owner-confirmed offers/prices and original/print distinctions, cart/checkout, the downloadable sales PDF, visitor book, site-wide immersive entry and Academy coursework keep their existing sequence. Artist/brand/domain naming remains an owner decision; this implementation keeps the current Del Carmen identity and does not acquire or configure domains.

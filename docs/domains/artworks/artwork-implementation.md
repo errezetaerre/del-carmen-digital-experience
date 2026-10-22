@@ -1,12 +1,12 @@
 # Artwork Implementation
 
-Version: 1.36
+Version: 1.37
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
 Document Type: Implementation
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-20
+Last Updated: 2026-10-21
 Status: Implemented; production build and emulated browser verification completed for the portrait increment. Physical-device visual review remains pending.
 
 ## Shared Standard motion for detail and gallery — 2026-10-20
@@ -376,3 +376,20 @@ Portrait embeds the approved rigid full-editorial 180-degree book. Each surface 
 The parent owns focus, Escape, background inert state and scroll locking. A book's own containing dialog permits its gestures; a nested zoom or unrelated modal blocks them. Source focus/scroll state returns on closing. Existing loading/decoding/retry, Coming Soon, warm metal, badge ownership, dust, idle teaching, reduced motion, queues and native touch remain with the approved engines. No physics constants are changed. The detail route still renders its own default content and navigation.
 
 Validation records accompany the delivery: lint/build/type checks, emulated browser interactions across five formats, native-touch/wheel checks, locale/history/focus/zoom/retry cases and existing-detail regression checks. Emulation does not replace owner testing on Safari/iPhone, Android or physical iPad. No deployment or remote write is performed by this increment.
+
+
+## Approved artwork archive integration — 2026-10-21
+
+Base: `49ed9685603894a2484eccb97ecffa0a9482548b` (merged PR #4). The owner approved Archive prototype v5 after reviewing its responsive composition, search/order controls, Halo placement, quiet top rules, Category glow and two compact gold corner accents. This increment integrates that direction into the real EN/ES `/artworks` route on `feat/artworks-archive`.
+
+`ArtworkArchive` now owns the left filter rail, faceted category/medium counts, year selection, accent-insensitive title search, All works / Featured selection, ordering, removable filters, empty state and progressive groups of 12 cards. The rail reserves a scrollbar gutter plus 22px of content clearance. Below 1100px, a native modal drawer provides focus containment, Escape/return focus, scrollable filters and a fixed result action. Resizing back to desktop closes the drawer and restores document scrolling. Local filter changes use Next's native-history integration rather than a server request on every search keystroke.
+
+`artworkArchive.ts` is the shared selection/ordering contract for this route and detail Previous / Next. It validates query values, retains the owner's canonical archive order by default, compares titles by locale, and carries `q`/`sort` with existing filters into both Standard and Glass entry/return links. ArtworkSeries membership still takes precedence on Series entry. No records, dates, images, curation or recognitions are rewritten.
+
+`CollectionGallery` and `CollectionArtwork` remain the card/reveal owners. Their optional archive presentation adds scoped dimensions/styles rather than a new card engine. The approved GSAP rollover sequence is retained: title/facts reveal; year at lower left; Discover and arrow together at lower right. Previously revealed archive cards stay visible when another group is appended. `CollectionArtworkFrame` retains its exact normal/hover/glow timings and gradients, with unique SVG definition IDs per instance. Archive-only corners are 22px, gold, 40% at rest and 100% on hover/focus, using the approved thicker stroke. Other caller presentations keep their existing dimensions.
+
+Archive Halo rows have fixed heights and absolutely positioned icon/copy surfaces so hidden long text cannot push a second insignia outside its thumbnail or change the hover target. Whole-card activation and existing loading feedback are retained. No nested insignia action is added to these cards. Solid upper gallery/menu/search rules use 20% opacity; Category, Year and Medium retain their warm reflection.
+
+Validation and installation are recorded in the delivery README. The complete project is built with the pinned dependencies; provider imports use non-operational fixture credentials locally. Archive UI verification uses the compiled production HTML/CSS/JavaScript and approved thumbnail fixtures because the managed Next server encounters an environment-specific native compiler failure. This static review does not establish live App Router transition or real-device behavior; route continuity is also checked by executing the actual server page with inert component boundaries. No provider action, deployment, commit, push or merge is performed here. The owner must review the patch locally and in its new Vercel Preview before merging.
+
+The Standard/portrait/landscape motion controllers, shared kinetics, artwork data, physical media, existing non-Archive translations, legal/contact and dependency configuration are outside this change. Database, confirmed commerce offers/cart, sales PDF, visitor book and site-wide immersion remain separate roadmap work. Brand/domain choice remains pending.

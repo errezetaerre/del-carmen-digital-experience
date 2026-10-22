@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import gsap from "gsap";
 
 interface CollectionArtworkFrameProps {
@@ -10,6 +10,7 @@ interface CollectionArtworkFrameProps {
 export default function CollectionArtworkFrame({
   children,
 }: CollectionArtworkFrameProps) {
+  const frameId = `collection-frame-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const frameRef = useRef<HTMLDivElement>(null);
   const normalRef = useRef<SVGGElement>(null);
   const hoverRef = useRef<SVGGElement>(null);
@@ -87,6 +88,7 @@ export default function CollectionArtworkFrame({
   return (
     <div
       ref={frameRef}
+      data-collection-frame
       className="group relative"
       onMouseEnter={animateIn}
       onMouseLeave={animateOut}
@@ -102,7 +104,7 @@ export default function CollectionArtworkFrame({
         <defs>
           {/* Normal state: solid at top → transparent at bottom */}
           <linearGradient
-            id="collection-left-normal"
+            id={`${frameId}-left-normal`}
             x1="0"
             y1="0"
             x2="0"
@@ -116,7 +118,7 @@ export default function CollectionArtworkFrame({
           </linearGradient>
 
           <linearGradient
-            id="collection-right-normal"
+            id={`${frameId}-right-normal`}
             x1="0"
             y1="0"
             x2="0"
@@ -130,7 +132,7 @@ export default function CollectionArtworkFrame({
           </linearGradient>
 
           <linearGradient
-            id="collection-left-hover"
+            id={`${frameId}-left-hover`}
             x1="0"
             y1="0"
             x2="0"
@@ -144,7 +146,7 @@ export default function CollectionArtworkFrame({
           </linearGradient>
 
           <linearGradient
-            id="collection-right-hover"
+            id={`${frameId}-right-hover`}
             x1="0"
             y1="0"
             x2="0"
@@ -158,7 +160,7 @@ export default function CollectionArtworkFrame({
           </linearGradient>
 
           <filter
-            id="collection-frame-glow"
+            id={`${frameId}-frame-glow`}
             x="-50%"
             y="-50%"
             width="200%"
@@ -187,7 +189,7 @@ export default function CollectionArtworkFrame({
             y1="0"
             x2="0"
             y2="125"
-            stroke="url(#collection-left-normal)"
+            stroke={`url(#${frameId}-left-normal)`}
             strokeWidth="0.45"
             vectorEffect="non-scaling-stroke"
           />
@@ -198,7 +200,7 @@ export default function CollectionArtworkFrame({
             y1="0"
             x2="100"
             y2="125"
-            stroke="url(#collection-right-normal)"
+            stroke={`url(#${frameId}-right-normal)`}
             strokeWidth="0.45"
             vectorEffect="non-scaling-stroke"
           />
@@ -212,7 +214,7 @@ export default function CollectionArtworkFrame({
             y1="0"
             x2="0"
             y2="125"
-            stroke="url(#collection-left-hover)"
+            stroke={`url(#${frameId}-left-hover)`}
             strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
@@ -223,7 +225,7 @@ export default function CollectionArtworkFrame({
             y1="0"
             x2="100"
             y2="125"
-            stroke="url(#collection-right-hover)"
+            stroke={`url(#${frameId}-right-hover)`}
             strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
@@ -244,7 +246,7 @@ export default function CollectionArtworkFrame({
         <g
           ref={glowRef}
           opacity="0"
-          filter="url(#collection-frame-glow)"
+          filter={`url(#${frameId}-frame-glow)`}
         >
           <line
             x1="0"

@@ -93,9 +93,9 @@ export default function ArtworkBadges({ artwork, variant = "ribbon", expanded = 
     // The enclosing thumbnail link/button owns the single artwork action.
     // Descriptive insignias preserve the rollover without nested controls.
     if (passive) return <div lang={locale} className={`${styles.root} ${styles.thumbnail} ${styles.passive} ${className}`} data-expanded={expanded || undefined} role="img" aria-label={badges.map((badge) => [badge.label, badge.detail].filter(Boolean).join(": ")).join(". ")}>
-        <ul className={styles.list}>{badges.map((badge) => <li key={badge.id}><span className={styles.badge}>
-            <span className={styles.symbol} dangerouslySetInnerHTML={{ __html: artworkHaloSymbol(badge.kind) }} />
-            <span className={styles.copy}><span className={styles.label}>{badge.label}</span>{badge.detail && <span className={styles.detail}>{badge.detail}</span>}</span>
+        <ul className={styles.list}>{badges.map((badge) => <li key={badge.id}><span data-artwork-badge className={styles.badge}>
+            <span data-artwork-badge-symbol className={styles.symbol} dangerouslySetInnerHTML={{ __html: artworkHaloSymbol(badge.kind) }} />
+            <span data-artwork-badge-copy className={styles.copy}><span data-artwork-badge-label className={styles.label}>{badge.label}</span>{badge.detail && <span data-artwork-badge-detail className={styles.detail}>{badge.detail}</span>}</span>
         </span></li>)}</ul>
     </div>;
 

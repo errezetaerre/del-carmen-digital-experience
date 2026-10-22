@@ -13,6 +13,7 @@ import feedbackStyles from "@/shared/ui/artwork/ArtworkNavigationFeedback.module
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
+import styles from "./CollectionArtwork.module.css";
 
 type CollectionImageVariant =
   | "collection"
@@ -24,7 +25,7 @@ interface CollectionArtworkProps {
   loading?: boolean;
 
   imageVariant?: CollectionImageVariant;
-  presentation?: "default" | "series";
+  presentation?: "default" | "series" | "archive";
 }
 
 export default function CollectionArtwork({
@@ -202,9 +203,11 @@ export default function CollectionArtwork({
     <article
       lang={locale}
       ref={cardRef}
+      data-active={cardActive || undefined}
+      data-creation-status={artwork.creationStatus}
       className={`group relative w-full ${presentation === "series"
         ? "max-w-[260px]"
-        : "max-w-[200px]"
+        : presentation === "archive" ? styles.archive : "max-w-[200px]"
         }`}
       onMouseEnter={() => { setCardActive(true); animateIn(); }}
       onMouseLeave={() => { setCardActive(false); animateOut(); }}
@@ -253,9 +256,9 @@ export default function CollectionArtwork({
               "
             />}
 
-            <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+            <div data-collection-caption className="absolute inset-x-0 bottom-0 p-4 md:p-5">
               {/* Estado inicial */}
-              <div ref={initialRef}>
+              <div ref={initialRef} data-collection-caption-initial aria-hidden={presentation === "archive" ? cardActive : undefined}>
                 <p className="mb-2 text-[9px] uppercase tracking-[0.3em] text-brand-gold">
                   {presentationInfo.yearLabel}
                 </p>
@@ -268,6 +271,8 @@ export default function CollectionArtwork({
               {/* Estado revelado */}
               <div
                 ref={detailsRef}
+                data-collection-caption-details
+                aria-hidden={presentation === "archive" ? !cardActive : undefined}
                 className="
                   absolute
                   inset-x-0
@@ -287,6 +292,7 @@ export default function CollectionArtwork({
 
                 <div
                   ref={metaRef}
+                  data-collection-meta
                   className="
                     mt-3
                     space-y-1
@@ -307,21 +313,22 @@ export default function CollectionArtwork({
 
                 <div
                   ref={footerRef}
+                  data-collection-footer
                   className="mt-4 flex items-center justify-between"
                 >
                   <span className="text-[9px] uppercase tracking-[0.3em] text-brand-gold">
-                    {presentationInfo.yearLabel}
+                    {presentation === "archive" ? artwork.year : presentationInfo.yearLabel}
                   </span>
 
-                  <span className="text-[9px] uppercase tracking-[0.25em] text-brand-gold">
-                    {t("discover")}
+                  <span data-collection-discover className="text-[9px] uppercase tracking-[0.25em] text-brand-gold">
+                    {presentation === "archive" ? <>{t("discover").replace(/\s*→$/, "")}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></> : t("discover")}
                   </span>
                 </div>
               </div>
             </div>
           </div>
         </CollectionArtworkFrame>
-        <ArtworkBadges key={artwork.id} artwork={artwork} variant="thumbnail" passive expanded={cardActive} />
+        <ArtworkBadges key={artwork.id} artwork={artwork} variant="thumbnail" passive expanded={cardActive} className={presentation === "archive" ? styles.badges : undefined} />
       </button>
       {loading && <span className={feedbackStyles.overlay}><ArtworkLoading label={t("opening")} /></span>}
     </article>
