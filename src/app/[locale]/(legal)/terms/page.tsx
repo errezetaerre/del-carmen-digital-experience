@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { getSiteMessages } from "@/i18n/messages";
 import { activateLocale } from "@/i18n/server";
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/metadata";
 import Link from "@/i18n/navigation";
 
 import { brand } from "@/config/brand";
@@ -10,7 +11,7 @@ import { getLegalContact } from "@/i18n/legalCopy";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Terms;
-    return { title: copy.metadataTitle, description: copy.metadataDescription };
+    return createPageMetadata({ locale, pathname: "/terms", title: copy.metadataTitle, description: copy.metadataDescription });
 }
 
 export default async function TermsPage({ params }: { params: Promise<{ locale: string }> }) {

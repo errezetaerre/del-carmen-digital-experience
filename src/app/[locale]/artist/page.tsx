@@ -6,7 +6,7 @@ import Artist from "@/domains/artist";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Artist;
-    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+    return createPageMetadata({ locale, pathname: "/artist", title: copy.metadataTitle, description: copy.metadataDescription });
 }
 
 export default async function ArtistPage({ params }: { params: Promise<{ locale: string }> }) {

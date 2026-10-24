@@ -6,7 +6,7 @@ import Journal from "@/domains/journal";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Journal;
-    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+    return createPageMetadata({ locale, pathname: "/journal", title: copy.metadataTitle, description: copy.metadataDescription });
 }
 
 export default async function JournalPage({ params }: { params: Promise<{ locale: string }> }) {

@@ -8,8 +8,10 @@ import { localizeArtwork } from "@/i18n/artworkCopy";
 import Image from "next/image";
 import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
 import previewStyles from "@/shared/ui/artwork/ArtworkComingSoon.module.css";
-import { createPortal } from "react-dom";
+import { createPortal, flushSync } from "react-dom";
 import useDialogFocus from "@/shared/hooks/useDialogFocus";
+import useArtworkGestureBoundary from "@/shared/ui/artwork/useArtworkGestureBoundary";
+import { bindArtworkImageGestures, type ArtworkImageGestureActions } from "@/shared/ui/artwork/artworkImageGestures";
 
 
 
@@ -18,6 +20,7 @@ import {
     useCallback,
 
     useEffect,
+    useLayoutEffect,
 
     useRef,
 
@@ -25,6 +28,7 @@ import {
 
     type PointerEvent,
     type CSSProperties,
+    type RefObject,
 
 } from "react";
 
@@ -42,6 +46,7 @@ interface ArtworkDetailViewerProps {
     artwork: Artwork;
     triggerOnly?: boolean;
     portalTarget?: HTMLElement | null;
+    gestureRoot?: RefObject<HTMLElement | null>;
 }
 
 
@@ -72,6 +77,7 @@ export default function ArtworkDetailViewer({
     artwork: sourceArtwork,
     triggerOnly = false,
     portalTarget,
+    gestureRoot,
 }: ArtworkDetailViewerProps) {
     const locale = useLocale();
     const t = useTranslations("Artwork");
@@ -130,6 +136,12 @@ export default function ArtworkDetailViewer({
 
 
     const [zoomDragging, setZoomDragging] = useState(false);
+    const [zoomGesturing, setZoomGesturing] = useState(false);
+    const [zoomPortal, setZoomPortal] = useState<HTMLElement | null>(null);
+    const previewRootRef = useRef<HTMLDivElement>(null);
+    const previewSurfaceRef = useRef<HTMLElement | null>(null);
+    const gestureActions = useRef<ArtworkImageGestureActions | null>(null);
+    useLayoutEffect(() => { previewSurfaceRef.current = gestureRoot?.current ?? previewRootRef.current; });
     const setZoomPointer = useCallback((pointerId: number | null) => {
         zoomPointerId.current = pointerId;
         setZoomDragging(pointerId !== null);
@@ -202,7 +214,12 @@ export default function ArtworkDetailViewer({
 
 
     const zoomDialogRef = useRef<HTMLDivElement>(null);
-    useDialogFocus(zoomDialogRef, isZoomOpen);
+    useDialogFocus(zoomDialogRef, isZoomOpen, { onEscape() {
+        setIsZoomOpen(false);
+        setZoom(MIN_ZOOM);
+        setPan({ x: 0, y: 0 });
+    } });
+    useArtworkGestureBoundary(zoomDialogRef, isZoomOpen);
 
     // Reconcile the next artwork before paint while preserving the image node.
     const [zoomArtworkId, setZoomArtworkId] = useState(artwork.id);
@@ -212,6 +229,7 @@ export default function ArtworkDetailViewer({
         setZoom(MIN_ZOOM);
         setPan({ x: 0, y: 0 });
         setZoomDragging(false);
+        setZoomGesturing(false);
     }
 
     useEffect(() => {
@@ -332,11 +350,12 @@ export default function ArtworkDetailViewer({
 
 
 
-    const openZoomViewer = (
+    const openZoomViewer = useCallback((
 
         initialZoom = MIN_ZOOM,
 
     ) => {
+        setZoomPortal(portalTarget ?? previewSurfaceRef.current?.closest<HTMLElement>("[data-artwork-experience]") ?? document.body);
 
         setZoom(initialZoom);
 
@@ -354,7 +373,7 @@ export default function ArtworkDetailViewer({
 
         setIsZoomOpen(true);
 
-    };
+    }, [portalTarget]);
 
 
 
@@ -404,47 +423,7 @@ export default function ArtworkDetailViewer({
 
 
 
-    const updateZoom = (
 
-        nextZoom: number,
-
-    ) => {
-
-        const clampedZoom =
-
-            Math.min(
-
-                MAX_ZOOM,
-
-                Math.max(
-
-                    MIN_ZOOM,
-
-                    nextZoom,
-
-                ),
-
-            );
-
-
-
-        setZoom(clampedZoom);
-
-
-
-        setPan((currentPan) =>
-
-            clampPan(
-
-                currentPan,
-
-                clampedZoom,
-
-            ),
-
-        );
-
-    };
 
 
 
@@ -692,6 +671,40 @@ export default function ArtworkDetailViewer({
 
     }, [getPanBounds]);
 
+    const updateZoom = useCallback((nextZoom: number) => {
+        const clampedZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, nextZoom));
+        setZoom(clampedZoom);
+        setPan(currentPan => clampPan(currentPan, clampedZoom));
+    }, [clampPan]);
+
+    useLayoutEffect(() => {
+        gestureActions.current = {
+            isOpen: () => isZoomOpen, scale: () => zoom, pan: () => pan,
+            open: value => flushSync(() => openZoomViewer(value)),
+            zoom: updateZoom, move: point => setPan(clampPan(point, zoom)), activity: setZoomGesturing,
+        };
+    }, [isZoomOpen, zoom, pan, openZoomViewer, updateZoom, clampPan]);
+    useEffect(() => {
+        const surface = gestureRoot?.current ?? previewRootRef.current;
+        if (!surface || artwork.creationStatus !== "completed") return;
+        return bindArtworkImageGestures(surface, {
+            isOpen: () => gestureActions.current!.isOpen(), scale: () => gestureActions.current!.scale(),
+            pan: () => gestureActions.current!.pan(), open: value => gestureActions.current!.open(value),
+            zoom: value => gestureActions.current!.zoom(value), move: point => gestureActions.current!.move(point),
+            activity: active => gestureActions.current!.activity(active),
+        });
+    }, [artwork.id, artwork.creationStatus, gestureRoot, triggerOnly]);
+    useEffect(() => {
+        const canvas = zoomCanvasRef.current;
+        if (!isZoomOpen || !canvas) return;
+        return bindArtworkImageGestures(canvas, {
+            isOpen: () => gestureActions.current!.isOpen(), scale: () => gestureActions.current!.scale(),
+            pan: () => gestureActions.current!.pan(), open: value => gestureActions.current!.open(value),
+            zoom: value => gestureActions.current!.zoom(value), move: point => gestureActions.current!.move(point),
+            activity: active => gestureActions.current!.activity(active),
+        }, false);
+    }, [isZoomOpen]);
+
     useEffect(() => {
 
         if (!isZoomOpen) {
@@ -827,6 +840,7 @@ export default function ArtworkDetailViewer({
 
 
             isPinching.current = true;
+            setZoomGesturing(true);
 
 
 
@@ -1263,6 +1277,7 @@ export default function ArtworkDetailViewer({
         ) {
 
             isPinching.current = false;
+            setZoomGesturing(false);
 
         }
 
@@ -1448,6 +1463,7 @@ export default function ArtworkDetailViewer({
                 </button>
             ) : (
             <div
+                ref={previewRootRef}
 
                 className="
 
@@ -1823,6 +1839,11 @@ export default function ArtworkDetailViewer({
 
                     ref={zoomDialogRef}
                     role="dialog"
+                    data-artwork-zoom-dialog
+                    onPointerDown={event => event.stopPropagation()}
+                    onPointerMove={event => event.stopPropagation()}
+                    onPointerUp={event => event.stopPropagation()}
+                    onDoubleClick={event => event.stopPropagation()}
                     data-artwork-kinetic-ignore
 
                     aria-modal="true"
@@ -2205,7 +2226,7 @@ export default function ArtworkDetailViewer({
 
                                 transition:
 
-                                    !zoomDragging
+                                    !zoomDragging && !zoomGesturing
 
                                         ? "transform 320ms cubic-bezier(0.22, 1, 0.36, 1)"
 
@@ -2550,7 +2571,7 @@ export default function ArtworkDetailViewer({
                     )}
 
                 </div>,
-                portalTarget ?? document.body,
+                zoomPortal ?? portalTarget ?? document.body,
             )}
 
         </>

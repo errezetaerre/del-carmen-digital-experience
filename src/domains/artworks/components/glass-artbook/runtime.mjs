@@ -275,6 +275,7 @@ export function createGlassArtbook(root,options){
   wheelActive=false;wheelTimer=null;lockWheel();release({pointerId:-1});
  }
  function onWheel(event){
+  if(event.ctrlKey)return;
   if(event.target.closest("[data-artwork-highlights],[data-lightbox-native-scroll]"))return;
   if(!wideLayout.matches||inputBlocked())return;
   const horizontal=event.shiftKey&&Math.abs(event.deltaX)<1?event.deltaY:event.deltaX;
@@ -1118,9 +1119,11 @@ idle();requestAnimationFrame(tick);
  scene.addEventListener('wheel',onWheel,{passive:false});
  nativeDocument.addEventListener('pointermove',onOutsidePointerMove);nativeDocument.addEventListener('pointerup',onDocumentPointerUp);nativeDocument.addEventListener('pointercancel',onDocumentPointerCancel);
  window.addEventListener('blur',onInputBlur);nativeDocument.addEventListener('visibilitychange',onVisibilityChange);
+ root.addEventListener('artwork-image-zoom',onInputBlur);
  cleanups.push(()=>{
   nativeDocument.removeEventListener('pointermove',onOutsidePointerMove);nativeDocument.removeEventListener('pointerup',onDocumentPointerUp);nativeDocument.removeEventListener('pointercancel',onDocumentPointerCancel);
   window.removeEventListener('blur',onInputBlur);nativeDocument.removeEventListener('visibilitychange',onVisibilityChange);
+  root.removeEventListener('artwork-image-zoom',onInputBlur);
   for(const [type,listener] of scenePointerHandlers)scene.removeEventListener(type,listener);
  });
  function onLayoutChange(){

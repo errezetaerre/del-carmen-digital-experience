@@ -15,6 +15,7 @@ import {
 import "../globals.css";
 
 import { siteConfig } from "@/config/site";
+import { isIndexableDeployment, siteOrigin } from "@/config/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,9 +42,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   if (!isSiteLocale(locale)) notFound();
   return {
+    metadataBase: new URL(siteOrigin),
     title: siteConfig.name,
     description: siteConfig.description,
-    ...(locale === "es" && !spanishReleaseReady ? { robots: { index: false, follow: true } } : {}),
+    ...(!isIndexableDeployment || (locale === "es" && !spanishReleaseReady)
+      ? { robots: { index: false, follow: isIndexableDeployment } } : {}),
   };
 }
 

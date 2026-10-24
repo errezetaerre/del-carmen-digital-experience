@@ -3,6 +3,7 @@
 import { useId, useLayoutEffect, useRef, useState, type MouseEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import gsap from "gsap";
+import useArtworkGestureBoundary from "@/shared/ui/artwork/useArtworkGestureBoundary";
 import Link, { usePathname, useRouter } from "@/i18n/navigation";
 import { localizeHref } from "@/i18n/config";
 import { artworkExperienceHref } from "../../presentation/artworkExperience";
@@ -58,6 +59,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     const previous = artworks[index - 1];
     const next = artworks[index + 1];
     const rootRef = useRef<HTMLElement>(null);
+    useArtworkGestureBoundary(rootRef, Boolean(currentArtwork));
     const frameRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const bubbleRef = useRef<HTMLDivElement>(null);

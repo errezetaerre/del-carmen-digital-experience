@@ -11,7 +11,7 @@ import styles from "./ArtworkArchive.module.css";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Archive;
-    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+    return createPageMetadata({ locale, pathname: "/artworks", title: copy.metadataTitle, description: copy.metadataDescription });
 }
 
 export default async function ArtworksPage({ params }: { params: Promise<{ locale: string }> }) {

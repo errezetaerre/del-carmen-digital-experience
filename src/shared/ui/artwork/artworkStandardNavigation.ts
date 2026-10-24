@@ -20,9 +20,11 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
     const reduced = view.matchMedia("(prefers-reduced-motion: reduce)");
     let disposed = false, settling = false, queued = 0, suppressClickUntil = 0, queueFrame = 0;
     let pointer: { id: number; x: number; y: number; axis: "pending" | "horizontal" | "vertical" } | null = null;
-    let pointerActive = false, pointerDistance = 0, pointerVelocity = 0, pointerTime = 0;
+    let pointerActive = false, pointerDistance = 0, pointerOrigin = 0, pointerVelocity = 0, pointerTime = 0;
     let wheelDistance = 0, wheelVelocity = 0, wheelTime = 0, wheelReset = 0, wheelUnlock = 0, wheelLocked = false;
     const width = () => Math.max(1, viewport.getBoundingClientRect().width);
+    gsap.set(track, { force3D: true });
+    const setPosition = gsap.quickSetter(track, "x", "px") as (value: number) => void;
     const position = () => Number(gsap.getProperty(track, "x")) || 0;
     const ignored = (target: EventTarget | null) => options.zoomed() || Boolean((target as Element | null)?.closest(
         "a,button,input,textarea,select,[contenteditable],[data-artwork-highlights],[data-lightbox-native-scroll],[data-artwork-kinetic-ignore]"));
@@ -30,7 +32,7 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
         view.clearTimeout(wheelReset); wheelReset = 0;
         wheelDistance = 0; wheelVelocity = 0; wheelTime = 0;
     }
-    function render(x: number) { gsap.set(track, { x }); viewport.dataset.artworkDragging = ""; }
+    function render(x: number) { setPosition(x); viewport.dataset.artworkDragging = ""; }
     function reset() {
         if (disposed || settling) return;
         pointerActive = false; clearWheel();
@@ -40,7 +42,7 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
     function begin() {
         if (disposed || settling || options.zoomed()) return;
         clearWheel(); gsap.killTweensOf(track);
-        pointerActive = true; pointerDistance = 0; pointerVelocity = 0; pointerTime = view.performance.now();
+        pointerActive = true; pointerDistance = 0; pointerOrigin = position(); pointerVelocity = 0; pointerTime = view.performance.now();
     }
     function preview(distance: number) {
         if (disposed || settling || options.zoomed()) return;
@@ -48,7 +50,7 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
         const now = view.performance.now();
         pointerVelocity = artworkPointerVelocity(pointerVelocity, distance - pointerDistance, now - pointerTime);
         pointerDistance = distance; pointerTime = now;
-        render(distance);
+        render(pointerOrigin + distance);
     }
     function navigate(direction: ArtworkDirection, releaseVelocity = 0, preserveReleaseVelocity = false) {
         if (disposed) return;
@@ -67,7 +69,8 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
         if (disposed || settling || !pointerActive) return;
         pointerActive = false;
         const displacement = position();
-        const direction = artworkPointerDirection(displacement, pointerVelocity, width(), true, true);
+        const direction = artworkPointerDirection(displacement, pointerVelocity, width(), true, true,
+            view.performance.now() - pointerTime);
         if (Math.abs(displacement) >= motion.intentDistance) suppressClickUntil = view.performance.now() + 350;
         if (direction) navigate(direction, pointerVelocity); else reset();
     }
@@ -93,7 +96,8 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
         if (!pointer || event.pointerId !== pointer.id) return;
         const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
         if (pointer.axis === "pending") {
-            if (Math.max(Math.abs(dx), Math.abs(dy)) < motion.intentDistance) return;
+            if (Math.abs(dx) < 1 && Math.abs(dy) < motion.intentDistance) return;
+            if (Math.abs(dx) < Math.abs(dy) * motion.axisLockRatio && Math.abs(dy) < motion.intentDistance) return;
             pointer.axis = Math.abs(dx) >= Math.abs(dy) * motion.axisLockRatio ? "horizontal" : "vertical";
             if (pointer.axis === "vertical") { pointerActive = false; return; }
             try { viewport.setPointerCapture(event.pointerId); } catch { /* Outside document. */ }
@@ -104,9 +108,14 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
     }
     function end(event: PointerEvent) {
         if (!pointer || event.pointerId !== pointer.id) return;
+        if (event.type === "pointerup" && event.clientX - pointer.x !== pointerDistance) move(event);
         const gesture = pointer; pointer = null;
         try { viewport.releasePointerCapture(event.pointerId); } catch { /* Already released. */ }
-        if (gesture.axis !== "horizontal") { pointerActive = false; return; }
+        if (gesture.axis !== "horizontal") {
+            pointerActive = false;
+            if (Math.abs(position()) > .5) reset();
+            return;
+        }
         if (event.type === "pointercancel") reset(); else release();
     }
     function holdWheelTail() {
@@ -120,7 +129,8 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
         event.preventDefault(); options.onInteraction();
         if (wheelLocked) { holdWheelTail(); return; }
         if (settling) return;
-        const delta = event.shiftKey ? event.deltaY : event.deltaX;
+        const units = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? width() : 1;
+        const delta = (event.shiftKey ? event.deltaY : event.deltaX) * units;
         if (!delta) return;
         const now = view.performance.now();
         if (wheelTime > 0) wheelVelocity = artworkWheelVelocity(wheelVelocity, delta, now - wheelTime);
@@ -159,6 +169,7 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
     view.addEventListener("pointerup", end); view.addEventListener("pointercancel", end);
     viewport.addEventListener("wheel", wheel, { passive: false, capture: true });
     viewport.addEventListener("click", click, true); view.addEventListener("blur", cancel);
+    viewport.addEventListener("artwork-image-zoom", cancel);
     return { navigate, begin, preview, release, reset, selectionChanged, dispose() {
         disposed = true; resize.disconnect(); clearWheel(); view.clearTimeout(wheelUnlock); view.cancelAnimationFrame(queueFrame);
         gsap.killTweensOf(track); gsap.set(track, { clearProps: "transform" }); track.style.removeProperty("--artwork-kinetic-step");
@@ -166,5 +177,6 @@ export function bindArtworkStandardNavigation(viewport: HTMLElement, track: HTML
         viewport.removeEventListener("pointerdown", down); view.removeEventListener("pointermove", move);
         view.removeEventListener("pointerup", end); view.removeEventListener("pointercancel", end);
         viewport.removeEventListener("wheel", wheel, true); viewport.removeEventListener("click", click, true); view.removeEventListener("blur", cancel);
+        viewport.removeEventListener("artwork-image-zoom", cancel);
     } };
 }

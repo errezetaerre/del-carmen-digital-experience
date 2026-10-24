@@ -11,6 +11,7 @@ import { createPortal } from "react-dom";
 import Link from "@/i18n/navigation";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import gsap from "gsap";
+import useArtworkGestureBoundary from "@/shared/ui/artwork/useArtworkGestureBoundary";
 import type { Artwork } from "@/domains/artworks";
 import { getArtworkPresentation } from "../../presentation/getArtworkPresentation";
 import { artworkExperienceHref } from "../../presentation/artworkExperience";
@@ -46,6 +47,7 @@ export default function ArtworkGlassArtbook({
     const clientReady = useClientReady();
     const portalHost = clientReady ? document.body : null;
     const [experienceHost, setExperienceHost] = useState<HTMLElement | null>(null);
+    useArtworkGestureBoundary(experienceRef, Boolean(experienceHost));
     const captureExperience = useCallback((host: HTMLElement | null) => {
         experienceRef.current = host;
         setExperienceHost(host);
@@ -203,7 +205,7 @@ export default function ArtworkGlassArtbook({
                 </div>}
             </div>}
             {actionsHost && experienceHost && createPortal(
-                <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly portalTarget={experienceHost} />,
+                <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly gestureRoot={hostRef} portalTarget={experienceHost} />,
                 actionsHost,
             )}
             {highlightsHosts.map((host, slot) => {

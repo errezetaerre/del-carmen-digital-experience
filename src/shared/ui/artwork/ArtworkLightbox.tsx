@@ -31,6 +31,8 @@ import ArtworkReadingPanel from "./ArtworkReadingPanel";
 import ArtworkViewerEditorial from "./ArtworkViewerEditorial";
 import { bindArtworkStandardNavigation, type ArtworkStandardNavigation } from "./artworkStandardNavigation";
 import { ARTWORK_KINETICS } from "./artworkKinetics";
+import ArtworkDetailViewer from "@/domains/artworks/components/ArtworkDetailViewer";
+import { hasBlockingArtworkDialog } from "./hasBlockingArtworkDialog";
 
 export interface ArtworkLightboxProps {
     artworks: Artwork[];
@@ -132,6 +134,7 @@ export default function ArtworkLightbox({
     const swipeAxisRef = useRef<"pending" | "horizontal" | "vertical">("pending");
     const navigationRef = useRef<ArtworkStandardNavigation | null>(null);
     const viewportRef = useRef<HTMLDivElement>(null);
+    const imageGestureRootRef = useRef<HTMLDivElement>(null);
     const navigationOptions = useRef<{ navigate(direction: -1 | 1): void; zoomed(): boolean; onInteraction(): void }>({ navigate: () => {}, zoomed: () => false, onInteraction: () => {} });
 
     /* =========================================================
@@ -403,6 +406,21 @@ export default function ArtworkLightbox({
     }, [embedded, isGlass, isOpen, total]);
     useLayoutEffect(() => { navigationRef.current?.selectionChanged(); }, [currentIndex, artwork?.id]);
 
+    useEffect(() => {
+        const viewport = viewportRef.current;
+        if (!isOpen || !viewport) return;
+        // A pinch hands its touches to the image viewer. Their release may
+        // never bubble back to this adapter, so no finger may remain cached.
+        const clearImageInput = () => {
+            activePointersRef.current.clear();
+            swipeStartRef.current = null; swipeAxisRef.current = "pending";
+            panGestureRef.current = null; pinchGestureRef.current = null;
+            hadMultiTouchRef.current = false;
+        };
+        viewport.addEventListener("artwork-image-zoom", clearImageInput);
+        return () => viewport.removeEventListener("artwork-image-zoom", clearImageInput);
+    }, [isOpen]);
+
     /* =========================================================
        RESET WHEN OPENING
        ========================================================= */
@@ -459,6 +477,7 @@ export default function ArtworkLightbox({
         const handleKeyDown = (
             event: KeyboardEvent,
         ) => {
+            if (event.defaultPrevented || (viewportRef.current && hasBlockingArtworkDialog(viewportRef.current))) return;
             if (isGlass && event.key === "Escape" && descriptionExpandedRef.current) {
                 event.preventDefault();
                 setDescriptionExpanded(false);
@@ -1084,7 +1103,7 @@ export default function ArtworkLightbox({
 
                         {/* Zoomable artwork — no visible frame/border */}
                         <ArtworkImageHighlights artwork={artwork} className={isGlass ? styles.imageWrapper : "relative h-full max-h-full w-full max-w-full lg:translate-x-[1.5vw] items-center justify-center"}>
-                            <div className={isGlass ? styles.imageMask : "contents"}>
+                            <div ref={active ? imageGestureRootRef : undefined} className={isGlass ? styles.imageMask : "contents"}>
                             <div
                                 ref={active ? zoomLayerRef : undefined}
                                 data-artwork-arrival-zoom
@@ -1115,6 +1134,7 @@ export default function ArtworkLightbox({
                             </div>
                             {hasHighlights && artwork.creationStatus === "completed" && <ArtworkArrivalAccent key={artwork.id} artworkId={artwork.id} surface="lightbox" />}
                         </ArtworkImageHighlights>
+                        {active && <ArtworkDetailViewer artwork={artwork} triggerOnly gestureRoot={imageGestureRootRef} />}
 
 
                         {/* Ephemeral touch guidance — shared interaction language */}

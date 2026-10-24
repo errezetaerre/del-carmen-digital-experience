@@ -5,7 +5,7 @@ import { createPageMetadata } from "@/shared/lib/metadata";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Contact;
-    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+    return createPageMetadata({ locale, pathname: "/contact", title: copy.metadataTitle, description: copy.metadataDescription });
 }
 
 import Contact from "@/domains/contact";

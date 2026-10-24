@@ -16,6 +16,7 @@ import { hasBlockingArtworkDialog } from "./hasBlockingArtworkDialog";
 import { artworkViewerInformation } from "./artworkViewerInformation";
 import { artworkViewerHref, artworkViewerLocation, selectArtworkInViewer, subscribeArtworkViewerLocation } from "./artworkViewerLocation";
 import styles from "./ArtworkExperienceViewer.module.css";
+import useArtworkGestureBoundary from "./useArtworkGestureBoundary";
 
 function Preparing() {
     const t = useTranslations("Glass");
@@ -38,6 +39,7 @@ export default function ArtworkExperienceViewer({ artworks: sourceArtworks, init
     const requested = new URL(location || "/", "https://viewer.invalid").searchParams.get("experience");
     const mode = viewport === "unsupported" ? "standard" : requested === "standard" || requested === "glass" ? requested : entryMode;
     const root = useRef<HTMLDivElement>(null);
+    useArtworkGestureBoundary(root);
     const closeButton = useRef<HTMLButtonElement>(null);
     const returnFocus = useRef<HTMLElement | null>(null);
     const [switching, setSwitching] = useState<"glass" | "standard" | null>(null);

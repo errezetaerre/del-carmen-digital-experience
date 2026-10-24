@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: JournalEntryPageProps) {
     const story = getJournalStoryBySlug(slug);
     if (!entry || !story) notFound();
     const localizedEntry = localizeJournalEntry(entry, locale);
-    return createPageMetadata({ locale, title: localizedEntry.title, description: localizedEntry.excerpt, type: "article" });
+    return createPageMetadata({ locale, pathname: `/journal/${entry.slug}`, title: localizedEntry.title,
+        description: localizedEntry.excerpt, image: { src: entry.image, alt: localizedEntry.title }, type: "article" });
 }
 
 export default async function JournalEntryPage({

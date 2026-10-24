@@ -19,6 +19,7 @@ import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
 import sceneStyles from "./ArtworkDetailScene.module.css";
 import { captureStandardNavigation, finishStandardNavigation } from "../presentation/artworkNavigationContinuity";
 import { bindArtworkTouchNavigation, type ArtworkDragInput } from "./artworkTouchNavigation";
+import useArtworkGestureBoundary from "@/shared/ui/artwork/useArtworkGestureBoundary";
 
 interface ArtworkDetailKineticExperienceProps {
     previousScene?: ReactNode;
@@ -82,7 +83,9 @@ export default function ArtworkDetailKineticExperience({
     }, []);
 
     const viewportRef = useRef<HTMLDivElement>(null);
+    useArtworkGestureBoundary(viewportRef);
     const trackRef = useRef<HTMLDivElement>(null);
+    const directTrackRef = useRef<{ node: HTMLDivElement; set(value: number): void } | null>(null);
     const currentPanelRef = useRef<HTMLDivElement>(null);
     const onboardingSlideRef = useRef<gsap.core.Timeline | null>(null);
 
@@ -97,6 +100,7 @@ export default function ArtworkDetailKineticExperience({
     const nativeTouchActiveRef = useRef(false);
     const startXRef = useRef(0);
     const startYRef = useRef(0);
+    const startOffsetRef = useRef(0);
     const lastXRef = useRef(0);
     const lastTimeRef = useRef(0);
     const velocityRef = useRef(0);
@@ -407,7 +411,13 @@ export default function ArtworkDetailKineticExperience({
         if (!track) return;
 
         positionRef.current = x;
-        gsap.set(track, { x });
+        let direct = directTrackRef.current;
+        if (!direct || direct.node !== track) {
+            gsap.set(track, { force3D: true });
+            direct = { node: track, set: gsap.quickSetter(track, "x", "px") as (value: number) => void };
+            directTrackRef.current = direct;
+        }
+        direct.set(x);
     }, []);
 
     const resetToCurrent = useCallback(
@@ -627,7 +637,9 @@ export default function ArtworkDetailKineticExperience({
             if (wasDragging) resetToCurrent();
         };
         window.addEventListener("blur", cancelDrag);
-        return () => { window.removeEventListener("blur", cancelDrag); cancelDrag(); };
+        const viewport = viewportRef.current;
+        viewport?.addEventListener("artwork-image-zoom", cancelDrag);
+        return () => { window.removeEventListener("blur", cancelDrag); viewport?.removeEventListener("artwork-image-zoom", cancelDrag); cancelDrag(); };
     }, [releaseTextSelection, resetToCurrent]);
 
     /*
@@ -641,6 +653,7 @@ export default function ArtworkDetailKineticExperience({
         if (!viewport) return;
 
         const handleWheel = (event: WheelEvent) => {
+            if (event.ctrlKey || document.querySelector("[data-artwork-zoom-dialog]")) return;
             if ((event.target as HTMLElement | null)?.closest("[data-artwork-highlights]")) return;
             if (
                 inputModeRef.current === "pointer" ||
@@ -689,7 +702,8 @@ export default function ArtworkDetailKineticExperience({
                 ? event.deltaY
                 : event.deltaX;
 
-            if (delta === 0) return;
+            const pixels = delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewportWidthRef.current : 1);
+            if (pixels === 0) return;
 
             inputModeRef.current = "wheel";
             sealOnboardingHint();
@@ -703,7 +717,7 @@ export default function ArtworkDetailKineticExperience({
             const previousWheelTime = wheelLastEventTimeRef.current;
             if (previousWheelTime > 0) {
                 wheelVelocityRef.current = artworkWheelVelocity(
-                    wheelVelocityRef.current, delta, now - previousWheelTime,
+                    wheelVelocityRef.current, pixels, now - previousWheelTime,
                 );
             }
             wheelLastEventTimeRef.current = now;
@@ -715,11 +729,11 @@ export default function ArtworkDetailKineticExperience({
              */
             if (
                 wheelDistanceRef.current !== 0 &&
-                Math.sign(wheelDistanceRef.current) !== Math.sign(delta)
+                Math.sign(wheelDistanceRef.current) !== Math.sign(pixels)
             ) {
-                wheelDistanceRef.current = delta;
+                wheelDistanceRef.current = pixels;
             } else {
-                wheelDistanceRef.current += delta;
+                wheelDistanceRef.current += pixels;
             }
 
             const accumulated = wheelDistanceRef.current;
@@ -737,8 +751,7 @@ export default function ArtworkDetailKineticExperience({
             if (track) {
                 gsap.killTweensOf(track);
                 const nextX = baseXRef.current + previewOffset;
-                gsap.set(track, { x: nextX });
-                positionRef.current = nextX;
+                setTrackX(nextX);
             }
 
             if (wheelResetRef.current !== null) {
@@ -815,10 +828,12 @@ export default function ArtworkDetailKineticExperience({
         navigate,
         resetToCurrent,
         sealOnboardingHint,
+        setTrackX,
     ]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
+            if (document.querySelector("[data-artwork-zoom-dialog]")) return;
             const target = event.target as HTMLElement | null;
 
             if (
@@ -892,10 +907,10 @@ export default function ArtworkDetailKineticExperience({
         const track = trackRef.current;
         if (track) {
             gsap.killTweensOf(track);
-            positionRef.current =
-                Number(gsap.getProperty(track, "x")) ||
-                baseXRef.current;
+            const renderedX = Number(gsap.getProperty(track, "x"));
+            positionRef.current = Number.isFinite(renderedX) ? renderedX : baseXRef.current;
         }
+        startOffsetRef.current = positionRef.current - baseXRef.current;
 
         inputModeRef.current = "pointer";
         draggingRef.current = true;
@@ -942,7 +957,7 @@ export default function ArtworkDetailKineticExperience({
 
         if (!horizontalDragRef.current) {
             if (
-                Math.abs(deltaX) < ARTWORK_KINETICS.intentDistance &&
+                Math.abs(deltaX) < (event.pointerType === "mouse" ? 1 : ARTWORK_KINETICS.intentDistance) &&
                 Math.abs(deltaY) < ARTWORK_KINETICS.intentDistance
             ) {
                 return;
@@ -952,6 +967,7 @@ export default function ArtworkDetailKineticExperience({
                 Math.abs(deltaX) <
                 Math.abs(deltaY) * AXIS_LOCK_RATIO
             ) {
+                if (Math.abs(deltaY) < ARTWORK_KINETICS.intentDistance) return;
                 draggingRef.current = false;
                 pointerIdRef.current = null;
                 inputModeRef.current = "idle";
@@ -974,7 +990,7 @@ export default function ArtworkDetailKineticExperience({
 
         const offset = artworkPointerOffset(deltaX, Boolean(previousHref), Boolean(nextHref));
 
-        setTrackX(baseXRef.current + offset);
+        setTrackX(baseXRef.current + startOffsetRef.current + offset);
 
         const now = performance.now();
         velocityRef.current = artworkPointerVelocity(
@@ -993,6 +1009,12 @@ export default function ArtworkDetailKineticExperience({
             pointerIdRef.current !== event.pointerId
         ) {
             return;
+        }
+
+        // The release can carry a final position not delivered by pointermove.
+        // Keep cancelled/lost captures on the existing cancellation path.
+        if (event.type === "pointerup" && event.clientX !== lastXRef.current) {
+            handlePointerMove(event);
         }
 
         draggingRef.current = false;
@@ -1021,6 +1043,7 @@ export default function ArtworkDetailKineticExperience({
         }
 
         if (!horizontalDragRef.current) {
+            if (Math.abs(positionRef.current - baseXRef.current) > .5) resetToCurrent();
             return;
         }
 
@@ -1029,7 +1052,7 @@ export default function ArtworkDetailKineticExperience({
 
         const velocity = velocityRef.current;
         const direction = artworkPointerDirection(displacement, velocity, viewportWidthRef.current,
-            Boolean(previousHref), Boolean(nextHref));
+            Boolean(previousHref), Boolean(nextHref), performance.now() - lastTimeRef.current);
         if (direction) { navigate(direction, velocity); return; }
 
         resetToCurrent();

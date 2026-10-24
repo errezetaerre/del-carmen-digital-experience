@@ -392,10 +392,12 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     view.addEventListener("pointerup", pointerEnd);
     view.addEventListener("pointercancel", pointerEnd);
     view.addEventListener("blur", cancel);
+    root.addEventListener("artwork-image-zoom", cancel);
     cleanup.push(() => {
         frame.removeEventListener("pointerdown", pointerDown); view.removeEventListener("pointermove", pointerMove);
         view.removeEventListener("pointerup", pointerEnd); view.removeEventListener("pointercancel", pointerEnd);
         view.removeEventListener("blur", cancel);
+        root.removeEventListener("artwork-image-zoom", cancel);
     });
     function navigate(direction: Direction) {
         if (!ready || settling || grip || blocked()) return;

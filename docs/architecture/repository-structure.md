@@ -1,4 +1,4 @@
-Version: 1.45
+Version: 1.46
 
 Document ID:
 DOC-RS
@@ -22,7 +22,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-21
+2026-10-23
 
 ---
 
@@ -713,3 +713,13 @@ The approved Archive v5 is integrated into the existing localized route tree:
 - `CollectionArtworkFrame`: existing material/motion with per-instance SVG IDs. Passive `ArtworkBadges` expose stable data hooks for archive styling; badge content still comes from the canonical presentation service.
 
 Only the Archive message namespace is extended in EN/ES. The detail page consumes the shared archive query for Previous / Next and return context; its motion components and Glass runtime are unchanged. No database, API, dependency or source-media migration is included.
+
+## Search metadata ownership — 2026-10-23
+
+- `src/config/seo.ts`: validated public origin and deployment indexing policy.
+- `src/shared/lib/seo.ts`: localized canonical URLs, page release gates and reciprocal language alternatives.
+- `src/shared/lib/metadata.ts`: shared title/description, canonical, robots and social metadata factory. Route owners supply their own path and optional image.
+- `src/app/sitemap.ts` and `src/app/robots.ts`: App Router discovery endpoints outside the locale route segment.
+- `docs/architecture/seo.md`: configuration, release policy and operational checks.
+
+The existing Artwork, ArtworkSeries, Home curation and published Journal services remain the source of data. SEO does not own another catalog, alter media or change the Standard/Glass interaction engines. Domain connection and language/legal publication retain their separate release checks.

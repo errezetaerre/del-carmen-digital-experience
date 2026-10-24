@@ -8,6 +8,7 @@ export const ARTWORK_KINETICS = {
     momentumFactor: .24,
     snapDistanceRatio: .12,
     snapVelocity: 420,
+    releaseVelocityWindowMs: 120,
     wheelTrigger: 72,
     wheelPreviewMultiplier: 1,
     wheelPreviewRatio: .42,
@@ -28,7 +29,8 @@ export function artworkKineticTween(remainingDistance: number, releaseVelocity =
 }
 
 export function artworkPointerVelocity(previous: number, delta: number, elapsedMs: number) {
-    return previous * .72 + ((delta / Math.max(elapsedMs, 1)) * 1000) * .28;
+    const recent = elapsedMs <= ARTWORK_KINETICS.releaseVelocityWindowMs ? previous : 0;
+    return recent * .72 + ((delta / Math.max(elapsedMs, 1)) * 1000) * .28;
 }
 
 export function artworkWheelVelocity(previous: number, delta: number, elapsedMs: number) {
@@ -47,10 +49,19 @@ export function artworkWheelOffset(distance: number, width: number, hasDestinati
 }
 
 export function artworkPointerDirection(displacement: number, velocity: number, width: number,
-    hasPrevious: boolean, hasNext: boolean): ArtworkDirection | null {
-    const projected = displacement + velocity * ARTWORK_KINETICS.momentumFactor;
+    hasPrevious: boolean, hasNext: boolean, idleMs = 0): ArtworkDirection | null {
     const threshold = width * ARTWORK_KINETICS.snapDistanceRatio;
-    if (hasNext && (projected <= -threshold || velocity <= -ARTWORK_KINETICS.snapVelocity)) return 1;
-    if (hasPrevious && (projected >= threshold || velocity >= ARTWORK_KINETICS.snapVelocity)) return -1;
+    // A completed drag must not be vetoed by a few reverse pixels at release.
+    if (displacement <= -threshold) return hasNext ? 1 : null;
+    if (displacement >= threshold) return hasPrevious ? -1 : null;
+    if (Math.abs(displacement) < ARTWORK_KINETICS.intentDistance) return null;
+
+    // A short flick is valid only while moving toward that same neighbour.
+    // Holding still before release must not reuse an earlier burst of speed.
+    const releaseVelocity = idleMs <= ARTWORK_KINETICS.releaseVelocityWindowMs && displacement * velocity > 0
+        ? velocity : 0;
+    const projected = displacement + releaseVelocity * ARTWORK_KINETICS.momentumFactor;
+    if (hasNext && (projected <= -threshold || releaseVelocity <= -ARTWORK_KINETICS.snapVelocity)) return 1;
+    if (hasPrevious && (projected >= threshold || releaseVelocity >= ARTWORK_KINETICS.snapVelocity)) return -1;
     return null;
 }

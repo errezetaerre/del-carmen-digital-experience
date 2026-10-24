@@ -28,6 +28,7 @@ export default function ArtworkViewerEditorial({ artwork, portalTarget, detailsQ
     const expanded = readingExpanded ?? ownExpanded;
     const setExpanded = onReadingChange ?? setOwnExpanded;
     const readButton = useRef<HTMLButtonElement>(null), previewSlot = useRef<HTMLDivElement>(null);
+    const imageGestureRoot = useRef<HTMLDivElement>(null);
     const id = `gallery${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
     const query = new URLSearchParams(detailsQuery);
     query.set("experience", standard ? "standard" : "glass");
@@ -37,7 +38,7 @@ export default function ArtworkViewerEditorial({ artwork, portalTarget, detailsQ
         // Focus returns after the reverse motion, without scrolling the page.
     }
     return <div className={styles.editorial} data-gallery-editorial data-portrait-sheet>
-        <div className={styles.artwork} data-artwork-reading-boundary>
+        <div ref={imageGestureRoot} className={styles.artwork} data-artwork-reading-boundary>
             <ArtworkImageHighlights artwork={artwork} className={glass.imageWrapper}>
                 <div className={glass.imageMask}>
                     <div ref={zoomLayerRef} className={glass.zoomViewport} data-artwork-arrival-zoom data-lightbox-content="true">
@@ -51,7 +52,7 @@ export default function ArtworkViewerEditorial({ artwork, portalTarget, detailsQ
                 </div>
                 {standard && active && hasHighlights && artwork.creationStatus === "completed" && <ArtworkArrivalAccent key={artwork.id} artworkId={artwork.id} surface="lightbox" />}
             </ArtworkImageHighlights>
-            {!standard && <ArtworkDetailViewer artwork={artwork} triggerOnly portalTarget={portalTarget} />}
+            {active && <ArtworkDetailViewer artwork={artwork} triggerOnly gestureRoot={imageGestureRoot} portalTarget={portalTarget} />}
             {hint}
         </div>
         {positionDots ?? <div className={styles.positionSpacer} data-lightbox-position-dots aria-hidden="true" />}

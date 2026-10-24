@@ -45,7 +45,9 @@ export async function generateMetadata({ params }: Pick<SeriesPageProps, "params
     if (!sourceSeries) notFound();
     const series = localizeArtworkSeries(sourceSeries, locale);
     const t = await getTranslations({ locale, namespace: "Series" });
-    return createPageMetadata({ locale, title: series.title,
+    const cover = getArtworksBySeriesId(series.id).find((artwork) =>
+        artwork.id === series.coverArtworkId && artwork.creationStatus === "completed");
+    return createPageMetadata({ locale, pathname: `/series/${series.slug}`, image: cover?.images.primary, title: series.title,
         description: series.description || series.statement || t("metadataFallback", { title: series.title }) });
 }
 

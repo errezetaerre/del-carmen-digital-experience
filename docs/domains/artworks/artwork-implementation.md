@@ -1,13 +1,37 @@
 # Artwork Implementation
 
-Version: 1.37
+Version: 1.39
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
 Document Type: Implementation
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-21
-Status: Implemented; production build and emulated browser verification completed for the portrait increment. Physical-device visual review remains pending.
+Last Updated: 2026-10-23
+Status: Gesture response v2 prepared and verified in Chromium with emulated input. Owner and physical-device review remain pending.
+
+## Direct navigation and image pinch ownership — 2026-10-23
+
+Standard Drag v1 did not satisfy the owner's review: live held movement and trackpad input still felt delayed, and horizontal overscroll could navigate browser history. Input Gestures v2 supersedes that delivery, retaining its release guards below. Mouse dragging over a painting continues page navigation; it never automatically opens image zoom. Horizontal two-finger trackpad movement also navigates. Separating two touch points over a completed painting, or the browser's trackpad pinch signal, opens the existing image-only viewer and continues changing its scale. Holding the first contact before adding the second is supported. Native vertical input remains available for reading hidden text.
+
+The routed Standard controller and shared Home/Series gallery adapter write live displacement through cached GSAP setters, without a tween between input samples. Mouse horizontal intention begins after one pixel; touch keeps its eight-pixel direction threshold and native vertical reading. Wheel deltas account for pixel, line and page units. Existing release distance, spring/settling equations, momentum guard, queued buttons and route-readiness handoff remain with their approved owners. This does not preload the whole catalogue or remove actual image/route loading time.
+
+`shared/ui/artwork/artworkImageGestures.ts` owns photo-targeted pinch recognition for detail, shared gallery and the two Glass engines. Single mouse input passes through. Two-point expansion claims the image and cancels the underlying page grip before opening the existing `ArtworkDetailViewer`; the original pinch can continue without a second attempt. Trackpad Ctrl+Wheel and WebKit gesture events are browser-generated pinch signals, not an instruction to press a keyboard modifier. Viewer panning/zooming updates without the previous CSS easing during live input. Planned/frosted works remain unavailable for image-only zoom. Explicit expand controls and double click retain their existing behavior.
+
+`useArtworkGestureBoundary.ts` scopes horizontal overscroll suppression to the active experience and its nested image dialog. It consumes horizontal Wheel input while leaving vertical reading and image pinch to their respective owners, applies horizontal overscroll containment with reference-counted cleanup, and restores prior document styles on exit. Ordinary browser controls and explicit Back/Forward are retained. Nested image focus/Escape closes only the image viewer; gallery keyboard navigation yields while a blocking dialog is open. Gallery touch bookkeeping resets when a pinch claims the image and after all contacts end.
+
+The change preserves approved page geometry, rigid Glass perspective/rotation physics, materials, insignias, particles, catalogue facts, owner media, translations and SEO configuration. It introduces no runtime dependency. It applies to the existing `/artworks/[slug]` and `/series/[slug]?artwork=...` paths and shared gallery hosts, in Standard and Glass across portrait/landscape viewport classes.
+
+Validation uses the pinned production build and real Chromium 153. A 24-case matrix covers both routes, both modes and six desktop/phone/tablet viewport/input profiles. Additional browser cases exercise held mouse and trusted trackpad navigation in both directions, two-pixel immediate mouse displacement, a held contact followed by a pinch, mouse-held trackpad pinch, real vertical scrolling, nested zoom layering/Escape, one-finger navigation after closing pinch, and boundary cleanup. TypeScript/build pass with 123 static pages on the pre-SEO base; lint has zero errors and the existing 14 warnings. Browser tests substitute small local image fixtures for the sparse checkout's absent original media. They do not establish actual-photo loading performance, macOS history-gesture behavior, Safari/WebKit input behavior or physical iPhone/iPad/Android approval. Owner review in local/Preview remains required before commit/merge; no remote write or deployment is performed here. The separate SEO increment can remain pending on the same feature branch.
+
+## Standard mouse release stability — 2026-10-23
+
+The owner reports intermittent rebound in `/artworks/[slug]`, confirmed specifically in Standard with a held mouse drag. A reproducible trace on main `307f33d` crosses the 12% distance threshold and then reverses eight pixels at release; the earlier velocity projection incorrectly returns the scene. The shared release resolver now gives the completed distance priority. Short flicks must agree with the actual displacement, and velocity older than 120ms is not reused after a hold or pause.
+
+Detail and gallery adapters consume the final pointerup coordinate before resolving the gesture, keep the rendered track position when a return is grabbed again, and resume an interrupted return after a grip without horizontal movement. Pointer cancellation and vertical reading retain their cancellation/native paths. Shared gallery Standard uses the same resolver to preserve the approved consistency with Home/Series/Collections.
+
+The existing 12% distance, 420px/s flick threshold, return duration, settling/easing equations and trackpad equations remain unchanged. No Glass engine, layout, media, catalog, translation, dependency or SEO file changes belong to this correction. Its patch can be applied alongside the separate SEO increment without discarding that work.
+
+Regression checks compare original and corrected React pointer handlers in a simulated DOM, cover missing final movement, reverse jitter, stale velocity, regrab continuity, genuine flick, previous/next, cancellation and vertical input, and exercise the shared gallery adapter plus 32 width/direction/jitter combinations. GSAP timing is mocked in those event checks; they do not establish physical-browser visual approval. Production build/TypeScript and lint pass with the existing 14 warnings. Owner mouse review in local/Preview remains the final interaction check.
 
 ## Shared Standard motion for detail and gallery — 2026-10-20
 

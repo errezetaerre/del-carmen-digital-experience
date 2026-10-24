@@ -6,7 +6,7 @@ import { createPageMetadata } from "@/shared/lib/metadata";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Collections;
-    return createPageMetadata({ locale, title: copy.metadataTitle, description: copy.metadataDescription });
+    return createPageMetadata({ locale, pathname: "/collections", title: copy.metadataTitle, description: copy.metadataDescription });
 }
 
 import {
