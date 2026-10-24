@@ -3,6 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import {
     FormEvent,
+    useRef,
     useState,
 } from "react";
 
@@ -43,6 +44,7 @@ export default function NewsletterForm() {
     const searchParams = useSearchParams();
 
     const [email, setEmail] = useState("");
+    const formRef = useRef<HTMLFormElement>(null);
     const [contactField, setContactField] = useState("");
     const [acceptedNotice, setAcceptedNotice] = useState<string | null>(null);
     const noticeKey = locale + ":" + privacy.version;
@@ -61,6 +63,10 @@ export default function NewsletterForm() {
     }
 
     const isSubmitting = status === "submitting";
+
+    function focusConsent() {
+        requestAnimationFrame(() => formRef.current?.querySelector<HTMLInputElement>('[name="consent"]')?.focus());
+    }
 
     /*
      * ======================================================
@@ -100,6 +106,7 @@ export default function NewsletterForm() {
 
         if (!consent) {
             setConsentError("consentRequired");
+            focusConsent();
             return;
         }
 
@@ -145,6 +152,7 @@ export default function NewsletterForm() {
                         : "consentRequired");
                     setConsent(false);
                     setStatus("idle");
+                    focusConsent();
                     return;
                 }
 
@@ -162,6 +170,8 @@ export default function NewsletterForm() {
 
     return (
         <form
+            ref={formRef}
+            aria-busy={isSubmitting}
             onSubmit={handleSubmit}
             autoComplete="on"
             className="mt-8 w-full"
@@ -219,6 +229,7 @@ export default function NewsletterForm() {
                     <input
                         id="newsletter-email"
                         name="email"
+                        maxLength={254}
                         type="email"
                         required
                         autoComplete="email"

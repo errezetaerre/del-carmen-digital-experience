@@ -5,6 +5,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 import { getFormPrivacy, resolveFormLocale } from "@/i18n/formPrivacyCopy";
+import { readFormJson } from "@/shared/lib/server/readFormJson";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -32,6 +33,11 @@ type ContactPayload = {
 
 export async function POST(request: Request) {
     try {
+        const payload = await readFormJson(request);
+        if (!payload.ok) {
+            return NextResponse.json({ error: payload.error, code: payload.code }, { status: payload.status });
+        }
+        const body: ContactPayload = payload.body;
 
         const forwardedFor = request.headers.get("x-forwarded-for");
 
@@ -57,18 +63,6 @@ export async function POST(request: Request) {
                     },
                 }
             );
-        }
-
-        let body: ContactPayload;
-
-        try {
-            const parsed: unknown = await request.json();
-            if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-                return NextResponse.json({ error: "Invalid request." }, { status: 400 });
-            }
-            body = parsed as ContactPayload;
-        } catch {
-            return NextResponse.json({ error: "Invalid request." }, { status: 400 });
         }
 
         const name =

@@ -7,6 +7,7 @@ import { Redis } from "@upstash/redis";
 import { Resend } from "resend";
 
 import { getFormPrivacy, resolveFormLocale } from "@/i18n/formPrivacyCopy";
+import { readFormJson } from "@/shared/lib/server/readFormJson";
 
 import {
     cleanFailedSubscriptionRequest,
@@ -53,6 +54,11 @@ function getBaseUrl(request: Request) {
 }
 
 export async function POST(request: Request) {
+    const payload = await readFormJson(request);
+    if (!payload.ok) {
+        return NextResponse.json({ error: payload.error, code: payload.code }, { status: payload.status });
+    }
+    const body: NewsletterRequestBody = payload.body;
     /*
      * ======================================================
      * 01 — RATE LIMIT
@@ -67,8 +73,14 @@ export async function POST(request: Request) {
         request.headers.get("x-real-ip") ||
         "unknown";
 
-    const { success, limit, remaining, reset } =
-        await ratelimit.limit(ip);
+    let rate;
+    try {
+        rate = await ratelimit.limit(ip);
+    } catch (error) {
+        console.error("Newsletter rate limit service error:", error);
+        return NextResponse.json({ error: "Newsletter service is temporarily unavailable." }, { status: 503 });
+    }
+    const { success, limit, remaining, reset } = rate;
 
     if (!success) {
         return NextResponse.json(
@@ -83,30 +95,6 @@ export async function POST(request: Request) {
                         String(remaining),
                     "X-RateLimit-Reset": String(reset),
                 },
-            },
-        );
-    }
-
-    /*
-     * ======================================================
-     * 02 — REQUEST BODY
-     * ======================================================
-     */
-
-    let body: NewsletterRequestBody;
-
-    try {
-        body = await request.json();
-        if (!body || typeof body !== "object" || Array.isArray(body)) {
-            return NextResponse.json({ error: "Invalid request." }, { status: 400 });
-        }
-    } catch {
-        return NextResponse.json(
-            {
-                error: "Invalid request.",
-            },
-            {
-                status: 400,
             },
         );
     }

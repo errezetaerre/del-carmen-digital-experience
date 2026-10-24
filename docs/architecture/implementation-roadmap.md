@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.19
+Version: 1.20
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,11 +7,11 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-23
+Last Updated: 2026-10-24
  
-Current increment — 2026-10-23
+Current increment — 2026-10-24
 
-PR #5 is merged into main at `307f33d`; the approved archive and shared Standard/Glass experiences are the baseline. The current bounded increment prepares technical SEO on `feat/seo-foundation`: origin configuration, canonical URLs, gated language alternates, discovery files and social metadata. The registered domain remains disconnected until the agreed launch checks. Details are recorded in `docs/architecture/seo.md`.
+SEO and Input Gestures v2 are published in main `cd98843`, including the approved archive and shared Standard/Glass experiences. The current bounded increment, `fix/accessibility-security-baseline`, prepares keyboard/modal accessibility and public-form request hardening. It also includes the four previously identified legal metadata title corrections. Its code is pending owner installation/review and PR; no remote write or deployment is performed here. Domain/email setup, Spanish/legal release gates, physical-device QA and the broader security/operations review remain separate checks.
 
 1. Objective
 This document defines the official implementation sequence of the Del Carmen Digital Experience platform.

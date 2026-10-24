@@ -9,6 +9,7 @@
     "switchToSpanish": "Leer esta página en español",
     "switchToEnglish": "Leer esta página en inglés",
     "openMenu": "Abrir menú",
+    "skipToContent": "Saltar al contenido",
     "closeMenu": "Cerrar menú",
     "main": "Navegación principal",
     "mobile": "Navegación móvil",
@@ -578,7 +579,7 @@
     "contact": "Contacto"
   },
   "Privacy": {
-    "metadataTitle": "Aviso de privacidad | Del Carmen",
+    "metadataTitle": "Aviso de privacidad",
     "metadataDescription": "Borrador del aviso sobre consultas de contacto, suscripciones al boletín y datos personales en Del Carmen.",
     "label": "Del Carmen · Información legal",
     "title": "Aviso de privacidad",
@@ -632,7 +633,7 @@
     "linksDescription": "Los enlaces a plataformas sociales y otros sitios web conducen a servicios con sus propias prácticas de privacidad. Revisa sus avisos cuando decidas visitarlos."
   },
   "Terms": {
-    "metadataTitle": "Condiciones de uso | Del Carmen",
+    "metadataTitle": "Condiciones de uso",
     "metadataDescription": "Borrador de las condiciones para consultar obras, realizar consultas y utilizar el sitio web de Del Carmen.",
     "label": "Del Carmen · Información legal",
     "title": "Condiciones de uso",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
+import { isolateDialog } from "./dialogBackground";
 
 type FocusOptions = { initialFocus?: HTMLElement | null; onEscape?: () => void };
 type DialogEntry = { root: HTMLElement };
@@ -55,6 +56,7 @@ export function bindDialogFocus(root: HTMLElement, options: FocusOptions = {}): 
     }
     document.addEventListener("keydown", keyboard, true);
     document.addEventListener("focusin", escaped, true);
+    const restoreBackground = isolateDialog(root);
     focusInside();
     return () => {
         if (disposed) return;
@@ -64,6 +66,7 @@ export function bindDialogFocus(root: HTMLElement, options: FocusOptions = {}): 
         document.removeEventListener("focusin", escaped, true);
         const index = stack.indexOf(entry); if (index >= 0) stack.splice(index, 1);
         if (!stack.length) dialogs.delete(document);
+        restoreBackground();
         if (originalTabIndex === null) root.removeAttribute("tabindex"); else root.setAttribute("tabindex", originalTabIndex);
         if (!wasTop) return;
         const parent = stack[stack.length - 1]?.root;

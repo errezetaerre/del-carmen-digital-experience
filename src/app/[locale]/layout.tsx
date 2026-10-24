@@ -73,7 +73,9 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider locale={locale} messages={getSiteMessages(locale)}>
+          <a href="#main-content" className="skip-to-content">{getSiteMessages(locale).Navigation.skipToContent}</a>
           <Navigation />
+          <div id="main-content" tabIndex={-1} />
           {children}
         </NextIntlClientProvider>
       </body>

@@ -9,6 +9,7 @@
     "switchToSpanish": "Read this page in Spanish",
     "switchToEnglish": "Read this page in English",
     "openMenu": "Open menu",
+    "skipToContent": "Skip to content",
     "closeMenu": "Close menu",
     "main": "Main navigation",
     "mobile": "Mobile navigation",
@@ -578,7 +579,7 @@
     "contact": "Contact"
   },
   "Privacy": {
-    "metadataTitle": "Privacy Notice | Del Carmen",
+    "metadataTitle": "Privacy Notice",
     "metadataDescription": "A draft notice about contact enquiries, newsletter subscriptions and personal data at Del Carmen.",
     "label": "Del Carmen · Legal",
     "title": "Privacy Notice",
@@ -632,7 +633,7 @@
     "linksDescription": "Links to social platforms and other websites lead to services with their own privacy practices. Review their notices when you choose to visit them."
   },
   "Terms": {
-    "metadataTitle": "Terms of Use | Del Carmen",
+    "metadataTitle": "Terms of Use",
     "metadataDescription": "Draft terms for viewing artwork, making enquiries and using the Del Carmen website.",
     "label": "Del Carmen · Legal",
     "title": "Terms of Use",

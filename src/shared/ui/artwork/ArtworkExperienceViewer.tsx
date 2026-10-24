@@ -64,12 +64,6 @@ export default function ArtworkExperienceViewer({ artworks: sourceArtworks, init
         const element = root.current;
         if (!element) return;
         returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-        const siblings = Array.from(document.body.children).filter((node): node is HTMLElement => node instanceof HTMLElement && node !== element && node.tagName !== "SCRIPT")
-            .map(node => ({ node, inert: node.inert }));
-        siblings.forEach(({ node }) => { node.inert = true; });
-        return () => {
-            siblings.forEach(({ node, inert }) => { node.inert = inert; });
-        };
     }, []);
     useEffect(() => () => {
         // Wait until React has removed every portal and focus trap. Restoring

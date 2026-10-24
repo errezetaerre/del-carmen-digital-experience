@@ -67,7 +67,16 @@ export default function ContactForm() {
     const consent = acceptedNotice === noticeKey;
     const setConsent = (checked: boolean) => setAcceptedNotice(checked ? noticeKey : null);
     const [subjectPreview, setSubjectPreview] = useState<string | null>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const feedbackRef = useRef<HTMLDivElement>(null);
+
+    function focusInvalidField() {
+        requestAnimationFrame(() => {
+            formRef.current?.querySelector<HTMLElement>(
+                'input[aria-invalid="true"], textarea[aria-invalid="true"], fieldset[aria-invalid="true"] input',
+            )?.focus();
+        });
+    }
 
     useEffect(() => {
         if (status === "success") {
@@ -137,6 +146,7 @@ export default function ContactForm() {
         if (status === "submitting") return;
 
         if (!validateForm()) {
+            focusInvalidField();
             return;
         }
 
@@ -178,6 +188,7 @@ export default function ContactForm() {
                     }));
                     setConsent(false);
                     setStatus("idle");
+                    focusInvalidField();
                     return;
                 }
 
@@ -200,6 +211,8 @@ export default function ContactForm() {
 
     return (
         <form
+            ref={formRef}
+            aria-busy={isSubmitting}
             className="w-full"
             noValidate
             onSubmit={handleSubmit}
@@ -246,6 +259,7 @@ export default function ContactForm() {
                     <input
                         id="name"
                         name="name"
+                        maxLength={100}
                         required
                         type="text"
                         autoComplete="name"
@@ -297,6 +311,7 @@ export default function ContactForm() {
                     <input
                         id="email"
                         name="email"
+                        maxLength={254}
                         required
                         type="email"
                         autoComplete="email"
@@ -462,6 +477,7 @@ export default function ContactForm() {
                     <textarea
                         id="message"
                         name="message"
+                        maxLength={5000}
                         required
                         rows={3}
                         value={formData.message}

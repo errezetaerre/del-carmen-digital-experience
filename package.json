@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:security": "node --test tests/form-security.test.mjs"
   },
   "dependencies": {
     "@upstash/ratelimit": "^2.0.8",

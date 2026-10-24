@@ -2,6 +2,8 @@
 
 The shared metadata factory owns canonical URLs, Open Graph/Twitter metadata and page indexing policy. Each route passes its own internal `pathname`; the locale layout sets `metadataBase` and does not inherit a home-page canonical into its children.
 
+The factory adds the brand suffix once. Privacy/Terms `metadataTitle` values in both message files contain only the page title, avoiding a duplicated `Del Carmen` in browser/social titles. This four-string correction is included in the accessibility/security increment of 2026-10-24; legal page bodies and their draft/noindex policy are unchanged.
+
 ## Public origin
 
 `src/config/seo.ts` reads the server-side `SITE_URL` environment variable. Until the registered domain is connected and verified, its fallback is the current public production address, `https://del-carmen-digital-experience.vercel.app`.
