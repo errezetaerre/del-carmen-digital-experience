@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { newsletterActionHeaders } from "./src/config/newsletterHttp";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -21,6 +22,10 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "no-referrer" },
         ],
       },
+      ...["/api/newsletter/confirm", "/api/newsletter/unsubscribe"].map(source => ({
+        source,
+        headers: Object.entries(newsletterActionHeaders).map(([key, value]) => ({ key, value })),
+      })),
     ];
   },
 };

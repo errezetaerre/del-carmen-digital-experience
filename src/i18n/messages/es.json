@@ -565,6 +565,24 @@
     "error": "Ha ocurrido un error. Inténtalo de nuevo.",
     "rateLimited": "Demasiados intentos. Espera unos minutos antes de volver a intentarlo."
   },
+  "NewsletterAction": {
+    "confirmTitle": "Confirma tu suscripción",
+    "confirmDescription": "Pulsa el botón para confirmar que deseas recibir novedades ocasionales del estudio. Abrir esta página por sí solo no te suscribe.",
+    "confirmButton": "Confirmar mi suscripción",
+    "unsubscribeTitle": "Darse de baja del boletín",
+    "unsubscribeDescription": "Pulsa el botón para dejar de recibir novedades del estudio. No necesitas una cuenta ni una contraseña.",
+    "unsubscribeButton": "Darme de baja",
+    "unavailableTitle": "Inténtalo de nuevo en un momento",
+    "unavailableDescription": "No se pudo verificar el resultado de esta solicitud. Inténtalo de nuevo con el mismo enlace en un momento.",
+    "rateLimitedTitle": "Un momento de paciencia",
+    "rateLimitedDescription": "Se han realizado demasiados intentos. Espera unos minutos antes de volver a intentarlo.",
+    "invalidRequestTitle": "No se pudo procesar esta solicitud",
+    "invalidRequestDescription": "Vuelve a abrir el enlace de tu correo y utiliza el botón que aparece allí.",
+    "retry": "Volver a intentar",
+    "back": "Volver al sitio",
+    "privacy": "Aviso de privacidad",
+    "navigation": "Navegación del boletín"
+  },
   "FormPrivacy": {
     "handler": "gestiona estos datos para",
     "privacyLink": "Aviso de privacidad (se abre en una pestaña nueva)",

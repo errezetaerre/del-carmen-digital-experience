@@ -1,41 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync, existsSync, statSync } from "node:fs";
-import { createRequire } from "node:module";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import test from "node:test";
-import ts from "typescript";
-
-const require = createRequire(import.meta.url);
-const project = fileURLToPath(new URL("../", import.meta.url));
-
-// Load the actual server code; replace only external services. No test sends
-// email, accesses Redis, or requires private environment configuration.
-function serverModules(mocks = new Map()) {
-    const cache = new Map();
-    function load(path) {
-        const filename = [path, `${path}.ts`, `${path}.tsx`, `${path}.json`, resolve(path, "index.ts")]
-            .find(candidate => existsSync(candidate) && statSync(candidate).isFile());
-        assert.ok(filename, `Missing module: ${path}`);
-        if (cache.has(filename)) return cache.get(filename).exports;
-        const source = readFileSync(filename, "utf8");
-        if (filename.endsWith(".json")) return JSON.parse(source);
-        const output = ts.transpileModule(source, { compilerOptions: {
-            module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true,
-        } }).outputText;
-        const compiledModule = { exports: {} };
-        cache.set(filename, compiledModule);
-        const dependency = name => {
-            if (mocks.has(name)) return mocks.get(name);
-            if (name.startsWith("@/")) return load(resolve(project, "src", name.slice(2)));
-            if (name.startsWith(".")) return load(resolve(dirname(filename), name));
-            return require(name);
-        };
-        new Function("require", "module", "exports", output)(dependency, compiledModule, compiledModule.exports);
-        return compiledModule.exports;
-    }
-    return path => load(resolve(project, path));
-}
+import { serverModules } from "../scripts/lib/loadProjectModule.mjs";
 
 const { readFormJson, MAX_FORM_BODY_BYTES } = serverModules()("src/shared/lib/server/readFormJson.ts");
 const { getFormPrivacy } = serverModules()("src/i18n/formPrivacyCopy.ts");
@@ -51,6 +16,12 @@ function rawRequest(body, headers = {}) {
 function routeFixture(kind, scenario = {}) {
     const calls = { rate: 0, send: [], pending: [], cleanup: [] };
     const mocks = new Map([
+        ["@/config/mail", {
+            getContactMailSettings: () => ({ apiKey: "re_mock_only", from: "Del Carmen <sender@example.invalid>", to: "owner@example.invalid" }),
+            getNewsletterMailSettings: () => ({ apiKey: "re_mock_only", from: "Del Carmen <sender@example.invalid>", replyTo: "owner@example.invalid" }),
+            getRedisSettings: () => ({ url: "https://redis.example.invalid", token: "mock_only" }),
+            getNewsletterOrigin: () => origin, logMailConfigurationError() {},
+        }],
         ["next/server", { NextResponse: { json: (body, init) => Response.json(body, init) } }],
         ["resend", { Resend: class {
             emails = { send: async payload => {
@@ -227,7 +198,7 @@ for (const kind of ["contact", "newsletter"]) {
         t.mock.method(console, "error", () => {});
         const { POST, calls } = routeFixture(kind, { rateError: true });
         const response = await POST(rawRequest(JSON.stringify(formBody(kind))));
-        assert.equal(response.status, kind === "newsletter" ? 503 : 500);
+        assert.equal(response.status, 503);
         assert.equal(calls.pending.length + calls.send.length, 0);
         assert.doesNotMatch(JSON.stringify(await response.json()), /Test rate service failure|stack|redis/i);
     });

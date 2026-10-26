@@ -1,4 +1,4 @@
-Version: 1.47
+Version: 1.48
 
 Document ID:
 DOC-RS
@@ -733,3 +733,19 @@ The existing Artwork, ArtworkSeries, Home curation and published Journal service
 - `tests/form-security.test.mjs`: Node tests of the actual parser/routes with external mail/Redis/rate services replaced. `npm run test:security` uses existing TypeScript tooling and adds no runtime dependency.
 
 Only the existing development dependency Zod moves from 4.4.3 to 4.6.7 in the lockfile to address GHSA-mrhx-c7xc-m3w5; application framework/runtime versions stay pinned. No database, catalogue, original image or consent-purpose migration is included.
+
+## Mail operations ownership — 2026-10-24
+
+`config/siteOrigin.ts` owns the existing public default and pure HTTPS-origin validation, re-exported by `config/seo.ts`. `config/mail.ts` is server-only and validates sender/recipient/reply, Redis settings and deployment-aware Newsletter links without contacting providers. Routes construct SDK clients lazily after input validation.
+
+`domains/newsletter/server/actionHandlers.ts` owns shared GET/POST confirmation/unsubscribe behavior; `actionPage.ts` renders the small localized HTML form without a client bundle. `config/newsletterHttp.ts` supplies the same strict action-response policy to the renderer and Next configuration; its exact-path rules follow the general API rules so Next cannot overwrite them. Existing request-origin/stream parsing is reused through `shared/lib/server/readFormJson.ts`.
+
+`scripts/check-mail-config.mjs` checks actual configuration locally without mail/provider calls or secret-value output. `scripts/lib/loadProjectModule.mjs` is local TypeScript tooling shared by that command and tests; application code never imports it. `tests/mail-operations.test.mjs` covers configuration, handlers and mail payloads with replaced transports. Optional `tests/newsletter-redis.integration.mjs` starts its own temporary Redis server and verifies its process identity before writes; it never accesses an existing/Upstash database.
+
+`docs/architecture/mail-configuration.md` consolidates the operator's configuration, checks and remaining delivery gates. Its `.env.example` companion contains empty credentials and the existing approved public origin; it is documentation, not an automatically loaded environment file.
+
+## Official-domain review ownership — 2026-10-25
+
+The 374-file actual snapshot on fix/accessibility-security-baseline matches the reviewed source. config/siteOrigin.ts now owns the approved rolandodelcarmen.com fallback; config/mail.ts adds the approved display name only to bare sender addresses, preserving explicit sender names, receiver and Reply-To. Contact owns its three EN/ES enquiry subject labels and rejects header-bound name line breaks. tests/site-origin.test.mjs and npm run test:seo cover canonical/social/robots/sitemap origins and existing indexing gates.
+
+DOC-MAIL-OPS consolidates owner-confirmed DNS/Resend/local delivery, production verification gates, Preview scope review, legacy-variable retirement and the coordinated Redis credential window. This increment adds no runtime dependency, data migration, account change or new database. Artwork/Glass/Standard presentation, catalogue, consent and subscriber lifecycle retain the supplied source.

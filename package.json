@@ -7,7 +7,11 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test:security": "node --test tests/form-security.test.mjs"
+    "test:security": "node --test tests/form-security.test.mjs",
+    "test:newsletter": "node --test tests/mail-operations.test.mjs",
+    "test:seo": "node --test tests/site-origin.test.mjs",
+    "test:newsletter:redis": "node --test tests/newsletter-redis.integration.mjs",
+    "check:mail": "node scripts/check-mail-config.mjs"
   },
   "dependencies": {
     "@upstash/ratelimit": "^2.0.8",

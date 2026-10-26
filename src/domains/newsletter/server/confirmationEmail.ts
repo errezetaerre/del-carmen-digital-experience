@@ -9,6 +9,7 @@ export function createNewsletterConfirmationEmail(locale: SiteLocale, confirmati
     const copy = getSiteMessages(locale).NewsletterEmail;
     return {
         subject: copy.subject,
+        text: ["Del Carmen", "", copy.heading, "", copy.description, "", copy.confirm + ": " + confirmationUrl, "", copy.expiry].join("\n"),
         html: `
                     <!doctype html>
                     <html lang="${locale}">

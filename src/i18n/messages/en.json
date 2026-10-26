@@ -565,6 +565,24 @@
     "error": "Something went wrong. Please try again.",
     "rateLimited": "Too many attempts. Please wait a few minutes before trying again."
   },
+  "NewsletterAction": {
+    "confirmTitle": "Confirm your subscription",
+    "confirmDescription": "Choose the button below to confirm that you want to receive occasional studio news. Opening this page alone does not subscribe you.",
+    "confirmButton": "Confirm my subscription",
+    "unsubscribeTitle": "Leave the studio newsletter",
+    "unsubscribeDescription": "Choose the button below to stop receiving studio news. No account or password is required.",
+    "unsubscribeButton": "Unsubscribe me",
+    "unavailableTitle": "Please try again shortly",
+    "unavailableDescription": "We could not verify the result of this request. Please try again using the same link in a moment.",
+    "rateLimitedTitle": "A moment of patience",
+    "rateLimitedDescription": "There have been too many attempts. Please wait a few minutes before trying again.",
+    "invalidRequestTitle": "We could not process this request",
+    "invalidRequestDescription": "Please reopen the link in your email and use the button shown there.",
+    "retry": "Try again",
+    "back": "Return to the site",
+    "privacy": "Privacy notice",
+    "navigation": "Newsletter navigation"
+  },
   "FormPrivacy": {
     "handler": "handles these details for",
     "privacyLink": "Privacy notice (opens in a new tab)",

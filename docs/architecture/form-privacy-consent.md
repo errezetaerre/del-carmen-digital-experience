@@ -1,6 +1,6 @@
 # Información previa y consentimiento de formularios
 
-Version: 1.2
+Version: 1.3
 Document ID: DOC-FORM-PRIVACY-CONSENT
 Project: Del Carmen Digital Experience
 Owner: Rolando Rojas Zapata
@@ -153,3 +153,9 @@ Los inputs reflejan los máximos existentes del servidor: nombre 100, correo 254
 Las respuestas API tienen no-store/no-referrer. Las cabeceras globales añaden nosniff, SAMEORIGIN y una CSP limitada a frame-ancestors/object-src/base-uri; no se presenta como una política completa contra XSS. La entrega de correo real, los accesos administrativos, la configuración de los proveedores, el dominio/remitente y la evaluación jurídica/operativa siguen pendientes de su revisión específica.
 
 `npm run test:security` ejecuta 47 casos sobre el código real con transportes sustituidos, sin correos ni acceso a suscriptores reales. Incluye límite por bytes/stream, JSON y origen, consentimiento EN/ES, honeypot, rate limit y fallos controlados. Las pruebas locales no acreditan por sí solas la configuración de Vercel/Resend/Upstash ni una auditoría integral.
+
+## Acciones explícitas del boletín — 2026-10-24
+
+La confirmación y la baja dejan de mutar por GET: abrir o previsualizar el enlace solo muestra un botón EN/ES. El POST explícito conserva el modelo y las versiones de consentimiento ya aceptadas. El idioma de presentación no reescribe la constancia original. No se añade una finalidad ni se amplían plazos/datos; la solicitud pendiente sigue requiriendo la casilla y la confirmación posterior.
+
+El formulario HTML de acción comparte la lectura acotada y la validación de origen con los endpoints JSON, con límite propio de 2048 bytes. Las páginas no tienen JavaScript, recursos externos, caché ni indexación. Usan strict-origin para retirar path/token de las referencias y mantener el Origin nativo; los otros endpoints API conservan no-referrer. La recepción URL-encoded de baja one-click no exige sesión ni asigna identidad a la visita. La emisión de campañas y su distribución de enlaces siguen pendientes.
