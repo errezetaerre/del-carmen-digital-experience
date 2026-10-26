@@ -1,5 +1,5 @@
 # Del Carmen Digital Experience --- architecture/implementation-roadmap.md
-Version: 1.19
+Version: 1.21
 Document ID: DOC-IR
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
@@ -7,11 +7,11 @@ Document Type: Technical
 Authority Level: High
 Status: 🟡 In Progress
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-23
+Last Updated: 2026-10-24
  
-Current increment — 2026-10-23
+Current increment — 2026-10-24
 
-PR #5 is merged into main at `307f33d`; the approved archive and shared Standard/Glass experiences are the baseline. The current bounded increment prepares technical SEO on `feat/seo-foundation`: origin configuration, canonical URLs, gated language alternates, discovery files and social metadata. The registered domain remains disconnected until the agreed launch checks. Details are recorded in `docs/architecture/seo.md`.
+SEO and Input Gestures v2 remain published in main `cd98843`. The owner approved Accessibility Security v1 and created a local commit on `fix/accessibility-security-baseline`, confirmed in GitHub Desktop on 2026-10-24; branch publication and PR are deliberately deferred. The current related increment prepares configurable mail senders/origins, lazy service setup, safe Newsletter GET/POST action pages and reproducible configuration/lifecycle checks on that same work branch. It is an incremental patch after Accessibility Security v1, pending owner review. No email, provider configuration, push, PR or deployment is performed here. Domain/sender verification, real delivery, language/legal release and physical-device/global QA remain separate checks.
 
 1. Objective
 This document defines the official implementation sequence of the Del Carmen Digital Experience platform.
@@ -603,3 +603,11 @@ Archive visual prototype v5 is approved. The real route now implements the left 
 The code is prepared as a checked patch against `49ed968`, without committing, pushing, merging or publishing. Owner review in the local application and its new Vercel Preview is next. Existing real-device, provider delivery, full bilingual/accessibility/SEO/security release verification remains active; source-only and static browser fixtures do not close those gates.
 
 Database/repository integration, owner-confirmed offers/prices and original/print distinctions, cart/checkout, the downloadable sales PDF, visitor book, site-wide immersive entry and Academy coursework keep their existing sequence. Artist/brand/domain naming remains an owner decision; this implementation keeps the current Del Carmen identity and does not acquire or configure domains.
+
+## Actual branch and domain review — 2026-10-25
+
+Reviewed the owner's actual fix/accessibility-security-baseline snapshot: 374 file hashes match, local HEAD dee21f91 and origin/main cd98843; no env credentials are included. Preserve its committed accessibility baseline and uncommitted mail increment. Incremental corrections name bare senders Rolando Del Carmen, localize all three Contact enquiry subjects, reject header-bound name line breaks and align the shared fallback with the verified official domain.
+
+Build/TypeScript, 95 offline regressions, lint (zero errors/twelve inherited warnings), full dependency audit (zero known vulnerabilities) and safe API HTTP/SEO output checks pass. The prior loopback English redirect remains a Preview check before merge. DOC-MAIL-OPS consolidates the exact owner handoff and remaining release work rather than adding another task list.
+
+Next: install/review this increment locally; inventory Vercel Production/Preview and all existing del-carmen-contact consumers; coordinate the credential rotation/deployment window; then prepare the approved commit, push, Preview and PR. Do not reset credentials now or assume saved Vercel variables updated existing deployments. Preserve real data, current Gmail receiver, old Onboarding key until consumer review, EN/ES and all approved visuals. Production delivery/persistence/unsubscribe verification and editorial Spanish/legal release remain open.

@@ -1,6 +1,6 @@
 # Contact Implementation
 
-Version: 1.7
+Version: 1.8
 
 Document ID: DOC-CON-IMP
 
@@ -12,11 +12,11 @@ Document Type: Implementation
 
 Authority Level: High
 
-Status: 🟢 Approved / Complete / Frozen
+Status: Approved public form; mail operations increment prepared for review
 
 Owner: Del Carmen Digital Experience
 
-Last Updated: 2026-10-18
+Last Updated: 2026-10-24
 
 ---
 
@@ -391,3 +391,17 @@ Client field errors store message keys and resolve them at render time. Checkbox
 The server accepts omitted locale as legacy English, or exact `en`/`es`. Unsupported locale returns 400 `invalid_locale`. Consent must remain boolean true and the version must match the server's registered language copy; otherwise the existing consent-required/outdated contract blocks delivery. Contact records the exact server-selected statement, purpose, version, language, UTC time and localized source path in the operator email. It does not translate the visitor's message, change recipient/sender, create Contact persistence or send a new auto-reply.
 
 English revision `2026-10-15.1` remains exact; Spanish revision `2026-10-18.1-es` is archived in DOC-FORM-PRIVACY-CONSENT. Retention and operator facts are unchanged. Build/TypeScript, actual compiled form/API fixtures and production GETs verify both languages, old English compatibility and no delivery on invalid consent. Existing English visible copy is exact. Real provider delivery, native browser validation, physical layout/accessibility and final legal draft review remain production/editorial QA.
+
+## Mail operations increment — 2026-10-24
+
+This section supersedes the earlier module-level SDK/test-sender configuration. The approved form UI, fields, copy and notice versions remain unchanged. After bounded JSON, honeypot, fields and current consent are validated, the handler loads server-only mail/Redis settings, constructs clients and applies the existing five-valid-request/ten-minute quota. Invalid fields and the honeypot no longer spend Redis requests.
+
+Sender precedence is CONTACT_EMAIL_FROM, then MAIL_FROM. The Resend testing sender is a development-only fallback; production requires an explicitly configured sender and rejects resend.dev. CONTACT_EMAIL_TO remains explicit and independent from the public correspondence address. Reply-To remains the visitor email so the operator can reply directly; MAIL_REPLY_TO configures Newsletter replies and does not override this behavior.
+
+Configuration and service unavailability return controlled 503 responses; a provider rejection returns 502. User-facing JSON never includes provider errors. Server logs contain static categories/configuration field names, not addresses, message bodies, credentials or tokens. A provider acceptance still needs real inbox/delivery verification; no such message is sent by this increment. See mail-configuration.md for setup and release gates.
+
+## Official-domain mail identity review — 2026-10-25
+
+The actual local snapshot is reviewed without replacing the approved form. Bare configured From addresses now use Rolando Del Carmen, preserving explicitly named overrides. The English artworks subject is [Rolando Del Carmen] Artworks Inquiry — Visitor; all three approved subjects have corresponding EN/ES labels. Internal line breaks in a visitor name are rejected before services because the name enters a mail header. The receiver remains Gmail and Reply-To remains the visitor.
+
+The owner passed local delivery/Reply-To with the verified domain and new Resend key. Production receipt remains unverified until the approved release. No live message is sent in this audit. DOC-MAIL-OPS records the preserved Redis database, environment scopes, credential rotation window, tests and remaining release gates.

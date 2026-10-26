@@ -2,11 +2,13 @@
 
 The shared metadata factory owns canonical URLs, Open Graph/Twitter metadata and page indexing policy. Each route passes its own internal `pathname`; the locale layout sets `metadataBase` and does not inherit a home-page canonical into its children.
 
+The factory adds the brand suffix once. Privacy/Terms `metadataTitle` values in both message files contain only the page title, avoiding a duplicated `Del Carmen` in browser/social titles. This four-string correction is included in the accessibility/security increment of 2026-10-24; legal page bodies and their draft/noindex policy are unchanged.
+
 ## Public origin
 
-`src/config/seo.ts` reads the server-side `SITE_URL` environment variable. Until the registered domain is connected and verified, its fallback is the current public production address, `https://del-carmen-digital-experience.vercel.app`.
+`src/config/seo.ts` reads the server-side `SITE_URL` environment variable. The approved fallback shared with mail in `src/config/siteOrigin.ts` is `https://rolandodelcarmen.com`, connected and verified by the owner on 2026-10-25.
 
-After approval of the domain connection, set `SITE_URL=https://rolandodelcarmen.com` in the Production environment and rebuild. This changes metadata and discovery URLs; it does not configure Cloudflare DNS, Vercel domains, HTTPS, www redirects or email. An invalid origin fails explicitly rather than publishing malformed URLs. HTTPS is required; paths, credentials, query strings and fragments are rejected.
+The owner saved `SITE_URL=https://rolandodelcarmen.com` in the Production environment. A new approved build/deployment is still required; existing deployments retain their old variables. This changes metadata and discovery URLs; it does not configure Cloudflare DNS, Vercel domains, HTTPS, www redirects or email. An invalid origin fails explicitly rather than publishing malformed URLs. HTTPS is required; paths, credentials, query strings and fragments are rejected.
 
 ## Canonical and language policy
 
@@ -37,3 +39,9 @@ Home uses its curated, completed artwork; completed Artwork pages use their prim
 ## Release checks
 
 Run lint and production build with the project's existing environment configuration. Inspect canonical/robots/social tags and XML in the new Preview, then validate DNS, HTTPS, domain redirects and real social previews when connecting the domain. Review the Spanish and legal release gates separately. Search engine indexing and third-party share caches are not guaranteed by a successful local build.
+
+## Domain release review — 2026-10-25
+
+The actual 374-file owner snapshot was verified before this incremental change. Four offline SEO regressions and the generated production output verify the official canonical/social origins, robots sitemap location and 58 sitemap URLs. Preview/local noindex, Spanish pilot and legal-draft gates remain unchanged. The sole runtime legacy NEXT_PUBLIC_SITE_URL dependency is the validated mail fallback; retire its saved Vercel value only after checking every environment's SITE_URL.
+
+Loopback Next start retains the previously documented English /contact self-redirect, also observed on the old baseline. This is not a passing English-page HTTP check; inspect actual Preview EN/ES navigation before merge. Domain DNS/HTTPS and public alias checks are independent from source compilation. No new deployment has been made.

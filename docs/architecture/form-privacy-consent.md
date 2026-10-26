@@ -1,10 +1,10 @@
 # Información previa y consentimiento de formularios
 
-Version: 1.1
+Version: 1.3
 Document ID: DOC-FORM-PRIVACY-CONSENT
 Project: Del Carmen Digital Experience
 Owner: Rolando Rojas Zapata
-Last Updated: 2026-10-18
+Last Updated: 2026-10-24
 Status: Código y textos preparados; instalación, revisión de producción y publicación final pendientes.
 
 ## Alcance de la revisión
@@ -141,3 +141,21 @@ El correo de confirmación y los resultados de confirmación/baja siguen el idio
 Cada cambio futuro en una copia requiere revisión de su versión y archivo de su texto anterior. Si cambia una finalidad, destinatario, plazo o dato material, revisar las dos versiones; no tratar una traducción como autorización para ampliar el tratamiento. Esta entrega traduce los borradores existentes y verifica su coherencia técnica, sin certificar suficiencia jurídica o aprobación final para producción.
 
 El bloque pasa build/TypeScript y 30 grupos de pruebas con componentes/handlers reales compilados, transportes simulados y GETs de producción local. No se envían mensajes reales, se accede a suscriptores ni se ejecutan migraciones. Quedan revisión editorial/jurídica, navegadores/dispositivos, validación nativa, lectores de pantalla y entrega real. Se conserva el error previo de lint de sincronización de Newsletter, confirmado sin hallazgos nuevos.
+
+## Protección técnica y acceso por teclado — 2026-10-24
+
+Contact y Newsletter comparten `readFormJson.ts`. Acepta objetos JSON con `application/json` (incluidos parámetros como charset), valida el origen contra el host/protocolo públicos reenviados por Next/proxy cuando un navegador lo declara y rechaza `Sec-Fetch-Site: cross-site`. Los clientes sin Origin siguen sujetos al resto de los controles; esta comprobación no autentica a quien envía ni sustituye al límite de frecuencia.
+
+Se permiten hasta 32 KiB reales por solicitud. El lector limita el flujo incluso sin Content-Length o con una longitud declarada menor; cancela al superar el límite. Los rechazos se producen antes de Redis/correo: 400 para JSON/UTF-8/estructura inválidos, 403 para origen no admitido, 413 para exceso de bytes y 415 para tipo de contenido no admitido. Las validaciones de campos, honeypot, idioma, booleano y versión de consentimiento se conservan. El límite de 5 solicitudes/10 minutos permanece; un fallo del servicio de rate limit de Newsletter devuelve un 503 controlado y no continúa al alta ni al envío.
+
+Los inputs reflejan los máximos existentes del servidor: nombre 100, correo 254 y mensaje 5000 caracteres. En Contact el primer campo inválido recibe foco después de validar; las casillas lo reciben al requerir revisar nuevamente el consentimiento. Ambos formularios exponen su estado ocupado. El formulario de Newsletter conserva además la validación nativa. Los textos y las revisiones del aviso, finalidades, destinatarios y plazos no cambian.
+
+Las respuestas API tienen no-store/no-referrer. Las cabeceras globales añaden nosniff, SAMEORIGIN y una CSP limitada a frame-ancestors/object-src/base-uri; no se presenta como una política completa contra XSS. La entrega de correo real, los accesos administrativos, la configuración de los proveedores, el dominio/remitente y la evaluación jurídica/operativa siguen pendientes de su revisión específica.
+
+`npm run test:security` ejecuta 47 casos sobre el código real con transportes sustituidos, sin correos ni acceso a suscriptores reales. Incluye límite por bytes/stream, JSON y origen, consentimiento EN/ES, honeypot, rate limit y fallos controlados. Las pruebas locales no acreditan por sí solas la configuración de Vercel/Resend/Upstash ni una auditoría integral.
+
+## Acciones explícitas del boletín — 2026-10-24
+
+La confirmación y la baja dejan de mutar por GET: abrir o previsualizar el enlace solo muestra un botón EN/ES. El POST explícito conserva el modelo y las versiones de consentimiento ya aceptadas. El idioma de presentación no reescribe la constancia original. No se añade una finalidad ni se amplían plazos/datos; la solicitud pendiente sigue requiriendo la casilla y la confirmación posterior.
+
+El formulario HTML de acción comparte la lectura acotada y la validación de origen con los endpoints JSON, con límite propio de 2048 bytes. Las páginas no tienen JavaScript, recursos externos, caché ni indexación. Usan strict-origin para retirar path/token de las referencias y mantener el Origin nativo; los otros endpoints API conservan no-referrer. La recepción URL-encoded de baja one-click no exige sesión ni asigna identidad a la visita. La emisión de campañas y su distribución de enlaces siguen pendientes.

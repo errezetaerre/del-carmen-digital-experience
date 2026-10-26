@@ -9,6 +9,7 @@
     "switchToSpanish": "Read this page in Spanish",
     "switchToEnglish": "Read this page in English",
     "openMenu": "Open menu",
+    "skipToContent": "Skip to content",
     "closeMenu": "Close menu",
     "main": "Main navigation",
     "mobile": "Mobile navigation",
@@ -564,6 +565,24 @@
     "error": "Something went wrong. Please try again.",
     "rateLimited": "Too many attempts. Please wait a few minutes before trying again."
   },
+  "NewsletterAction": {
+    "confirmTitle": "Confirm your subscription",
+    "confirmDescription": "Choose the button below to confirm that you want to receive occasional studio news. Opening this page alone does not subscribe you.",
+    "confirmButton": "Confirm my subscription",
+    "unsubscribeTitle": "Leave the studio newsletter",
+    "unsubscribeDescription": "Choose the button below to stop receiving studio news. No account or password is required.",
+    "unsubscribeButton": "Unsubscribe me",
+    "unavailableTitle": "Please try again shortly",
+    "unavailableDescription": "We could not verify the result of this request. Please try again using the same link in a moment.",
+    "rateLimitedTitle": "A moment of patience",
+    "rateLimitedDescription": "There have been too many attempts. Please wait a few minutes before trying again.",
+    "invalidRequestTitle": "We could not process this request",
+    "invalidRequestDescription": "Please reopen the link in your email and use the button shown there.",
+    "retry": "Try again",
+    "back": "Return to the site",
+    "privacy": "Privacy notice",
+    "navigation": "Newsletter navigation"
+  },
   "FormPrivacy": {
     "handler": "handles these details for",
     "privacyLink": "Privacy notice (opens in a new tab)",
@@ -578,7 +597,7 @@
     "contact": "Contact"
   },
   "Privacy": {
-    "metadataTitle": "Privacy Notice | Del Carmen",
+    "metadataTitle": "Privacy Notice",
     "metadataDescription": "A draft notice about contact enquiries, newsletter subscriptions and personal data at Del Carmen.",
     "label": "Del Carmen · Legal",
     "title": "Privacy Notice",
@@ -632,7 +651,7 @@
     "linksDescription": "Links to social platforms and other websites lead to services with their own privacy practices. Review their notices when you choose to visit them."
   },
   "Terms": {
-    "metadataTitle": "Terms of Use | Del Carmen",
+    "metadataTitle": "Terms of Use",
     "metadataDescription": "Draft terms for viewing artwork, making enquiries and using the Del Carmen website.",
     "label": "Del Carmen · Legal",
     "title": "Terms of Use",

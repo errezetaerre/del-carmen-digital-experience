@@ -1218,6 +1218,8 @@ export default function ArtworkDetailKineticExperience({
                         key={panel.key}
                         ref={panel.key === "current" ? currentPanelRef : undefined}
                         data-artwork-kinetic-panel={panel.key}
+                        inert={panel.key !== "current"}
+                        aria-hidden={panel.key !== "current" || undefined}
                         className="
                             w-screen
                             shrink-0

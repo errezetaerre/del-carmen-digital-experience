@@ -9,6 +9,7 @@
     "switchToSpanish": "Leer esta página en español",
     "switchToEnglish": "Leer esta página en inglés",
     "openMenu": "Abrir menú",
+    "skipToContent": "Saltar al contenido",
     "closeMenu": "Cerrar menú",
     "main": "Navegación principal",
     "mobile": "Navegación móvil",
@@ -564,6 +565,24 @@
     "error": "Ha ocurrido un error. Inténtalo de nuevo.",
     "rateLimited": "Demasiados intentos. Espera unos minutos antes de volver a intentarlo."
   },
+  "NewsletterAction": {
+    "confirmTitle": "Confirma tu suscripción",
+    "confirmDescription": "Pulsa el botón para confirmar que deseas recibir novedades ocasionales del estudio. Abrir esta página por sí solo no te suscribe.",
+    "confirmButton": "Confirmar mi suscripción",
+    "unsubscribeTitle": "Darse de baja del boletín",
+    "unsubscribeDescription": "Pulsa el botón para dejar de recibir novedades del estudio. No necesitas una cuenta ni una contraseña.",
+    "unsubscribeButton": "Darme de baja",
+    "unavailableTitle": "Inténtalo de nuevo en un momento",
+    "unavailableDescription": "No se pudo verificar el resultado de esta solicitud. Inténtalo de nuevo con el mismo enlace en un momento.",
+    "rateLimitedTitle": "Un momento de paciencia",
+    "rateLimitedDescription": "Se han realizado demasiados intentos. Espera unos minutos antes de volver a intentarlo.",
+    "invalidRequestTitle": "No se pudo procesar esta solicitud",
+    "invalidRequestDescription": "Vuelve a abrir el enlace de tu correo y utiliza el botón que aparece allí.",
+    "retry": "Volver a intentar",
+    "back": "Volver al sitio",
+    "privacy": "Aviso de privacidad",
+    "navigation": "Navegación del boletín"
+  },
   "FormPrivacy": {
     "handler": "gestiona estos datos para",
     "privacyLink": "Aviso de privacidad (se abre en una pestaña nueva)",
@@ -578,7 +597,7 @@
     "contact": "Contacto"
   },
   "Privacy": {
-    "metadataTitle": "Aviso de privacidad | Del Carmen",
+    "metadataTitle": "Aviso de privacidad",
     "metadataDescription": "Borrador del aviso sobre consultas de contacto, suscripciones al boletín y datos personales en Del Carmen.",
     "label": "Del Carmen · Información legal",
     "title": "Aviso de privacidad",
@@ -632,7 +651,7 @@
     "linksDescription": "Los enlaces a plataformas sociales y otros sitios web conducen a servicios con sus propias prácticas de privacidad. Revisa sus avisos cuando decidas visitarlos."
   },
   "Terms": {
-    "metadataTitle": "Condiciones de uso | Del Carmen",
+    "metadataTitle": "Condiciones de uso",
     "metadataDescription": "Borrador de las condiciones para consultar obras, realizar consultas y utilizar el sitio web de Del Carmen.",
     "label": "Del Carmen · Información legal",
     "title": "Condiciones de uso",

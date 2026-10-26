@@ -1,13 +1,21 @@
 # Artwork Implementation
 
-Version: 1.39
+Version: 1.40
 Document ID: DOC-ART-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
 Document Type: Implementation
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-23
-Status: Gesture response v2 prepared and verified in Chromium with emulated input. Owner and physical-device review remain pending.
+Last Updated: 2026-10-24
+Status: Gesture response v2 approved and published in cd98843. Accessibility baseline prepared for owner review; physical-device QA remains pending.
+
+## Keyboard and modal containment — 2026-10-24
+
+The Standard detail's live Previous/Next panels remain rendered for the approved slide, but only the current panel participates in focus and the accessibility tree. Neighbours carry `inert` and `aria-hidden`; movement calculations, release thresholds, native reading and navigation handlers are unchanged.
+
+The shared dialog-focus hook now owns background isolation through `dialogBackground.ts`. It follows the active dialog's ancestor chain, preserves existing inert states, handles late portal siblings and nested zoom, and restores the parent before returning focus. `ArtworkExperienceViewer` keeps its delayed return-to-thumbnail focus behavior but delegates inert ownership to that hook. The same behavior serves MobileMenu, standalone image zoom and legacy modal galleries. It does not turn the Glass page itself into a modal or change either book engine.
+
+The image wrapper exposes its already-required `alt` prop explicitly; source image descriptions are unchanged. Global keyboard-only focus outlines and the EN/ES skip link are accessibility affordances, not a redesign of resting artwork layouts. Owner browser/device review remains required before release.
 
 ## Direct navigation and image pinch ownership — 2026-10-23
 

@@ -1,13 +1,13 @@
 # Newsletter Implementation
-Version: 1.5
+Version: 1.6
 Document ID: DOC-NEWS-IMP
 Project: Del Carmen Digital Experience
 Parent Brand: Rō Visual
 Document Type: Technical Implementation
 Authority Level: High
-Status: 🟢 Approved / Complete / Frozen
+Status: Approved public form; mail operations increment prepared for review
 Owner: Del Carmen Digital Experience
-Last Updated: 2026-10-18
+Last Updated: 2026-10-24
 
 ---
 
@@ -333,3 +333,25 @@ The extracted `server/confirmationEmail.ts` retains email geometry/styles and En
 All Redis scripts, pending/active TTL rules, active Set, token/hash/lookup lifecycle, race-safe cleanup, rate/honeypot and minimal 30-day unsubscribe record stay byte-exact. Existing English links remain valid. Future newsletter-delivery code should carry the stored language (with legacy English fallback) into content/result links; this increment does not implement campaigns or deliver a new welcome email.
 
 Production build/TypeScript and compiled component/route/helper/provider fixtures plus GET verification pass. Tests use a simulated mail/Redis transport, never real subscribers or mail. Current lint retains the pre-existing query-result synchronization `react-hooks/set-state-in-effect` finding, verified against v5 with no new finding. Browser hydration/native validation/accessibility, real delivery/persistence and domain/sender QA remain open. Refer to DOC-I18N for installation and the overall release gate.
+
+## Mail operations increment — 2026-10-24
+
+The owner approved Accessibility Security v1 and committed it locally; this related increment stays on the same branch, with push/PR deferred. The existing Home form, localized messages, consent versions and Redis lifecycle scripts are preserved.
+
+The new GET handlers supersede the earlier GET-mutation description above: a syntactically valid link presents a localized, script-free HTML form and never accesses Redis or changes state. Next automatic HEAD is equally safe. An explicit POST performs the transition; successful human actions use 303 back to the existing localized Home result. Existing email URLs remain usable. Expired/used/unknown tokens retain the invalid-result flow.
+
+Human action POSTs accept only application/x-www-form-urlencoded, at most 2048 actual bytes, unique allowed fields, the existing opaque 64-hex token and EN/ES presentation locale. Origin validation is shared with JSON forms. Ten attempts/ten minutes per visitor and action protect the human action flow. Retryable service failures return 503, and quota failures return 429 with Retry-After, retaining the valid hidden token for a retry without falsely declaring whether a timed-out mutation completed.
+
+The unsubscribe endpoint additionally accepts the URL-encoded RFC 8058 List-Unsubscribe=One-Click POST with token in the URI. It returns direct idempotent 200, without a redirect, cookie or account requirement. This bearer-token flow is not subjected to the small per-visitor quota because provider servers share IPs. GET never unsubscribes. The current project still has no campaign sender: recipient-token issuance/distribution, signed List-Unsubscribe headers, DKIM coverage, suppression/bounce operation and actual provider acceptance must be completed before claiming campaign delivery/one-click integration is ready. The existing confirmation-created unsubscribe token is not distributed by this increment.
+
+Action pages use no-store, noindex/nofollow, DENY and a no-script CSP. Their strict-origin referrer policy strips the token/path while preserving native form Origin checks; blanket no-referrer would make native POST Origin null. Header values are shared with exact-path Next configuration rules because those rules can override Route Handler headers. These pages load no remote font/image/script.
+
+Mail settings are validated before a pending record is written. Newsletter sender precedence is NEWSLETTER_EMAIL_FROM, then MAIL_FROM, with only a non-production test fallback; replies use MAIL_REPLY_TO or the existing public contact. Confirmation email supplies matching HTML and plain text. Production links prefer SITE_URL, accept a validated legacy NEXT_PUBLIC_SITE_URL during migration, then use the current public default shared with SEO. Preview uses its own VERCEL_URL; local development uses an allowed loopback origin/port. Request Host cannot create an arbitrary public email link. Preview data credentials still require explicit environment separation by the operator.
+
+The 24-hour pending TTL, persistent active record/current unsubscribe lookup, minimal 30-day unsubscribe record, exact server notice evidence, atomic rechecks and race-safe cleanup remain byte-exact in subscriberLifecycle.ts. Provider/Redis configuration failures do not crash the site build: clients are created at request time. Real DNS, verified sender, credentials and live delivery remain release gates; no actual email or subscriber access is performed by this increment.
+
+## Official-domain operations review — 2026-10-25
+
+Owner confirms successful local email, explicit double opt-in and detection of active subscribers in existing del-carmen-contact. Resend domain is verified, the new key is saved as a Vercel Secret, and tracking/Receiving remain disabled. These are local/infrastructure facts, not a production delivery test. Bare From addresses receive the approved Rolando Del Carmen display name; replies remain the monitored Gmail. Production fallback links now use rolandodelcarmen.com. Legacy NEXT_PUBLIC_SITE_URL remains validated compatibility pending scope review.
+
+The actual snapshot's subscriberLifecycle.ts is unchanged: 24h pending, persistent active records, hash-only lookups, atomic rechecks/race cleanup and minimal 30-day withdrawal records are retained. Do not reset credentials until all consumers and the deployment window are ready; preserve this database and records. DOC-MAIL-OPS owns the coordinated procedure and separates the unfinished campaign/token-distribution work from DOI. No real Redis action, mail, commit or deployment occurs in this review.
