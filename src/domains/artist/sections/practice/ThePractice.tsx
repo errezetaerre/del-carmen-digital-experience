@@ -210,7 +210,7 @@ export default function ThePractice() {
                     >
                         {hasPracticeImages ? (
                             <Image
-                                src="/artist/practice/rolando_at_easel.jpg"
+                                src="/artist/practice/rolando_at_easel.webp"
                                 alt={t("practice.easelAlt")}
                                 fill
                                 sizes="
@@ -322,7 +322,7 @@ export default function ThePractice() {
                                 "
                             >
                                 <Image
-                                    src="/artist/practice/palette_color_study.jpg"
+                                    src="/artist/practice/palette_color_study.webp"
                                     alt={t("practice.paletteAlt")}
                                     fill
                                     sizes="
@@ -427,7 +427,7 @@ export default function ThePractice() {
                         >
                             {hasPracticeImages ? (
                                 <Image
-                                    src="/artist/practice/portrait_in_progress.jpg"
+                                    src="/artist/practice/portrait_in_progress.webp"
                                     alt={t("practice.portraitAlt")}
                                     fill
                                     sizes="

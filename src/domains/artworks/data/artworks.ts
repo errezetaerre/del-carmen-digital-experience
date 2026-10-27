@@ -34,7 +34,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/captura_de_jesucristo.jpg",
+        src: "/artworks/captura_de_jesucristo.webp",
         alt: "Captura de Jesucristo, master copy by Rolando Del Carmen",
         width: 2723,
         height: 2036
@@ -89,19 +89,19 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/epifania_nupcial.png",
+        src: "/artworks/epifania_nupcial.webp",
         alt: "Epifanía Nupcial by Rolando Del Carmen",
         width: 1376,
         height: 768
       },
 
       heroLandscape: {
-        src: "/artworks/epifania_nupcial_hero_landscape.png",
+        src: "/artworks/epifania_nupcial_hero_landscape.webp",
         alt: "Epifanía Nupcial, landscape composition for the Del Carmen Hero",
       },
 
       heroPortrait: {
-        src: "/artworks/epifania_nupcial_hero_portrait.png",
+        src: "/artworks/epifania_nupcial_hero_portrait.webp",
         alt: "Epifanía Nupcial, portrait composition for the Del Carmen Hero",
       },
     },
@@ -155,7 +155,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/el_misionero.jpg",
+        src: "/artworks/el_misionero.webp",
         alt: "El Misionero by Rolando Del Carmen",
         width: 832,
         height: 1279,
@@ -208,7 +208,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/perro_de_dani.jpg",
+        src: "/artworks/perro_de_dani.webp",
         alt: "Portrait of Dani's dog by Rolando Del Carmen",
         width: 720,
         height: 728,
@@ -265,7 +265,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/el_carnero.jpg",
+        src: "/artworks/el_carnero.webp",
         alt: "El Carnero, charcoal academic study by Rolando Del Carmen",
         width: 720,
         height: 556,
@@ -322,7 +322,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/el_baul_de_los_tesoros.jpg",
+        src: "/artworks/el_baul_de_los_tesoros.webp",
         alt: "El Baúl de los Tesoros by Rolando Del Carmen",
         width: 1090,
         height: 1489,
@@ -377,7 +377,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/buda.jpg",
+        src: "/artworks/buda.webp",
         alt: "Buda, planned artwork preview by Rolando Del Carmen",
         width: 1024,
         height: 1168,
@@ -438,7 +438,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/sendero_del_sol.jpg",
+        src: "/artworks/sendero_del_sol.webp",
         alt: "Sendero del Sol by Rolando Del Carmen",
         width: 2096,
         height: 2792,
@@ -494,7 +494,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/margarita.jpg",
+        src: "/artworks/margarita.webp",
         alt: "Margarita, planned artwork preview by Rolando Del Carmen",
         width: 1200,
         height: 992,
@@ -550,7 +550,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/recordando_mi_puerto.jpg",
+        src: "/artworks/recordando_mi_puerto.webp",
         alt: "Recordando Mi Puerto, planned artwork preview by Rolando Del Carmen",
         width: 1312,
         height: 912,
@@ -607,7 +607,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/la_mujer_del_bosque.jpg",
+        src: "/artworks/la_mujer_del_bosque.webp",
         alt: "La Mujer Del Bosque, planned artwork preview by Rolando Del Carmen",
         width: 896,
         height: 1344,
@@ -660,7 +660,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/rosa_rojita.jpg",
+        src: "/artworks/rosa_rojita.webp",
         alt: "Rosa Rojita by Rolando Del Carmen",
         width: 2238,
         height: 2850,
@@ -714,21 +714,21 @@ export const artworks: Artwork[] = [
     },
     images: {
       primary: {
-        src: "/artworks/yasemi_I.jpg",
+        src: "/artworks/yasemi_I.webp",
         alt: "Yasemi I by Rolando Del Carmen",
         width: 888,
         height: 592,
       },
 
       thumbnail: {
-        src: "/artworks/yasemi_I.jpg",
+        src: "/artworks/yasemi_I.webp",
         alt: "Yasemi I by Rolando Del Carmen",
         width: 444,
         height: 296,
       },
 
       collection: {
-        src: "/artworks/yasemi_I.jpg",
+        src: "/artworks/yasemi_I.webp",
         alt: "Yasemi I — collection presentation",
         width: 1920,
         height: 1080,
@@ -781,7 +781,7 @@ export const artworks: Artwork[] = [
     },
     images: {
       primary: {
-        src: "/artworks/yasemi_II.jpg",
+        src: "/artworks/yasemi_II.webp",
         alt: "Yasemi II by Rolando Del Carmen",
         width: 888,
         height: 592,
@@ -835,7 +835,7 @@ export const artworks: Artwork[] = [
     },
     images: {
       primary: {
-        src: "/artworks/yasemi_III.jpg",
+        src: "/artworks/yasemi_III.webp",
         alt: "Yasemi III by Rolando Del Carmen",
         width: 888,
         height: 592,
@@ -889,7 +889,7 @@ export const artworks: Artwork[] = [
     },
     images: {
       primary: {
-        src: "/artworks/yasemi_IV.jpg",
+        src: "/artworks/yasemi_IV.webp",
         alt: "Yasemi IV by Rolando Del Carmen",
         width: 888,
         height: 592,
@@ -940,7 +940,7 @@ export const artworks: Artwork[] = [
     },
     images: {
       primary: {
-        src: "/artworks/selenia_de_maria.jpg",
+        src: "/artworks/selenia_de_maria.webp",
         alt: "Selenia de Maria by Rolando Del Carmen",
         width: 1080,
         height: 810,
@@ -998,7 +998,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/la_chercheuse.png",
+        src: "/artworks/la_chercheuse.webp",
         alt: "Busto de Bevedere - Chercheuse by Rolando Del Carmen",
         width: 3072,
         height: 4096,
@@ -1054,7 +1054,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/carga_tu_propia_cruz.jpg",
+        src: "/artworks/carga_tu_propia_cruz.webp",
         alt: "Carga tu Propia Cruz by Rolando Del Carmen",
         width: 3072,
         height: 4096,
@@ -1110,7 +1110,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/cloe.jpg",
+        src: "/artworks/cloe.webp",
         alt: "Cloe - La Vaquita by Rolando Del Carmen",
         width: 3071,
         height: 3071,
@@ -1166,7 +1166,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/flor_del_desierto.jpg",
+        src: "/artworks/flor_del_desierto.webp",
         alt: "Flor del Desierto by Rolando Del Carmen",
         width: 3071,
         height: 3071,
@@ -1221,7 +1221,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/flor_francesa.jpg",
+        src: "/artworks/flor_francesa.webp",
         alt: "Flor Francesa by Rolando Del Carmen",
         width: 2159,
         height: 2717,
@@ -1274,7 +1274,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/franko.jpg",
+        src: "/artworks/franko.webp",
         alt: "Franko En Día De Campo by Rolando Del Carmen",
         width: 720,
         height: 908,
@@ -1328,7 +1328,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/la_plancha.jpg",
+        src: "/artworks/la_plancha.webp",
         alt: "La Plancha by Rolando Del Carmen",
         width: 3072,
         height: 4096,
@@ -1387,7 +1387,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/el_pie.jpg",
+        src: "/artworks/el_pie.webp",
         alt: "El Pie by Rolando Del Carmen",
         width: 720,
         height: 716,
@@ -1442,7 +1442,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/la_donna_velata.jpg",
+        src: "/artworks/la_donna_velata.webp",
         alt: "La Donna Velata by Rolando Del Carmen",
         width: 3072,
         height: 4096,
@@ -1496,7 +1496,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/margarita_la_niña.jpg",
+        src: "/artworks/margarita_la_nina.webp",
         alt: "Margarita la Niña by Rolando Del Carmen",
         width: 3072,
         height: 4096,
@@ -1550,7 +1550,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/el_desnudo_masculino.jpg",
+        src: "/artworks/el_desnudo_masculino.webp",
         alt: "El Desnudo Masculino by Rolando Del Carmen",
         width: 963,
         height: 1069,
@@ -1605,7 +1605,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/desnudo_joven.jpg",
+        src: "/artworks/desnudo_joven.webp",
         alt: "Desnudo Joven by Rolando Del Carmen",
         width: 674,
         height: 731,
@@ -1662,7 +1662,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/parthenon.jpg",
+        src: "/artworks/parthenon.webp",
         alt: "Parthenon by Rolando Del Carmen",
         width: 1200,
         height: 896,
@@ -1716,7 +1716,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/hugh_jackman.jpg",
+        src: "/artworks/hugh_jackman.webp",
         alt: "Hugh Jackman by Rolando Del Carmen",
         width: 720,
         height: 707,
@@ -1774,7 +1774,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/torso_de_bevedere.jpg",
+        src: "/artworks/torso_de_bevedere.webp",
         alt: "Torso de Bevedere by Rolando Del Carmen",
         width: 720,
         height: 721,
@@ -1828,7 +1828,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/la_mechuda.jpg",
+        src: "/artworks/la_mechuda.webp",
         alt: "La Mechuda by Rolando Del Carmen",
         width: 720,
         height: 726,
@@ -1882,7 +1882,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/la_travesti.jpg",
+        src: "/artworks/la_travesti.webp",
         alt: "La Travesti by Rolando Del Carmen",
         width: 670,
         height: 740,
@@ -1936,7 +1936,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/juan_carlillos.jpg",
+        src: "/artworks/juan_carlillos.webp",
         alt: "Juan Carlillos by Rolando Del Carmen",
         width: 953,
         height: 1080,
@@ -1992,7 +1992,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/victoria_de_samotracia.jpg",
+        src: "/artworks/victoria_de_samotracia.webp",
         alt: "Victoria de Samotracia by Rolando Del Carmen",
         width: 720,
         height: 741,
@@ -2047,7 +2047,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/desnudo_ronald_tellini.jpg",
+        src: "/artworks/desnudo_ronald_tellini.webp",
         alt: "Desnudo Ronald Tellini by Rolando Del Carmen",
         width: 1080,
         height: 1345,
@@ -2101,7 +2101,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/actriz_vivian_leigh.jpg",
+        src: "/artworks/actriz_vivian_leigh.webp",
         alt: "Actriz Vivian Leigh by Rolando Del Carmen",
         width: 720,
         height: 722,
@@ -2154,7 +2154,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/mama_de_luis_alonso.jpg",
+        src: "/artworks/mama_de_luis_alonso.webp",
         alt: "Mama de Luis Alonso by Rolando Del Carmen",
         width: 1080,
         height: 1956,
@@ -2207,7 +2207,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/el_pitufino_coral.jpg",
+        src: "/artworks/el_pitufino_coral.webp",
         alt: "El Pitufino Coral by Rolando Del Carmen",
         width: 720,
         height: 719,
@@ -2263,7 +2263,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/retrato_de_mujer.jpg",
+        src: "/artworks/retrato_de_mujer.webp",
         alt: "Retrato de Mujer by Rolando Del Carmen",
         width: 2250,
         height: 4000,
@@ -2319,7 +2319,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/l_aurore.jpg",
+        src: "/artworks/l_aurore.webp",
         alt: "L'Aurore by Rolando Del Carmen",
         width: 2222,
         height: 2824,
@@ -2376,7 +2376,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/psyche_de_naples.jpg",
+        src: "/artworks/psyche_de_naples.webp",
         alt: "Psyché de Náples by Rolando Del Carmen",
         width: 979,
         height: 1067,
@@ -2429,7 +2429,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/homenaje_postumo.jpg",
+        src: "/artworks/homenaje_postumo.webp",
         alt: "Homenaje Postumo by Rolando Del Carmen",
         width: 1080,
         height: 1080,
@@ -2482,7 +2482,7 @@ export const artworks: Artwork[] = [
 
     images: {
       primary: {
-        src: "/artworks/gatito.jpg",
+        src: "/artworks/gatito.webp",
         alt: "Gatito by Rolando Del Carmen",
         width: 1080,
         height: 1067,

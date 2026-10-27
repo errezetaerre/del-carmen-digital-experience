@@ -11,7 +11,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 media: {
                     type: "video",
                     src: "/videos/journal/light_revealing_wooden_palette.mp4",
-                    poster: "/images/journal/placeholder-01.jpg",
+                    poster: "/images/journal/placeholder-01.webp",
                 },
                 eyebrow: "I — Memory",
                 title: "What remains when a moment disappears?",
@@ -24,7 +24,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 layout: "split-left",
                 media: {
                     type: "image",
-                    src: "/images/journal/placeholder-02.jpg",
+                    src: "/images/journal/placeholder-02.webp",
                 },
                 eyebrow: "II — Presence",
                 title: "Some things remain without being seen.",
@@ -37,7 +37,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 layout: "immersive",
                 media: {
                     type: "image",
-                    src: "/images/journal/placeholder-03.jpg",
+                    src: "/images/journal/placeholder-03.webp",
                 },
                 eyebrow: "III — Light",
                 title: "Perhaps remembering is another way of illuminating.",
@@ -56,7 +56,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 layout: "immersive",
                 media: {
                     type: "image",
-                    src: "/images/journal/inside-the-studio-01.png",
+                    src: "/images/journal/inside-the-studio-01.webp",
                 },
                 eyebrow: "I — The Studio",
                 title: "Before a painting begins, there is a place waiting for it.",
@@ -69,7 +69,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 layout: "split-right",
                 media: {
                     type: "image",
-                    src: "/images/journal/inside-the-studio-02.png",
+                    src: "/images/journal/inside-the-studio-02.webp",
                 },
                 eyebrow: "II — The Ritual",
                 title: "Creation often begins with ordinary gestures.",
@@ -82,7 +82,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 layout: "split-left",
                 media: {
                     type: "image",
-                    src: "/images/journal/inside-the-studio-03.png",
+                    src: "/images/journal/inside-the-studio-03.webp",
                 },
                 eyebrow: "III — The Conversation",
                 title: "At some point, the painting begins to answer back.",
@@ -96,7 +96,7 @@ export const JOURNAL_STORIES: JournalStory[] = [
                 media: {
                     type: "video",
                     src: "/videos/journal/DelCarmen_Digital_Experience_the_studio.mp4",
-                    poster: "/images/journal/inside-the-studio-01.png",
+                    poster: "/images/journal/inside-the-studio-01.webp",
                 },
                 eyebrow: "IV — What Remains",
                 title: "The work stops. The studio remembers.",

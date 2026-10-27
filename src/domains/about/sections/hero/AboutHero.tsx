@@ -12,7 +12,7 @@ export default function AboutHero() {
             {/* Poster / future video */}
             <div className="about-hero-media absolute inset-0 z-0">
                 <Image
-                    src="/about/film/the_encounter_poster.png"
+                    src="/about/film/the_encounter_poster.webp"
                     alt=""
                     fill
                     priority

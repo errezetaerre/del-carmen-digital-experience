@@ -298,14 +298,14 @@ temporary design order.
 
 Examples:
 
-rolando_epifania_portrait.png rolando_epifania_landscape.png
-artist_painting_at_easel.jpg portrait_study_in_progress.jpg
-sendero_del_sol_detail.jpg atelier_archive_01.jpg
-exhibition_archive_01.jpg
+rolando_epifania_portrait.webp rolando_epifania_landscape.webp
+artist_painting_at_easel.webp portrait_study_in_progress.webp
+sendero_del_sol_detail.webp atelier_archive_01.webp
+exhibition_archive_01.webp
 
 Avoid:
 
-IMG_9834.jpg photo-final-final.jpg artist1.jpg image-new.jpg
+IMG_9834.webp photo-final-final.webp artist1.webp image-new.webp
 
 Original archival files may be preserved outside the production asset
 tree if needed.

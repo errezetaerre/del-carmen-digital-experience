@@ -1515,7 +1515,7 @@ The Hero integrates The Encounter media directly into the scene as full-bleed ba
 
 The current canonical media is:
 
-`public/about/film/the_encounter_poster.png`
+`public/about/film/the_encounter_poster.webp`
 
 The final audiovisual master may replace this poster without redesigning the About architecture.
 
