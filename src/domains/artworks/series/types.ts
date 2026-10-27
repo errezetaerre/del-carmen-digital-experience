@@ -80,5 +80,6 @@ export interface ArtworkSeries {
 
 export interface ArtworkSeriesAtmosphere {
     src: string;
+    portraitSrc?: string;
     alt: string;
 }

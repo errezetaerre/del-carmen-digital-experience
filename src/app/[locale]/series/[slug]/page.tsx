@@ -119,6 +119,7 @@ export default async function SeriesPage({
                 {series.atmosphere && (
                     <SeriesAtmosphere
                         src={series.atmosphere.src}
+                        portraitSrc={series.atmosphere.portraitSrc}
                     />
                 )}
 

@@ -1,9 +1,11 @@
 interface SeriesAtmosphereProps {
     src: string;
+    portraitSrc?: string;
 }
 
 export default function SeriesAtmosphere({
     src,
+    portraitSrc,
 }: SeriesAtmosphereProps) {
     return (
         <div
@@ -16,18 +18,26 @@ export default function SeriesAtmosphere({
             "
         >
             {/* Editorial atmosphere */}
-            <img
-                src={src}
-                alt=""
-                className="
-                    absolute
-                    inset-0
-                    h-full
-                    w-full
-                    object-cover
-                    object-center
-                "
-            />
+            <picture>
+                {portraitSrc && (
+                    <source
+                        media="(orientation: portrait)"
+                        srcSet={portraitSrc}
+                    />
+                )}
+                <img
+                    src={src}
+                    alt=""
+                    className="
+                        absolute
+                        inset-0
+                        h-full
+                        w-full
+                        object-cover
+                        object-center
+                    "
+                />
+            </picture>
 
             {/* 
                 Very subtle overall treatment.
