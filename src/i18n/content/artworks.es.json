@@ -2,7 +2,9 @@
   "captura_de_jesucristo": {
     "quote": "La captura de Cristo es el comienzo de todo.",
     "description": "Cuando el mundo está perdido, Jesús es la única esperanza.",
-    "images": { "primary": "Captura de Jesucristo, copia de maestro de Rolando Del Carmen" }
+    "images": {
+      "primary": "Captura de Jesucristo, copia de maestro de Rolando Del Carmen"
+    }
   },
   "epifania_nupcial": {
     "quote": "No lleva velo, solo silencio.",
@@ -16,52 +18,72 @@
   "el_misionero": {
     "quote": "No lleva misión, solo silencio.",
     "description": "Una meditación serena sobre la luz interior, la compasión, la libertad y la misión que llevamos dentro.",
-    "images": { "primary": "El Misionero, de Rolando Del Carmen" }
+    "images": {
+      "primary": "El Misionero, de Rolando Del Carmen"
+    }
   },
   "perro_de_dani": {
     "quote": "El amor se encuentra en los ojos de un perro.",
     "description": "Copia realizada a partir de una fotografía del perro de su dueño. Como amigos, acordamos intercambiar algunas de nuestras pinturas. Se retocó con Photoshop.",
-    "images": { "primary": "Retrato del perro de Dani, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Retrato del perro de Dani, de Rolando Del Carmen"
+    }
   },
   "el_carnero": {
     "quote": "Estudio original de un modelo de yeso.",
     "description": "A mi sobrina le gustó porque para ella representaba la infidelidad de su novio. La obra se realizó por observación. Segundo lugar. Mejor estudio de yeso del año 2019.",
-    "images": { "primary": "El Carnero, estudio académico al carboncillo de Rolando Del Carmen" }
+    "images": {
+      "primary": "El Carnero, estudio académico al carboncillo de Rolando Del Carmen"
+    }
   },
   "el_baul_de_los_tesoros": {
     "quote": "No lleva baúl, solo silencio.",
     "description": "Un viaje simbólico hacia el descubrimiento del alma y los tesoros que guarda en su interior.",
-    "images": { "primary": "El Baúl de los Tesoros, de Rolando Del Carmen" }
+    "images": {
+      "primary": "El Baúl de los Tesoros, de Rolando Del Carmen"
+    }
   },
   "buda": {
     "quote": "El viaje hacia el interior es el camino a la iluminación.",
     "description": "Esta obra recoge la esencia serena y contemplativa de Buda e invita a reflexionar sobre la paz interior, la atención plena y la búsqueda de la iluminación.",
-    "images": { "primary": "Buda, imagen preliminar de una obra prevista de Rolando Del Carmen" }
+    "images": {
+      "primary": "Buda, imagen preliminar de una obra prevista de Rolando Del Carmen"
+    }
   },
   "sendero_del_sol": {
     "quote": "No lleva sendero, solo silencio.",
     "description": "Una reflexión sobre el camino de la vida, la esperanza, la serenidad y la luz que dejamos a nuestro paso.",
-    "images": { "primary": "Sendero del Sol, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Sendero del Sol, de Rolando Del Carmen"
+    }
   },
   "margarita": {
     "quote": "Un símbolo de pureza, inocencia y de la naturaleza efímera de la belleza.",
     "description": "Esta obra recoge la esencia serena y contemplativa de una niña llamada Margarita, rodeada por una delicada flor blanca que simboliza la pureza y la inocencia. La luz suave y la expresión apacible de su rostro evocan tranquilidad y gracia, e invitan a reflexionar sobre la sencilla belleza de la infancia y los instantes fugaces de la vida.",
-    "images": { "primary": "Margarita, imagen preliminar de una obra prevista de Rolando Del Carmen" }
+    "images": {
+      "primary": "Margarita, imagen preliminar de una obra prevista de Rolando Del Carmen"
+    }
   },
   "recordando_mi_puerto": {
     "quote": "Recuerdos de infancia junto al mar, bajo la sombra de un árbol.",
     "description": "Recuerdo la inocencia de mi infancia y la belleza de los momentos sencillos que me hicieron ser quien soy. Al contemplar esta escena, vuelvo a aquellos años, al olor del mar y al calor del sol sobre mi piel. Es un homenaje a ese tiempo y al lugar que me vio crecer.",
-    "images": { "primary": "Recordando Mi Puerto, imagen preliminar de una obra prevista de Rolando Del Carmen" }
+    "images": {
+      "primary": "Recordando Mi Puerto, imagen preliminar de una obra prevista de Rolando Del Carmen"
+    }
   },
   "la_mujer_del_bosque": {
     "quote": "Lleva consigo el aroma de las hojas y la sabiduría de los árboles.",
     "description": "Una representación de la fuerza, la sabiduría y la belleza de la naturaleza. Su presencia transmite paz y tranquilidad a quienes la contemplan.",
-    "images": { "primary": "La Mujer Del Bosque, imagen preliminar de una obra prevista de Rolando Del Carmen" }
+    "images": {
+      "primary": "La Mujer Del Bosque, imagen preliminar de una obra prevista de Rolando Del Carmen"
+    }
   },
   "rosa_rojita": {
     "quote": "Pétalos llenos de color: una rosa que florece con intensidad y pasión.",
     "description": "Una rosa roja, con sombras profundas que le aportan misterio e intensidad.",
-    "images": { "primary": "Rosa Rojita, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Rosa Rojita, de Rolando Del Carmen"
+    }
   },
   "yasemi_i": {
     "quote": "La semilla en lo profundo del océano, sin luz ni aire; aun así, la semilla permanece.",
@@ -75,161 +97,225 @@
   "yasemi_ii": {
     "quote": "El mar es un espejo del alma que refleja las profundidades de nuestro ser.",
     "description": "En esta obra, los colores y las formas se funden para crear una sensación de movimiento y emoción.",
-    "images": { "primary": "Yasemi II, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Yasemi II, de Rolando Del Carmen"
+    }
   },
   "yasemi_iii": {
     "quote": "Duerme en el agua, despierta en el aire.",
     "description": "Yasemi, la semilla que duerme en el agua y despierta en el aire. La pieza presenta tres zonas: la oscuridad del agua en la parte inferior, la luz del aire en la parte superior y, entre ambas, el espacio de transición donde reposa Yasemi.",
-    "images": { "primary": "Yasemi III, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Yasemi III, de Rolando Del Carmen"
+    }
   },
   "yasemi_iv": {
     "quote": "Cada día más radiante: ya no es una semilla, sino una flor en el aire.",
     "description": "La semilla florece y se convierte en una flor que despliega su brillo día tras día. Está en el aire, con sus colores, su luz, su alegría y su movimiento.",
-    "images": { "primary": "Yasemi IV, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Yasemi IV, de Rolando Del Carmen"
+    }
   },
   "selenia_de_maria": {
     "quote": "Obra realizada a partir de una fotografía del cliente. Retrato de boda.",
     "description": "Obra por encargo realizada a partir de una fotografía tomada por el cliente con su celular. La imagen de referencia se retocó con Photoshop para aumentar el contraste y con una herramienta de IA para mejorar la definición del rostro.",
-    "images": { "primary": "Selenia de María, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Selenia de María, de Rolando Del Carmen"
+    }
   },
   "la_chercheuse": {
     "quote": "Obra original a partir de un modelo de yeso.",
     "description": "Obra original realizada íntegramente por observación de un modelo de yeso.",
-    "images": { "primary": "Busto de Bevedere - Chercheuse, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Busto de Bevedere - Chercheuse, de Rolando Del Carmen"
+    }
   },
   "carga_tu_propia_cruz": {
     "quote": "Obra a partir de una imagen de Ross Spirou encontrada en internet.",
     "description": "Copia realizada a partir de una fotografía como estudio de valores tonales, temperatura del color y base de grisalla. Se retocó con Photoshop.",
-    "images": { "primary": "Carga tu Propia Cruz, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Carga tu Propia Cruz, de Rolando Del Carmen"
+    }
   },
   "cloe": {
     "quote": "Siempre hay magia en la inspiración y la imaginación.",
     "description": "Pintura que utiliza la imaginación e imágenes como inspiración. Se retocó con Photoshop. Se pintó para una exposición en un restaurante vegetariano.",
-    "images": { "primary": "Cloe - La Vaquita, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Cloe - La Vaquita, de Rolando Del Carmen"
+    }
   },
   "flor_del_desierto": {
     "quote": "Todo comienza a solas, pero incluso en el desierto necesitamos compañía.",
     "description": "El desierto es un lugar donde podemos encontrarnos con nosotros mismos, pero necesitamos la compañía de otros para crecer. Una amistad me dijo una vez que las flores del desierto son las más hermosas porque tienen que luchar para sobrevivir.",
-    "images": { "primary": "Flor del Desierto, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Flor del Desierto, de Rolando Del Carmen"
+    }
   },
   "flor_francesa": {
     "quote": "Experimentar con la técnica alla prima y pintar una rosa en un día.",
     "description": "Un estudio de la luz y el color de los pétalos, como aproximación a la pintura impresionista.",
-    "images": { "primary": "Flor Francesa, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Flor Francesa, de Rolando Del Carmen"
+    }
   },
   "franko": {
     "quote": "Obra realizada a partir de una fotografía del cliente.",
     "description": "Copia realizada a partir de una fotografía del hijo del cliente durante un soleado día de campamento. Se retocó con Photoshop.",
-    "images": { "primary": "Franko En Día De Campo, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Franko En Día De Campo, de Rolando Del Carmen"
+    }
   },
   "la_plancha": {
     "quote": "La primera naturaleza muerta que pinté.",
     "description": "Mi primera pintura y proyecto de naturaleza muerta, realizados por observación con una paleta limitada.",
-    "images": { "primary": "La Plancha, de Rolando Del Carmen" }
+    "images": {
+      "primary": "La Plancha, de Rolando Del Carmen"
+    }
   },
   "el_pie": {
     "quote": "Obra original a partir de un modelo de yeso, realizada por observación.",
     "description": "Obra original realizada por observación de un modelo de yeso, con una paleta limitada.",
-    "images": { "primary": "El Pie, de Rolando Del Carmen" }
+    "images": {
+      "primary": "El Pie, de Rolando Del Carmen"
+    }
   },
   "la_donna_velata": {
     "quote": "Estudio de copia de maestro a partir de una obra de Rafael Sanzio, con una paleta limitada.",
     "description": "Copia de La Donna Velata, de Rafael Sanzio. Un estudio de la luz, el color y la técnica del maestro renacentista.",
-    "images": { "primary": "La Donna Velata, de Rolando Del Carmen" }
+    "images": {
+      "primary": "La Donna Velata, de Rolando Del Carmen"
+    }
   },
   "margarita_la_niña": {
     "quote": "Estudio de la inocencia a través de una copia.",
     "description": "Copia de una obra como estudio de valores tonales. Siempre había querido dibujar a una niña pequeña.",
-    "images": { "primary": "Margarita la Niña, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Margarita la Niña, de Rolando Del Carmen"
+    }
   },
   "el_desnudo_masculino": {
     "quote": "Una copia para el estudio y la documentación.",
     "description": "Dibujo de práctica realizado a partir de una fotografía. Mi primer desnudo de cuerpo completo, antes de recibir formación.",
-    "images": { "primary": "El Desnudo Masculino, de Rolando Del Carmen" }
+    "images": {
+      "primary": "El Desnudo Masculino, de Rolando Del Carmen"
+    }
   },
   "desnudo_joven": {
     "quote": "Mi primer proyecto de dibujo al carboncillo.",
     "description": "Mi primer proyecto de dibujo al carboncillo. Un estudio de una litografía a partir de una reproducción fotográfica impresa.",
-    "images": { "primary": "Desnudo Joven, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Desnudo Joven, de Rolando Del Carmen"
+    }
   },
   "parthenon": {
     "quote": "Estudio de una litografía de Bargue.",
     "description": "Copia de una litografía del curso de dibujo de Charles Bargue.",
-    "images": { "primary": "Parthenon, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Parthenon, de Rolando Del Carmen"
+    }
   },
   "hugh_jackman": {
     "quote": "La nostalgia de una escena de la película Los miserables.",
     "description": "Mi primer proyecto de retrato: el actor Hugh Jackman, dibujado a partir de una fotografía como ejercicio de práctica.",
-    "images": { "primary": "Hugh Jackman, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Hugh Jackman, de Rolando Del Carmen"
+    }
   },
   "torso_de_bevedere": {
     "quote": "Estudio a partir de una litografía de Bargue.",
     "description": "Copia de una litografía del curso de dibujo de Charles Bargue.",
-    "images": { "primary": "Torso de Bevedere, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Torso de Bevedere, de Rolando Del Carmen"
+    }
   },
   "la_mechuda": {
     "quote": "Estudio de copia.",
     "description": "Los sentimientos de mi hermana plasmados en una imagen. Vive entre la agitación y las preocupaciones, sin prestar demasiada atención a su aspecto ni a su ropa, pero tiene un corazón lleno de justicia, compasión y amor. Se realizó a partir de una fotografía como ejercicio de práctica.",
-    "images": { "primary": "La Mechuda, de Rolando Del Carmen" }
+    "images": {
+      "primary": "La Mechuda, de Rolando Del Carmen"
+    }
   },
   "la_travesti": {
     "quote": "Estudio de copia.",
     "description": "Mi hermana se dedica profesionalmente al cuidado de las uñas y refleja su gusto por la moda y la buena presencia. La serenidad y la inteligencia también la caracterizan. Se realizó a partir de una fotografía como ejercicio de práctica.",
-    "images": { "primary": "La Travesti, de Rolando Del Carmen" }
+    "images": {
+      "primary": "La Travesti, de Rolando Del Carmen"
+    }
   },
   "juan_carlillos": {
     "quote": "Obra realizada a partir de una fotografía del cliente.",
     "description": "Copia por encargo a partir de una fotografía del cliente cuando era bebé. Su propio bebé se parece a él. Fue un regalo. Se retocó con Photoshop.",
-    "images": { "primary": "Juan Carlillos, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Juan Carlillos, de Rolando Del Carmen"
+    }
   },
   "victoria_de_samotracia": {
     "quote": "Obra realizada a partir de una fotografía del cliente.",
     "description": "Encargo realizado a partir de una fotografía tomada por el cliente en el Museo del Louvre, en Francia. Fue mi primera obra vendida.",
-    "images": { "primary": "Victoria de Samotracia, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Victoria de Samotracia, de Rolando Del Carmen"
+    }
   },
   "desnudo_ronald_tellini": {
     "quote": "Obra realizada a partir de una fotografía del cliente.",
     "description": "Encargo realizado a partir de una sesión fotográfica del cliente. La imagen de referencia se retocó con Photoshop para aumentar el contraste. Fue mi segunda obra vendida.",
-    "images": { "primary": "Desnudo Ronald Tellini, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Desnudo Ronald Tellini, de Rolando Del Carmen"
+    }
   },
   "actriz_vivian_leigh": {
     "quote": "Estudio a partir de una imagen de una actriz.",
     "description": "Realicé este estudio porque me gustaba la imagen. Al terminar ocurrió algo curioso: el resultado se parecía a una fotografía de mi abuela, a quien nunca conocí, con el mismo peinado y la misma pose.",
-    "images": { "primary": "Actriz Vivian Leigh, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Actriz Vivian Leigh, de Rolando Del Carmen"
+    }
   },
   "mama_de_luis_alonso": {
     "quote": "Obra realizada a partir de una fotografía del cliente.",
     "description": "Fotografía de pasaporte retocada con Photoshop y una herramienta de IA para mejorar la calidad y la definición de la imagen de referencia.",
-    "images": { "primary": "Mama de Luis Alonso, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Mama de Luis Alonso, de Rolando Del Carmen"
+    }
   },
   "el_pitufino_coral": {
     "quote": "Obra realizada a partir de una fotografía encontrada en internet.",
     "description": "Una serpiente como inspiración para un dibujo con lápices de colores, realizado sobre papel especial para esta técnica. Sus ojos atraen la atención de quien la contempla.",
-    "images": { "primary": "El Pitufino Coral, de Rolando Del Carmen" }
+    "images": {
+      "primary": "El Pitufino Coral, de Rolando Del Carmen"
+    }
   },
   "retrato_de_mujer": {
     "quote": "Copia de maestro a partir de un estudio de Alejandro Roosembelt.",
     "description": "Estudio de copia de maestro a partir de la obra del artista Alejandro Roosembelt. Sus obras han sido una inspiración para mí y fue un honor realizar una copia de su trabajo.",
-    "images": { "primary": "Retrato de Mujer, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Retrato de Mujer, de Rolando Del Carmen"
+    }
   },
   "l_Aurore": {
     "quote": "Copia de maestro a partir de un estudio de Abel León Uurivilca.",
     "description": "Estudio de copia de maestro a partir de la obra del artista Abel León Uurivilca, cuyo trabajo ha sido una inspiración para mí.",
-    "images": { "primary": "L'Aurore, de Rolando Del Carmen" }
+    "images": {
+      "primary": "L'Aurore, de Rolando Del Carmen"
+    }
   },
   "psyche_de_naples": {
     "quote": "Estudio de una obra.",
     "description": "Estudio de una litografía de la escultura Psyché de Naples, perteneciente al curso académico de Charles Bargue.",
-    "images": { "primary": "Psyché de Náples, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Psyché de Náples, de Rolando Del Carmen"
+    }
   },
   "homenaje_postumo": {
     "quote": "Dibujo por encargo en memoria de un amigo fallecido.",
     "description": "Un encargo realizado para una amistad, en homenaje a su amigo fallecido.",
-    "images": { "primary": "Homenaje Postumo, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Homenaje Postumo, de Rolando Del Carmen"
+    }
   },
   "gatito": {
     "quote": "Pintura realizada a partir de una fotografía encontrada en internet.",
     "description": "Pintura al óleo sobre lienzo realizada como parte de mi documentación personal.",
-    "images": { "primary": "Gatito, de Rolando Del Carmen" }
+    "images": {
+      "primary": "Gatito, de Rolando Del Carmen"
+    }
   }
 }

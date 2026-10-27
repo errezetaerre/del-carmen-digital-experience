@@ -113,7 +113,7 @@ Motion remains scene-specific.
 
 Current poster:
 
-`public/about/film/the_encounter_poster.png`
+`public/about/film/the_encounter_poster.webp`
 
 The poster is rendered as full-bleed background media.
 
@@ -378,7 +378,7 @@ Reduced-motion accessibility remains mandatory.
 
 Current canonical Hero fallback:
 
-`public/about/film/the_encounter_poster.png`
+`public/about/film/the_encounter_poster.webp`
 
 Planned replacement:
 

@@ -12,7 +12,7 @@ export const artworkSeries: ArtworkSeries[] = [
         coverArtworkId: "yasemi_i",
         images: {
             featured: {
-                src: "/artworks/yasemi_I_collection_hero_landscape.jpg",
+                src: "/series/yasemi/yasemi_I_collection_hero_landscape.webp",
                 alt: "Yasemi — featured collection",
                 width: 1376,
                 height: 768,
@@ -27,13 +27,13 @@ export const artworkSeries: ArtworkSeries[] = [
             media: {
                 type: "image",
                 desktop: {
-                    src: "/artworks/yasemi_I_collection_hero_landscape.jpg",
+                    src: "/series/yasemi/yasemi_I_collection_hero_landscape.webp",
                     alt: "Yasemi",
                     width: 1376,
                     height: 768,
                 },
                 mobile: {
-                    src: "/artworks/yasemi_I_collection_hero_portrait.png",
+                    src: "/series/yasemi/yasemi_I_collection_hero_portrait.webp",
                     alt: "Yasemi",
                     width: 941,
                     height: 1672,
@@ -43,7 +43,7 @@ export const artworkSeries: ArtworkSeries[] = [
         status: "ongoing",
         yearStart: 2026,
         atmosphere: {
-            src: "/series/yasemi/yasemi_atmosphere.png",
+            src: "/series/yasemi/yasemi_atmosphere_landscape.webp",
             alt: "",
         },
     },
@@ -65,13 +65,13 @@ export const artworkSeries: ArtworkSeries[] = [
             media: {
                 type: "image",
                 desktop: {
-                    src: "/artworks/epifanias_collection_hero_landscape.png",
+                    src: "/series/epifanias/epifanias_collection_hero_landscape.webp",
                     alt: "Epifanias hero landscape",
                     width: 1672,
                     height: 941,
                 },
                 mobile: {
-                    src: "/artworks/epifanias_collection_hero_portrait.png",
+                    src: "/series/epifanias/epifanias_collection_hero_portrait.webp",
                     alt: "Epifanias hero portrait",
                     width: 941,
                     height: 1672,
@@ -81,7 +81,7 @@ export const artworkSeries: ArtworkSeries[] = [
         status: "ongoing",
         yearStart: 2027,
         atmosphere: {
-            src: "/series/epifanias/epifanias_atmosphere.png",
+            src: "/series/epifanias/epifanias_atmosphere_landscape.webp",
             alt: "",
         },
     },
@@ -103,13 +103,13 @@ export const artworkSeries: ArtworkSeries[] = [
             media: {
                 type: "image",
                 desktop: {
-                    src: "/artworks/the_inner_treasury_collection_hero_landscape.png",
+                    src: "/series/the_inner_treasury/the_inner_treasury_collection_hero_landscape.webp",
                     alt: "The Inner Treasury landscape",
                     width: 1672,
                     height: 941,
                 },
                 mobile: {
-                    src: "/artworks/the_inner_treasury_collection_hero_portrait.png",
+                    src: "/series/the_inner_treasury/the_inner_treasury_collection_hero_portrait.webp",
                     alt: "The Inner Treasury portrait",
                     width: 941,
                     height: 1672,
@@ -120,7 +120,7 @@ export const artworkSeries: ArtworkSeries[] = [
         yearStart: 2024,
         yearEnd: 2024,
         atmosphere: {
-            src: "/series/the_inner_treasury/the_inner_treasury_atmosphere.png",
+            src: "/series/the_inner_treasury/the_inner_treasury_atmosphere_landscape.webp",
             alt: "",
         },
     },
@@ -142,13 +142,13 @@ export const artworkSeries: ArtworkSeries[] = [
             media: {
                 type: "image",
                 desktop: {
-                    src: "/artworks/the_discipline_of_seeing_collection_hero_landscape.png",
+                    src: "/series/the_discipline_of_seeing/the_discipline_of_seeing_collection_hero_landscape.webp",
                     alt: "the_discipline_of_seeing_hero_landscape",
                     width: 1672,
                     height: 941,
                 },
                 mobile: {
-                    src: "/artworks/the_discipline_of_seeing_collection_hero_portrait.png",
+                    src: "/series/the_discipline_of_seeing/the_discipline_of_seeing_collection_hero_portrait.webp",
                     alt: "the_discipline_of_seeing_hero_portrait",
                     width: 941,
                     height: 1672,
@@ -159,7 +159,7 @@ export const artworkSeries: ArtworkSeries[] = [
         yearStart: 2023,
         yearEnd: 2023,
         atmosphere: {
-            src: "/series/the_discipline_of_seeing/the_discipline_of_seeing_atmosphere.png",
+            src: "/series/the_discipline_of_seeing/the_discipline_of_seeing_atmosphere_landscape.webp",
             alt: "",
         },
     },

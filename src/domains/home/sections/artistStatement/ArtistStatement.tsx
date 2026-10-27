@@ -74,7 +74,7 @@ export default function ArtistStatement() {
                 "
               >
                 <Image
-                  src="/images/artist/about_the_artist.png"
+                  src="/images/artist/about_the_artist.webp"
                   alt="Del Carmen"
                   fill
                   className="

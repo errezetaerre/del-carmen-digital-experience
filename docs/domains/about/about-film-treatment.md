@@ -50,7 +50,7 @@ The final audiovisual master is not yet complete.
 
 Current About v1.0 uses:
 
-`public/about/film/the_encounter_poster.png`
+`public/about/film/the_encounter_poster.webp`
 
 as the canonical static media fallback.
 

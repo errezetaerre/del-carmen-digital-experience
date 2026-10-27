@@ -23,7 +23,7 @@ export default function ArtistHero() {
                 className="artist-hero-motion absolute inset-0 bg-neutral-950">
                 {/* Mobile Portrait */}
                 <Image
-                    src="/artist/hero/rolando_epifania_portrait.png"
+                    src="/artist/hero/rolando_epifania_portrait.webp"
                     alt=""
                     fill
                     priority
@@ -38,7 +38,7 @@ export default function ArtistHero() {
 
                 {/* Mobile Landscape */}
                 <Image
-                    src="/artist/hero/rolando_epifania_landscape.png"
+                    src="/artist/hero/rolando_epifania_landscape.webp"
                     alt=""
                     fill
                     priority
@@ -55,7 +55,7 @@ export default function ArtistHero() {
 
                 {/* Tablet / Desktop */}
                 <Image
-                    src="/artist/hero/rolando_epifania_landscape.png"
+                    src="/artist/hero/rolando_epifania_landscape.webp"
                     alt=""
                     fill
                     priority

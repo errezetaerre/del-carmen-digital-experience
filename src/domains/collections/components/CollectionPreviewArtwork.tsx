@@ -49,7 +49,7 @@ export default function CollectionPreviewArtwork({
                     bg-white/[0.03]
                 "
             >
-                {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} variant="thumbnail" /> : <Image
+                {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} variant="thumbnail" imageSizes="18vw" /> : <Image
                     src={image.src}
                     alt={image.alt}
                     fill

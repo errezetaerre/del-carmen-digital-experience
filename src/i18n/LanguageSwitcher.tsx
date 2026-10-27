@@ -32,6 +32,7 @@ function LanguageChoices({ className = "", onNavigate }: Props) {
             {index > 0 && <span aria-hidden="true" className="text-current opacity-25">/</span>}
             {language === locale ? <span lang={language} aria-current="true" className="text-brand-gold">{language.toUpperCase()}</span> : <NextLink
                 href={localizeHref(pathname + (query ? `?${query}` : "") + hash, language)} hrefLang={language}
+                prefetch={false}
                 aria-label={t(language === "es" ? "switchToSpanish" : "switchToEnglish")}
                 className="inline-flex min-h-6 min-w-6 items-center justify-center text-current opacity-60 transition-opacity hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold"
                 scroll={false}

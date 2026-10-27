@@ -156,7 +156,7 @@ export default function TheWork() {
                             "
                         >
                             <Image
-                                src="/artworks/epifania_nupcial_hero_portrait.png"
+                                src="/artworks/epifania_nupcial_hero_portrait.webp"
                                 alt={t("work.imageAlt")}
                                 fill
                                 sizes="

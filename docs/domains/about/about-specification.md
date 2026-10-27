@@ -92,7 +92,7 @@ The Hero uses full-bleed media behind the editorial copy.
 
 Current canonical media:
 
-`public/about/film/the_encounter_poster.png`
+`public/about/film/the_encounter_poster.webp`
 
 The poster is a production fallback and current visual representation of the future film.
 
@@ -322,7 +322,7 @@ The Encounter belongs inside the Hero as the audiovisual layer of the existing A
 
 The current canonical implemented fallback remains:
 
-`public/about/film/the_encounter_poster.png`
+`public/about/film/the_encounter_poster.webp`
 
 The final audiovisual master remains planned.
 
