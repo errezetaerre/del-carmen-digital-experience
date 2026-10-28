@@ -1,4 +1,19 @@
 {
+  "SeriesExperience": {
+    "modeLabel": "Collection viewing experience",
+    "standard": "Carousel",
+    "glass": "Glass ArtBook",
+    "viewer": "Del Carmen collections",
+    "navigation": "Explore collections",
+    "position": "Collection {index} of {total}",
+    "standardHint": "Drag the page to explore the collections",
+    "glassHint": "Drag the glass to explore the collections",
+    "dockHint": "Drag the background · ← →",
+    "galleryHint": "Drag the artworks to explore this series",
+    "singleWork": "Work {index} of {total}",
+    "workRange": "Works {first}–{last} of {total}",
+    "error": "This collection could not finish loading."
+  },
   "Navigation": {
     "artworks": "Artworks",
     "collections": "Collections",
@@ -22,6 +37,7 @@
     "rights": "All rights reserved."
   },
   "Artwork": {
+    "backToGallery": "Back to gallery",
     "standardView": "Standard View",
     "original": "Original Artwork",
     "masterCopy": "Master Copy",

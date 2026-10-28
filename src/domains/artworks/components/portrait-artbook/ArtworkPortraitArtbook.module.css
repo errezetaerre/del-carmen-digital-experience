@@ -113,3 +113,17 @@
     .embedded .controls a > span { position: static; width: auto; height: auto; overflow: hidden; clip-path: none; }
     .embedded .center > :first-child, .embedded .hintDock { position: static; transform: none; }
 }
+
+/* Immersive portrait hides the global header and uses the released space. */
+.experience:not(.embedded) { z-index: 60; padding-top: max(.5rem, env(safe-area-inset-top)); }
+.controls a > span:first-child { font-size: var(--artbook-control-size); line-height: var(--artbook-control-line-height); letter-spacing: var(--artbook-control-tracking); }
+.spine { background: var(--artbook-spine); }
+.entryChecking { position: relative; display: block; min-height: 100svh; }
+.entryChecking > .entryFallback { visibility: hidden; }
+.entryChecking > .entryPortrait { position: absolute; inset: 0; display: grid; place-items: center; }
+/* Standalone portrait releases header space without reducing the approved photo cap. */
+.experience:not(.embedded) .page :global([data-artwork-editorial] > div) { padding: clamp(.5rem, 1vw, .75rem); }
+.experience:not(.embedded) .page :global([data-artwork-detail-photo]) { width: min(100%, calc(58svh * var(--artwork-photo-aspect, 1))); max-height: 58svh !important; }
+@media (min-width: 768px) {
+    .experience:not(.embedded) .page :global([data-artwork-detail-photo]) { width: min(100%, calc(64svh * var(--artwork-photo-aspect, 1))); max-height: 64svh !important; }
+}

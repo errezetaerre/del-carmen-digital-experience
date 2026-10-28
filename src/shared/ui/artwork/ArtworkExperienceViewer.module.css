@@ -38,3 +38,12 @@
     .actions a { font-size: 8px; letter-spacing: .10em; }
 }
 @media (orientation: landscape) and (max-height: 600px) { .toolbar { top: .25rem; } }
+
+/* Shared Glass chrome occupies the same reserved top band as Standard. */
+.dialog > .glassToolbar { position: absolute; top: max(.5rem, env(safe-area-inset-top)); left: max(1rem, env(safe-area-inset-left)); right: max(1rem, env(safe-area-inset-right)); }
+.mode { font-size: var(--artbook-control-size); line-height: var(--artbook-control-line-height); letter-spacing: var(--artbook-control-tracking); }
+.dialog:has([role="dialog"][aria-modal="true"]) > .glassToolbar { visibility: hidden; }
+
+/* Only Glass landscape: align its toolbar and recover the unused top margin. */
+.dialog[data-artwork-experience="glass"][data-gallery-layout="landscape"] { --gallery-top: max(4rem, calc(env(safe-area-inset-top) + 3.5rem)); }
+.dialog[data-gallery-layout="landscape"] > .glassToolbar { left: var(--gallery-inline); right: var(--gallery-inline); max-width: 1440px; margin-inline: auto; }

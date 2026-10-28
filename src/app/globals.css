@@ -100,6 +100,12 @@
   --tracking-brand: 0.25em;
   --tracking-button: 0.28em;
 
+  /* Shared book controls, independent of renderer and locale. */
+  --artbook-control-size: 10px;
+  --artbook-control-line-height: 1.5;
+  --artbook-control-tracking: .18em;
+  --artbook-spine: linear-gradient(transparent, rgb(167 121 67 / .22) 18%, rgb(225 187 128 / .36) 50%, rgb(167 121 67 / .22) 82%, transparent);
+
 
 
   /* ---------------------------------------------------------

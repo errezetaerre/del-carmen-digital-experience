@@ -1,60 +1,55 @@
 "use client";
 
-import { useSyncExternalStore, type ReactNode } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useSyncExternalStore, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import { usePathname } from "@/i18n/navigation";
-import { localizeHref } from "@/i18n/config";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { artworkExperienceHref } from "../../presentation/artworkExperience";
+import { artworkBookViewport, subscribeArtworkBookViewport } from "../../presentation/artworkBookViewport";
+import useArtworkExperience from "@/shared/ui/artwork/useArtworkExperience";
+import { setArtworkExperiencePreference } from "@/shared/ui/artwork/artworkExperiencePreference";
 import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
 import type { ArtworkGlassArtbookProps } from "../glass-artbook/types";
-import { portraitViewportSnapshot, serverPortraitSnapshot, subscribePortraitViewport } from "./portraitArtbookViewport";
 import styles from "./ArtworkPortraitArtbook.module.css";
-
-const PortraitArtbook = dynamic(() => import("./ArtworkPortraitArtbook"), {
-    loading: () => <PortraitLoading />,
-});
-const LandscapeArtbook = dynamic(() => import("../glass-artbook"), {
-    loading: () => <PortraitLoading />,
-});
 
 function PortraitLoading() {
     const t = useTranslations("Glass");
     return <div className={styles.entryLoading}><ArtworkLoading label={t("preparing")} /></div>;
 }
+const PortraitArtbook = dynamic(() => import("./ArtworkPortraitArtbook"), { loading: PortraitLoading });
+const LandscapeArtbook = dynamic(() => import("../glass-artbook"), { loading: PortraitLoading });
+const serverViewport = () => "checking" as const;
 
-// Explicit Standard remains available. The old landscape/desktop component
-// is passed through unchanged; it never mounts while portrait owns the book.
-export default function ArtworkPortraitEntry({ children, book, explicitGlass = false }: {
-    children: ReactNode;
-    book: ArtworkGlassArtbookProps;
-    explicitGlass?: boolean;
-}) {
-    const viewport = useSyncExternalStore(subscribePortraitViewport, portraitViewportSnapshot, serverPortraitSnapshot);
-    const locale = useLocale();
-    const t = useTranslations("Glass");
-    const search = useSearchParams();
-    const pathname = usePathname();
-    if (viewport === "portrait") return <PortraitArtbook {...book} />;
-    if (viewport === "other") {
-        // Native book history intentionally does not refetch the route. After
-        // a portrait turn, rotation must open the selected work, not the old
-        // server payload's initial artwork.
-        if (!explicitGlass && search.get("experience") === "glass") {
-            let slug = "";
-            try { slug = decodeURIComponent(pathname.replace(/^\/artworks\//, "").replace(/\/$/, "")); } catch { /* Use the initial artwork. */ }
-            const selected = book.artworks.find(artwork => artwork.slug === slug);
-            return <LandscapeArtbook {...book} initialArtworkId={selected?.id ?? book.initialArtworkId} />;
+/** Both route presentations are available; native book turns never refetch a page. */
+export default function ArtworkPortraitEntry({ children, book }: { children: ReactNode; book: ArtworkGlassArtbookProps }) {
+    const preference = useArtworkExperience();
+    const viewport = useSyncExternalStore(subscribeArtworkBookViewport, artworkBookViewport, serverViewport);
+    const pathname = usePathname(), search = useSearchParams(), router = useRouter();
+    let slug = "";
+    try { slug = decodeURIComponent(pathname.replace(/^\/artworks\//, "").replace(/\/$/, "")); } catch { /* Keep the initial ID. */ }
+    const selected = book.artworks.find(artwork => artwork.slug === slug) ?? book.artworks.find(artwork => artwork.id === book.initialArtworkId);
+    const mode = viewport === "unsupported" ? "standard" : preference;
+    // Standard is server-rendered. After native Glass turns, obtain the new
+    // selected work's server scenes before revealing Standard, never the old one.
+    const staleStandard = mode === "standard" && selected?.id !== book.initialArtworkId;
+    useEffect(() => {
+        if (!mode || viewport === "checking" || !selected) return;
+        if (staleStandard) {
+            router.replace(artworkExperienceHref(selected.slug, book.navigationQuery, "standard"), { scroll: false });
+            return;
         }
-        return children;
-    }
-    const initial = book.artworks.find(artwork => artwork.id === book.initialArtworkId) ?? book.artworks[0];
-    const standardHref = initial ? artworkExperienceHref(initial.slug, book.navigationQuery, "standard") : "/artworks";
-    const fallback = <noscript><a className={`${styles.noScript} font-sans text-sm text-white/70`} href={localizeHref(standardHref, locale)}>{t("standard")}</a></noscript>;
-    if (explicitGlass) return <><PortraitLoading />{fallback}</>;
-    return <><div className={styles.entryChecking}>
-        <div className={styles.entryFallback}>{children}</div>
-        <div className={styles.entryPortrait}><PortraitLoading /></div>
-    </div>{fallback}</>;
+        if (search.get("experience") === mode) return;
+        const url = new URL(window.location.href);
+        url.searchParams.set("experience", mode);
+        window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    }, [mode, viewport, selected, staleStandard, book.navigationQuery, search, router]);
+    function exit() { setArtworkExperiencePreference("standard"); }
+    if (!preference || viewport === "checking") return <div className={styles.entryChecking}>
+        <div className={styles.entryFallback}>{children}</div><div className={styles.entryPortrait}><PortraitLoading /></div>
+    </div>;
+    if (staleStandard) return <PortraitLoading />;
+    if (mode === "standard") return children;
+    const props = { ...book, initialArtworkId: selected?.id ?? book.initialArtworkId, onExit: exit };
+    return viewport === "portrait" ? <PortraitArtbook {...props} /> : <LandscapeArtbook {...props} />;
 }

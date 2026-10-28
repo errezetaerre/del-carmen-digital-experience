@@ -3,6 +3,9 @@
 import { useId, useLayoutEffect, useRef, useState, type MouseEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import gsap from "gsap";
+import ArtworkExperienceToolbar from "@/shared/ui/artwork/ArtworkExperienceToolbar";
+import { setArtworkExperiencePreference } from "@/shared/ui/artwork/artworkExperiencePreference";
+import useDialogFocus from "@/shared/hooks/useDialogFocus";
 import useArtworkGestureBoundary from "@/shared/ui/artwork/useArtworkGestureBoundary";
 import Link, { usePathname, useRouter } from "@/i18n/navigation";
 import { localizeHref } from "@/i18n/config";
@@ -43,7 +46,7 @@ function PortraitMaterial() {
     return <><div className={styles.reflection} aria-hidden="true" /><div ref={host} className={styles.rim} aria-hidden="true" /></>;
 }
 
-export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, navigationQuery, backHref, backLabel, host }: ArtworkGlassArtbookProps) {
+export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, navigationQuery, backHref, backLabel, host, onExit }: ArtworkGlassArtbookProps) {
     const locale = useLocale();
     const t = useTranslations("Artwork");
     const glass = useTranslations("Glass");
@@ -68,6 +71,15 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     const presentedRef = useRef(false);
     const [learnedAtMount] = useState(() => portraitHintLearned);
     const [loadState, setLoadState] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: initialArtworkId, kind: "entrance" });
+
+    function exit() {
+        if (host) { host.onStandardView(); return; }
+        setArtworkExperiencePreference("standard");
+        if (onExit) onExit(); else router.replace(artworkExperienceHref(currentArtwork.slug, navigationQuery, "standard"), { scroll: false });
+    }
+    const exitRef = useRef(exit);
+    useLayoutEffect(() => { exitRef.current = exit; });
+    useDialogFocus(rootRef, !host, { onEscape() { exitRef.current(); } });
 
     useLayoutEffect(() => {
         const root = rootRef.current, frame = frameRef.current, overlay = overlayRef.current;
@@ -141,7 +153,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
                 if (artwork && hostRef.current) hostRef.current.onNavigate(artwork);
                 else if (artwork) window.history.pushState(null, "", localizeHref(artworkExperienceHref(artwork.slug, navigationQuery, "glass"), locale));
             },
-            onExit() { if (hostRef.current) { hostRef.current.onStandardView(); return; } router.push(artworkExperienceHref(currentArtwork.slug, navigationQuery, "standard"), { scroll: false }); },
+            onExit() { exitRef.current(); },
             onArrival() {
                 const badges = getArtworkPresentation(currentArtwork, locale).badges;
                 if (currentArtwork.creationStatus !== "completed" || !badges.some(badge => badge.kind !== "planned" && badge.kind !== "in-progress") ||
@@ -170,14 +182,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     if (!currentArtwork) return null;
     return <main ref={rootRef} className={`${styles.experience} ${host ? styles.embedded : ""}`} data-portrait-artbook data-portrait-current={currentArtwork.id}
         data-portrait-learned={learnedAtMount || undefined} data-lenis-prevent aria-label={glass("viewer")}>
-        {!host && <div className={styles.toolbar}>
-            <Link href={backHref} className={`${styles.back} font-sans text-[10px] uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline focus-visible:outline-brand-gold`}>
-                <span>← {backLabel}</span>
-            </Link>
-            <Link href={artworkExperienceHref(currentArtwork.slug, navigationQuery, "standard")} className={`${styles.exit} font-sans text-[9px] uppercase tracking-[0.22em] text-white/60 transition-colors hover:text-brand-gold`} aria-label={glass("exitLabel")}>
-                {glass("exit")} <span aria-hidden="true">×</span>
-            </Link>
-        </div>}
+        {!host && <ArtworkExperienceToolbar backHref={backHref} backLabel={backLabel} onExit={exit} />}
         <div ref={frameRef} className={styles.frame} data-portrait-frame aria-busy={loadState.status === "loading"}>
             {artworks.slice(Math.max(0, index - 1), index + 2).map(artwork => {
                 const active = artwork.id === currentArtwork.id;

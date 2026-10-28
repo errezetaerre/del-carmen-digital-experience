@@ -11,6 +11,7 @@ export interface ArtworkGlassArtbookProps {
     backHref: string;
     backLabel: string;
     host?: ArtworkBookHost;
+    onExit?(): void;
 }
 
 // Optional gallery host; the detail routes retain their existing rendering.

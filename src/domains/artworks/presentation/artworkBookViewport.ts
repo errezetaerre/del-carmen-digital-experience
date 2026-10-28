@@ -1,4 +1,4 @@
-import { LANDSCAPE_ARTBOOK_ENTRY_QUERY } from "./artworkExperience";
+import { artworkExperiencePreference } from "@/shared/ui/artwork/artworkExperiencePreference";
 import { PORTRAIT_ARTBOOK_QUERY } from "../components/portrait-artbook/portraitArtbookViewport";
 
 export const GLASS_BOOK_QUERY = "(min-width:1024px) and (hover:hover) and (pointer:fine), (min-width:640px) and (min-height:300px) and (orientation:landscape)";
@@ -17,7 +17,7 @@ export function subscribeArtworkBookViewport(listener: () => void) {
     return () => queries.forEach(query => query.removeEventListener("change", listener));
 }
 
+/** Kept for existing consumers; viewport no longer selects the experience. */
 export function defaultArtworkViewerMode(): "glass" | "standard" {
-    return window.matchMedia(PORTRAIT_ARTBOOK_QUERY).matches || window.matchMedia(LANDSCAPE_ARTBOOK_ENTRY_QUERY).matches
-        ? "glass" : "standard";
+    return artworkExperiencePreference();
 }
