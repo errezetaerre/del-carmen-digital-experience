@@ -44,7 +44,7 @@ export default function SeriesGallery({
                     ? "md:grid-cols-2"
                     : "md:grid-cols-1";
 
-    const useDesktopCarousel =
+    const useCarousel =
         artworks.length > 4;
 
     return (
@@ -54,71 +54,65 @@ export default function SeriesGallery({
              * STANDARD GALLERY
              * ------------------------------------------------
              *
-             * Mobile / tablet always use the existing grid.
-             * Desktop uses this layout for 1–4 artworks.
+             * All viewports use the existing grid for 1–4 artworks.
              */}
-            <div
-                className={`
-                    mx-auto
-                    w-fit
-                    -mt-35
-                    grid
-                    grid-cols-2
-                    items-start
-                    justify-items-center
-                    gap-x-6
-                    gap-y-14
+            {!useCarousel && (
+                <div
+                    className={`
+                        mx-auto
+                        w-fit
+                        -mt-35
+                        grid
+                        grid-cols-2
+                        items-start
+                        justify-items-center
+                        gap-x-6
+                        gap-y-14
 
-                    md:gap-x-5
+                        md:gap-x-5
 
-                    xl:gap-x-8
+                        xl:gap-x-8
 
-                    ${mobileColumns}
-                    ${desktopColumns}
+                        ${mobileColumns}
+                        ${desktopColumns}
 
-                    ${useDesktopCarousel
-                        ? "lg:hidden"
-                        : ""
-                    }
-
-                    [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-3
-                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-x-4
-                    [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
-                `}
-            >
-                {artworks.map(
-                    (artwork) => (
-                        <CollectionArtwork
-                            key={artwork.id}
-                            artwork={artwork}
-                            presentation="series"
-                            onOpen={() =>
-                                viewer.open(
-                                    artwork,
-                                )
-                            }
-                        />
-                    ),
-                )}
-            </div>
+                        [@media(orientation:landscape)_and_(max-height:600px)]:!grid-cols-3
+                        [@media(orientation:landscape)_and_(max-height:600px)]:!gap-x-4
+                        [@media(orientation:landscape)_and_(max-height:600px)]:!gap-y-8
+                    `}
+                >
+                    {artworks.map(
+                        (artwork) => (
+                            <CollectionArtwork
+                                key={artwork.id}
+                                artwork={artwork}
+                                presentation="series"
+                                onOpen={() =>
+                                    viewer.open(
+                                        artwork,
+                                    )
+                                }
+                            />
+                        ),
+                    )}
+                </div>
+            )}
 
             {/*
              * ------------------------------------------------
-             * DESKTOP KINETIC CAROUSEL
+             * KINETIC CAROUSEL
              * ------------------------------------------------
              *
-             * Activated only when the Series contains
-             * more than four artworks.
+             * Activated in every viewport when the Series contains
+             * more than four artworks. Only one gallery is mounted.
              */}
-            {useDesktopCarousel && (
+            {useCarousel && (
                 <div
                     className="
                         relative
                         mx-auto
                         -mt-35
-                        hidden
                         w-full
-                        lg:block
                     "
                 >
                     <KineticCarousel

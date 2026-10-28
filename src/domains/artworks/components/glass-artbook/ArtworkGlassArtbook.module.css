@@ -190,3 +190,68 @@
 
 /* The gallery never gives the information leaf a minimum that steals image area. */
 .embedded .root :global(.book) { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+
+/* One joined spread: the outer metal/glass treatment remains on its own faces. */
+.experience { padding-top: max(4rem, calc(env(safe-area-inset-top) + 3.5rem)); }
+.toolbar { position: absolute; top: max(.5rem, env(safe-area-inset-top)); left: clamp(1rem, 3vw, 3rem); right: clamp(1rem, 3vw, 3rem); }
+.root :global(.book) { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 0; }
+.root :global(.hinge) { background: var(--artbook-spine); }
+/* Suppress the two inner shader edges; retain each outer edge and corner. */
+.root :global([data-side="-1"] > .material-gl) { mask-image: linear-gradient(90deg, #000 calc(100% - 8px), transparent 100%); -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 8px), transparent 100%); }
+.root :global([data-side="1"] > .material-gl) { mask-image: linear-gradient(90deg, transparent, #000 8px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8px); }
+.root :global(.art) { padding: 3% 2.2%; }
+.root :global(.nav-label) { font-size: var(--artbook-control-size); line-height: var(--artbook-control-line-height); letter-spacing: var(--artbook-control-tracking); }
+/* Gallery books share Standard's exact available rectangle and image stage. */
+.embedded { padding: var(--gallery-top) var(--gallery-inline) var(--gallery-bottom); }
+.embedded .bookViewport { display: contents; }
+.embedded .root { max-width: 1440px; max-height: calc(800px + 5rem); min-height: 0; gap: 1rem; grid-template-rows: minmax(0, 1fr) auto; }
+.embedded .root :global(.art) { padding: 12px 12px 60px; }
+.embedded .root :global(.art .ga-image) { width: 100%; height: 100%; max-width: 100%; max-height: 100%; transform: none; object-fit: contain; }
+.embedded .root :global(.info) { text-align: center; padding: 20px clamp(20px, 3vw, 48px); }
+.embedded .root :global(.rule) { margin-inline: auto; }
+.embedded .root :global([data-gallery-information]) { margin-block: auto; }
+.embedded .root :global([data-gallery-information] h2) { margin-top: 8px; font-size: 1.875rem; }
+.embedded .root :global([data-gallery-information] [data-gallery-actions]) { justify-content: center; }
+@media (orientation:landscape) and (max-height:600px) {
+    .embedded { --gallery-top: max(3.75rem, calc(env(safe-area-inset-top) + 3.25rem)); padding: var(--gallery-top) var(--gallery-inline) max(.5rem, env(safe-area-inset-bottom)); }
+    .embedded .root :global(.art) { padding: 8px 8px 56px; }
+    .embedded .root :global(.info) { padding: 12px 16px; }
+    .embedded .root :global([data-gallery-information] h2) { font-size: 1.125rem; }
+}
+
+
+/* Glass chrome owns real rows; stylesheet arrival order cannot move the book. */
+.experience:not(.embedded) {
+    grid-template-rows: auto minmax(0, 1fr);
+    row-gap: 12px;
+    padding-top: max(.5rem, env(safe-area-inset-top));
+}
+.experience > .toolbar {
+    position: relative; inset: auto; grid-row: 1;
+    width: 100%; max-width: 1800px; margin-inline: auto;
+}
+.experience:not(.embedded) > .bookViewport {
+    position: relative; display: block; grid-row: 2;
+    box-sizing: border-box; width: 100%; height: 100%; min-height: 0;
+    margin: 0; padding: 0; overflow: visible;
+}
+/* The shared gallery supplies its fixed top band; footer stays below the scene. */
+.embedded .root > :global(.controls) {
+    position: relative; inset: auto; grid-row: 2;
+    min-height: 4rem; pointer-events: auto;
+}
+.embedded .root :global(.control-center) { position: relative; inset: auto; transform: none; gap: .25rem; }
+.embedded .root :global(.nav-title) { display: block; }
+.positionDots { position: relative; display: flex; align-items: center; gap: 2px; width: max-content; max-width: min(28vw, 17rem); min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; overscroll-behavior-x: contain; }
+.positionDots::-webkit-scrollbar { display: none; }
+.root .positionDots button { flex: 0 0 24px; display: grid; place-items: center; width: 24px; height: 24px; min-height: 24px; margin: 0; padding: 0; border: 0; background: transparent; }
+.positionDots button::before { content: ""; width: 8px; height: 8px; border: 1px solid rgb(225 187 128 / .35); border-radius: 50%; background: transparent; }
+.positionDots button[aria-current="true"]::before { background: var(--brand-gold); border-color: var(--brand-gold); box-shadow: 0 0 7px rgb(201 154 91 / .2); }
+.root .positionDots button:disabled { opacity: .45; }
+.root :global(.control-center) > .positionDots { order: 1; }
+.root :global(.control-center) > :global(.guide-dock) { order: 2; }
+@media (orientation:landscape) and (max-height:600px) {
+    .embedded .root { gap: .5rem; }
+    .embedded .root > :global(.controls) { min-height: 3.5rem; }
+    .root .positionDots button { flex-basis: 20px; width: 20px; height: 20px; min-height: 20px; }
+}

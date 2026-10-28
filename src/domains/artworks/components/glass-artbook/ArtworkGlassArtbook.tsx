@@ -3,7 +3,8 @@
 import { useLocale, useTranslations } from "next-intl";
 import { localizeHref } from "@/i18n/config";
 import { localizeArtwork } from "@/i18n/artworkCopy";
-import LanguageSwitcher from "@/i18n/LanguageSwitcher";
+import ArtworkExperienceToolbar from "@/shared/ui/artwork/ArtworkExperienceToolbar";
+import { setArtworkExperiencePreference } from "@/shared/ui/artwork/artworkExperiencePreference";
 
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import useClientReady from "@/shared/hooks/useClientReady";
@@ -25,7 +26,7 @@ import type { ArtworkGlassArtbookProps, GlassArtbookController, GlassArtbookLoad
 import styles from "./ArtworkGlassArtbook.module.css";
 
 export default function ArtworkGlassArtbook({
-    artworks: sourceArtworks, initialArtworkId, navigationQuery, host,
+    artworks: sourceArtworks, initialArtworkId, navigationQuery, backHref, backLabel, host, onExit,
 }: ArtworkGlassArtbookProps) {
     const embedded = Boolean(host);
     const hostedArtworkId = host?.artworkId;
@@ -33,6 +34,7 @@ export default function ArtworkGlassArtbook({
     useLayoutEffect(() => { latestHost.current = host; });
     const locale = useLocale();
     const t = useTranslations("Glass");
+    const artworkT = useTranslations("Artwork");
     const artworks = useMemo(() => sourceArtworks.map((artwork) => localizeArtwork(artwork, locale)), [sourceArtworks, locale]);
     const pathname = usePathname();
     const router = useRouter();
@@ -55,6 +57,8 @@ export default function ArtworkGlassArtbook({
     const [bookEligible, setBookEligible] = useState<boolean | null>(embedded ? true : null);
     const [actionsHost, setActionsHost] = useState<HTMLElement | null>(null);
     const [highlightsHosts, setHighlightsHosts] = useState<HTMLElement[]>([]);
+    const [positionHost, setPositionHost] = useState<HTMLElement | null>(null);
+    const positionRail = useRef<HTMLDivElement>(null);
     const routedArtwork = useMemo(() => {
         if (hostedArtworkId) return artworks.find(item => item.id === hostedArtworkId) ?? null;
         if (!pathname?.startsWith("/artworks/")) return null;
@@ -69,6 +73,12 @@ export default function ArtworkGlassArtbook({
     const standardHref = selectedArtwork
         ? artworkExperienceHref(selectedArtwork.slug, navigationQuery, "standard")
         : "/artworks";
+
+    const exit = useCallback(() => {
+        if (latestHost.current) { latestHost.current.onStandardView(); return; }
+        setArtworkExperiencePreference("standard");
+        if (onExit) onExit(); else router.replace(standardHref, { scroll: false });
+    }, [onExit, router, standardHref]);
 
     useEffect(() => {
         if (embedded) return;
@@ -107,7 +117,7 @@ export default function ArtworkGlassArtbook({
             .filter((node): node is HTMLElement => node instanceof HTMLElement && node !== experienceRef.current && node.tagName !== "SCRIPT")
             .map((node) => ({ node, inert: node.inert }));
         siblings.forEach(({ node }) => { node.inert = true; });
-        experienceRef.current?.querySelector<HTMLAnchorElement>("[data-glass-exit]")?.focus({ preventScroll: true });
+        experienceRef.current?.querySelector<HTMLElement>("[data-glass-exit]")?.focus({ preventScroll: true });
         return () => {
             document.documentElement.style.overflow = previousOverflow;
             siblings.forEach(({ node, inert }) => { node.inert = inert; });
@@ -151,9 +161,18 @@ export default function ArtworkGlassArtbook({
         controllerRef.current = controller;
         setActionsHost(host.querySelector<HTMLElement>("[data-glass-artwork-actions]"));
         setHighlightsHosts(Array.from(host.querySelectorAll<HTMLElement>("[data-glass-artwork-highlights]")));
+        setPositionHost(embedded ? host.querySelector<HTMLElement>(".control-center") : null);
         const unbindReading = embedded ? bindArtworkReadingPanels(host) : () => {};
-        return () => { unbindReading(); controller.dispose(); controllerRef.current = null; setActionsHost(null); setHighlightsHosts([]); setHighlightArtworks([null, null]); };
+        return () => { unbindReading(); controller.dispose(); controllerRef.current = null; setActionsHost(null); setHighlightsHosts([]); setPositionHost(null); setHighlightArtworks([null, null]); };
     }, [dataKey, instanceId, portalHost, bookEligible, locale, embedded]);
+
+    useLayoutEffect(() => {
+        const rail = positionRail.current;
+        const active = rail?.querySelector<HTMLButtonElement>('[aria-current="true"]');
+        if (!rail || !active) return;
+        // Scroll this rail only. scrollIntoView could shift the whole book.
+        rail.scrollLeft = Math.max(0, active.offsetLeft + active.offsetWidth / 2 - rail.clientWidth / 2);
+    }, [selectedArtwork?.id, positionHost]);
 
     useEffect(() => {
         const item = routedArtwork;
@@ -167,11 +186,11 @@ export default function ArtworkGlassArtbook({
         const onKeyDown = (event: KeyboardEvent) => {
             if (event.key !== "Escape" || document.querySelector('[role="dialog"][aria-modal="true"]')) return;
             event.preventDefault();
-            router.push(standardHref, { scroll: false });
+            exit();
         };
         document.addEventListener("keydown", onKeyDown);
         return () => { document.removeEventListener("keydown", onKeyDown); };
-    }, [portalHost, bookEligible, embedded, router, standardHref]);
+    }, [portalHost, bookEligible, embedded, exit]);
 
     if (!selectedArtwork) return null;
     if (!portalHost || !bookEligible) {
@@ -187,12 +206,7 @@ export default function ArtworkGlassArtbook({
 
     const content = (
         <main ref={captureExperience} className={`${styles.experience} ${embedded ? styles.embedded : ""} bg-surface-deep text-white`} data-lenis-prevent aria-label={t("immersive")}>
-            {!embedded && <div className={`${styles.exit} flex items-center gap-5`}>
-                <LanguageSwitcher className="text-white/60" />
-                <Link href={standardHref} data-glass-exit className="font-sans text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60" aria-label={t("exitLabel")}>
-                    {t("exit")} <span aria-hidden="true">×</span>
-                </Link>
-            </div>}
+            {!embedded && <ArtworkExperienceToolbar backHref={backHref} backLabel={backLabel} onExit={exit} className={styles.toolbar} />}
             <h1 className="sr-only">{selectedArtwork.title}</h1>
             <div className={styles.bookViewport} data-lenis-prevent aria-busy={loadState.status === "loading"}>
                 <div ref={hostRef} className={`${styles.root} font-sans`} inert={loadState.status !== "ready" && !(loadState.status === "loading" && loadState.kind === "turn")} aria-label={t("viewer")} />
@@ -201,12 +215,25 @@ export default function ArtworkGlassArtbook({
                 {loadState.status === "loading" ? <ArtworkLoading label={t(loadState.kind === "turn" ? "loadingArtwork" : "preparing")} /> : <div className={styles.loadError}>
                     <p role="alert" className="font-sans text-sm text-white/70">{t("error")}</p>
                     <button type="button" onClick={() => controllerRef.current?.retry()} className="font-sans text-[10px] uppercase tracking-[0.2em] text-brand-gold transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-gold/60">{t("retry")}</button>
-                    <>{host ? <button type="button" onClick={host.onStandardView} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-brand-gold">{t("standard")}</button> : <Link href={standardHref} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-brand-gold">{t("standard")}</Link>}</>
+                    <>{host ? <button type="button" onClick={host.onStandardView} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-brand-gold">{t("standard")}</button> : <button type="button" onClick={exit} className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-brand-gold">{t("standard")}</button>}</>
                 </div>}
             </div>}
             {actionsHost && experienceHost && createPortal(
                 <ArtworkDetailViewer artwork={selectedArtwork} triggerOnly gestureRoot={hostRef} portalTarget={experienceHost} />,
                 actionsHost,
+            )}
+            {positionHost && createPortal(
+                <div ref={positionRail} className={styles.positionDots} data-glass-position-dots role="group" aria-label={t("viewer")}>
+                    {artworks.map(artwork => <button key={artwork.id} type="button"
+                        aria-label={artworkT("viewNamed", { title: artwork.title })}
+                        aria-current={artwork.id === selectedArtwork.id ? "true" : undefined}
+                        disabled={loadState.status !== "ready"}
+                        onClick={() => {
+                            if (artwork.id === selectedArtwork.id) return;
+                            controllerRef.current?.select(artwork.id);
+                            onNavigateRef.current(artwork);
+                        }} />)}
+                </div>, positionHost,
             )}
             {highlightsHosts.map((host, slot) => {
                 const artwork = highlightArtworks[slot];

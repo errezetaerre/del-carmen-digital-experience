@@ -1,0 +1,10 @@
+.toolbar { position: relative; z-index: 200; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-width: 0; min-height: 44px; color: rgb(255 255 255 / .65); }
+.back, .exit, .language { font-family: var(--font-geist-sans), sans-serif; font-size: var(--artbook-control-size); line-height: var(--artbook-control-line-height); font-weight: 400; letter-spacing: var(--artbook-control-tracking); text-transform: uppercase; }
+.back, .exit { display: inline-flex; align-items: center; min-height: 44px; background: none; border: 0; cursor: pointer; transition: color 180ms; }
+.back { min-width: 0; text-align: left; }
+.back:hover, .exit:hover { color: var(--brand-gold); }
+.actions { flex-shrink: 0; display: flex; align-items: center; gap: clamp(.75rem, 2vw, 1.75rem); }
+.language { white-space: nowrap; }
+.exit { gap: .5rem; white-space: nowrap; }
+.exit > span { font-size: 1.25rem; line-height: 1; font-weight: 300; }
+@media (max-width: 480px) { .toolbar { gap: .5rem; } .back { max-width: 48%; line-height: 1.5; } }

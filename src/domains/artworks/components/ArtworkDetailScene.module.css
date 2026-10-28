@@ -53,3 +53,6 @@
     .scene .content { padding-top: max(7.5rem, calc(env(safe-area-inset-top) + 7rem)); padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
     .sheet .navigation { margin-top: 1rem; padding-top: .75rem; }
 }
+
+.navigation a > span { font-size: var(--artbook-control-size); line-height: var(--artbook-control-line-height); letter-spacing: var(--artbook-control-tracking); }
+.heading :global([data-artwork-open-artbook]) { font-size: var(--artbook-control-size); line-height: var(--artbook-control-line-height); letter-spacing: var(--artbook-control-tracking); }

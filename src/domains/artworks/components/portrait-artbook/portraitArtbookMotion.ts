@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { bindArtworkTouchNavigation, type ArtworkDragInput } from "../artworkTouchNavigation";
 import type { GlassArtbookLoadState } from "../glass-artbook/types";
 import styles from "./ArtworkPortraitArtbook.module.css";
+import type { PortraitPageCache } from "./portraitPageCache";
 
 type Direction = -1 | 1;
 interface Options {
@@ -18,6 +19,11 @@ interface Options {
     onLand(direction: Direction): void;
     onExit(): void;
     onArrival(): void;
+    /** A gallery can prepare its visible thumbnails; artwork callers keep the full-page default. */
+    imagesForPage?(page: HTMLElement): HTMLImageElement[];
+    /** Opt-in cache/material for collection pages; existing artwork callers are unchanged. */
+    pageCache?: PortraitPageCache;
+    renderSurface?(page: HTMLElement, angle: number, moving?: boolean): void;
 }
 export interface PortraitArtbookController {
     navigate(direction: Direction): void;
@@ -30,6 +36,7 @@ interface Grip {
 }
 interface Turn {
     direction: Direction; leaf: HTMLElement; left: HTMLElement; right: HTMLElement;
+    front: HTMLElement; back: HTMLElement;
     halfWidth: number; perspective: number; progress: number;
 }
 
@@ -128,13 +135,19 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         imageJobs.set(image, promise);
         return promise;
     }
+    const imagesForPage = (page: HTMLElement) => options.imagesForPage?.(page) ?? Array.from(page.querySelectorAll<HTMLImageElement>("img"));
+    const viewport = () => ({ width: frame.clientWidth, height: frame.clientHeight, fontsLoaded: doc.fonts?.status !== "loading" });
+    const prepared = (page: HTMLElement) => options.pageCache?.ready(page, imagesForPage(page), viewport()) ?? false;
     async function prepare(page: HTMLElement) {
-        const images = Array.from(page.querySelectorAll<HTMLImageElement>("img"));
+        if (prepared(page)) return true;
+        const images = imagesForPage(page);
         const results = await Promise.all(images.map(waitForImage));
         await doc.fonts?.ready;
         // Halo measurement and the font layout must precede all four copies.
         await new Promise<void>(resolve => view.requestAnimationFrame(() => resolve()));
-        return results.every(Boolean);
+        const ok = results.every(Boolean);
+        if (ok && !disposed) options.pageCache?.remember(page, images, viewport());
+        return ok;
     }
     function clearWheel() {
         view.clearTimeout(wheelTimer); wheelTimer = undefined; wheelDistance = 0;
@@ -209,6 +222,9 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         overlay.style.setProperty("--portrait-fold", String(depth));
         turn.leaf.style.setProperty("--portrait-depth", `${depth}px`);
         turn.leaf.style.transform = `rotateY(${-turn.direction * turn.progress * 180}deg)`;
+        const faceAngle = -turn.direction * turn.progress * 180;
+        options.renderSurface?.(turn.front.firstElementChild as HTMLElement, faceAngle, true);
+        options.renderSurface?.(turn.back.firstElementChild as HTMLElement, faceAngle + 180, true);
         root.dataset.portraitProgress = turn.progress.toFixed(5);
         // Reveal only the area uncovered by the actual projected glass plane.
         // This avoids ghost text showing through its transparent material.
@@ -243,6 +259,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
             parent.append(snapshot.clone); restores.push(snapshot.restoreScroll);
             parent.dataset.portraitSource = page.dataset.portraitPage;
             parent.dataset.portraitHalf = side;
+            options.renderSurface?.(snapshot.clone, 0);
         };
         overlay.replaceChildren();
         const left = make(`${styles.half} ${styles.leftHalf}`, overlay);
@@ -256,7 +273,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         canvas(destination, direction === 1 ? "left" : "right", back);
         make(styles.edge, leaf);
         make(styles.spine, overlay);
-        turn = { direction, leaf, left, right, halfWidth: half, perspective, progress: 0 };
+        turn = { direction, leaf, left, right, front, back, halfWidth: half, perspective, progress: 0 };
         overlay.hidden = false;
         restores.forEach(restore => restore());
         // The live page remains in place, ready to be restored on cancellation.
@@ -293,8 +310,9 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         const token = ++request;
         failedDirection = direction;
         interact();
-        load("loading", destination);
-        const ok = await prepare(destination);
+        const cached = prepared(destination);
+        if (!cached) load("loading", destination);
+        const ok = cached || await prepare(destination);
         if (disposed || token !== request) return;
         if (!ok) { grip = null; clearTurn(); load("error", destination); return; }
         if (blocked()) { grip = null; clearTurn(); load("ready"); return; }
@@ -456,8 +474,9 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     observer.observe(frame); cleanup.push(() => observer.disconnect());
 
     async function initialise() {
-        load("loading", current, "entrance");
-        const ok = await prepare(current);
+        const cached = prepared(current);
+        if (!cached) load("loading", current, "entrance");
+        const ok = cached || await prepare(current);
         if (disposed) return;
         if (!ok) { load("error", current, "entrance"); return; }
         ready = true; root.dataset.portraitReady = "true";
@@ -472,6 +491,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         navigate,
         retry() {
             const destination = failedDirection ? neighbour(failedDirection) : current;
+            if (destination) options.pageCache?.invalidate(destination);
             destination?.querySelectorAll<HTMLImageElement>("img").forEach(image => {
                 imageJobs.delete(image);
                 if (!image.naturalWidth) image.src = image.currentSrc || image.src;

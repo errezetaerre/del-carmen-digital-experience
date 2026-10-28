@@ -2,6 +2,7 @@ import Link from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { artworkTextLocale, formatArtworkCategory, formatArtworkAuthorship, formatArtworkTechnique, localizeArtwork } from "@/i18n/artworkCopy";
 import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
+import ArtworkOpenArtbook from "@/shared/ui/artwork/ArtworkOpenArtbook";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "../presentation/getArtworkPresentation";
 import glassStyles from "./glass-artbook/ArtworkGlassArtbook.module.css";
@@ -130,10 +131,10 @@ export default function ArtworkDetailScene({
                                 text-brand-gold
                             "
                         >
-                            {authorshipLabel}
+                            {presentation.yearLabel} · {authorshipLabel}
                         </p>
 
-                            {!editorialOnly && <><Link
+                            {!editorialOnly && <><ArtworkOpenArtbook
                                 href={artbookHref}
                                 data-artwork-kinetic-ignore
                                 data-artwork-open-artbook
@@ -142,7 +143,7 @@ export default function ArtworkDetailScene({
                             >
                                 {t("openArtbook")}
                                 <ArtworkLinkFeedback label={t("openingArtbook")} />
-                            </Link>
+                            </ArtworkOpenArtbook>
                             <span data-artwork-orientation-hint className={`${glassStyles.orientationHint} font-sans text-[9px] uppercase tracking-[0.20em] text-white/35`}>{t("orientationHint")}</span></>}
                         </div>
 
@@ -209,13 +210,6 @@ export default function ArtworkDetailScene({
                                 text-sm
                             "
                         >
-                            <dt className="text-white/35">
-                                {t(artwork.creationStatus === "completed" ? "year" : "plannedYear")}
-                            </dt>
-                            <dd className="text-white/75">
-                                {artwork.year}
-                            </dd>
-
                             <dt className="text-white/35">
                                 {t("medium")}
                             </dt>

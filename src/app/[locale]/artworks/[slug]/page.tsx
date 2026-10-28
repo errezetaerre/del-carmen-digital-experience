@@ -11,8 +11,6 @@ import {
 } from "@/domains/artworks";
 
 import ArtworkDetailKineticExperience from "@/domains/artworks/components/ArtworkDetailKineticExperience";
-import ArtworkDetailResponsiveEntry from "@/domains/artworks/components/ArtworkDetailResponsiveEntry";
-import ArtworkGlassArtbook from "@/domains/artworks/components/glass-artbook";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
 import { isFeaturedArtwork } from "@/domains/artworks/presentation/getArtworkPresentation";
 import { artworkArchiveQuery, readArtworkArchiveFilters, selectArtworkArchive } from "@/domains/artworks/presentation/artworkArchive";
@@ -65,7 +63,6 @@ export default async function ArtworkPage({
         q,
         sort,
         series: seriesSlug,
-        experience,
     } = await searchParams;
 
     const artwork = getArtworkBySlug(slug);
@@ -210,20 +207,6 @@ export default async function ArtworkPage({
         backLabel,
     };
 
-    if (experience === "glass") {
-        return (
-            <ArtworkPortraitEntry book={portraitBook} explicitGlass>
-                <ArtworkGlassArtbook
-                    artworks={currentIndex >= 0 ? navigationArtworks : [artwork]}
-                    initialArtworkId={artwork.id}
-                    navigationQuery={navigationQuery}
-                    backHref={backHref}
-                    backLabel={backLabel}
-                />
-            </ArtworkPortraitEntry>
-        );
-    }
-
     const previousScene = previousArtwork ? (
         <ArtworkDetailScene
             artwork={previousArtwork}
@@ -255,11 +238,6 @@ export default async function ArtworkPage({
     ) : undefined;
 
     const standardExperience = (
-        <ArtworkDetailResponsiveEntry
-            glassHref={artworkExperienceHref(artwork.slug, navigationQuery, "glass")}
-            standardHref={artworkExperienceHref(artwork.slug, navigationQuery, "standard")}
-            enabled={experience !== "standard"}
-        >
         <ArtworkDetailKineticExperience
             previousScene={previousScene}
             currentScene={currentScene}
@@ -269,10 +247,7 @@ export default async function ArtworkPage({
             backHref={backHref}
             backLabel={backLabel}
         />
-        </ArtworkDetailResponsiveEntry>
     );
 
-    return experience === "standard" ? standardExperience : (
-        <ArtworkPortraitEntry book={portraitBook}>{standardExperience}</ArtworkPortraitEntry>
-    );
+    return <ArtworkPortraitEntry book={portraitBook}>{standardExperience}</ArtworkPortraitEntry>;
 }

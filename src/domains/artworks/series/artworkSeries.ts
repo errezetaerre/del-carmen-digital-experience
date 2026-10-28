@@ -44,6 +44,7 @@ export const artworkSeries: ArtworkSeries[] = [
         yearStart: 2026,
         atmosphere: {
             src: "/series/yasemi/yasemi_atmosphere_landscape.webp",
+            portraitSrc: "/series/yasemi/yasemi_atmosphere_portrait.webp",
             alt: "",
         },
     },
@@ -82,6 +83,7 @@ export const artworkSeries: ArtworkSeries[] = [
         yearStart: 2027,
         atmosphere: {
             src: "/series/epifanias/epifanias_atmosphere_landscape.webp",
+            portraitSrc: "/series/epifanias/epifanias_atmosphere_portrait.webp",
             alt: "",
         },
     },
@@ -121,6 +123,7 @@ export const artworkSeries: ArtworkSeries[] = [
         yearEnd: 2024,
         atmosphere: {
             src: "/series/the_inner_treasury/the_inner_treasury_atmosphere_landscape.webp",
+            portraitSrc: "/series/the_inner_treasury/the_inner_treasury_atmosphere_portrait.webp",
             alt: "",
         },
     },
@@ -160,6 +163,7 @@ export const artworkSeries: ArtworkSeries[] = [
         yearEnd: 2023,
         atmosphere: {
             src: "/series/the_discipline_of_seeing/the_discipline_of_seeing_atmosphere_landscape.webp",
+            portraitSrc: "/series/the_discipline_of_seeing/the_discipline_of_seeing_atmosphere_portrait.webp",
             alt: "",
         },
     },
