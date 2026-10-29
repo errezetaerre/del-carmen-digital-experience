@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { isSiteLocale, locales, spanishReleaseReady } from "@/i18n/config";
 import { getSiteMessages } from "@/i18n/messages";
 import { Navigation } from "@/domains/navigation";
+import SiteAnalytics from "@/shared/analytics/SiteAnalytics";
 
 import {
   Cormorant_Garamond,
@@ -77,6 +78,7 @@ export default async function RootLayout({
           <Navigation />
           <div id="main-content" tabIndex={-1} />
           {children}
+          {process.env.VERCEL_ENV === "production" && <SiteAnalytics />}
         </NextIntlClientProvider>
       </body>
     </html>
