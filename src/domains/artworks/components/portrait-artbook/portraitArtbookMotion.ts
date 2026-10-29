@@ -21,6 +21,8 @@ interface Options {
     onArrival(): void;
     /** A gallery can prepare its visible thumbnails; artwork callers keep the full-page default. */
     imagesForPage?(page: HTMLElement): HTMLImageElement[];
+    /** Opt-in editorial links can be dragged; artwork/series callers keep their existing policy. */
+    canStartDrag?(target: Element | null): boolean;
     /** Opt-in cache/material for collection pages; existing artwork callers are unchanged. */
     pageCache?: PortraitPageCache;
     renderSurface?(page: HTMLElement, angle: number, moving?: boolean): void;
@@ -259,7 +261,6 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
             parent.append(snapshot.clone); restores.push(snapshot.restoreScroll);
             parent.dataset.portraitSource = page.dataset.portraitPage;
             parent.dataset.portraitHalf = side;
-            options.renderSurface?.(snapshot.clone, 0);
         };
         overlay.replaceChildren();
         const left = make(`${styles.half} ${styles.leftHalf}`, overlay);
@@ -276,6 +277,11 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         turn = { direction, leaf, left, right, front, back, halfWidth: half, perspective, progress: 0 };
         overlay.hidden = false;
         restores.forEach(restore => restore());
+        // The overlay must be visible before measuring its stationary halves.
+        // Hidden clones have zero-size reflection holders; draw() only paints
+        // the moving faces, so these two still surfaces need their own paint.
+        options.renderSurface?.(left.firstElementChild as HTMLElement, 0);
+        options.renderSurface?.(right.firstElementChild as HTMLElement, 0);
         // The live page remains in place, ready to be restored on cancellation.
         current.style.visibility = "hidden"; current.style.opacity = "0"; current.inert = true;
         root.dataset.portraitTurning = "";
@@ -342,7 +348,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         activity();
         if (turn) return false;
         const target = input.target as Element | null;
-        if (target?.closest("a, button, input, textarea, select, [contenteditable='true'], [data-artwork-highlights], [data-lightbox-native-scroll]")) return false;
+        if (options.canStartDrag ? !options.canStartDrag(target) : target?.closest("a, button, input, textarea, select, [contenteditable='true'], [data-artwork-highlights], [data-lightbox-native-scroll]")) return false;
         clearWheel(); ++request;
         grip = { id: input.pointerId, x: input.clientX, y: input.clientY, lastX: input.clientX,
             lastTime: performance.now(), delta: 0, velocity: 0, direction: null, ended: false };
