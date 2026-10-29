@@ -1,0 +1,10 @@
+.open { position: fixed; z-index: 45; right: max(1.2rem,env(safe-area-inset-right)); bottom: max(1.2rem,env(safe-area-inset-bottom)); display: inline-flex; align-items: center; justify-content: center; gap: .75rem; min-height: 44px; padding: .65rem 1rem; border: 1px solid rgb(201 163 90 / .25); border-radius: 999px; background: rgb(8 8 8 / .85); backdrop-filter: blur(12px); color: var(--brand-gold); font: 400 var(--artbook-control-size,11px)/1.5 var(--font-geist-sans),sans-serif; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+.open:hover { border-color: rgb(201 163 90 / .6); }
+.preparing { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: var(--background,#080808); }
+.preparing button { margin-top: 1.5rem; min-height: 44px; color: var(--brand-gold); }
+.standard { display: contents; }
+.placeholder { min-height: 100dvh; background: var(--background,#080808); }
+.shell { display:contents; }
+.bootstrap { display:none; }
+.shell[data-home-glass-pending] .bootstrap { display:grid; }
+@media (max-width:600px) { .open { font-size:9px; right:1rem; bottom: max(1rem,env(safe-area-inset-bottom)); } }

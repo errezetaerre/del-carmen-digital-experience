@@ -5,6 +5,7 @@ import { Container } from "@/shared/layout";
 import LinkButton from "@/shared/ui/button/LinkButton";
 
 import ArtistStatementMotion from "./ArtistStatementMotion";
+import { homeVisualAssets } from "../../curation/homeVisualAssets";
 
 export default function ArtistStatement() {
   const t = useTranslations("Home");
@@ -74,7 +75,7 @@ export default function ArtistStatement() {
                 "
               >
                 <Image
-                  src="/images/artist/about_the_artist.webp"
+                  src={homeVisualAssets.artist.src}
                   alt="Del Carmen"
                   fill
                   className="
@@ -152,7 +153,7 @@ export default function ArtistStatement() {
               <div data-artist-signature
                 className="artist-statement-motion">
                 <Image
-                  src="/images/artist/Rolando_del_Carmen_white_high_res_signature.png"
+                  src={homeVisualAssets.signature.src}
                   alt="Del Carmen"
                   width={220}
                   height={60}

@@ -6,10 +6,11 @@ import SelectedWorks from "./sections/selectedWorks";
 import JournalPreview from "./sections/journal";
 import Invitation from "./sections/invitation";
 import Footer from "@/shared/layout/footer";
+import HomeExperience from "./experience/HomeExperience";
 
 export default function Home() {
   return (
-    <main
+    <HomeExperience><main
       className="
         relative
         w-full
@@ -25,6 +26,6 @@ export default function Home() {
       <JournalPreview />
       <Invitation />
       <Footer />
-    </main>
+    </main></HomeExperience>
   );
 }
