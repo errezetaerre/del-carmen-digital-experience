@@ -113,6 +113,14 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
                 </p>
             </section>
 
+            <section aria-labelledby="privacy-analytics">
+                <h2 id="privacy-analytics">{t("analyticsTitle")}</h2>
+                <p>{t("analyticsDescription")}</p>
+                <p>
+                    <a href="https://vercel.com/docs/analytics/privacy-policy">{t("analyticsProviderPrivacy")}</a>
+                </p>
+            </section>
+
             <section aria-labelledby="privacy-newsletter">
                 <h2 id="privacy-newsletter">{t("newsletterTitle")}</h2>
                 <p>
