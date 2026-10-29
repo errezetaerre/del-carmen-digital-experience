@@ -81,9 +81,9 @@ function SeriesArtworkGallery({ artworks, wide, active, openingId, onOpen }: {
             </div>
         </div>
         {carousel && <div className={styles.galleryControls}>
-            <button type="button" onClick={() => controller.current?.navigate(-1)} disabled={position.index === 0} aria-label={t("previousArtworks")}>‹</button>
+            <button type="button" onClick={() => controller.current?.navigate(-1)} disabled={position.index === 0} aria-label={t("previousArtworks")}><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
             <p>{wide ? first === last ? experience("singleWork", { index: first, total: artworks.length }) : experience("workRange", { first, last, total: artworks.length }) : experience("galleryHint")}</p>
-            <button type="button" onClick={() => controller.current?.navigate(1)} disabled={position.index >= position.total - 1} aria-label={t("nextArtworks")}>›</button>
+            <button type="button" onClick={() => controller.current?.navigate(1)} disabled={position.index >= position.total - 1} aria-label={t("nextArtworks")}><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
         </div>}
     </section>;
 }

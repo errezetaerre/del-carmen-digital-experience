@@ -44,7 +44,8 @@
 .card :global([data-collection-footer])>span{font-size:clamp(7px,3.4cqi,9px);letter-spacing:.08em;white-space:nowrap}
 .card :global([data-collection-discover]){margin-left:auto}
 .galleryControls{display:flex;align-items:center;justify-content:center;gap:20px;min-height:30px;margin-top:20px}
-.galleryControls button{display:grid;place-items:center;flex:none;width:28px;height:28px;border:1px solid rgb(225 187 128/.15);border-radius:50%;background:rgb(9 9 8/.4);color:rgb(238 233 223/.66);font-family:var(--font-cormorant),Georgia,serif;font-size:23px;font-weight:300;cursor:pointer}
+.galleryControls button{display:grid;place-items:center;flex:none;width:28px;height:28px;border:1px solid rgb(225 187 128/.15);border-radius:50%;background:rgb(9 9 8/.4);color:rgb(238 233 223/.66);padding:0;line-height:1;cursor:pointer}
+.galleryControls button svg{display:block;flex:none}
 .galleryControls button:disabled{opacity:.3;cursor:default}.galleryControls button:hover{color:#e1bb80}
 .galleryControls p{margin:0;font-size:8px;line-height:1.6;letter-spacing:.1em;text-align:center;color:rgb(238 233 223/.5)}
 .statementSection{position:relative;z-index:3;width:calc(100% - 56px);max-width:710px;margin:clamp(48px,7vh,82px) auto 0;text-align:center;padding-bottom:35px}
