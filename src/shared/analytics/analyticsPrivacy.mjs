@@ -3,7 +3,7 @@
  * Query strings and fragments may carry newsletter or deployment share tokens.
  */
 const indexPaths = new Set(["/", "/about", "/artist", "/artworks", "/collections", "/contact", "/journal", "/privacy", "/terms"]);
-const editorialDetail = /^\/(?:artworks|series|journal)\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const editorialDetail = /^\/(?:artworks|series|journal)\/[a-z0-9]+(?:[-_][a-z0-9]+)*$/;
 
 /** @param {string} value @returns {string | null} */
 export function publicAnalyticsUrl(value) {

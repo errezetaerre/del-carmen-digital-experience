@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { publicAnalyticsUrl, createAnalyticsFilter } from "../src/shared/analytics/analyticsPrivacy.mjs";
 
 test("only public EN/ES routes can produce a page view", () => {
-    for (const path of ["/", "/es", "/es/collections", "/en/artworks", "/series/yasemi", "/artworks/epifania-nupcial", "/es/journal/inside-the-studio", "/privacy", "/es/terms"])
+    for (const path of ["/", "/es", "/es/collections", "/en/artworks", "/series/yasemi", "/series/the_discipline_of_seeing", "/es/series/the_inner_treasury", "/artworks/epifania-nupcial", "/es/journal/inside-the-studio", "/privacy", "/es/terms"])
         assert.equal(publicAnalyticsUrl(`https://rolandodelcarmen.com${path}`), `https://rolandodelcarmen.com${path}`);
     for (const path of ["/api/newsletter/confirm", "/api/newsletter/unsubscribe", "/admin", "/account/invoice/123", "/labs", "/contact/private/123", "/es/account", "/unknown"])
         assert.equal(publicAnalyticsUrl(`https://rolandodelcarmen.com${path}?token=private`), null);
