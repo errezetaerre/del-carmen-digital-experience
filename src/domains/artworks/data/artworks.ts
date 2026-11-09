@@ -687,7 +687,7 @@ export const artworks: Artwork[] = [
 
     title: "Yasemi I",
 
-    year: 2026,
+    year: 2025,
 
     creationStatus: "completed",
 
@@ -741,7 +741,7 @@ export const artworks: Artwork[] = [
     description:
       "Practice with a photo of a flower in a jar with intense and vibrant colors, study soft petals and its folds.",
 
-    availability: "unavailable",
+    availability: "available",
 
     price: {
       amount: 500,
@@ -794,7 +794,7 @@ export const artworks: Artwork[] = [
     description:
       "In this artwork, the colors and shapes merge to create a sense of movement and emotion.",
 
-    availability: "available",
+    availability: "unavailable",
 
     price: {
       amount: 500,
