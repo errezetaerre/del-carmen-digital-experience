@@ -689,7 +689,7 @@ export const artworks: Artwork[] = [
 
     year: 2026,
 
-    creationStatus: "planned",
+    creationStatus: "completed",
 
     authorship: "original",
 
@@ -757,7 +757,7 @@ export const artworks: Artwork[] = [
 
     year: 2026,
 
-    creationStatus: "completed",
+    creationStatus: "planned",
 
     authorship: "original",
 
