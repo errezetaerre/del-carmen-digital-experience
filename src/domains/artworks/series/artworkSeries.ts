@@ -12,7 +12,7 @@ export const artworkSeries: ArtworkSeries[] = [
         coverArtworkId: "yasemi_i",
         images: {
             featured: {
-                src: "/series/yasemi/yasemi_I_collection_hero_landscape.webp",
+                src: "/images/series/yasemi_I_collection_hero_landscape.webp",
                 alt: "Yasemi — featured collection",
                 width: 1376,
                 height: 768,

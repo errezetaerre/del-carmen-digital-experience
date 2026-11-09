@@ -23,14 +23,18 @@ function projectLoader(window, runtime = {}, external = {}) {
         // The data barrel also re-exports UI. Those unused re-exports are tree-shaken
         // by Next; keep Node's data tests independent of Next's browser router.
         if (target === path.join(project, "src/domains/artworks/index.ts")) {
-            loadedModule.exports = { ...load(path.join(project, "src/domains/artworks/services/index.ts")),
-                ...load(path.join(project, "src/domains/artworks/series/index.ts")) };
+            loadedModule.exports = {
+                ...load(path.join(project, "src/domains/artworks/services/index.ts")),
+                ...load(path.join(project, "src/domains/artworks/series/index.ts"))
+            };
             return loadedModule.exports;
         }
         if (target.endsWith(".mjs")) return require(target);
-        const code = ts.transpileModule(fs.readFileSync(target, "utf8"), { compilerOptions: {
-            target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true,
-        }, fileName: target }).outputText;
+        const code = ts.transpileModule(fs.readFileSync(target, "utf8"), {
+            compilerOptions: {
+                target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true,
+            }, fileName: target
+        }).outputText;
         const localRequire = specifier => Object.hasOwn(external, specifier) ? external[specifier] : specifier.startsWith("@/") ? load(path.join(project, "src", specifier.slice(2))) :
             specifier.startsWith(".") ? load(path.resolve(path.dirname(target), specifier)) : require(specifier);
         vm.runInContext(`(function(require,module,exports){${code}\n})`, context, { filename: target })(localRequire, loadedModule, loadedModule.exports);
@@ -89,7 +93,7 @@ test("The book panorama and the original portrait artwork use independent assets
     const load = projectLoader();
     const { getHomeBookContent } = load("src/domains/home/experience/homeBookContent.ts");
     const content = getHomeBookContent("en");
-    assert.equal(content.collection.landscapeImage.src, "/series/yasemi/yasemi_I_hero_landscape.webp");
+    assert.equal(content.collection.landscapeImage.src, "/images/series/yasemi_I_hero_landscape.webp");
     assert.equal(content.collection.portraitImage.src, content.collection.coverArtwork.images.collection.src);
     assert.notEqual(content.collection.landscapeImage.src, content.collection.portraitImage.src);
 });
@@ -115,8 +119,10 @@ function eventHub() {
         addEventListener(name, listener) { const set = listeners.get(name) ?? new Set(); set.add(listener); listeners.set(name, set); },
         removeEventListener(name, listener) { listeners.get(name)?.delete(listener); },
         emit(name, values = {}) {
-            const event = { type: name, cancelable: true, defaultPrevented: false,
-                preventDefault() { this.defaultPrevented = true; }, stopImmediatePropagation() { this.stopped = true; }, ...values };
+            const event = {
+                type: name, cancelable: true, defaultPrevented: false,
+                preventDefault() { this.defaultPrevented = true; }, stopImmediatePropagation() { this.stopped = true; }, ...values
+            };
             for (const listener of listeners.get(name) ?? []) { listener(event); if (event.stopped) break; }
             return event;
         },
@@ -125,19 +131,23 @@ function eventHub() {
 }
 
 function motorFixture(home = true) {
-    const view = { ...eventHub(), performance, setTimeout, clearTimeout,
-        matchMedia: () => ({ ...eventHub(), matches: true }) };
+    const view = {
+        ...eventHub(), performance, setTimeout, clearTimeout,
+        matchMedia: () => ({ ...eventHub(), matches: true })
+    };
     const doc = { ...eventHub(), defaultView: view, hidden: false, fonts: { status: "loaded" }, querySelectorAll: () => [] };
     const root = { ownerDocument: doc, dataset: {}, hasAttribute: name => name === "data-portrait-learned", ...eventHub() };
-    const page = id => ({ dataset: { portraitPage: id }, querySelectorAll: () => [], querySelector: () => null,
-        style: { removeProperty() {} }, contains: () => false });
+    const page = id => ({
+        dataset: { portraitPage: id }, querySelectorAll: () => [], querySelector: () => null,
+        style: { removeProperty() { } }, contains: () => false
+    });
     const frame = { ...eventHub(), ownerDocument: doc, clientWidth: 1000, clientHeight: 700, getBoundingClientRect: () => ({ width: 1000 }) };
-    const overlay = { style: { removeProperty() {} }, replaceChildren() {} }, changes = [];
-    const load = projectLoader(view, { performance, ResizeObserver: class { observe() {} disconnect() {} } });
+    const overlay = { style: { removeProperty() { } }, replaceChildren() { } }, changes = [];
+    const load = projectLoader(view, { performance, ResizeObserver: class { observe() { } disconnect() { } } });
     const policy = load("src/domains/home/experience/homeBookGestures.ts");
     const motor = load("src/domains/artworks/components/portrait-artbook/portraitArtbookMotion.ts").createPortraitArtbookMotion({
         root, frame, overlay, current: page("a"), next: page("b"), previous: page("c"),
-        pageCache: { ready: () => true }, onLoad() {}, onActivity() {}, onInteraction() {}, onArrival() {}, onExit() {},
+        pageCache: { ready: () => true }, onLoad() { }, onActivity() { }, onInteraction() { }, onArrival() { }, onExit() { },
         onLand: direction => changes.push(direction), ...(home ? { canStartDrag: policy.homeBookAllowsDrag } : {}),
     });
     const target = { closest: selector => selector.startsWith("a,") ? {} : null };
@@ -168,8 +178,10 @@ test("Both stationary reflections are painted with visible dimensions and persis
     // Hidden DOM has zero layout dimensions, just as the browser's overlay does.
     // Run the real non-reduced-motion controller, only controlling its GSAP clock.
     for (const direction of [1, -1]) {
-        const view = { ...eventHub(), performance, setTimeout, clearTimeout,
-            matchMedia: () => ({ ...eventHub(), matches: false }) };
+        const view = {
+            ...eventHub(), performance, setTimeout, clearTimeout,
+            matchMedia: () => ({ ...eventHub(), matches: false })
+        };
         let doc;
         class Surface {
             constructor(tag = "div") {
@@ -201,21 +213,29 @@ test("Both stationary reflections are painted with visible dimensions and persis
                 return copy;
             }
         }
-        doc = { ...eventHub(), defaultView: view, hidden: false, fonts: { status: "loaded" }, querySelectorAll: () => [],
-            getSelection: () => ({ removeAllRanges() {} }), createElement: tag => new Surface(tag) };
+        doc = {
+            ...eventHub(), defaultView: view, hidden: false, fonts: { status: "loaded" }, querySelectorAll: () => [],
+            getSelection: () => ({ removeAllRanges() { } }), createElement: tag => new Surface(tag)
+        };
         const frame = new Surface(), root = new Surface(), overlay = new Surface(); overlay.hidden = true; frame.append(overlay);
         const page = id => { const element = new Surface(); element.dataset.portraitPage = id; element.append(new Surface("canvas")); return element; };
         const current = page("a"), previous = page("c"), next = page("b"), paints = [], tweens = [], landed = [];
-        const clock = { __esModule: true, default: { killTweensOf() {}, utils: { clamp: (min, max, value) => Math.max(min, Math.min(max, value)) },
-            to(target, settings) { tweens.push({ target, settings }); return { kill() {} }; } } };
-        const load = projectLoader(view, { performance, ResizeObserver: class { observe() {} disconnect() {} } }, { gsap: clock });
+        const clock = {
+            __esModule: true, default: {
+                killTweensOf() { }, utils: { clamp: (min, max, value) => Math.max(min, Math.min(max, value)) },
+                to(target, settings) { tweens.push({ target, settings }); return { kill() { } }; }
+            }
+        };
+        const load = projectLoader(view, { performance, ResizeObserver: class { observe() { } disconnect() { } } }, { gsap: clock });
         const controller = load("src/domains/artworks/components/portrait-artbook/portraitArtbookMotion.ts").createPortraitArtbookMotion({
             root, frame, overlay, current, previous, next, pageCache: { ready: () => true },
-            onLoad() {}, onActivity() {}, onInteraction() {}, onArrival() {}, onExit() {}, onLand: value => landed.push(value),
+            onLoad() { }, onActivity() { }, onInteraction() { }, onArrival() { }, onExit() { }, onLand: value => landed.push(value),
             renderSurface(surface, angle, moving = false) {
                 const width = surface.clientWidth;
-                paints.push({ half: surface.closest("[data-portrait-half]")?.dataset.portraitHalf, source: surface.dataset.portraitPage,
-                    stationary: surface.parentElement?.parentElement === overlay, moving, width, angle });
+                paints.push({
+                    half: surface.closest("[data-portrait-half]")?.dataset.portraitHalf, source: surface.dataset.portraitPage,
+                    stationary: surface.parentElement?.parentElement === overlay, moving, width, angle
+                });
                 if (width) surface.dataset.paintedReflection = "visible";
             },
         });
@@ -331,7 +351,8 @@ test("Startup preparation respects the saved mode and never writes storage", () 
         [null, "?experience=glass", true, false],
     ]) {
         let pending = false;
-        vm.runInNewContext(HOME_BOOK_BOOTSTRAP, { URL, location: { href: `https://example.invalid/es${query}` },
+        vm.runInNewContext(HOME_BOOK_BOOTSTRAP, {
+            URL, location: { href: `https://example.invalid/es${query}` },
             localStorage: { getItem() { if (blocked) throw Error("Unavailable"); return saved; }, setItem() { throw Error("Must not write"); } },
             document: { currentScript: { parentElement: { setAttribute(name) { assert.equal(name, "data-home-glass-pending"); pending = true; } } } },
         });
