@@ -96,12 +96,12 @@ export const artworks: Artwork[] = [
       },
 
       heroLandscape: {
-        src: "/artworks/epifania_nupcial_hero_landscape.webp",
+        src: "/images/hero/epifania_nupcial_hero_landscape.webp",
         alt: "Epifanía Nupcial, landscape composition for the Del Carmen Hero",
       },
 
       heroPortrait: {
-        src: "/artworks/epifania_nupcial_hero_portrait.webp",
+        src: "/images/hero/epifania_nupcial_hero_portrait.webp",
         alt: "Epifanía Nupcial, portrait composition for the Del Carmen Hero",
       },
     },
