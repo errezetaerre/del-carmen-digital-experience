@@ -1,6 +1,11 @@
 export type ArtworkSeriesStatus =
+    | "upcoming"
     | "ongoing"
-    | "completed"
+    | "completed";
+
+export type ArtworkSeriesPublicationStatus =
+    | "draft"
+    | "published"
     | "archived";
 
 export interface ArtworkSeriesImage {

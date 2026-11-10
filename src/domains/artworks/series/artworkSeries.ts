@@ -40,9 +40,8 @@ export const artworkSeries: ArtworkSeries[] = [
                 },
             },
         },
-        status: "completed",
+        status: "ongoing",
         yearStart: 2025,
-        yearEnd: 2025,
         atmosphere: {
             src: "/series/yasemi/yasemi_atmosphere_landscape.webp",
             portraitSrc: "/series/yasemi/yasemi_atmosphere_portrait.webp",
