@@ -14,6 +14,7 @@ import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
 import feedbackStyles from "@/shared/ui/artwork/ArtworkNavigationFeedback.module.css";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 import { getArtworkThumbnailSizes } from "@/shared/ui/artwork/artworkThumbnailSizes";
+import useArtworkThumbnailPan from "@/shared/ui/artwork/useArtworkThumbnailPan";
 
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
 import styles from "./CollectionArtwork.module.css";
@@ -56,6 +57,7 @@ export default function CollectionArtwork({
       : artwork.images.thumbnail ??
       artwork.images.primary;
   const imageSizes = getArtworkThumbnailSizes(presentation, displayImage);
+  useArtworkThumbnailPan(cardRef, artwork.creationStatus === "completed" ? displayImage.src : undefined);
 
   const techniqueLabel = locale === "es" ? formatArtworkTechnique(artwork, locale) : `${artwork.medium} on ${artwork.support}`;
   const presentationInfo = getArtworkPresentation(artwork, locale);
@@ -231,6 +233,7 @@ export default function CollectionArtwork({
         <CollectionArtworkFrame>
           <div className="relative aspect-[4/5] overflow-hidden bg-black">
             {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} variant="thumbnail" imageSizes={imageSizes} /> : <Image
+              data-artwork-thumbnail-image=""
               src={displayImage.src}
               alt={displayImage.alt}
               width={displayImage.width ?? artwork.images.primary.width ?? 1200}
