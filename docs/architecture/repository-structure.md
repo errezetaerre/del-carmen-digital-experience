@@ -750,3 +750,10 @@ Only the existing development dependency Zod moves from 4.4.3 to 4.6.7 in the lo
 The 374-file actual snapshot on fix/accessibility-security-baseline matches the reviewed source. config/siteOrigin.ts now owns the approved rolandodelcarmen.com fallback; config/mail.ts adds the approved display name only to bare sender addresses, preserving explicit sender names, receiver and Reply-To. Contact owns its three EN/ES enquiry subject labels and rejects header-bound name line breaks. tests/site-origin.test.mjs and npm run test:seo cover canonical/social/robots/sitemap origins and existing indexing gates.
 
 DOC-MAIL-OPS consolidates owner-confirmed DNS/Resend/local delivery, production verification gates, Preview scope review, legacy-variable retirement and the coordinated Redis credential window. This increment adds no runtime dependency, data migration, account change or new database. Artwork/Glass/Standard presentation, catalogue, consent and subscriber lifecycle retain the supplied source.
+
+## Cropped-thumbnail motion ownership — 2026-11-09
+
+- `src/shared/ui/artwork/artworkThumbnailPan.ts`: loaded-image crop geometry, scoped GSAP pan/return timelines, viewport/visibility/motion-preference guards and cleanup. It animates only the image object's position and retains the approved source/frame.
+- `src/shared/ui/artwork/useArtworkThumbnailPan.ts`: small client binding keyed to the actual media source, without restarting on caption rollover state.
+- `CollectionArtwork` and `CollectionPreviewArtwork`: opt their completed thumbnail image into the shared controller with a stable root reference and a data marker. Existing data, Image optimization, cards, routes and book engines retain their owners.
+- `tests/artwork-thumbnail-pan.test.mjs`: horizontal/vertical crop, no-crop fallback, hover/focus/touch activation, offscreen/background/turning-page pause, reduced motion, resize and resource cleanup.

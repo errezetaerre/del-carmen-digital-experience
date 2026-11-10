@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "@/i18n/navigation";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
@@ -6,6 +9,7 @@ import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
 import { useLocale } from "next-intl";
 import { localizeArtwork } from "@/i18n/artworkCopy";
+import useArtworkThumbnailPan from "@/shared/ui/artwork/useArtworkThumbnailPan";
 
 import type { Artwork } from "@/domains/artworks";
 
@@ -20,13 +24,16 @@ export default function CollectionPreviewArtwork({
 }: CollectionPreviewArtworkProps) {
     const locale = useLocale();
     const artwork = localizeArtwork(sourceArtwork, locale);
+    const cardRef = useRef<HTMLAnchorElement>(null);
     const image =
         artwork.images.collection ??
         artwork.images.thumbnail ??
         artwork.images.primary;
+    useArtworkThumbnailPan(cardRef, artwork.creationStatus === "completed" ? image.src : undefined);
 
     return (
         <Link
+            ref={cardRef}
             href={`/series/${seriesSlug}?artwork=${encodeURIComponent(
                 artwork.slug,
             )}`}
@@ -50,6 +57,7 @@ export default function CollectionPreviewArtwork({
                 "
             >
                 {artwork.creationStatus !== "completed" ? <ArtworkComingSoon artwork={artwork} variant="thumbnail" imageSizes="18vw" /> : <Image
+                    data-artwork-thumbnail-image=""
                     src={image.src}
                     alt={image.alt}
                     fill
