@@ -1,5 +1,6 @@
 "use client";
 
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
@@ -325,7 +326,7 @@ export default function CollectionArtwork({
                   className="mt-4 flex items-center justify-between"
                 >
                   <span className="text-[9px] uppercase tracking-[0.3em] text-brand-gold">
-                    {presentation === "archive" ? artwork.year : presentationInfo.yearLabel}
+                    {presentation === "archive" ? getArtworkYear(artwork.date) : presentationInfo.yearLabel}
                   </span>
 
                   <span data-collection-discover className="text-[9px] uppercase tracking-[0.25em] text-brand-gold">

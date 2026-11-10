@@ -21,7 +21,7 @@ export default function CollectionHeroContent({
     const yearLabel = series.yearStart
         ? series.yearEnd
             ? `${series.yearStart} — ${series.yearEnd}`
-            : series.status === "ongoing"
+            : series.artisticStatus === "ongoing"
                 ? `${series.yearStart} — ${t("ongoing")}`
                 : `${series.yearStart}`
         : null;

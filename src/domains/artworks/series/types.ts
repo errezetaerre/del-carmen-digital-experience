@@ -1,6 +1,11 @@
 export type ArtworkSeriesStatus =
+    | "upcoming"
     | "ongoing"
-    | "completed"
+    | "completed";
+
+export type ArtworkSeriesPublicationStatus =
+    | "draft"
+    | "published"
     | "archived";
 
 export interface ArtworkSeriesImage {
@@ -71,7 +76,8 @@ export interface ArtworkSeries {
     coverArtworkId: string;
     images?: ArtworkSeriesImages;
     hero?: ArtworkSeriesHero;
-    status: ArtworkSeriesStatus;
+    artisticStatus: ArtworkSeriesStatus;
+    publicationStatus: ArtworkSeriesPublicationStatus;
     yearStart?: number;
     yearEnd?: number;
     atmosphere?: ArtworkSeriesAtmosphere;

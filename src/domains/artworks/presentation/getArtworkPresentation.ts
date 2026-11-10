@@ -1,3 +1,4 @@
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import type { Artwork } from "../model/artwork";
 import { artworkRecognitions } from "../data/artworkRecognitions";
 import { homeCuration } from "@/domains/home/curation/homeCuration";
@@ -38,7 +39,7 @@ export function isFeaturedArtworkSeries(seriesId: string): boolean {
 // Featured is not duplicated as a persisted boolean on Artwork.
 export function getArtworkPresentation(artwork: Artwork, locale: SiteLocale = "en"): ArtworkPresentation {
     const copy = getSiteMessages(locale).Artwork;
-    const plannedFor = copy.plannedFor.replace("{year}", String(artwork.year));
+    const plannedFor = copy.plannedFor.replace("{year}", String(getArtworkYear(artwork.date)));
     const planned = artwork.creationStatus === "planned";
     const inProgress = artwork.creationStatus === "in-progress";
     const badges: ArtworkBadge[] = [];
@@ -91,7 +92,7 @@ export function getArtworkPresentation(artwork: Artwork, locale: SiteLocale = "e
     return {
         badges,
         statusLabel: planned ? copy.comingSoon : inProgress ? copy.inProgress : availability[artwork.availability],
-        yearLabel: planned || inProgress ? plannedFor : String(artwork.year),
+        yearLabel: planned || inProgress ? plannedFor : String(getArtworkYear(artwork.date)),
         previewLabel: planned ? copy.plannedPreview : inProgress ? copy.progressPreview : undefined,
     };
 }

@@ -1,6 +1,6 @@
 # Artwork Model
 
-Version: 1.6
+Version: 1.8
 
 Document ID:
 DOC-AM
@@ -24,7 +24,7 @@ Owner:
 Del Carmen Digital Experience
 
 Last Updated:
-2026-10-17
+2026-11-09
 
 ---
 
@@ -81,7 +81,7 @@ Artwork
 ├── id
 ├── slug
 ├── title
-├── year
+├── date
 ├── creationStatus
 │
 ├── authorship
@@ -171,15 +171,34 @@ El Misionero
 
 ---
 
-## year
+## date
 
-For a completed artwork, the year is associated with completion. For a planned or in-progress artwork, it is the planned year and must be presented as such.
+`date` is the single persisted artwork date, replacing the former numeric `Artwork.year` under the owner's DAT-02 decision of 2026-11-09. It is a serializable string with exactly one of these precisions:
 
-`creationStatus` explicitly determines the artistic state; a future year does not make a work planned automatically.
+| Form | Meaning | Format-only example |
+| --- | --- | --- |
+| `YYYY` | Only the documented year is known. | `"2025"` |
+| `YYYY-MM-DD` | The real month and day are also documented. | `"2025-11-09"` |
 
-Initial implementation uses a single year value.
+The exact-date example is not a newly asserted date for any real artwork. All 45 existing numeric years migrate to the same `YYYY` string. No month, day or time is added.
 
-More complex date ranges may be introduced later if a real requirement appears.
+For `completed` works, this may be a known completion date or only its documented year. For `planned` and `in-progress` works, it may be an artistic reference or anticipated date; it is not automatically a completion date. `creationStatus` remains independent, including for past planned dates and future completed dates.
+
+`model/artworkDate.ts` owns the `ArtworkDate` authoring type, `isArtworkDate`, `assertArtworkDate`, `getArtworkYear` and `compareArtworkDates`. Runtime validation is authoritative for exact width and calendar validity: years 0001–9999, two-digit month/day, valid month lengths and Gregorian leap-year/century rules. Year zero, partial months, timestamps, time zones, whitespace and other formats are rejected. The catalogue validates every date on load; readers use the same typed getter rather than copying year extraction across components. No JavaScript Date normalization or timezone conversion is used.
+
+Visible year labels, technical sheets, metadata, cards and the existing numeric `year` filter/query derive their year through `getArtworkYear(artwork.date)`. There is no second persisted year attribute. Journal years, recognition event years and ArtworkSeries.yearStart/yearEnd retain their separate meanings.
+
+### Mixed-precision ordering
+
+`/artworks` defaults to `newest`; `oldest` and `title` remain available. Physical record order is irrelevant to this interface contract.
+
+| Order | Across years | Within one year |
+| --- | --- | --- |
+| newest | Descending year | Known exact dates descending, then the separate year-only group. |
+| oldest | Ascending year | Known exact dates ascending, then the separate year-only group. |
+| title | Original title alphabetically | Date and precision do not affect this order. |
+
+Within chronological ties, compare the original title using the active locale's existing case/accent-insensitive numeric collation, then stable ID ascending. The year-only group always follows known days in the same year, in both directions. This is a deterministic editorial grouping, not an assertion of an unknown month/day. Unknown dates are never converted to January 1 or December 31. Equal year-only values therefore tie on date and use title/ID. Standard and Glass detail navigation share the same archive selector and filter context; Series membership ordering remains its own contract.
 
 ---
 
@@ -643,7 +662,8 @@ ArtworkSeries
 ├── description?
 ├── statement?
 ├── coverArtworkId
-├── status
+├── artisticStatus
+├── publicationStatus
 ├── yearStart?
 └── yearEnd?
 ```
@@ -726,19 +746,37 @@ If a future series requires an explicit curatorial ordering that cannot be deriv
 
 ---
 
-# ArtworkSeries Status
+# ArtworkSeries Artistic Status
 
-Initial canonical values:
+`artisticStatus` uses the lifecycle approved in `collection-specification.md` v1.18:
 
 ```text
+upcoming
 ongoing
 completed
+```
+
+This describes the artistic lifecycle of the series.
+
+It does not describe whether individual artworks are available for purchase.
+
+---
+
+# ArtworkSeries Publication Status
+
+`publicationStatus` is separate editorial state:
+
+```text
+draft
+published
 archived
 ```
 
-Status describes the lifecycle of the artistic series.
+An ongoing series can be published. Archiving a series does not make its artistic lifecycle completed or change its years, members or resources. Editorial states are internal and do not introduce public badges.
 
-It does not describe whether individual artworks are available for purchase.
+Public series services select `published` records. All four existing records migrate to `published`, preserving their current artistic states, years and resources. The canonical data export remains complete for internal catalogue tooling; this selection is not an authentication boundary.
+
+The DAT-02 implementation and verification record is `docs/architecture/implementation-roadmap.md`.
 
 ---
 
@@ -748,7 +786,7 @@ It does not describe whether individual artworks are available for purchase.
 
 They may be used when a series has a meaningful chronological span.
 
-They are not mandatory because individual Artwork records already contain their own year values.
+They are not mandatory because individual Artwork records already contain their own date values, from which the year is derived.
 
 ---
 
@@ -763,8 +801,11 @@ Yasemi
 coverArtworkId:
 yasemi_i
 
-status:
+artisticStatus:
 ongoing
+
+publicationStatus:
+published
 ```
 
 Individual works:
@@ -953,7 +994,7 @@ otherwise primary
 
 The artwork metadata is resolved from the canonical Artwork record.
 
-HomeCuration must not duplicate title, image, year or other artwork metadata.
+HomeCuration must not duplicate title, image, date or other artwork metadata.
 
 ---
 
@@ -1082,7 +1123,7 @@ categories:
 - spiritual
 - symbolic
 seriesId: none
-year: 2025
+date: "2025"
 dimensions: 95 × 113 cm
 availability: available
 ```

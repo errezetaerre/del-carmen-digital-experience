@@ -708,6 +708,7 @@ The approved Archive v5 is integrated into the existing localized route tree:
 - `src/app/[locale]/artworks/ArtworkArchive.tsx`: URL-bound filter/search/order state, counts, result disclosure and native mobile/tablet filter dialog.
 - `src/app/[locale]/artworks/ArtworkArchive.module.css`: archive introduction, desktop rail, responsive gallery, filter drawer and separators. Its styles are local to this route.
 - `src/domains/artworks/presentation/artworkArchive.ts`: canonical selection, input validation, faceted matching, title normalization, ordering and query serialization shared with detail navigation.
+- `src/domains/artworks/model/artworkDate.ts`: serializable ArtworkDate type, strict Gregorian date validation, derived year and documented mixed-precision comparison. Consumers import this small model module directly; the catalogue validates owner-authored dates on load.
 - `src/domains/home/sections/collection/CollectionArtwork.module.css`: optional archive card presentation, compact gold corners and stable passive Halo rows. Default Home and Series styling stays under the existing component owners.
 - `CollectionGallery`/`CollectionArtwork`: reuse the existing reveal, rollover, loading and artwork activation; optional props select archive geometry without duplicating the interaction engine.
 - `CollectionArtworkFrame`: existing material/motion with per-instance SVG IDs. Passive `ArtworkBadges` expose stable data hooks for archive styling; badge content still comes from the canonical presentation service.

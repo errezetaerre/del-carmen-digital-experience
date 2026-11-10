@@ -1,3 +1,4 @@
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import type { ArtworkProps } from "@/domains/artworks/components/types";
 import CoverArtworkBadge from "./CoverArtworkBadge";
 import { useLocale } from "next-intl";
@@ -118,7 +119,7 @@ export default function ArtworkInfo({
               ·
             </span>
 
-            <span>{artwork.year}</span>
+            <span>{getArtworkYear(artwork.date)}</span>
 
             <span className="text-brand-gold/40">
               ·
@@ -225,7 +226,7 @@ export default function ArtworkInfo({
               ·
             </span>
 
-            <span>{artwork.year}</span>
+            <span>{getArtworkYear(artwork.date)}</span>
 
             <span className="text-brand-gold/40">
               ·
@@ -336,7 +337,7 @@ export default function ArtworkInfo({
               ·
             </span>
 
-            <span>{artwork.year}</span>
+            <span>{getArtworkYear(artwork.date)}</span>
 
             <span className="text-brand-gold/40">
               ·
@@ -412,7 +413,7 @@ export default function ArtworkInfo({
             </p>
 
             <p className="text-base">
-              {artwork.year}
+              {getArtworkYear(artwork.date)}
             </p>
 
             <p className="text-base">

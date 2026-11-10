@@ -21,7 +21,7 @@ export function seriesTextLocale(series: ArtworkSeries, locale: SiteLocale): Sit
 }
 
 // Only editorial text/alt changes: the canonical series name, layout, media,
-// membership, year and status continue to come from ArtworkSeries.
+// membership, years and both lifecycle states continue to come from ArtworkSeries.
 export function localizeArtworkSeries(series: ArtworkSeries, locale: SiteLocale): ArtworkSeries {
     const copy = locale === "es" ? getCopy(series.id) : undefined;
     if (!copy) return series;
@@ -44,6 +44,7 @@ export function localizeArtworkSeries(series: ArtworkSeries, locale: SiteLocale)
     };
 }
 
-export function formatSeriesStatus(status: ArtworkSeriesStatus, locale: SiteLocale): string {
-    return getSiteMessages(locale).Series[status];
+// Only the artistic lifecycle has a public label; publication remains internal.
+export function formatSeriesStatus(artisticStatus: ArtworkSeriesStatus, locale: SiteLocale): string {
+    return getSiteMessages(locale).Series[artisticStatus];
 }

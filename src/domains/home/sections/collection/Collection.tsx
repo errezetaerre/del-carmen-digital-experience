@@ -231,7 +231,7 @@ export default function Collection() {
                 </span>
 
                 <span>
-                  {formatSeriesStatus(series.status, locale)}
+                  {formatSeriesStatus(series.artisticStatus, locale)}
                 </span>
               </div>
 
@@ -476,7 +476,7 @@ export default function Collection() {
                     </span>
 
                     <span>
-                      {formatSeriesStatus(series.status, locale)}
+                      {formatSeriesStatus(series.artisticStatus, locale)}
                     </span>
                   </div>
 

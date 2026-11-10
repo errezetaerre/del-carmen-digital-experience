@@ -40,9 +40,9 @@ export const artworkSeries: ArtworkSeries[] = [
                 },
             },
         },
-        status: "completed",
+        artisticStatus: "ongoing",
+        publicationStatus: "published",
         yearStart: 2025,
-        yearEnd: 2025,
         atmosphere: {
             src: "/series/yasemi/yasemi_atmosphere_landscape.webp",
             portraitSrc: "/series/yasemi/yasemi_atmosphere_portrait.webp",
@@ -80,7 +80,8 @@ export const artworkSeries: ArtworkSeries[] = [
                 },
             },
         },
-        status: "ongoing",
+        artisticStatus: "ongoing",
+        publicationStatus: "published",
         yearStart: 2027,
         atmosphere: {
             src: "/series/epifanias/epifanias_atmosphere_landscape.webp",
@@ -119,7 +120,8 @@ export const artworkSeries: ArtworkSeries[] = [
                 },
             },
         },
-        status: "completed",
+        artisticStatus: "completed",
+        publicationStatus: "published",
         yearStart: 2024,
         yearEnd: 2024,
         atmosphere: {
@@ -159,7 +161,8 @@ export const artworkSeries: ArtworkSeries[] = [
                 },
             },
         },
-        status: "completed",
+        artisticStatus: "completed",
+        publicationStatus: "published",
         yearStart: 2023,
         yearEnd: 2023,
         atmosphere: {

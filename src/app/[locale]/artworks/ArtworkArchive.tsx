@@ -6,7 +6,8 @@ import { useLocale, useTranslations } from "next-intl";
 import type { Artwork } from "@/domains/artworks";
 import { formatArtworkCategory, formatArtworkMedium } from "@/i18n/artworkCopy";
 import {
-    artworkArchiveQuery, artworkArchiveSorts, getArtworkArchiveOptions,
+    artworkArchiveQuery, artworkArchiveSorts, artworkArchiveCreationStatuses,
+    defaultArtworkArchiveSort, defaultArtworkArchiveCreationStatus, getArtworkArchiveOptions,
     matchesArtworkArchive, readArtworkArchiveFilters, selectArtworkArchive,
     type ArtworkArchiveFilters, type ArtworkArchiveSort,
 } from "@/domains/artworks/presentation/artworkArchive";
@@ -33,7 +34,8 @@ function FilterOption({ label, count, active, onSelect }: { label: string; count
     </button>;
 }
 
-const sortCopy = { archive: "archiveOrder", newest: "newest", oldest: "oldest", title: "titleOrder" } as const;
+const sortCopy = { newest: "newest", oldest: "oldest", title: "titleOrder" } as const;
+const creationStatusCopy = { completed: "completed", "in-progress": "inProgress", planned: "comingSoon" } as const;
 
 export default function ArtworkArchive({ artworks }: { artworks: Artwork[] }) {
     const locale = useLocale();
@@ -54,6 +56,7 @@ export default function ArtworkArchive({ artworks }: { artworks: Artwork[] }) {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const categoryCandidates = artworks.filter((artwork) => matchesArtworkArchive(artwork, filters, "category"));
     const mediumCandidates = artworks.filter((artwork) => matchesArtworkArchive(artwork, filters, "medium"));
+    const creationCandidates = artworks.filter((artwork) => matchesArtworkArchive(artwork, filters, "creationStatus"));
 
     // Native modal supplies inert background, Escape, focus containment and return.
     useEffect(() => {
@@ -82,10 +85,11 @@ export default function ArtworkArchive({ artworks }: { artworks: Artwork[] }) {
     }
 
     function reset() {
-        updateFilters({ category: "all", year: "all", medium: "all", featured: false, search: "", sort: "archive" });
+        updateFilters({ creationStatus: defaultArtworkArchiveCreationStatus, category: "all", year: "all", medium: "all", featured: false, search: "", sort: defaultArtworkArchiveSort });
     }
 
     const chips: Array<{ key: string; label: string; clear: () => void }> = [];
+    if (filters.creationStatus !== defaultArtworkArchiveCreationStatus) chips.push({ key: "creationStatus", label: t(creationStatusCopy[filters.creationStatus]), clear: () => updateFilters({ creationStatus: defaultArtworkArchiveCreationStatus }) });
     if (filters.category !== "all") chips.push({ key: "category", label: formatArtworkCategory(filters.category, locale), clear: () => updateFilters({ category: "all" }) });
     if (filters.year !== "all") chips.push({ key: "year", label: String(filters.year), clear: () => updateFilters({ year: "all" }) });
     if (filters.medium !== "all") chips.push({ key: "medium", label: formatArtworkMedium(filters.medium, locale), clear: () => updateFilters({ medium: "all" }) });
@@ -104,6 +108,14 @@ export default function ArtworkArchive({ artworks }: { artworks: Artwork[] }) {
                     placeholder={t("searchPlaceholder")} onChange={(event) => updateFilters({ search: event.target.value })} />
                 {filters.search && <button type="button" className={styles.clearSearch} aria-label={t("clearSearch")} onClick={() => updateFilters({ search: "" })}><Icon name="close" /></button>}
             </div>
+            <section className={styles.section} aria-labelledby={`${prefix}-creation-status`}>
+                <h3 id={`${prefix}-creation-status`}>{t("creationStatus")}</h3>
+                <div className={styles.options} role="group" aria-label={t("creationStatus")}>
+                    {artworkArchiveCreationStatuses.map((creationStatus) => <FilterOption key={creationStatus} label={t(creationStatusCopy[creationStatus])}
+                        count={creationCandidates.filter((artwork) => artwork.creationStatus === creationStatus).length}
+                        active={filters.creationStatus === creationStatus} onSelect={() => updateFilters({ creationStatus })} />)}
+                </div>
+            </section>
             <section className={styles.section} aria-labelledby={`${prefix}-category`}>
                 <h3 id={`${prefix}-category`}>{t("category")}</h3>
                 <div className={styles.options} role="group" aria-label={t("category")}>

@@ -1,3 +1,4 @@
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import type { Artwork } from "../model/artwork";
 import { createPageMetadata } from "@/shared/lib/metadata";
 import type { SiteLocale } from "@/i18n/config";
@@ -13,7 +14,7 @@ export function getArtworkMetadata(sourceArtwork: Artwork, locale: SiteLocale = 
         const copy = getSiteMessages(locale).Artwork;
         const state = artwork.creationStatus === "planned" ? copy.comingSoon : artwork.creationStatus === "in-progress" ? copy.inProgress : null;
         const title = state ? `${artwork.title} — ${state}` : artwork.title;
-        const status = state ? `${state}. ${artwork.title} es una ${artwork.creationStatus === "planned" ? "obra prevista" : "obra en proceso"}.` : `${artwork.title} (${artwork.year}), ${formatArtworkAuthorship(artwork, locale).toLocaleLowerCase("es")}.`;
+        const status = state ? `${state}. ${artwork.title} es una ${artwork.creationStatus === "planned" ? "obra prevista" : "obra en proceso"}.` : `${artwork.title} (${getArtworkYear(artwork.date)}), ${formatArtworkAuthorship(artwork, locale).toLocaleLowerCase("es")}.`;
         return createPageMetadata({ ...page, title, description: `${status} ${artwork.description?.trim() || artwork.quote?.trim() || formatArtworkTechnique(artwork, locale) + "."}` });
     }
     const state = artwork.creationStatus === "planned" ? "Coming soon" :
@@ -21,7 +22,7 @@ export function getArtworkMetadata(sourceArtwork: Artwork, locale: SiteLocale = 
     const title = state ? `${artwork.title} — ${state}` : artwork.title;
     const authorship = { original: "original artwork", "master-copy": "master copy", "study-after": "study after" }[artwork.authorship];
     const status = state ? `${state}. ${artwork.title} is a ${artwork.creationStatus === "planned" ? "planned artwork" : "work in progress"}.` :
-        `${artwork.title} (${artwork.year}), ${authorship}.`;
+        `${artwork.title} (${getArtworkYear(artwork.date)}), ${authorship}.`;
     const detail = artwork.description?.trim() || artwork.quote?.trim() ||
         `${artwork.medium.replace(/-/g, " ")} on ${artwork.support}.`;
     return createPageMetadata({ ...page, title, description: `${status} ${detail}` });

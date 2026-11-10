@@ -1,5 +1,6 @@
 "use client";
 
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import ArtworkImageHighlights from "@/shared/ui/artwork/ArtworkImageHighlights";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
 import { useLocale, useTranslations } from "next-intl";
@@ -421,7 +422,7 @@ export default function FeaturedArtwork() {
                 ·
               </span>
 
-              {artwork.year}
+              {getArtworkYear(artwork.date)}
             </p>
 
 

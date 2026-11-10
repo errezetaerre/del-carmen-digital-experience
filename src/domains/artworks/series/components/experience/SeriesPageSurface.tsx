@@ -107,7 +107,7 @@ export default function SeriesPageSurface({ entry, active, wide, openingId, onOp
                 <header className={styles.intro}>
                     <p className={styles.eyebrow}>{isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : t("label")}</p>
                     <h1 className={styles.collectionTitle}>{series.title}</h1>
-                    <div className={styles.workStatus}><span>{t("workCount", { count: artworks.length })}</span><i>·</i><span>{formatSeriesStatus(series.status, locale)}</span></div>
+                    <div className={styles.workStatus}><span>{t("workCount", { count: artworks.length })}</span><i>·</i><span>{formatSeriesStatus(series.artisticStatus, locale)}</span></div>
                 </header>
                 <SeriesArtworkGallery artworks={artworks} wide={wide} active={active} openingId={openingId} onOpen={onOpen} />
                 <section className={styles.statementSection} data-series-statement tabIndex={active ? 0 : -1} aria-label={t("statement")}>
