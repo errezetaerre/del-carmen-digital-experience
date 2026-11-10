@@ -611,3 +611,65 @@ Reviewed the owner's actual fix/accessibility-security-baseline snapshot: 374 fi
 Build/TypeScript, 95 offline regressions, lint (zero errors/twelve inherited warnings), full dependency audit (zero known vulnerabilities) and safe API HTTP/SEO output checks pass. The prior loopback English redirect remains a Preview check before merge. DOC-MAIL-OPS consolidates the exact owner handoff and remaining release work rather than adding another task list.
 
 Next: install/review this increment locally; inventory Vercel Production/Preview and all existing del-carmen-contact consumers; coordinate the credential rotation/deployment window; then prepare the approved commit, push, Preview and PR. Do not reset credentials now or assume saved Vercel variables updated existing deployments. Preserve real data, current Gmail receiver, old Onboarding key until consumer review, EN/ES and all approved visuals. Production delivery/persistence/unsubscribe verification and editorial Spanish/legal release remain open.
+
+## DAT-02 — Series lifecycles, artwork dates and sorting — 2026-11-09
+
+### Approved source and boundary
+
+Source branch: `refactor/series-lifecycle-and-artwork-sorting`, synchronized from GitHub at `1e6ed39b91021b86008aeffa1c4679ece8dec369` (`wip: prepare artwork series lifecycle changes`). This branch, including the owner's recent series corrections and partial types, is the baseline for this increment; the former `main` snapshot is not the application target.
+
+Authority: owner request and `docs/domains/collection/collection-specification.md` v1.18. That specification remains unchanged. `ArtworkSeries` stays canonical; `/collections` remains its editorial presentation. No PostgreSQL, ORM, physical schema, media migration, new Collection entity or commerce work is included.
+
+### Decision log
+
+| ID | Decision and reason | Implementation / state |
+| --- | --- | --- |
+| DAT-02-A | Separate artistic progress from publication. Preserve the owner's `ArtworkSeriesStatus` (`upcoming`, `ongoing`, `completed`) and `ArtworkSeriesPublicationStatus` (`draft`, `published`, `archived`) type names. | Approved; interface now requires `artisticStatus` and `publicationStatus`. Both types are exported from the series and artwork barrels. The ambiguous record field `status` is removed. |
+| DAT-02-A / data | Copy every existing artistic value unchanged and mark all four current records `published`. Retain chronology, resources, texts, IDs and membership. | Implemented; full before/after comparison checks every field. Yasemi remains ongoing from 2025 with no yearEnd. |
+| DAT-02-A / public services | Select `published` series in public list, ID and slug services, independently of artistic status. Keep the canonical array complete and the membership service unchanged. | Implemented; all existing series remain visible. Draft/archived fixtures are excluded from public selection without changing their artistic states or deleting records. This is editorial selection, not an authentication boundary. |
+| DAT-02-A / presentation | Home Standard/Glass, Collection Hero and Series Standard/Glass read `artisticStatus`. `formatSeriesStatus` retains its existing public function name and formats only the artistic lifecycle. EN/ES localization preserves both canonical states. | Implemented; add the missing upcoming label, preserve ongoing/completed wording, and remove the obsolete public archived label. No editorial-state badge, CSS, layout or animation change. |
+| DAT-02-B | Remove only the `archive` ordering choice from `/artworks`. `newest` is the default and reset; `oldest` and `title` remain. | Implemented in the existing shared archive/detail selection contract. Archive presentation, other filters and their counts retain their owners. |
+| DAT-02-B / deterministic order | Newest: year descending → localized title ascending → stable ID ascending. Oldest: year ascending → localized title ascending → stable ID ascending. Title: localized title ascending → stable ID ascending. | Implemented and tested in EN/ES with accent/case-equivalent and numeric titles and reversed input arrays. The catalogue is never sorted in place. |
+| DAT-02-B / URL and navigation | Missing, legacy `archive` and invalid sort queries normalize to newest. Omit the default from serialized queries; retain non-default orders and existing search/filter context. | Implemented; round-trips and the shared selection are tested. Detail Previous/Next consumes that same function; existing Series-context precedence, gestures and Standard/Glass routing remain unchanged. |
+| DAT-02-B / gallery visibility refinement | After local review, the owner requested that unfinished works no longer lead or appear in `/artworks`. Show only `creationStatus: "completed"` there; do not infer completion from the year or remove records from the catalogue. | Implemented in the archive selector and facet options. Current selection: 38 completed works; seven planned records remain available elsewhere. Counters, search, pagination and archive-context Previous/Next share this selection. Home, Collections, Series membership and direct detail access retain the full catalogue. No separate Coming Soon section or visual redesign is introduced. |
+| DAT-02-B / explicit creation-state filter | The owner subsequently approved offering Completed, In progress and Coming soon in the left menu, with completed as the initial selection. Reuse Artwork.creationStatus (`completed`, `in-progress`, `planned`), independently of ArtworkSeries artistic/publication states. | Implemented in the shared sidebar/mobile drawer with EN/ES labels and contextual counts. An explicit `creationStatus` query selects unfinished works; missing/invalid values and Reset select completed. The default is omitted from the URL. Non-default status is retained in detail, Back and mode navigation. Facet vocabulary spans all states so other filters are preserved; counts/results use the chosen state. This supersedes the earlier unconditional gallery exclusion while retaining its completed-only initial view. |
+| DAT-02 / Artwork.date | On 2026-11-09 the owner approved replacing numeric Artwork.year with a single date string: YYYY or a documented real YYYY-MM-DD. Preserve every current year at year precision and keep creationStatus independent. | Implemented as ArtworkDate and a shared model helper. All 45 records migrate to the same YYYY; every other record field is compared unchanged. Calendar validation includes Gregorian leap years and century exceptions, and runs at catalogue load. Rendering/filtering use getArtworkYear; no persisted year alias remains. |
+| DAT-02 / mixed date precision | Use full dates for chronological precision while never assuming an unknown month/day. Keep newest default, oldest and title, original-title/ID ties and all existing filters/navigation. | Implemented: compare year in the chosen direction; within a year, known days in that chronology, then the separate year-only group in both directions. Date ties use original title then ID; title ordering ignores date. This documented editorial group does not claim unknown chronological positions. Physical database order is not a requirement; no database is created. |
+
+### Preserved branch records
+
+| ID | Artistic value after migration | yearStart | yearEnd | Publication |
+| --- | --- | --- | --- | --- |
+| yasemi | ongoing | 2025 | absent | published |
+| epifanias | ongoing | 2027 | absent | published |
+| the_inner_treasury | completed | 2024 | 2024 | published |
+| the_discipline_of_seeing | completed | 2023 | 2023 | published |
+
+These values are copied from the synchronized branch, not inferred from dates or older examples. The existing tracked `src.zip` is preserved unchanged; it is not part of this completion patch. Artwork records, image paths and roles, years, curatorial references, recognition data and translated editorial content are not rewritten.
+
+The subsequent Artwork.date increment changes only each artwork's former year attribute to the identical YYYY string. Series chronology above, creation states, IDs, slugs, original titles, image references, translations and all other facts remain intact. Existing Journal/recognition year fields and Series yearStart/yearEnd are independent and are not migrated.
+
+### Migration, recovery and publication state
+
+This is a TypeScript catalogue migration, not a database migration. The completion is prepared as a context-checked patch against the identified branch. No reset, stash, owner-file checkout, staging or commit is part of applying it. Conflicting newer local edits must stop the application for review rather than being forced over.
+
+If a reversal is needed, check the exact patch with `git apply --reverse --check` and review it before an approved inverse application. Never reset the whole working tree or revert the owner's earlier WIP commit to undo this increment.
+
+Implementation and local verification do not mean PR, merge or Production deployment. Those remain pending review of the results and owner approval.
+
+### Verification
+
+Verified on the synchronized branch, using Node 24.22.1, Next 16.4.2 and TypeScript 5.9.3:
+
+- `next typegen` and `tsc --noEmit`: passed, including artistic/publication separation, ArtworkDate strings, the typed year getter and removal of Artwork.year.
+- Focused DAT-02 and Home/Series/preference/Analytics regressions: 81 tests passed after the Artwork.date migration. Coverage retains the owner's Yasemi correction, all four published series, independent draft/archived selection, EN/ES controls, every ordering mode, tie-breaks, immutability and query continuity. Added date checks cover strict formats, invalid months/days, leap/century years, timestamp/whitespace rejection, mixed precision in both chronological modes, original-title/ID ties, year filtering, unchanged creation states and the actual detail page's date-ordered Standard/Glass data and neighbours. Existing status/filter and Series-membership regressions continue to pass.
+- `npm run lint`: zero errors and ten warnings in unchanged code. No lint rule was disabled.
+- `npm run build`: passed with the real Next 16.4.2 configuration and fonts; 125 pages generated. No font or configuration substitution was used.
+- Full before/after series comparison: all fields are equal after mapping the original status to artisticStatus and excluding the new publicationStatus.
+- Delivery checks use disposable Git indexes: exact application/reversal passed; a non-overlapping local catalogue edit was preserved; an overlapping edit was refused without changes. The actual working index remains unstaged.
+- Before/after comparison confirms that all 45 former years become the identical YYYY date and every other artwork field remains equal, including state, IDs/slugs, original title, images, dimensions, copy and price. All EN/ES presentation and SEO outputs remain equal for the existing catalogue.
+- Byte checks preserve collection specification v1.18, all series corrections, translations, existing src.zip, package.json, package-lock.json, styles and material modules. The only Glass-runtime change is its helper import and year fallback; physics and shader code remain intact. No asset or API change is included.
+
+The application target is the owner's existing refactor branch, not main. Delivery preflight checks that branch and its reviewed baseline and performs `git apply --check` before any application. Non-overlapping pending changes remain in place; an overlap stops for review. The assistant has not modified the owner's Mac or performed a commit, push, PR, merge or deployment. Final visual/device review and application to the local checkout remain with the owner; these checks do not claim an interactive browser audit.
+
+The date-only increment targets the latest approved local state with the creation-status filter already integrated. It is incremental over those pending changes; it does not reapply or replace the preceding DAT-02 deliveries. No exact date is newly assigned to a real work, PostgreSQL is not created, and publication remains pending owner review.

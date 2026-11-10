@@ -1,4 +1,4 @@
-export type { Artwork } from "./model";
+export type { Artwork, ArtworkDate } from "./model";
 
 export {
     getArtworkById,
@@ -23,4 +23,5 @@ export {
 export type {
     ArtworkSeries,
     ArtworkSeriesStatus,
+    ArtworkSeriesPublicationStatus,
 } from "./series";

@@ -1,3 +1,4 @@
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import type { ArtworkProps } from "./types";
 
 export default function ArtworkMetadata({
@@ -22,7 +23,7 @@ export default function ArtworkMetadata({
       </p>
 
       <p className="text-sm text-white/45">
-        {artwork.year}
+        {getArtworkYear(artwork.date)}
       </p>
 
       <p className="text-sm text-white/40">

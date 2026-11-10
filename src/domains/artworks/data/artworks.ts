@@ -1,3 +1,4 @@
+import { assertArtworkDate } from "../model/artworkDate";
 import type { Artwork } from "../model";
 
 export const artworks: Artwork[] = [
@@ -8,7 +9,7 @@ export const artworks: Artwork[] = [
 
     title: "Captura de Jesucristo",
 
-    year: 2025,
+    date: "2025",
 
     creationStatus: "completed",
 
@@ -62,7 +63,7 @@ export const artworks: Artwork[] = [
 
     title: "Epifanía Nupcial",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -127,7 +128,7 @@ export const artworks: Artwork[] = [
 
     title: "El Misionero",
 
-    year: 2024,
+    date: "2024",
 
     creationStatus: "completed",
 
@@ -183,7 +184,7 @@ export const artworks: Artwork[] = [
 
     title: "Perro de Dani",
 
-    year: 2019,
+    date: "2019",
 
     creationStatus: "completed",
 
@@ -236,7 +237,7 @@ export const artworks: Artwork[] = [
 
     title: "El Carnero",
 
-    year: 2019,
+    date: "2019",
 
     creationStatus: "completed",
 
@@ -293,7 +294,7 @@ export const artworks: Artwork[] = [
 
     title: "El Baúl de los Tesoros",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -350,7 +351,7 @@ export const artworks: Artwork[] = [
 
     title: "Buda",
 
-    year: 2027,
+    date: "2027",
 
     creationStatus: "planned",
 
@@ -407,7 +408,7 @@ export const artworks: Artwork[] = [
 
     title: "Sendero del Sol",
 
-    year: 2023,
+    date: "2023",
 
     creationStatus: "completed",
 
@@ -466,7 +467,7 @@ export const artworks: Artwork[] = [
 
     title: "Margarita",
 
-    year: 2027,
+    date: "2027",
 
     creationStatus: "planned",
 
@@ -522,7 +523,7 @@ export const artworks: Artwork[] = [
 
     title: "Recordando Mi Puerto",
 
-    year: 2027,
+    date: "2027",
 
     creationStatus: "planned",
 
@@ -578,7 +579,7 @@ export const artworks: Artwork[] = [
 
     title: "La Mujer Del Bosque",
 
-    year: 2027,
+    date: "2027",
 
     creationStatus: "planned",
 
@@ -635,7 +636,7 @@ export const artworks: Artwork[] = [
 
     title: "Rosa Rojita",
 
-    year: 2024,
+    date: "2024",
 
     creationStatus: "completed",
 
@@ -687,7 +688,7 @@ export const artworks: Artwork[] = [
 
     title: "Yasemi I",
 
-    year: 2025,
+    date: "2025",
 
     creationStatus: "completed",
 
@@ -755,7 +756,7 @@ export const artworks: Artwork[] = [
 
     title: "Yasemi II",
 
-    year: 2026,
+    date: "2026",
 
     creationStatus: "planned",
 
@@ -809,7 +810,7 @@ export const artworks: Artwork[] = [
 
     title: "Yasemi III",
 
-    year: 2026,
+    date: "2026",
 
     creationStatus: "planned",
 
@@ -863,7 +864,7 @@ export const artworks: Artwork[] = [
 
     title: "Yasemi IV",
 
-    year: 2026,
+    date: "2026",
 
     creationStatus: "planned",
 
@@ -916,7 +917,7 @@ export const artworks: Artwork[] = [
 
     title: "Selenia de María",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -967,7 +968,7 @@ export const artworks: Artwork[] = [
 
     title: "Busto de Bevedere - Chercheuse",
 
-    year: 2021,
+    date: "2021",
 
     creationStatus: "completed",
 
@@ -1025,7 +1026,7 @@ export const artworks: Artwork[] = [
 
     title: "Carga tu Propia Cruz",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -1082,7 +1083,7 @@ export const artworks: Artwork[] = [
 
     title: "Cloe - La Vaquita",
 
-    year: 2019,
+    date: "2019",
 
     creationStatus: "completed",
 
@@ -1138,7 +1139,7 @@ export const artworks: Artwork[] = [
 
     title: "Flor del Desierto",
 
-    year: 2019,
+    date: "2019",
 
     creationStatus: "completed",
 
@@ -1194,7 +1195,7 @@ export const artworks: Artwork[] = [
 
     title: "Flor Francesa",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -1248,7 +1249,7 @@ export const artworks: Artwork[] = [
 
     title: "Franko En Día De Campo",
 
-    year: 2020,
+    date: "2020",
 
     creationStatus: "completed",
 
@@ -1301,7 +1302,7 @@ export const artworks: Artwork[] = [
 
     title: "La Plancha",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -1356,7 +1357,7 @@ export const artworks: Artwork[] = [
 
     title: "El Pie",
 
-    year: 2020,
+    date: "2020",
 
     creationStatus: "completed",
 
@@ -1415,7 +1416,7 @@ export const artworks: Artwork[] = [
 
     title: "La Donna Velata",
 
-    year: 2021,
+    date: "2021",
 
     creationStatus: "completed",
 
@@ -1470,7 +1471,7 @@ export const artworks: Artwork[] = [
 
     title: "Margarita la Niña",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -1524,7 +1525,7 @@ export const artworks: Artwork[] = [
 
     title: "El Desnudo Masculino",
 
-    year: 2017,
+    date: "2017",
 
     creationStatus: "completed",
 
@@ -1578,7 +1579,7 @@ export const artworks: Artwork[] = [
 
     title: "Desnudo Joven",
 
-    year: 2018,
+    date: "2018",
 
     creationStatus: "completed",
 
@@ -1633,7 +1634,7 @@ export const artworks: Artwork[] = [
 
     title: "Parthenon",
 
-    year: 2017,
+    date: "2017",
 
     creationStatus: "completed",
 
@@ -1690,7 +1691,7 @@ export const artworks: Artwork[] = [
 
     title: "Hugh Jackman",
 
-    year: 2017,
+    date: "2017",
 
     creationStatus: "completed",
 
@@ -1744,7 +1745,7 @@ export const artworks: Artwork[] = [
 
     title: "Le Torse du Belvédère",
 
-    year: 2018,
+    date: "2018",
 
     creationStatus: "completed",
 
@@ -1802,7 +1803,7 @@ export const artworks: Artwork[] = [
 
     title: "La Mechuda",
 
-    year: 2018,
+    date: "2018",
 
     creationStatus: "completed",
 
@@ -1856,7 +1857,7 @@ export const artworks: Artwork[] = [
 
     title: "La Travesti",
 
-    year: 2017,
+    date: "2017",
 
     creationStatus: "completed",
 
@@ -1910,7 +1911,7 @@ export const artworks: Artwork[] = [
 
     title: "Juan Carlillos",
 
-    year: 2017,
+    date: "2017",
 
     creationStatus: "completed",
 
@@ -1964,7 +1965,7 @@ export const artworks: Artwork[] = [
 
     title: "Victoria de Samotracia",
 
-    year: 2019,
+    date: "2019",
 
     creationStatus: "completed",
 
@@ -2020,7 +2021,7 @@ export const artworks: Artwork[] = [
 
     title: "Desnudo Ronald Tellini",
 
-    year: 2017,
+    date: "2017",
 
     creationStatus: "completed",
 
@@ -2075,7 +2076,7 @@ export const artworks: Artwork[] = [
 
     title: "Actriz Vivian Leigh",
 
-    year: 2019,
+    date: "2019",
 
     creationStatus: "completed",
 
@@ -2128,7 +2129,7 @@ export const artworks: Artwork[] = [
 
     title: "Mama de Luis Alonso",
 
-    year: 2022,
+    date: "2022",
 
     creationStatus: "completed",
 
@@ -2181,7 +2182,7 @@ export const artworks: Artwork[] = [
 
     title: "El Pitufino Coral",
 
-    year: 2020,
+    date: "2020",
 
     creationStatus: "completed",
 
@@ -2235,7 +2236,7 @@ export const artworks: Artwork[] = [
 
     title: "Retrato de Mujer",
 
-    year: 2024,
+    date: "2024",
 
     creationStatus: "completed",
 
@@ -2291,7 +2292,7 @@ export const artworks: Artwork[] = [
 
     title: "L'Aurore",
 
-    year: 2025,
+    date: "2025",
 
     creationStatus: "completed",
 
@@ -2347,7 +2348,7 @@ export const artworks: Artwork[] = [
 
     title: "Psyché de Náples",
 
-    year: 2017,
+    date: "2017",
 
     creationStatus: "completed",
 
@@ -2403,7 +2404,7 @@ export const artworks: Artwork[] = [
 
     title: "Homenaje Postumo",
 
-    year: 2021,
+    date: "2021",
 
     creationStatus: "completed",
 
@@ -2457,7 +2458,7 @@ export const artworks: Artwork[] = [
 
     title: "Gatito",
 
-    year: 2021,
+    date: "2021",
 
     creationStatus: "completed",
 
@@ -2503,3 +2504,6 @@ export const artworks: Artwork[] = [
     },
   },
 ];
+
+// Validate owner-authored dates at the catalogue boundary, before any viewer uses them.
+for (const artwork of artworks) assertArtworkDate(artwork.date);

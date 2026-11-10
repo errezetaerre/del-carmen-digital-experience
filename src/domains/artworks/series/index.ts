@@ -10,6 +10,7 @@ export {
 export type {
     ArtworkSeries,
     ArtworkSeriesStatus,
+    ArtworkSeriesPublicationStatus,
     ArtworkSeriesImage,
     ArtworkSeriesImages,
     ArtworkSeriesHero,

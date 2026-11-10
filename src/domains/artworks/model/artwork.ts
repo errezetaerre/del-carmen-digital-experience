@@ -1,3 +1,5 @@
+import type { ArtworkDate } from "./artworkDate";
+
 export type ArtworkAuthorship =
   | "original"
   | "master-copy"
@@ -77,7 +79,7 @@ export interface Artwork {
 
   title: string;
 
-  year: number;
+  date: ArtworkDate;
 
   creationStatus: ArtworkCreationStatus;
 

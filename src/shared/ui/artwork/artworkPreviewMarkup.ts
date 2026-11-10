@@ -1,3 +1,4 @@
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import type { Artwork } from "@/domains/artworks/model/artwork";
 import { artworkHaloSymbol } from "./artworkHaloSymbols";
 import styles from "./ArtworkComingSoon.module.css";
@@ -15,7 +16,7 @@ export function artworkPreviewMarkup(artwork: Artwork, locale: SiteLocale = "en"
     const planned = artwork.creationStatus === "planned";
     const copy = getSiteMessages(locale).Artwork;
     const label = locale === "en" ? (planned ? "Coming Soon" : "In Progress") : planned ? copy.comingSoon : copy.inProgress;
-    const description = copy.previewDescription.replace("{title}", artwork.title).replace("{label}", label).replace("{year}", String(artwork.year));
+    const description = copy.previewDescription.replace("{title}", artwork.title).replace("{label}", label).replace("{year}", String(getArtworkYear(artwork.date)));
     const kind = planned ? "planned" : "in-progress";
     let imageAttributes = `src="${escape(artwork.images.primary.src)}"`;
     if (imageSizes) {

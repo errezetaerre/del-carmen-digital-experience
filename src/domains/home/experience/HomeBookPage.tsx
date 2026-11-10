@@ -1,5 +1,6 @@
 "use client";
 
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import Image from "next/image";
 import { Suspense } from "react";
 import { useLocale, useTranslations } from "next-intl";
@@ -80,12 +81,12 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
             {discover(hero, "cover-image", hero.images.heroLandscape ?? hero.images.primary)}<div className="panorama-shade" aria-hidden="true" />
             <div className="cover-info"><div className="cover-info-inner"><h2>{hero.title}</h2>
                 {hero.quote && <p className="cover-quote">“{hero.quote}”</p>}<div className="cover-rule" aria-hidden="true" />
-                <div className="cover-facts"><span>{formatArtworkTechnique(hero, locale)}</span><span>{hero.year}</span><span>{dimensions(hero)}</span></div>
+                <div className="cover-facts"><span>{formatArtworkTechnique(hero, locale)}</span><span>{getArtworkYear(hero.date)}</span><span>{dimensions(hero)}</span></div>
             </div></div>
         </div><div className="cover-editorial-page"><div className="cover-introduction">{coverIntroduction}</div></div>
     </div> : <div className="split"><div className="art-side"><div className="home-cover-media">
         {discover(hero, "hero-art")}
-        <div className="art-caption"><span><strong>{hero.title}</strong><br /><span className="meta">{hero.year} · {formatArtworkTechnique(hero, locale)}</span></span>
+        <div className="art-caption"><span><strong>{hero.title}</strong><br /><span className="meta">{getArtworkYear(hero.date)} · {formatArtworkTechnique(hero, locale)}</span></span>
             <CoverArtworkBadge artworkId={hero.id} /></div>
     </div></div><div className="editorial-side">{coverIntroduction}</div></div>;
     if (chapter === "featured" && featured) body = <div className="split"><div className="art-side">
@@ -95,7 +96,7 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
             <p className="eyebrow">{h("featuredWork")}</p><h2>{featured.title}</h2>
             <div className="badge-row" data-badged><ArtworkBadges artwork={featured} /></div>
             {featured.quote && <p className="large-copy">“{featured.quote}”</p>}<div className="rule" aria-hidden="true" />
-            <p className="meta">{featured.year} · {formatArtworkTechnique(featured, locale)}</p>
+            <p className="meta">{getArtworkYear(featured.date)} · {formatArtworkTechnique(featured, locale)}</p>
             {featured.description && <p className="body-copy">{featured.description}</p>}
             <button type="button" className="cta" onClick={() => onOpen(featured)}>{h("discoverWork")}<span className="arrow" aria-hidden="true">→</span></button>
         </div></div>;
@@ -115,14 +116,14 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
             </Link><div className="collection-blend" aria-hidden="true" />
             <div className="collection-editorial"><div className="badge" data-badged><FeaturedSeriesBadge seriesId={series.id} /></div>
                 <h2>{series.title}</h2>{series.description && <p className="collection-description">{series.description}</p>}
-                <div className="collection-facts"><span>{s("workCount", { count: artworkCount })}</span>{years && <span>{years}</span>}<span>{formatSeriesStatus(series.status, locale)}</span></div>
+                <div className="collection-facts"><span>{s("workCount", { count: artworkCount })}</span>{years && <span>{years}</span>}<span>{formatSeriesStatus(series.artisticStatus, locale)}</span></div>
                 <Cta href={href}>{h("exploreCollection")}</Cta>
             </div></div> : <div className="split" lang={seriesTextLocale(series, locale)}>
             <div className="portrait-collection-art"><Link className="portrait-collection-image" href={href} prefetch={false} aria-label={s("exploreNamed", { title: series.title })}>
                 <BookImage image={collectionImage} active={active} /></Link></div>
             <div className="editorial-side"><div className="badge" data-badged><FeaturedSeriesBadge seriesId={series.id} /></div><h2>{series.title}</h2>
                 {series.statement && <p className="collection-statement">{series.statement}</p>}<div className="rule" aria-hidden="true" />
-                {series.description && <p className="body-copy">{series.description}</p>}<p className="collection-mark">{formatSeriesStatus(series.status, locale)}</p>
+                {series.description && <p className="body-copy">{series.description}</p>}<p className="collection-mark">{formatSeriesStatus(series.artisticStatus, locale)}</p>
                 <Cta href={href}>{h("exploreCollection")}</Cta>
             </div></div>;
     }

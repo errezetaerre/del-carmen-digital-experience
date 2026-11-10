@@ -76,7 +76,8 @@ export interface ArtworkSeries {
     coverArtworkId: string;
     images?: ArtworkSeriesImages;
     hero?: ArtworkSeriesHero;
-    status: ArtworkSeriesStatus;
+    artisticStatus: ArtworkSeriesStatus;
+    publicationStatus: ArtworkSeriesPublicationStatus;
     yearStart?: number;
     yearEnd?: number;
     atmosphere?: ArtworkSeriesAtmosphere;

@@ -1,6 +1,7 @@
 import { activateLocale } from "@/i18n/server";
 import { getSiteMessages } from "@/i18n/messages";
 import { getArtworkMetadata } from "@/domains/artworks/presentation/getArtworkMetadata";
+import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import { notFound } from "next/navigation";
 
 import {
@@ -24,6 +25,7 @@ interface ArtworkPageProps {
     }>;
 
     searchParams: Promise<{
+        creationStatus?: string | string[];
         category?: string;
         year?: string;
         medium?: string;
@@ -56,6 +58,7 @@ export default async function ArtworkPage({
     const { slug } = await params;
 
     const {
+        creationStatus,
         category,
         year,
         medium,
@@ -105,7 +108,7 @@ export default async function ArtworkPage({
     const activeYear =
         parsedYear &&
         artworks.some(
-            (item) => item.year === parsedYear,
+            (item) => getArtworkYear(item.date) === parsedYear,
         )
             ? parsedYear
             : undefined;
@@ -121,6 +124,7 @@ export default async function ArtworkPage({
     const featuredOnly = featured === "true" && isFeaturedArtwork(artwork);
 
     const archiveFilters = readArtworkArchiveFilters(artworks, new URLSearchParams({
+        creationStatus: !activeSeries && typeof creationStatus === "string" ? creationStatus : "",
         category: activeCategory ?? "",
         year: activeYear ? String(activeYear) : "",
         medium: activeMedium ?? "",
