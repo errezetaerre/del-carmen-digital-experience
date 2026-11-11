@@ -1,5 +1,8 @@
 import postgres from "postgres";
 
+// Approved Neon main compute, never the integration's Preview or owner URL.
+const productionCatalogueHost = "ep-lingering-silence-bbokbc7w-pooler.c-15.us-east-1.aws.neon.tech";
+
 export class CatalogueConfigError extends Error {
     constructor(code) { super(code); this.name = "CatalogueConfigError"; this.code = code; }
 }
@@ -36,6 +39,26 @@ export function catalogueReaderConfig(env) {
     requireConfig(env.CATALOGUE_DB_ENDPOINT === config.endpoint, "development_endpoint_mismatch");
     return config;
 }
+
+// Production is available to the request reader only. Operator commands keep
+// their existing non-production guards and cannot use this configuration.
+export function catalogueProductionReaderConfig(env) {
+    requireConfig(env.VERCEL_ENV === "production" && env.CATALOGUE_PRODUCTION_SOURCE === "postgres",
+        "production_catalogue_read_not_requested");
+    const value = env.CATALOGUE_PRODUCTION_READ_URL;
+    requireConfig(typeof value === "string" && value.length > 0, "production_catalogue_reader_secret_missing");
+    const config = connection(value);
+    const url = new URL(config.url);
+    requireConfig(url.hostname === productionCatalogueHost && (!url.port || url.port === "5432") && url.pathname === "/neondb",
+        "production_catalogue_target_mismatch");
+    requireConfig(url.username === "catalogue_reader", "production_catalogue_reader_role_required");
+    // Use only canonical TLS/authentication options, without inherited URL options.
+    url.search = "";
+    url.searchParams.set("sslmode", "verify-full");
+    url.searchParams.set("channel_binding", "require");
+    return { ...config, url: url.toString() };
+}
+
 export function createCatalogueClient(config) {
     // Explicit CA/hostname verification overrides sslmode=require's weaker default.
     // Lazy one-connection pool, used only after an explicit operator/server read.

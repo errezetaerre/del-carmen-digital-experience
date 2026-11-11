@@ -14,5 +14,6 @@ export type CatalogueEnvironment = Readonly<Record<string, string | undefined>>;
 export interface CatalogueClient extends CatalogueDatabase { close(): Promise<void> }
 export function catalogueConnectionConfig(env: CatalogueEnvironment, write?: boolean): CatalogueConnectionConfig;
 export function catalogueReaderConfig(env: CatalogueEnvironment): CatalogueConnectionConfig;
+export function catalogueProductionReaderConfig(env: CatalogueEnvironment): CatalogueConnectionConfig;
 export function createCatalogueClient(config: CatalogueConnectionConfig): CatalogueClient;
 export function catalogueClientFromSql(sql: unknown): CatalogueClient;

@@ -1,5 +1,5 @@
 import "server-only";
-import { catalogueReaderConfig, createCatalogueClient } from "./postgresClient.mjs";
+import { catalogueProductionReaderConfig, catalogueReaderConfig, createCatalogueClient } from "./postgresClient.mjs";
 import { createArtworkArchiveReader } from "./archiveReader";
 import { loadCatalogueFiles } from "./fileSource";
 import type { CatalogueRepository } from "./reader";
@@ -20,7 +20,9 @@ const messages: Record<CatalogueReadScope, string> = {
 // Reuse the bounded reader/pool across requests in this server instance.
 export function readArtworkArchiveCatalogue(scope: CatalogueReadScope = "archive") {
     if (!reader) {
-        const config = catalogueReaderConfig(process.env);
+        const config = process.env.VERCEL_ENV === "production"
+            ? catalogueProductionReaderConfig(process.env)
+            : catalogueReaderConfig(process.env);
         const expected = loadCatalogueFiles();
         reader = createArtworkArchiveReader(createCatalogueClient(config), expected);
     }
