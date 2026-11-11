@@ -51,7 +51,7 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
     const coverIntroduction = hero && <>
         <p className={`eyebrow${wide ? " cover-brand-line" : ""}`}>{wide ? "by Rõ Visual" : "ROLANDO DEL CARMEN · RŌ VISUAL"}</p>
         <div className="cover-brand-heading"><h1 className="hero-title">Del<br /><em>Carmen</em></h1>
-            {wide && <div className="cover-right-badge"><CoverArtworkBadge artworkId={hero.id} /></div>}
+            {wide && <div className="cover-right-badge"><CoverArtworkBadge artwork={hero} /></div>}
         </div>
         {wide && <div className="rule" aria-hidden="true" />}
         <p className="hero-tagline">{h("taglineFirst")}<br />{h("taglineSecond")}</p>
@@ -87,7 +87,7 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
     </div> : <div className="split"><div className="art-side"><div className="home-cover-media">
         {discover(hero, "hero-art")}
         <div className="art-caption"><span><strong>{hero.title}</strong><br /><span className="meta">{getArtworkYear(hero.date)} · {formatArtworkTechnique(hero, locale)}</span></span>
-            <CoverArtworkBadge artworkId={hero.id} /></div>
+            <CoverArtworkBadge artwork={hero} /></div>
     </div></div><div className="editorial-side">{coverIntroduction}</div></div>;
     if (chapter === "featured" && featured) body = <div className="split"><div className="art-side">
         <HomeBookImage className="featured-artwork-media" onOpen={() => onOpen(featured)} label={a("viewNamed", { title: featured.title })}>
@@ -114,14 +114,14 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
                 <BookImage image={collectionImage} sizes="100vw" active={active} />
                 <span className="collection-rollover"><strong>{series.title}</strong><span>{s("workCount", { count: artworkCount })} · {h("exploreCollection")} ↗</span></span>
             </Link><div className="collection-blend" aria-hidden="true" />
-            <div className="collection-editorial"><div className="badge" data-badged><FeaturedSeriesBadge seriesId={series.id} /></div>
+            <div className="collection-editorial"><div className="badge" data-badged><FeaturedSeriesBadge series={series} /></div>
                 <h2>{series.title}</h2>{series.description && <p className="collection-description">{series.description}</p>}
                 <div className="collection-facts"><span>{s("workCount", { count: artworkCount })}</span>{years && <span>{years}</span>}<span>{formatSeriesStatus(series.artisticStatus, locale)}</span></div>
                 <Cta href={href}>{h("exploreCollection")}</Cta>
             </div></div> : <div className="split" lang={seriesTextLocale(series, locale)}>
             <div className="portrait-collection-art"><Link className="portrait-collection-image" href={href} prefetch={false} aria-label={s("exploreNamed", { title: series.title })}>
                 <BookImage image={collectionImage} active={active} /></Link></div>
-            <div className="editorial-side"><div className="badge" data-badged><FeaturedSeriesBadge seriesId={series.id} /></div><h2>{series.title}</h2>
+            <div className="editorial-side"><div className="badge" data-badged><FeaturedSeriesBadge series={series} /></div><h2>{series.title}</h2>
                 {series.statement && <p className="collection-statement">{series.statement}</p>}<div className="rule" aria-hidden="true" />
                 {series.description && <p className="body-copy">{series.description}</p>}<p className="collection-mark">{formatSeriesStatus(series.artisticStatus, locale)}</p>
                 <Cta href={href}>{h("exploreCollection")}</Cta>

@@ -4,21 +4,16 @@ import { useLocale, useTranslations } from "next-intl";
 import { localizeArtwork } from "@/i18n/artworkCopy";
 import { formatSeriesStatus, localizeArtworkSeries, seriesTextLocale } from "@/i18n/seriesCopy";
 
-import {
-  getFeaturedCollection,
-} from "@/domains/home/services";
+import type { FeaturedCollection } from "../../services/types";
 
 import { Container } from "@/shared/layout";
 import { LinkButton } from "@/shared/ui/button";
 
 import CollectionMotion from "./CollectionMotion";
 
-export default function Collection() {
+export default function Collection({ featuredCollection }: { featuredCollection: FeaturedCollection | undefined }) {
   const locale = useLocale();
   const t = useTranslations("Series");
-
-  const featuredCollection =
-    getFeaturedCollection();
 
   if (!featuredCollection) {
     return null;
@@ -151,7 +146,7 @@ export default function Collection() {
                   text-brand-gold
                 "
               >
-                <FeaturedSeriesBadge seriesId={series.id} />
+                <FeaturedSeriesBadge series={series} />
               </p>
 
               <h2

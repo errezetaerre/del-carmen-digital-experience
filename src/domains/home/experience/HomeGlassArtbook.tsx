@@ -19,6 +19,7 @@ import ArtworkExperienceToolbar from "@/shared/ui/artwork/ArtworkExperienceToolb
 import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
 import useDialogFocus from "@/shared/hooks/useDialogFocus";
 import { getHomeBookContent, visibleHomeBookImages } from "./homeBookContent";
+import type { HomeCatalogue } from "../model/homeCatalogue";
 import { homeBookChapter, homeBookLayout, selectHomeBookChapter, subscribeHomeBookChapter, subscribeHomeBookLayout } from "./homeBookLocation";
 import HomeBookPage from "./HomeBookPage";
 import { homeBookPages, journalPageSlug, resolveHomeBookPage, type HomeBookPageId } from "./homeBookChapters";
@@ -28,9 +29,9 @@ import styles from "./HomeGlassArtbook.module.css";
 const serverChapter = () => "cover" as const, serverLayout = () => "portrait" as const;
 let lessonLearned = false;
 
-export default function HomeGlassArtbook({ onExit }: { onExit(): void }) {
+export default function HomeGlassArtbook({ onExit, catalogue }: { onExit(): void; catalogue: HomeCatalogue }) {
     const locale = useLocale() as SiteLocale, g = useTranslations("Glass"), a = useTranslations("Artwork"), router = useRouter();
-    const copy = homeBookCopy(locale), content = useMemo(() => getHomeBookContent(locale), [locale]);
+    const copy = homeBookCopy(locale), content = useMemo(() => getHomeBookContent(locale, catalogue), [locale, catalogue]);
     const chapter = useSyncExternalStore(subscribeHomeBookChapter, homeBookChapter, serverChapter);
     const layout = useSyncExternalStore(subscribeHomeBookLayout, homeBookLayout, serverLayout);
     const pages = useMemo(() => homeBookPages(content.chapters, content.journal, layout === "spread"), [content, layout]);

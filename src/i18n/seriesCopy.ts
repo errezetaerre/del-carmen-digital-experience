@@ -1,6 +1,7 @@
 import type { ArtworkSeries, ArtworkSeriesStatus } from "@/domains/artworks/series/types";
 import type { SiteLocale } from "./config";
 import { getSiteMessages } from "./messages";
+import { applySeriesEditorial, seriesEditorial } from "./catalogueEditorial";
 import translations from "./content/series.es.json";
 
 interface SeriesTranslation {
@@ -16,13 +17,19 @@ function getCopy(id: string): SeriesTranslation | undefined {
     return Object.prototype.hasOwnProperty.call(spanishSeriesCopy, id) ? spanishSeriesCopy[id] : undefined;
 }
 
-export function seriesTextLocale(series: ArtworkSeries, locale: SiteLocale): SiteLocale {
+export function seriesTextLocale(series: ArtworkSeries, locale: SiteLocale): string {
+    const resolved = seriesEditorial(series, locale);
+    if (resolved) return resolved.textLocale;
     return locale === "es" && getCopy(series.id) ? "es" : "en";
 }
 
 // Only editorial text/alt changes: the canonical series name, layout, media,
 // membership, years and both lifecycle states continue to come from ArtworkSeries.
+// Read DTOs resolve copy from their own snapshot; plain legacy records retain
+// the existing file adapter until the remaining consumers are migrated.
 export function localizeArtworkSeries(series: ArtworkSeries, locale: SiteLocale): ArtworkSeries {
+    const resolved = seriesEditorial(series, locale);
+    if (resolved) return applySeriesEditorial(series, resolved.copy);
     const copy = locale === "es" ? getCopy(series.id) : undefined;
     if (!copy) return series;
     const featured = series.images?.featured;

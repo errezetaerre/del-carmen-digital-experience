@@ -90,7 +90,11 @@ const pageDependencies = {
     "@/domains/artworks/presentation/getArtworkMetadata": { getArtworkMetadata: () => ({}) },
     "@/domains/artworks/model/artworkDate": load("src/domains/artworks/model/artworkDate.ts"),
     "next/navigation": { notFound: () => { throw new Error("Unexpected 404"); } },
+    "@/server/catalogue/staticParams": load("src/server/catalogue/staticParams.ts"),
     "@/domains/artworks": { ...services, ...seriesServices },
+    "@/server/catalogue/detailSource": { getArtworkDetailCatalogue: async () => ({
+        artworks, ...services, ...seriesServices,
+    }) },
     "@/domains/artworks/components/ArtworkDetailKineticExperience": defaultExport("kinetic-experience"),
     "@/domains/artworks/components/ArtworkDetailScene": defaultExport("artwork-scene"),
     "@/domains/artworks/presentation/getArtworkPresentation": load("src/domains/artworks/presentation/getArtworkPresentation.ts"),
@@ -115,6 +119,10 @@ test("detail year context preserves mixed-precision date ordering in Standard ne
             getArtworks: () => records,
             getArtworkBySlug: slug => records.find(work => work.slug === slug),
         },
+        "@/server/catalogue/detailSource": { getArtworkDetailCatalogue: async () => ({
+            artworks: records, ...seriesServices,
+            getArtworkBySlug: slug => records.find(work => work.slug === slug),
+        }) },
     });
     const entry = await datedPage({
         params: Promise.resolve({ locale: "en", slug: "late-day" }),

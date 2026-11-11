@@ -7,10 +7,11 @@ import JournalPreview from "./sections/journal";
 import Invitation from "./sections/invitation";
 import Footer from "@/shared/layout/footer";
 import HomeExperience from "./experience/HomeExperience";
+import type { HomeCatalogue } from "./model/homeCatalogue";
 
-export default function Home() {
+export default function Home({ catalogue }: { catalogue: HomeCatalogue }) {
   return (
-    <HomeExperience><main
+    <HomeExperience catalogue={catalogue}><main
       className="
         relative
         w-full
@@ -18,11 +19,11 @@ export default function Home() {
         overflow-x-clip
       "
     >
-      <Hero />
-      <FeaturedArtwork />
+      <Hero artwork={catalogue.hero} />
+      <FeaturedArtwork artwork={catalogue.featured} />
       <ArtistStatement />
-      <Collection />
-      <SelectedWorks />
+      <Collection featuredCollection={catalogue.collection} />
+      <SelectedWorks artworks={catalogue.selected} />
       <JournalPreview />
       <Invitation />
       <Footer />

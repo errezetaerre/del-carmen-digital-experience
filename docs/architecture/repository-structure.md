@@ -757,3 +757,105 @@ DOC-MAIL-OPS consolidates owner-confirmed DNS/Resend/local delivery, production 
 - `src/shared/ui/artwork/useArtworkThumbnailPan.ts`: small client binding keyed to the actual media source, without restarting on caption rollover state.
 - `CollectionArtwork` and `CollectionPreviewArtwork`: opt their completed thumbnail image into the shared controller with a stable root reference and a data marker. Existing data, Image optimization, cards, routes and book engines retain their owners.
 - `tests/artwork-thumbnail-pan.test.mjs`: horizontal/vertical crop, no-crop fallback, hover/focus/touch activation, offscreen/background/turning-page pause, reduced motion, resize and resource cleanup.
+
+
+## Catalogue PostgreSQL foundation ownership — 2026-11-09
+
+- `database/migrations/0001_catalogue.sql`: versioned private catalogue schema and constraints; no mail/Redis tables.
+- `src/server/catalogue/snapshot.ts`: aggregate of existing domain types, source validation and locale-neutral copy helpers. `server-only` excludes it from client imports.
+- `src/server/catalogue/rows.ts`: explicit relational mapping and hydration, including optional media/facts, translation alts and the two actual ordered relationships.
+- `src/server/catalogue/operations.ts`: parameterized import/read operations, migration checksums, transactional equivalence and schema-column/version checks.
+- `src/server/catalogue/reader.ts`: server-only typed repository, database-backed editorial projection, detached domain results and bounded instance cache with concurrent-load coalescing and an optional pre-cache snapshot validator.
+- `src/server/catalogue/fileSource.ts`: single current-file snapshot mapping shared by operator tools and the temporary staged-migration parity gate.
+- `src/server/catalogue/postgresClient.mjs` / `.d.mts`: shared lazy one-connection driver, typed interface, verified TLS and preserved endpoint/write/read guards. Only server/tool entry points consume it.
+- `src/server/catalogue/schemaVersion.ts`: reviewed migration identity/checksum manifest, checked against actual SQL files by tests; no runtime DDL.
+- `src/server/catalogue/archiveReader.ts`: read-only schema-and-data gate for the first page, requiring complete file/database parity while other consumers remain file-backed.
+- `src/server/catalogue/archiveRuntime.ts`: lazy module-scoped archive reader/pool and redacted successful-refresh evidence.
+- `src/server/catalogue/archiveSource.ts`: explicit local/Preview source choice, mandatory files for Vercel Production, request-time database boundary and sanitized failures without fallback.
+- `src/app/[locale]/artworks/page.tsx`: awaits the selected archive data inside its existing Suspense boundary; the client archive, CSS and detail links retain their previous owners.
+- `scripts/lib/catalogueSource.mjs`: local TypeScript loader for the shared current-file mapping.
+- `scripts/lib/catalogueClient.mjs`: compatibility re-export of the server-owned driver for existing operator/test imports.
+- `scripts/catalogue-db.mjs`: db:check/migrate/seed/verify/read operator commands, redacted diagnostics and no env-file rewrite. db:read compares database repository projections against the actual local EN/ES functions and refuses Vercel Production.
+- `tests/catalogue-database.test.mjs`: disposable actual PostgreSQL/PGlite migrations, constraints, complete catalogue/localization/filter equivalence and failure/recovery cases.
+- `tests/catalogue-driver.test.mjs`: actual Postgres.js wire-protocol import/read and JSONB regression against a disposable loopback database.
+- `tests/catalogue-reader.test.mjs`: source/translation equivalence, publication boundaries, mutation isolation, cache/failure behavior and read-environment guards.
+- `tests/catalogue-archive.test.mjs`: migration-manifest checks, source/Production policy, request/prerender boundaries, sanitized failures, lazy runtime evidence and actual EN/ES page-to-gallery data flow. The driver regression also checks real schema/data divergence and recovery.
+- `docs/architecture/catalogue-database.md`: canonical physical dictionary, operational steps and activation gates; decision history stays in DAT-02 in the existing roadmap.
+
+Postgres.js 4.1.0 is the SQL client; PGlite 0.5.16 is development-only SQL verification. Existing Next/runtime versions remain pinned. No ORM or second domain model is introduced. The archive is the first opt-in page; all other services, Production and database-free builds preserve their previous behavior. No browser query, env-file rewrite or automated migration/seed is introduced.
+
+The development-only TypeScript-ESLint → minimatch edge is narrowly overridden to 11.0.1 to resolve the seven moderate advisories. No global minimatch replacement or application dependency upgrade is included. Real development import/equivalence was confirmed by the owner on 2026-11-10; the canonical dictionary records its counts/fingerprint and the pending public-integration gates.
+
+## Artwork detail persistence boundary — Stage 2 — 2026-11-10
+
+- src/server/catalogue/detailCatalogue.ts: typed detached detail projection and transitional Series-order compatibility using unchanged IDs; published Series lookups and membership from the supplied records, no persisted ordering/membership duplication.
+- src/server/catalogue/detailSource.ts: the existing private source policy for detail, request-time reads, shared reader scope and sanitized failure; no credential access in the page or browser.
+- src/server/catalogue/archiveRuntime.ts: the existing lazy reader/pool/cache, now shared by archive/detail within the same server instance, with fixed redacted success messages per scope.
+- src/app/[locale]/artworks/[slug]/page.tsx: consumes the detail data source for scene/book input, context and SEO; static params remain file-backed and the approved rendering/navigation code retains its owner.
+- tests/catalogue-detail.test.mjs: detail-source/Production/prerender/error gates, supplied-record/Series-order projection, real EN/ES page and metadata parity, context/neighbour/mode contracts and missing/static-param behavior.
+- tests/artwork-archive-entry.test.mjs: retains its existing behavioural assertions with the new server boundary supplied by the fixture; the actual-driver regression also exercises persisted detail projection.
+
+No domain model/data, image/viewer/style, runtime dependency or applied migration is changed. Artwork detail joins the gallery as an explicitly enabled local/Preview consumer; Home, Collections and Series pages remain file-backed. The image sizing warning observed by the owner is tracked in DAT-02 without a visual change in this stage.
+
+## Collections/Series persistence boundary — Stage 3 — 2026-11-10
+
+- src/domains/collections/services/collectionEntries.ts: the single existing Collections year-start ordering/entry rule and CollectionEntry type; getCollections keeps compatible exports and synchronous selection.
+- src/server/catalogue/seriesCatalogue.ts: detached published-Series view composed with the detail projection; preserves separate Series-cycle/member and Collections sequences under the parity gate.
+- src/server/catalogue/seriesSource.ts: scoped Collections/Series source selection, request boundary, shared instance reader and sanitized failures; no page/browser credential access.
+- src/server/catalogue/archiveRuntime.ts: the same lazy reader/cache/pool, with fixed redacted success messages for archive, detail, Collections and Series.
+- src/app/[locale]/collections/page.tsx and src/app/[locale]/series/[slug]/page.tsx: existing presentation and metadata receive the selected catalogue; static Series params remain file-backed. All existing visual components keep their owners.
+- tests/catalogue-series.test.mjs: order/identity/publication/source guards and actual EN/ES page/metadata/mode/query contracts; real-driver regression covers persisted Series/Collections projection.
+
+The same private opt-in now covers these four route families in local/Preview. Production stays file-backed, Home remains pending, and the model, assets, styles, translations, applied migration and dependency versions are unchanged.
+
+
+## DAT-02 — Home read boundary v1.6 — 2026-11-10
+
+- src/domains/home/model/homeCatalogue.ts: public serializable Home selection DTO containing only the chosen records; no server methods or connection data.
+- src/server/catalogue/homeCatalogue.ts: detached selection from supplied records and curated IDs, reusing approved Series-member order and deriving counts.
+- src/server/catalogue/homeSource.ts: the existing local/Preview opt-in, request boundary, shared instance reader and sanitized failures; mandatory files for Vercel Production.
+- src/app/[locale]/page.tsx and domains/home/index.tsx: Home/SEO server boundary and props to the existing Standard sections and lazy Home experience.
+- src/domains/home/experience/homeBookContent.ts: explicit HomeCatalogue input for the approved EN/ES book composition; no separate static curation lookup in the client book.
+- tests/catalogue-home.test.mjs: current file-service and supplied-record parity, curation/member order, EN/ES chapters/media, source/error/Production guards and actual page/SEO/composition data. The real protocol and previous Home gesture regressions are retained.
+
+The shared runtime adds only the fixed Home scope; no new query client, schema, dependency, UI service or persistence abstraction. CSS, image files/references, book engines, canonical records and translation dictionaries retain their owners. The full-equivalence migration gate still protects independent static consumers.
+
+
+## DAT-02 — Home bootstrap lifecycle v1.7 — 2026-11-10
+
+HomeExperience remains the owner of Home's startup markup and Standard/Glass preference presentation. Stable server/initial-hydration snapshots include the existing homeBookBootstrap string only during initial rendering; client remounts do not insert executable script elements. No new folder, layout provider, route, dependency, persistence abstraction or global state is introduced. homeBookBootstrap, approved styles/materials, catalogue sources and translations retain their existing owners.
+
+
+## DAT-02 — catalogue editorial read DTOs v1.8 — 2026-11-10
+
+- src/i18n/catalogueEditorial.ts: public typed Artwork/Series read DTOs and pure editorial copy extraction/application. Only text and media alternatives are carried; no connection, query, UI styles, persistent model field or schema change.
+- src/server/catalogue/reader.ts: unchanged canonical read API plus detached getArtworkViews/getSeriesViews for requested UI locales, derived from the same snapshot/localization rules.
+- src/server/catalogue/fileReader.ts: file-mode adapter to that existing repository; no provider, private-variable, migration or write setup.
+- src/server/catalogue/archiveSource.ts, detailSource.ts, seriesSource.ts and homeSource.ts: existing source/Production/request gates now supply public editorial read DTOs.
+- src/i18n/artworkCopy.ts and seriesCopy.ts: use supplied read copy without replacing it with static dictionaries; compatible plain-record adapters and UI-label formatters remain.
+- tests/catalogue-editorial.test.mjs: EN/ES equality, supplied DB edits, correct language fallback/reversal, additional locale selection, JSON/media semantics, mutation isolation, canonical-import separation and projection continuity. Source/runtime/protocol/cache tests retain their scopes and extend editorial evidence.
+
+No approved component, CSS file, book engine, canonical data/type, translation dictionary, applied SQL, image or dependency version changes. The requested /artworks Glass prototype is a backlog entry only in the existing implementation roadmap; data unification remains the current priority.
+
+
+### DAT-02 stage 6 — curatorial read presentation and sitemap (v1.9)
+
+- domains/artworks/presentation/cataloguePresentation.ts defines/reads only public derived role/recognition metadata; it does not change Artwork, ArtworkSeries or SQL.
+- server/catalogue/reader.ts attaches that snapshot-derived metadata to the existing read DTOs; it groups recognition records once and adds no SQL calls.
+- getArtworkPresentation.ts consumes supplied roles/history. The existing EN/ES recognition-event adapter applies only to the same known original event. Plain-record/string compatibility remains explicit.
+- FeaturedSeriesBadge/CoverArtworkBadge and their Home/Collections/Series callers pass the supplied domain record rather than discarding its context into an ID. The Series arrival effect uses that same record for eligibility. DOM/styles/material/motion are not redesigned.
+- server/catalogue/sitemapSource.ts projects deterministic artwork/published-Series paths and uses the same source/Production/request/error guards and instance reader. app/sitemap.ts owns the unchanged public-domain/language/legal gating and fixed/Journal paths.
+- tests/catalogue-presentation.test.mjs verifies all current labels/roles, supplied curation/recognitions, UI badge SSR, filters and serialized/immutable/import-safe outputs. tests/catalogue-sitemap.test.mjs verifies path equivalence, row-order independence, publication, noindex/lazy-read and sanitized request boundaries. The real driver and site-origin tests cover the integration/async route contract.
+
+Canonical data, migrations, image assets/dimensions, UI dictionaries, layouts, core book engines and lockfile are unchanged. Legacy seed/equivalence/reference services remain deliberate migration boundaries; no independently editable Neon/Production activation is enabled by these new consumers.
+
+
+### DAT-02 stage 7 — navigation and static/read boundaries (v1.10)
+
+- domains/artworks/presentation/seriesNavigationOrder.ts owns only the existing contextual position preferences and stable future-record tail order. It stores no entities or membership. /artworks sorting stays in artworkArchive.ts.
+- server/catalogue/detailCatalogue.ts, seriesCatalogue.ts and homeCatalogue.ts project supplied records without static entity reference arrays/count gates. Source modules obtain all data through the same repository; Series membership is the supplied FK, not an ID preference list.
+- server/catalogue/staticParams.ts preserves default/enforced-Production file enumeration and returns [] for PostgreSQL opt-in without connecting or loading file records. Detail/Series pages use that build boundary and retain request-time lookup/notFound.
+- server/catalogue/verifyReadModel.ts supplies the detached public-data consistency verification used by the existing scripts/catalogue-db.mjs read command. It executes no SQL/provider/environment operations itself; the caller supplies an application-verified repository from one read-only snapshot.
+- tests/catalogue-navigation.test.mjs covers all current editorial positions, row-order invariance, independent archive sorts, future records/publication/membership, static source gates and corrupt read-model refusal. Page, driver, reader and existing regressions verify integration without a live provider.
+
+No canonical type/data, SQL migration/table, CSS, image, motion/runtime, dictionary or lockfile is added/changed. Private administration/uploads and /artworks Glass remain later roadmap items. Seed/parity/file-default and legacy plain-record adapters stay explicit; their existence does not make them active PostgreSQL fact sources.

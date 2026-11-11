@@ -1,19 +1,14 @@
 import Link from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import {
-    getSelectedWorks,
-} from "@/domains/home/services";
+import type { Artwork } from "@/domains/artworks/model/artwork";
 
 import { Container } from "@/shared/layout";
 
 import CollectionGallery from "../collection/CollectionGallery";
 import SelectedWorksMotion from "./SelectedWorksMotion";
 
-export default function SelectedWorks() {
+export default function SelectedWorks({ artworks }: { artworks: Artwork[] }) {
     const t = useTranslations("Home");
-    const artworks =
-        getSelectedWorks();
-
     if (!artworks.length) {
         return null;
     }

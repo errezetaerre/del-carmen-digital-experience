@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { ArtworkImage } from "@/shared/ui/artwork";
-import { getHeroArtwork } from "@/domains/home/services";
+import type { Artwork } from "@/domains/artworks/model/artwork";
 
 import { Button } from "@/shared/ui/button";
 
@@ -15,15 +15,16 @@ type HeroArtworkMode =
   | "desktop";
 
 interface HeroArtworkProps {
+  artwork: Artwork | undefined;
   mode?: HeroArtworkMode;
 }
 
 export default function HeroArtwork({
+  artwork: sourceArtwork,
   mode = "desktop",
 }: HeroArtworkProps) {
   const locale = useLocale();
   const t = useTranslations("Home");
-  const sourceArtwork = getHeroArtwork();
   const artwork = sourceArtwork ? localizeArtwork(sourceArtwork, locale) : undefined;
 
   if (!artwork) {

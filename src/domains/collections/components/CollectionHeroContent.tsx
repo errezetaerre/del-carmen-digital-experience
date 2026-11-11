@@ -44,7 +44,7 @@ export default function CollectionHeroContent({
                     text-brand-gold
                 "
             >
-                {isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : t("label")}
+                {isFeaturedArtworkSeries(series) ? <FeaturedSeriesBadge series={series} /> : t("label")}
             </p>
 
             <h2

@@ -105,7 +105,7 @@ export default function SeriesPageSurface({ entry, active, wide, openingId, onOp
                     </picture>
                 </div>}
                 <header className={styles.intro}>
-                    <p className={styles.eyebrow}>{isFeaturedArtworkSeries(series.id) ? <FeaturedSeriesBadge seriesId={series.id} /> : t("label")}</p>
+                    <p className={styles.eyebrow}>{isFeaturedArtworkSeries(series) ? <FeaturedSeriesBadge series={series} /> : t("label")}</p>
                     <h1 className={styles.collectionTitle}>{series.title}</h1>
                     <div className={styles.workStatus}><span>{t("workCount", { count: artworks.length })}</span><i>·</i><span>{formatSeriesStatus(series.artisticStatus, locale)}</span></div>
                 </header>

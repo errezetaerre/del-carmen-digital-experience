@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { activateLocale } from "@/i18n/server";
 import { getSiteMessages } from "@/i18n/messages";
 import { createPageMetadata } from "@/shared/lib/metadata";
-import { getArtworks } from "@/domains/artworks";
+import { getArtworkArchiveArtworks } from "@/server/catalogue/archiveSource";
 import { Container } from "@/shared/layout";
 import Footer from "@/shared/layout/footer";
 import ArtworkArchive from "./ArtworkArchive";
@@ -12,6 +12,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Archive;
     return createPageMetadata({ locale, pathname: "/artworks", title: copy.metadataTitle, description: copy.metadataDescription });
+}
+
+async function ArchiveCatalogue() {
+    return <ArtworkArchive artworks={await getArtworkArchiveArtworks()} />;
 }
 
 export default async function ArtworksPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -27,7 +31,7 @@ export default async function ArtworksPage({ params }: { params: Promise<{ local
                     </div>
                     <p className={styles.description}>{copy.description}</p>
                 </section>
-                <Suspense fallback={<div className="min-h-[40vh]" />}><ArtworkArchive artworks={getArtworks()} /></Suspense>
+                <Suspense fallback={<div className="min-h-[40vh]" />}><ArchiveCatalogue /></Suspense>
             </Container>
         </main>
         <Footer />

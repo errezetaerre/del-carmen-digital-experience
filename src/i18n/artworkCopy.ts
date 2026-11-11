@@ -1,6 +1,7 @@
 import type { Artwork } from "@/domains/artworks/model/artwork";
 import type { SiteLocale } from "./config";
 import { getSiteMessages } from "./messages";
+import { applyArtworkEditorial, artworkEditorial } from "./catalogueEditorial";
 import spanishArtworkCopyData from "./content/artworks.es.json";
 
 // Editorial translations are keyed to canonical IDs. Facts, titles and asset paths
@@ -13,11 +14,17 @@ interface ArtworkTranslation {
 
 const spanishArtworkCopy: Readonly<Record<string, ArtworkTranslation>> = spanishArtworkCopyData;
 
-export function artworkTextLocale(artwork: Artwork, locale: SiteLocale): SiteLocale {
+export function artworkTextLocale(artwork: Artwork, locale: SiteLocale): string {
+    const resolved = artworkEditorial(artwork, locale);
+    if (resolved) return resolved.textLocale;
     return locale === "es" && spanishArtworkCopy[artwork.id] ? "es" : "en";
 }
 
+// Read DTOs resolve copy from their own snapshot; plain legacy records retain
+// the existing file adapter until the remaining consumers are migrated.
 export function localizeArtwork(artwork: Artwork, locale: SiteLocale): Artwork {
+    const resolved = artworkEditorial(artwork, locale);
+    if (resolved) return applyArtworkEditorial(artwork, resolved.copy);
     const copy = locale === "es" ? spanishArtworkCopy[artwork.id] : undefined;
     if (!copy) return artwork;
     const images = { ...artwork.images };

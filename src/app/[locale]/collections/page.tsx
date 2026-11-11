@@ -2,6 +2,7 @@ import { activateLocale } from "@/i18n/server";
 import { getSiteMessages } from "@/i18n/messages";
 import { localizeArtworkSeries } from "@/i18n/seriesCopy";
 import { createPageMetadata } from "@/shared/lib/metadata";
+import { getArtworkSeriesCatalogue } from "@/server/catalogue/seriesSource";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const locale = await activateLocale(params);
@@ -12,7 +13,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 import {
     CollectionHero,
     CollectionsIntro,
-    getCollections,
 } from "@/domains/collections";
 
 import Footer from "@/shared/layout/footer";
@@ -20,7 +20,7 @@ import Footer from "@/shared/layout/footer";
 export default async function CollectionsPage({ params }: { params: Promise<{ locale: string }> }) {
   const locale = await activateLocale(params);
     const collections =
-        getCollections();
+        (await getArtworkSeriesCatalogue("collections")).getCollections();
 
     return (
         <main

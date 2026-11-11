@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { getFeaturedWorkArtwork } from "@/domains/home/services";
+import type { Artwork } from "@/domains/artworks/model/artwork";
 import { Container } from "@/shared/layout";
 import {
   ArtworkFrame,
@@ -21,12 +21,11 @@ import { LinkButton } from "@/shared/ui/button";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function FeaturedArtwork() {
+export default function FeaturedArtwork({ artwork: sourceArtwork }: { artwork: Artwork | undefined }) {
   const locale = useLocale();
   const t = useTranslations("Home");
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const sourceArtwork = getFeaturedWorkArtwork();
   const artwork = sourceArtwork ? localizeArtwork(sourceArtwork, locale) : undefined;
 
   useLayoutEffect(() => {

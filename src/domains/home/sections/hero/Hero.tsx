@@ -1,4 +1,5 @@
 import HeroArtwork from "./HeroArtwork";
+import type { Artwork } from "@/domains/artworks/model/artwork";
 import HeroBackground from "./HeroBackground";
 import HeroBrand from "./HeroBrand";
 import HeroAtmosphere from "./HeroAtmosphere";
@@ -6,7 +7,7 @@ import HeroLighting from "./HeroLighting";
 
 import { Container } from "@/shared/layout";
 
-export default function Hero() {
+export default function Hero({ artwork }: { artwork: Artwork | undefined }) {
   return (
     <section
       className="
@@ -48,7 +49,7 @@ export default function Hero() {
           [@media(orientation:landscape)_and_(max-height:600px)]:!hidden
         "
       >
-        <HeroArtwork mode="mobile" />
+        <HeroArtwork artwork={artwork} mode="mobile" />
       </div>
 
       {/* =====================================================
@@ -71,7 +72,7 @@ export default function Hero() {
           [@media(orientation:landscape)_and_(max-height:600px)]:!block
         "
       >
-        <HeroArtwork mode="desktop" />
+        <HeroArtwork artwork={artwork} mode="desktop" />
       </div>
 
       {/* =====================================================
@@ -101,7 +102,7 @@ export default function Hero() {
           {/* Brand */}
 
           <div className="pt-24">
-            <HeroBrand />
+            <HeroBrand artwork={artwork} />
           </div>
 
           {/* Artwork info + CTA */}
@@ -115,7 +116,7 @@ export default function Hero() {
               z-30
             "
           >
-            <HeroArtwork mode="mobileInfo" />
+            <HeroArtwork artwork={artwork} mode="mobileInfo" />
           </div>
         </Container>
       </div>
@@ -171,7 +172,7 @@ export default function Hero() {
               [@media(orientation:landscape)_and_(max-height:600px)]:!translate-y-[8svh]
             "
           >
-            <HeroBrand />
+            <HeroBrand artwork={artwork} />
           </div>
 
           {/* Structural empty column.
