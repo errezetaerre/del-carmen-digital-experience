@@ -56,7 +56,7 @@ export default function ArtworkInfo({
           [@media(orientation:landscape)_and_(max-height:600px)]:!py-4
         "
       >
-        <CoverArtworkBadge artworkId={artwork.id} />
+        <CoverArtworkBadge artwork={artwork} />
 
         {/* ===================================================
             MOBILE PORTRAIT

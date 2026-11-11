@@ -42,6 +42,12 @@ function projectLoader(window, runtime = {}, external = {}) {
     }
     return relative => load(path.join(project, relative));
 }
+// Same file catalogue supplied by the server, now explicit for both views.
+function homeCatalogue(load) {
+    const services = load("src/domains/home/services/index.ts");
+    return { hero: services.getHeroArtwork(), featured: services.getFeaturedWorkArtwork(),
+        collection: services.getFeaturedCollection(), selected: services.getSelectedWorks() };
+}
 function browser(href) {
     const listeners = new Map(), changes = [];
     return {
@@ -58,7 +64,7 @@ test("Home content follows the real curation, creation state and public Journal"
     const load = projectLoader();
     const { getHomeBookContent } = load("src/domains/home/experience/homeBookContent.ts");
     const { homeCuration } = load("src/domains/home/curation/homeCuration.ts");
-    const content = getHomeBookContent("en");
+    const content = getHomeBookContent("en", homeCatalogue(load));
     assert.equal(content.hero.id, homeCuration.hero.artworkId);
     assert.equal(content.featured.id, homeCuration.featuredWork.artworkId);
     assert.equal(content.collection.series.id, homeCuration.featuredCollection.seriesId);
@@ -72,7 +78,7 @@ test("Journal has a title spread and a turn per published entry only in landscap
     const { getHomeBookContent } = load("src/domains/home/experience/homeBookContent.ts");
     const { homeBookPages, resolveHomeBookPage } = load("src/domains/home/experience/homeBookChapters.ts");
     for (const locale of ["en", "es"]) {
-        const content = getHomeBookContent(locale);
+        const content = getHomeBookContent(locale, homeCatalogue(load));
         const portrait = homeBookPages(content.chapters, content.journal, false);
         const spread = Array.from(homeBookPages(content.chapters, content.journal, true));
         assert.deepEqual(Array.from(portrait), Array.from(content.chapters));
@@ -92,7 +98,7 @@ test("Journal has a title spread and a turn per published entry only in landscap
 test("The book panorama and the original portrait artwork use independent assets", () => {
     const load = projectLoader();
     const { getHomeBookContent } = load("src/domains/home/experience/homeBookContent.ts");
-    const content = getHomeBookContent("en");
+    const content = getHomeBookContent("en", homeCatalogue(load));
     assert.equal(content.collection.landscapeImage.src, "/images/series/yasemi_I_hero_landscape.webp");
     assert.equal(content.collection.portraitImage.src, content.collection.coverArtwork.images.collection.src);
     assert.notEqual(content.collection.landscapeImage.src, content.collection.portraitImage.src);
@@ -102,7 +108,7 @@ test("A Journal entry URL survives language changes and resolves to the same rea
     const window = browser("https://example.invalid/es?campaign=studio&experience=glass"); window.history.browser = window;
     const load = projectLoader(window);
     const location = load("src/domains/home/experience/homeBookLocation.ts");
-    const content = load("src/domains/home/experience/homeBookContent.ts").getHomeBookContent("es");
+    const content = load("src/domains/home/experience/homeBookContent.ts").getHomeBookContent("es", homeCatalogue(load));
     const key = `journal:${content.journal[0].slug}`;
     location.selectHomeBookChapter(key);
     assert.equal(location.homeBookChapter(), key);
@@ -295,8 +301,9 @@ test("Dragging an editorial link cannot accidentally open it, and cleanup remove
     stop(); assert.equal(frame.listenerCount + view.listenerCount, 0);
 });
 test("Spanish changes editorial copy while keeping work identity and asset paths", () => {
-    const { getHomeBookContent } = projectLoader()("src/domains/home/experience/homeBookContent.ts");
-    const english = getHomeBookContent("en"), spanish = getHomeBookContent("es");
+    const load = projectLoader();
+    const { getHomeBookContent } = load("src/domains/home/experience/homeBookContent.ts");
+    const english = getHomeBookContent("en", homeCatalogue(load)), spanish = getHomeBookContent("es", homeCatalogue(load));
     assert.equal(spanish.hero.id, english.hero.id);
     assert.equal(spanish.hero.images.primary.src, english.hero.images.primary.src);
     assert.notEqual(spanish.hero.description, english.hero.description);

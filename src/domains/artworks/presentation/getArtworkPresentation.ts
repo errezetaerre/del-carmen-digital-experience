@@ -4,6 +4,8 @@ import { artworkRecognitions } from "../data/artworkRecognitions";
 import { homeCuration } from "@/domains/home/curation/homeCuration";
 import type { SiteLocale } from "@/i18n/config";
 import { getSiteMessages } from "@/i18n/messages";
+import type { ArtworkSeries } from "../series/types";
+import { catalogueArtworkPresentation, catalogueSeriesPresentation } from "./cataloguePresentation";
 
 export interface ArtworkBadge {
     id: string;
@@ -24,15 +26,19 @@ export function isArtworkAvailable(artwork: Artwork): boolean {
 }
 
 export function isFeaturedArtwork(artwork: Artwork): boolean {
-    return homeCuration.featuredWork.artworkId === artwork.id;
+    return catalogueArtworkPresentation(artwork)?.featured ?? homeCuration.featuredWork.artworkId === artwork.id;
 }
 
 export function isCoverArtwork(artwork: Pick<Artwork, "id">): boolean {
-    return homeCuration.hero.artworkId === artwork.id;
+    return catalogueArtworkPresentation(artwork)?.cover ?? homeCuration.hero.artworkId === artwork.id;
 }
 
-export function isFeaturedArtworkSeries(seriesId: string): boolean {
-    return homeCuration.featuredCollection.seriesId === seriesId;
+export function isFeaturedArtworkSeries(series: Pick<ArtworkSeries, "id"> | string): boolean {
+    if (typeof series !== "string") {
+        const context = catalogueSeriesPresentation(series);
+        if (context) return context.featured;
+    }
+    return homeCuration.featuredCollection.seriesId === (typeof series === "string" ? series : series.id);
 }
 
 // This derived presentation joins existing Home curation with artwork state/history.
@@ -61,10 +67,16 @@ export function getArtworkPresentation(artwork: Artwork, locale: SiteLocale = "e
         badges.push({ id: "featured", kind: "featured", label: copy.featured, detail: copy.curatorial });
     }
 
-    for (const recognition of artworkRecognitions) {
+    // Empty supplied history is authoritative too; never restore a file award.
+    for (const recognition of catalogueArtworkPresentation(artwork)?.recognitions ?? artworkRecognitions) {
         if (recognition.artworkId !== artwork.id) continue;
         const translatedEvents = getSiteMessages(locale).Recognitions;
-        const event = locale === "es" && Object.prototype.hasOwnProperty.call(translatedEvents, recognition.id)
+        const englishEvents = getSiteMessages("en").Recognitions;
+        // The existing event dictionary is a reviewed EN/ES display adapter,
+        // not authority for changed/new event names stored in the catalogue.
+        const knownEvent = Object.prototype.hasOwnProperty.call(englishEvents, recognition.id)
+            ? englishEvents[recognition.id as keyof typeof englishEvents].event : undefined;
+        const event = locale === "es" && recognition.event === knownEvent && Object.prototype.hasOwnProperty.call(translatedEvents, recognition.id)
             ? translatedEvents[recognition.id as keyof typeof translatedEvents].event
             : recognition.event;
 

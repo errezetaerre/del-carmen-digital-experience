@@ -95,7 +95,7 @@ export default function SeriesExperience({ entries, initialSeriesSlug, initialAr
             if (disposed || arrivalKey.current === key || reduced.matches || document.hidden || hasBlockingArtworkDialog(root!)) return;
             arrivalKey.current = key;
             // Record every visit, so leaving a featured series rearms its next arrival.
-            if (!isFeaturedArtworkSeries(current.series.id)) return;
+            if (!isFeaturedArtworkSeries(current.series)) return;
             arrivalFrame = requestAnimationFrame(() => {
                 if (disposed || hasBlockingArtworkDialog(root!) || document.hidden) return;
                 const featured = active!.querySelector<HTMLElement>("[data-featured-series]");

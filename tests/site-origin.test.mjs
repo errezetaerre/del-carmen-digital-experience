@@ -4,7 +4,7 @@ import { serverModules } from "../scripts/lib/loadProjectModule.mjs";
 
 const official = "https://rolandodelcarmen.com";
 
-function configured(values, check) {
+async function configured(values, check) {
     const keys = ["SITE_URL", "NODE_ENV", "VERCEL_ENV"];
     const original = Object.fromEntries(keys.map(key => [key, process.env[key]]));
     try {
@@ -12,7 +12,7 @@ function configured(values, check) {
             if (values[key] === undefined) delete process.env[key];
             else process.env[key] = values[key];
         }
-        return check(serverModules());
+        return await check(serverModules());
     } finally {
         for (const key of keys) {
             if (original[key] === undefined) delete process.env[key];
@@ -21,15 +21,15 @@ function configured(values, check) {
     }
 }
 
-test("production canonical, social URLs, robots and sitemap share the approved fallback", () => {
-    configured({ NODE_ENV: "production", VERCEL_ENV: "production" }, load => {
+test("production canonical, social URLs, robots and sitemap share the approved fallback", async () => {
+    await configured({ NODE_ENV: "production", VERCEL_ENV: "production" }, async load => {
         const metadata = load("src/shared/lib/metadata.ts").createPageMetadata({ pathname: "/contact?view=glass#form", locale: "en" });
         assert.equal(metadata.alternates.canonical, `${official}/contact`);
         assert.equal(metadata.openGraph.url, `${official}/contact`);
         assert.equal(metadata.robots.index, true);
         const robots = load("src/app/robots.ts").default();
         assert.equal(robots.sitemap, `${official}/sitemap.xml`);
-        const entries = load("src/app/sitemap.ts").default();
+        const entries = await load("src/app/sitemap.ts").default();
         assert.ok(entries.length > 0);
         for (const entry of entries) {
             assert.equal(new URL(entry.url).origin, official);
@@ -39,29 +39,29 @@ test("production canonical, social URLs, robots and sitemap share the approved f
     });
 });
 
-test("an explicit approved SITE_URL consistently overrides the shared fallback", () => {
-    configured({ NODE_ENV: "production", VERCEL_ENV: "production", SITE_URL: "https://studio.example.invalid/" }, load => {
+test("an explicit approved SITE_URL consistently overrides the shared fallback", async () => {
+    await configured({ NODE_ENV: "production", VERCEL_ENV: "production", SITE_URL: "https://studio.example.invalid/" }, async load => {
         const seo = load("src/shared/lib/seo.ts");
         assert.equal(seo.publicPageUrl("/artworks/work?experience=glass", "en"), "https://studio.example.invalid/artworks/work");
         assert.equal(load("src/app/robots.ts").default().sitemap, "https://studio.example.invalid/sitemap.xml");
     });
 });
 
-test("Preview and local development remain non-indexable on the new public domain", () => {
+test("Preview and local development remain non-indexable on the new public domain", async () => {
     for (const environment of [{ NODE_ENV: "production", VERCEL_ENV: "preview" }, { NODE_ENV: "development" }]) {
-        configured({ ...environment, SITE_URL: official }, load => {
+        await configured({ ...environment, SITE_URL: official }, async load => {
             const metadata = load("src/shared/lib/metadata.ts").createPageMetadata({ pathname: "/contact", locale: "en" });
             assert.equal(metadata.alternates.canonical, `${official}/contact`);
             assert.equal(metadata.robots.index, false);
             assert.equal(metadata.robots.follow, false);
-            assert.deepEqual(load("src/app/sitemap.ts").default(), []);
+            assert.deepEqual(await load("src/app/sitemap.ts").default(), []);
             assert.deepEqual(load("src/app/robots.ts").default(), { rules: { userAgent: "*", disallow: "/" } });
         });
     }
 });
 
-test("domain migration preserves the existing Spanish and draft-legal indexing gates", () => {
-    configured({ NODE_ENV: "production", VERCEL_ENV: "production", SITE_URL: official }, load => {
+test("domain migration preserves the existing Spanish and draft-legal indexing gates", async () => {
+    await configured({ NODE_ENV: "production", VERCEL_ENV: "production", SITE_URL: official }, async load => {
         const seo = load("src/shared/lib/seo.ts");
         assert.equal(seo.publicPageUrl("/contact", "es"), `${official}/es/contact`);
         assert.equal(seo.isIndexablePage("/contact", "es"), false);

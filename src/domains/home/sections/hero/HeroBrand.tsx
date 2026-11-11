@@ -1,11 +1,10 @@
 import { LinkButton } from "@/shared/ui/button";
 import { brand } from "@/config/brand";
-import { getHeroArtwork } from "@/domains/home/services";
+import type { Artwork } from "@/domains/artworks/model/artwork";
 import { useTranslations } from "next-intl";
 
-export default function HeroBrand() {
+export default function HeroBrand({ artwork: heroArtwork }: { artwork: Artwork | undefined }) {
   const t = useTranslations("Home");
-  const heroArtwork = getHeroArtwork();
 
   const heroHref =
     heroArtwork?.seriesId

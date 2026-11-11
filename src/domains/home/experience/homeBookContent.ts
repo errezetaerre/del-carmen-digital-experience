@@ -3,7 +3,7 @@ import { localizeArtwork } from "@/i18n/artworkCopy";
 import { localizeArtworkSeries } from "@/i18n/seriesCopy";
 import { localizeJournalEntry } from "@/i18n/journalCopy";
 import { getJournalEntries } from "@/domains/journal/data/journalEntries";
-import { getFeaturedCollection, getFeaturedWorkArtwork, getHeroArtwork, getSelectedWorks } from "../services";
+import type { HomeCatalogue } from "../model/homeCatalogue";
 
 import { HOME_BOOK_CHAPTERS } from "./homeBookChapters";
 import { homeVisualAssets } from "../curation/homeVisualAssets";
@@ -11,9 +11,9 @@ import type { ArtworkImage } from "@/domains/artworks/model/artwork";
 export { HOME_BOOK_CHAPTERS, type HomeBookChapter } from "./homeBookChapters";
 
 /** A presentation of the existing catalogue, never a second Home catalogue. */
-export function getHomeBookContent(locale: SiteLocale) {
-    const hero = getHeroArtwork(), featured = getFeaturedWorkArtwork(), collection = getFeaturedCollection();
-    const selected = getSelectedWorks().map(work => localizeArtwork(work, locale));
+export function getHomeBookContent(locale: SiteLocale, catalogue: HomeCatalogue) {
+    const { hero, featured, collection } = catalogue;
+    const selected = catalogue.selected.map(work => localizeArtwork(work, locale));
     const journal = getJournalEntries().slice(0, 4).map(entry => localizeJournalEntry(entry, locale));
     return {
         hero: hero ? localizeArtwork(hero, locale) : undefined,

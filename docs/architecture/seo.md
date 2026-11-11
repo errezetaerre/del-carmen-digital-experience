@@ -45,3 +45,15 @@ Run lint and production build with the project's existing environment configurat
 The actual 374-file owner snapshot was verified before this incremental change. Four offline SEO regressions and the generated production output verify the official canonical/social origins, robots sitemap location and 58 sitemap URLs. Preview/local noindex, Spanish pilot and legal-draft gates remain unchanged. The sole runtime legacy NEXT_PUBLIC_SITE_URL dependency is the validated mail fallback; retire its saved Vercel value only after checking every environment's SITE_URL.
 
 Loopback Next start retains the previously documented English /contact self-redirect, also observed on the old baseline. This is not a passing English-page HTTP check; inspect actual Preview EN/ES navigation before merge. Domain DNS/HTTPS and public alias checks are independent from source compilation. No new deployment has been made.
+
+
+## DAT-02 catalogue source — v1.9
+
+The sitemap's Artwork/ArtworkSeries paths now use server/catalogue/sitemapSource.ts and the staged shared repository. This changes where slugs are read, not which current public pages are advertised. All artwork creation states remain addressable; only published Series are included. Catalogue paths sort lexically for deterministic XML without a stored gallery order. Fixed pages, renderable Journal entries, public origin, canonical paths, Spanish release and draft-legal gates retain their existing owners.
+
+sitemap() is asynchronous. Non-indexable development/Preview returns an empty list before reading the catalogue. Vercel Production remains forced to files; catalogue/sitemap build without a database even when the staged opt-in flag is set. An indexable local opt-in test waits for a request before accessing the shared read-only/cache repository, and propagates the Next prerender boundary outside error sanitization. Provider failures are reduced to catalogue_sitemap_read_failed without a stale/file substitute or credentials. robots.txt is unchanged. This is not Production database activation or a change to public indexing policy.
+
+
+### Catalogue dynamic slugs — v1.10
+
+Artwork/Series generateStaticParams now delegate to the shared guarded static-params boundary. Default/enforced Vercel Production retains the current file-backed list. PostgreSQL local/Preview opt-in returns [] without opening a database or loading static entity files, and those pages look up their slug on request. The pages explicitly declare dynamic=force-dynamic to retain their existing request-time behavior and avoid Next 16.4.2 on-demand-static DYNAMIC_SERVER_USAGE with an empty parameter list. It does not set dynamicParams=false or change canonical, language, legal, sitemap or publication rules. Actual page/metadata tests cover supplied future slugs in both languages; the staged equivalence gate still refuses independent real-catalogue edits until activation is reviewed.

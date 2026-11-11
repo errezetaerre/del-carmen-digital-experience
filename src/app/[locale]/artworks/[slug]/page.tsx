@@ -4,12 +4,8 @@ import { getArtworkMetadata } from "@/domains/artworks/presentation/getArtworkMe
 import { getArtworkYear } from "@/domains/artworks/model/artworkDate";
 import { notFound } from "next/navigation";
 
-import {
-    getArtworks,
-    getArtworkBySlug,
-    getArtworkSeriesBySlug,
-    getArtworksBySeriesId,
-} from "@/domains/artworks";
+import { artworkStaticParams } from "@/server/catalogue/staticParams";
+import { getArtworkDetailCatalogue } from "@/server/catalogue/detailSource";
 
 import ArtworkDetailKineticExperience from "@/domains/artworks/components/ArtworkDetailKineticExperience";
 import ArtworkDetailScene from "@/domains/artworks/components/ArtworkDetailScene";
@@ -37,15 +33,17 @@ interface ArtworkPageProps {
     }>;
 }
 
+// These routes already require request-time searchParams/catalogue reads.
+// Explicitly avoid on-demand static generation when PostgreSQL returns no build slugs.
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
-    return getArtworks().map((artwork) => ({
-        slug: artwork.slug,
-    }));
+    return artworkStaticParams();
 }
 
 export async function generateMetadata({ params }: Pick<ArtworkPageProps, "params">) {
     const { slug } = await params;
-    const artwork = getArtworkBySlug(slug);
+    const artwork = (await getArtworkDetailCatalogue()).getArtworkBySlug(slug);
     if (!artwork) notFound();
     return getArtworkMetadata(artwork, await activateLocale(params));
 }
@@ -68,20 +66,21 @@ export default async function ArtworkPage({
         series: seriesSlug,
     } = await searchParams;
 
-    const artwork = getArtworkBySlug(slug);
+    const catalogue = await getArtworkDetailCatalogue();
+    const artwork = catalogue.getArtworkBySlug(slug);
 
     if (!artwork) {
         notFound();
     }
 
-    const artworks = getArtworks();
+    const artworks = catalogue.artworks;
 
     const requestedSeries = seriesSlug
-        ? getArtworkSeriesBySlug(seriesSlug)
+        ? catalogue.getArtworkSeriesBySlug(seriesSlug)
         : undefined;
 
     const seriesArtworks = requestedSeries
-        ? getArtworksBySeriesId(requestedSeries.id)
+        ? catalogue.getArtworksBySeriesId(requestedSeries.id)
         : [];
 
     const isArtworkInSeries = requestedSeries

@@ -1,6 +1,6 @@
 "use client";
 
-import { Component, useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
+import { Component, useEffect, useLayoutEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 import { createPortal, flushSync } from "react-dom";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
@@ -11,6 +11,13 @@ import { clearHomeBookLocation, homeBookChapter, selectHomeBookChapter } from ".
 import type { HomeBookPageId } from "./homeBookChapters";
 import styles from "./HomeExperience.module.css";
 import { HOME_BOOK_BOOTSTRAP } from "./homeBookBootstrap";
+import type { HomeCatalogue } from "../model/homeCatalogue";
+
+// Emit the parser-executed bootstrap only in SSR/initial hydration. A client
+// navigation already has the preference store and must not insert inert scripts.
+const subscribeBootstrap = () => () => {};
+const clientBootstrapSnapshot = () => false;
+const serverBootstrapSnapshot = () => true;
 
 function PreparingHome() {
     const t = useTranslations("Glass");
@@ -34,8 +41,9 @@ class BookBoundary extends Component<{ children: ReactNode; fallback: ReactNode 
 }
 
 /** Standard remains the original server composition; only the additional book is lazy. */
-export default function HomeExperience({ children }: { children: ReactNode }) {
+export default function HomeExperience({ children, catalogue }: { children: ReactNode; catalogue: HomeCatalogue }) {
     const preference = useArtworkExperience(), t = useTranslations("Artwork"), glass = useTranslations("Glass");
+    const includeBootstrap = useSyncExternalStore(subscribeBootstrap, clientBootstrapSnapshot, serverBootstrapSnapshot);
     const active = preference === "glass";
     const shell = useRef<HTMLDivElement>(null);
     const savedScroll = useRef<number | null>(null), paintFrame = useRef(0);
@@ -63,10 +71,10 @@ export default function HomeExperience({ children }: { children: ReactNode }) {
         flushSync(() => setArtworkExperiencePreference("standard"));
     }
     return <div ref={shell} className={styles.shell} suppressHydrationWarning>
-        <script dangerouslySetInnerHTML={{ __html: HOME_BOOK_BOOTSTRAP }} />
+        {includeBootstrap && <script data-home-bootstrap dangerouslySetInnerHTML={{ __html: HOME_BOOK_BOOTSTRAP }} />}
         <div className={`${styles.preparing} ${styles.bootstrap}`} role="status"><ArtworkLoading label={glass("preparing")} /></div>
         {active ? <div className={styles.placeholder} aria-hidden="true" /> : <div className={styles.standard} data-home-standard>{children}</div>}
-        {active ? <BookBoundary fallback={<FailedHome />}><HomeGlassArtbook onExit={exit} /></BookBoundary> :
+        {active ? <BookBoundary fallback={<FailedHome />}><HomeGlassArtbook catalogue={catalogue} onExit={exit} /></BookBoundary> :
             <button ref={openButton} type="button" className={styles.open} onClick={open}>{t("openArtbook")}</button>}
     </div>;
 }
