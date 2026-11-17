@@ -2132,6 +2132,59 @@ Future roadmap requirements may extend or supersede them through an explicit app
 
 ------------------------------------------------------------------------
 
+## Decision 050
+
+Category
+
+Artworks catalogue · Glass ArtBook
+
+Decision
+
+On 16 November 2026 (Costa Rica), Rolando reviewed and visually approved
+[Del_Carmen_Galeria_en_Cristal_v1.html](https://chatgpt.com/library?file_id=libfile_1ee583dd74d88191b977141e25c861b0&account_id=personal)
+as the reference for a future Glass ArtBook view of the artworks catalogue.
+
+Preserve the Epifanía Nupcial cover, rigid glass page turns, uncropped artworks,
+artwork details, the searchable index and filters, and the EN/ES experience.
+Keep this prototype as a separate reference and retain the standard catalogue view.
+
+Status
+
+Visual prototype approved. Implementation for the live site is deferred until
+Rolando requests it separately.
+
+------------------------------------------------------------------------
+
+## Decision 051
+
+Category
+
+Data governance · DAT-04
+
+Decision
+
+Keep the public catalogue on the dedicated `catalogue_reader` role with
+`SELECT` on the 12 `catalogue` tables and `USAGE` on the schema. Keep any
+future administrative writer separate. Use an independent branch for
+restore rehearsals; leave `main` in service until a separately reviewed
+cutover is required. Retain the manual snapshot and the rehearsal branch.
+
+Status
+
+Recorded 2026-11-16 (Costa Rica). Neon permissions and basic recovery were
+verified: 12 tables, 388 rows. Production use of `catalogue_reader` is
+supported by the reviewed code, Secret scope and successful runtime reads;
+`SELECT current_user` was not run in the live application session.
+Exhaustive referential-integrity validation and Production cutover were
+outside the test. Scheduled or external backups remain for later evaluation.
+
+Impact
+
+The evidence, per-table counts and safe Multi-step restore procedure are
+recorded in `docs/architecture/catalogue-database.md` under DAT-04.
+
+------------------------------------------------------------------------
+
 # Audit Note — 2026-10-05
 
 This v1.8 update uses a conservative documentation audit.

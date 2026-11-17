@@ -1,14 +1,14 @@
 # Catalogue PostgreSQL — DAT-02 persistence foundation
 
-Status: all five catalogue page families, editorial copy, curatorial presentation and sitemap integration reviewed locally through v1.9. v1.10 prepares explicit navigation/static-param policies and expanded read verification. Actual isolated Preview remains pending; Production stays file-backed.
-Updated: 2026-11-10 (Costa Rica).
+Status: PostgreSQL catalogue reads are active in Vercel Production. DAT-04 verified the reader grants in Neon and a basic isolated restore. The Production role evidence is indirect.
+Updated: 2026-11-16 (Costa Rica).
 Source: main `eb23294b20a14843c046de7a63373efd91972396`, after PR #17 and the approved thumbnail pan.
 Authority: current TypeScript catalogue, Artwork model v1.8, Collection Specification v1.18 and the owner's explicit persistence rules. Earlier snapshots are not seed sources.
-Decision history remains in `implementation-roadmap.md`, under DAT-02.
+Decision history remains in `implementation-roadmap.md`, under DAT-02 and DAT-04. The [DAT-04 closeout](#dat-04--neon-permissions-and-recovery-closeout-2026-11-16) records the operational evidence and recovery procedure.
 
 ## Boundary
 
-This work supplies the data dictionary, one versioned SQL migration, typed import/read mappings, a server-only read repository and local operational commands. The Home, `/artworks`, `/artworks/[slug]`, `/collections` and `/series/[slug]` server boundaries support explicit PostgreSQL reads in local/Preview; files remain their default and their enforced Vercel Production source. Legacy plain-record adapters, canonical seed/parity inputs and non-catalogue content retain their file-backed owners. No browser-side query, migration/seed during a build or thumbnail-owned query is added. Canonical records, EN/ES messages, media, filters, gestures and Standard/Glass presentation remain unchanged.
+This work supplies the data dictionary, one versioned SQL migration, typed import/read mappings, a server-only read repository and local operational commands. The Home, `/artworks`, `/artworks/[slug]`, `/collections` and `/series/[slug]` server boundaries support explicit PostgreSQL reads. Files remain the default when the relevant opt-in is absent. Production reads are enabled and use the separate reader configuration documented below. Legacy plain-record adapters, canonical seed/parity inputs and non-catalogue content retain their file-backed owners. No browser-side query, migration/seed during a build or thumbnail-owned query is added. Canonical records, EN/ES messages, media, filters, gestures and Standard/Glass presentation remain unchanged.
 
 Existing Upstash `del-carmen-contact`, Contact, Newsletter, their credentials, records and delivery behavior are separate. No Redis command, credential rotation, email or subscription action is performed by this tooling. Commerce, accounts, uploads and administration remain later increments.
 
@@ -123,7 +123,7 @@ Before public activation:
 5. Compare facts, translations, images/roles, curation, recognition, filters, pages and contextual navigation with the current catalogue; run TypeScript/tests/build and actual Preview QA.
 6. Prepare the separate Production database target, least-privilege runtime access, migration/import verification and recovery/export plan. Review environment scope, then activate only after approval.
 
-Current state: the owner executed migration 0001 and imported/verified the real Neon development catalogue after v1.1. No Neon SQL has been executed by the assistant, no Production connection has been enabled, no credentials/Redis records have changed, and no commit/push/deployment is part of this increment. PGlite is PostgreSQL compiled to WebAssembly for isolated SQL tests; provider networking/persistence evidence comes from the owner's separate real commands below.
+Foundation checkpoint (2026-11-10): the owner executed migration 0001 and imported/verified the real Neon development catalogue after v1.1. No Neon SQL has been executed by the assistant, no Production connection has been enabled, no credentials/Redis records have changed, and no commit/push/deployment is part of this increment. PGlite is PostgreSQL compiled to WebAssembly for isolated SQL tests; provider networking/persistence evidence comes from the owner's separate real commands below.
 
 ### Results for this prepared increment
 
@@ -320,3 +320,150 @@ Before enabling public traffic, deploy the reviewed code as a staged Production 
 Staged verification (2026-11-11 UTC): the first build succeeded but catalogue reads failed. Fixed diagnostic categories on `/artworks` isolated an invalid Production Secret format before database authentication; the public response stayed generic and logs contained no URL, provider message, SQL or row data. After the verified pooled reader URL was saved directly as the Production-only Secret, the new Staged deployment reached Ready and logged `PostgreSQL verified` for Home in EN/ES, `/es/artworks` and `/series/epifanias`. The same reader checked the schema and full snapshot equivalence. The public alias still serves the file-backed release; the Production opt-in is not set project-wide.
 
 The runtime code in this patch matches the verified staged candidate. Review it on a branch and run the catalogue tests and build before merging. A normal build without the Production opt-in remains file-backed. After merge, stage the exact Git revision with the deployment-level opt-in and verify the remaining detail, Collections, sitemap and visual language/experience cases before any separately approved domain promotion.
+
+## DAT-04 — Neon permissions and recovery closeout (2026-11-16)
+
+**Status:** least-privilege checks and a basic isolated restore completed
+successfully. The Production role is supported by strong indirect evidence.
+
+### PostgreSQL permissions
+
+| Item | Verified result |
+| --- | --- |
+| Neon resource / PostgreSQL database | `del-carmen-catalogue` / `neondb`. |
+| Main branch and schema | `main` / `catalogue`. |
+| Role for the public catalogue | `catalogue_reader`, used by the application on the server. |
+| All 12 `catalogue` tables | `SELECT` granted; `INSERT`, `UPDATE` and `DELETE` denied. |
+| Schema access | `USAGE` granted on `catalogue`; creation of objects in `catalogue` denied. |
+| Role and database privileges | The role is not a superuser. It cannot create databases, roles or schemas in the audited target. |
+
+These permissions were checked directly in Neon for the named role on the main
+target. Keep the public catalogue reader separate from any future
+administrative writer.
+
+### Vercel Production evidence
+
+The reviewed connection code uses `CATALOGUE_PRODUCTION_READ_URL` and rejects
+any username other than `catalogue_reader`. The variable was confirmed as a
+Secret scoped to Production only. Runtime logs for the active Git `main`
+deployment (`91cfe90`) showed successful PostgreSQL reads for Home and an
+artwork detail page. The reviewed catalogue logs contained no authentication or
+permission errors.
+
+This supports the use of `catalogue_reader` in Production. No
+`SELECT current_user` was executed in the application's live Production
+session. The Neon grant audit and the Vercel evidence do not constitute a
+direct SQL measurement of that session's effective role.
+
+### Backup and restore evidence
+
+| Item | Observed state |
+| --- | --- |
+| Neon plan | Free. |
+| Historical recovery window | 6 hours. |
+| Manual snapshot | Created on 2026-11-16; the console showed `Expires on: never`. |
+| Scheduled backups | None configured at the time of review. |
+| Restore test | Multi-step restore created a separate branch without replacing `main`. |
+| End of the test | The Neon Console was switched back to `main`. The snapshot and temporary recovery branch were retained. |
+
+The historical window and manual snapshot are separate recovery options.
+Snapshot expiration is recorded as observed for this snapshot.
+
+### Recovered inventory
+
+| Table in `catalogue` | Rows |
+| --- | ---: |
+| `artwork` | 45 |
+| `artwork_category` | 163 |
+| `artwork_image` | 49 |
+| `artwork_recognition` | 1 |
+| `artwork_series` | 4 |
+| `artwork_translation` | 90 |
+| `category` | 16 |
+| `home_curation` | 1 |
+| `home_selected_artwork` | 8 |
+| `locale` | 2 |
+| `schema_migration` | 1 |
+| `series_translation` | 8 |
+| **Total: 12 tables** | **388** |
+
+The result is a successful basic recovery test for the selected recovery
+point. This inventory check did not include exhaustive referential-integrity
+validation or a Production cutover. Use the counts above as the baseline for
+the November 16 drill, and compare a future drill with its own recovery point.
+
+### Safe Multi-step restore procedure
+
+This procedure is for an isolated rehearsal and verification in Neon.
+
+1. In the Neon Console, open `del-carmen-catalogue`, select `main` and open
+   **Postgres database → Backup & Restore**. Identify the intended snapshot by
+   source branch and date. Record the recovery point and the name of the
+   temporary branch for the drill.
+2. Open the snapshot's restore action and choose **Multi-step restore**. Before
+   confirming, check that the action prepares a separate branch for inspection
+   and does not replace `main`. If the console offers only an in-place restore
+   or immediate finalization, stop the rehearsal.
+3. Wait for the temporary branch and its compute to be available. In SQL Editor
+   select the **temporary recovery branch** and database `neondb` explicitly.
+   Run the inventory as read-only SQL on that branch. Keep the Production
+   application connected to its existing branch.
+4. Record the table count, per-table counts and total. For the November 16
+   recovery point, expect **12 tables and 388 rows**. Investigate any difference
+   on the temporary branch. Before a real cutover, also verify migration
+   versions, expected constraints and foreign-key relationships, role grants,
+   and representative application reads against the candidate branch.
+5. End the rehearsal without finalizing the restore or replacing the existing
+   branch. Re-select `main` in Neon, record the result, and retain the snapshot
+   and temporary branch for now. A real cutover is a separate operation and
+   was not tested in DAT-04.
+
+Optional read-only inventory query for repeating step 3 on the **temporary
+branch**. This query does not establish the effective role of the live
+Production application.
+
+~~~sql
+BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY;
+
+SELECT count(*) AS catalogue_tables
+FROM information_schema.tables
+WHERE table_schema = 'catalogue' AND table_type = 'BASE TABLE';
+
+WITH counts (table_name, row_count) AS (
+    SELECT 'artwork', count(*) FROM catalogue.artwork
+    UNION ALL SELECT 'artwork_category', count(*) FROM catalogue.artwork_category
+    UNION ALL SELECT 'artwork_image', count(*) FROM catalogue.artwork_image
+    UNION ALL SELECT 'artwork_recognition', count(*) FROM catalogue.artwork_recognition
+    UNION ALL SELECT 'artwork_series', count(*) FROM catalogue.artwork_series
+    UNION ALL SELECT 'artwork_translation', count(*) FROM catalogue.artwork_translation
+    UNION ALL SELECT 'category', count(*) FROM catalogue.category
+    UNION ALL SELECT 'home_curation', count(*) FROM catalogue.home_curation
+    UNION ALL SELECT 'home_selected_artwork', count(*) FROM catalogue.home_selected_artwork
+    UNION ALL SELECT 'locale', count(*) FROM catalogue.locale
+    UNION ALL SELECT 'schema_migration', count(*) FROM catalogue.schema_migration
+    UNION ALL SELECT 'series_translation', count(*) FROM catalogue.series_translation
+)
+SELECT table_name, row_count FROM counts
+UNION ALL
+SELECT 'TOTAL', sum(row_count) FROM counts
+ORDER BY table_name;
+
+ROLLBACK;
+~~~
+
+### Open items
+
+- Retain the manual snapshot and the temporary recovery branch. Do not remove
+  either during this closeout.
+- Evaluate scheduled or external backups later, including retention and a
+  repeatable restore check. No schedule was created for DAT-04.
+- Preserve the separation between the public reader and a future
+  administrative writer. Direct evidence from the live application session,
+  exhaustive integrity checks and a Production cutover remain outside the
+  completed verification.
+
+This closeout changed documentation only. No SQL, credentials, environment
+variables, Neon branches or deployments were changed while preparing it.
+
+References: [Neon backup strategies](https://neon.com/docs/postgres/backup-restore/backups)
+and [Neon snapshot restore semantics](https://neon.com/docs/reference/api/snapshots/restore-snapshot).
