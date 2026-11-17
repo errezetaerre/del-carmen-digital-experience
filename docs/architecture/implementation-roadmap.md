@@ -819,3 +819,25 @@ Default/forced-Production static params remain unchanged. PostgreSQL opt-in retu
 Expand the existing db:read command to check application read DTOs/editorial/presentation/curation/contextual ordering/filter sorts/sitemap over the same schema/parity-verified read-only transaction. No new operator command or live data mutation is required. 86 catalogue/integration tests plus 183 prior regressions pass; TypeScript, lint and build/HTTP evidence/limits are recorded in the increment README. Source records, SQL, images/proportions, DOM/styles, gestures/material and credentials are preserved.
 
 Next owner checkpoint: same feat/catalogue-postgres branch, incremental local apply, tests/build/db:read and visual/gesture review. Keep complete equality and file-backed Production. Actual Preview isolation/environment/schema/data/route verification and controlled activation are separate remaining checkpoints; no commit/push/PR/merge/deployment or provider configuration occurs now.
+
+## DAT-04 — Neon permissions and recovery closeout — 2026-11-16
+
+Status: least-privilege audit and basic isolated recovery drill completed.
+`catalogue_reader` has `SELECT` on all 12 `catalogue` tables and `USAGE` on the
+schema, without the audited write or create privileges. Keep future
+administrative writes separate from the public reader.
+
+The active Production deployment (`91cfe90`) showed successful PostgreSQL
+reads with no authentication or permissions errors in the reviewed logs.
+The role check is indirect: `SELECT current_user` was not executed in the
+live application session.
+
+The Neon Free project has a six-hour history window and a manual November 16
+snapshot with no expiration shown; no scheduled backups were configured.
+Multi-step restore left `main` in place and recovered 12 tables and 388 rows
+in an independent branch. There was no exhaustive referential-integrity
+validation or Production cutover. Retain the snapshot and rehearsal branch;
+scheduled or external backups remain for later evaluation.
+
+See [Catalogue PostgreSQL: DAT-04](catalogue-database.md#dat-04--neon-permissions-and-recovery-closeout-2026-11-16)
+for the evidence, full inventory and safe restore procedure.
