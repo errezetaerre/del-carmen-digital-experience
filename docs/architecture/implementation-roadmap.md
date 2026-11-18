@@ -841,3 +841,15 @@ scheduled or external backups remain for later evaluation.
 
 See [Catalogue PostgreSQL: DAT-04](catalogue-database.md#dat-04--neon-permissions-and-recovery-closeout-2026-11-16)
 for the evidence, full inventory and safe restore procedure.
+
+## DAT-05 — Studio Admin architecture closeout — 2026-11-17
+
+The [Studio Admin technical contract](studio-admin.md) closes the architecture
+review through V0.7. Implementation is deferred. Controlled manual catalogue
+maintenance continues under the current public reader.
+
+If implementation is authorized later, the reader transition and the private
+editor can be prepared independently in Development. Publication depends on
+their joint verification in isolated Preview, a compatible rollback and a
+read-only coexistence period in Production. See the [acceptance gates](studio-admin.md#acceptance-gates).
+The first editorial publication is a separate owner decision.
