@@ -441,6 +441,12 @@ This distinction is fundamental.
 
 `Canonical for Phase 1` does not mean `immutable for all future phases`.
 
+## Studio Admin — 2026-11-17
+
+[DAT-05 V0.7 — Studio Admin technical contract](../architecture/studio-admin.md)
+is the canonical reference for editorial administration. Architecture review
+closed through V0.7. Implementation is deferred.
+
 ---
 
 Del Carmen Digital Experience

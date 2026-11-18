@@ -2185,6 +2185,106 @@ recorded in `docs/architecture/catalogue-database.md` under DAT-04.
 
 ------------------------------------------------------------------------
 
+## Decision 052
+
+Category
+
+DAT-05 · Studio scope and architecture closeout
+
+Decision
+
+Del Carmen Studio Admin is a private editorial workspace within the existing
+Next.js project. Its Artworks Manager and six-tab Artwork Editor belong to
+Studio. The [Studio Admin technical contract](../architecture/studio-admin.md)
+records the tabs, the approval history from V0.1 through V0.7 and the open decisions.
+
+Status
+
+Reference architecture accepted on 2026-11-17 (Costa Rica). Implementation is
+deferred. This closeout grants no operational or deployment authority.
+
+------------------------------------------------------------------------
+
+## Decision 053
+
+Category
+
+DAT-05 · Authority for published catalogue data
+
+Decision
+
+PostgreSQL becomes the editorial authority for published data only after a
+compatible public reader serves a verified baseline and its rollback has been
+rehearsed. Preserve DAT-02 and Collections v1.18. Select the cache strategy
+after measuring consistency, latency and Neon activity across instances.
+
+------------------------------------------------------------------------
+
+## Decision 054
+
+Category
+
+DAT-05 · Private revisions and publication
+
+Decision
+
+A meaningful Save Draft creates a private revision of the edited work.
+Preview & Validate is bound to that revision. Explicit publication checks the
+editing base and commits the public changes, version and history together.
+Retries are idempotent. Reversal creates a new publication. Keep this workflow
+separate from the public models without mirroring all catalogue tables.
+
+------------------------------------------------------------------------
+
+## Decision 055
+
+Category
+
+DAT-05 · Editorial withdrawal and protected media
+
+Decision
+
+Normal and urgent withdrawal both preserve artwork identity and history.
+Normal withdrawal resolves curatorial dependencies. Urgent withdrawal must
+protect the work and its derivatives even when a replacement is unavailable.
+An authorized upcoming work keeps its real, pre-blurred WebP and the approved
+additional CSS blur. Private drafts, embargoed revisions and protected
+originals stay outside public delivery.
+
+------------------------------------------------------------------------
+
+## Decision 056
+
+Category
+
+DAT-05 · Administrative identity and least privilege
+
+Decision
+
+Require server-side authorization and strong authentication for the initial
+administrator. Separate identity, draft editing, publication and migration
+privileges from the public reader. Self-hosted Better Auth is the preferred
+candidate for a future isolated evaluation without a mandatory subscription.
+Provider adoption and operational setup remain open.
+
+------------------------------------------------------------------------
+
+## Decision 057
+
+Category
+
+DAT-05 · Manual operation and activation conditions
+
+Decision
+
+Continue controlled manual catalogue maintenance while Studio is deferred.
+Coordinate structured Git and PostgreSQL changes under the existing parity
+rule. The future reader transition, private previews, recovery and publication
+each require their own evidence. A first Production publication requires a
+separate owner authorization.
+
+------------------------------------------------------------------------
+
 # Audit Note — 2026-10-05
 
 This v1.8 update uses a conservative documentation audit.

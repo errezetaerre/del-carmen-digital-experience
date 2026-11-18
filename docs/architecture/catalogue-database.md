@@ -467,3 +467,12 @@ variables, Neon branches or deployments were changed while preparing it.
 
 References: [Neon backup strategies](https://neon.com/docs/postgres/backup-restore/backups)
 and [Neon snapshot restore semantics](https://neon.com/docs/reference/api/snapshots/restore-snapshot).
+
+## DAT-05 editorial boundary — 2026-11-17
+
+The DAT-04 public reader and the existing schema and parity checks govern
+current operations. Use the [manual catalogue procedure](studio-admin.md#manual-catalogue-updates)
+while Studio is deferred. The [future authority transition](studio-admin.md#public-reader-transition)
+and [administrative privileges](studio-admin.md#identity-and-database-permissions)
+are documented separately. This closeout introduces no migration, database
+role, grant or change to the active reader.
