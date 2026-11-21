@@ -4,6 +4,7 @@ import { artworkTextLocale, formatArtworkTechnique, localizeArtwork } from "@/i1
 import { createPortal } from "react-dom";
 
 import Link from "@/i18n/navigation";
+import { setArtworkExperiencePreference } from "./artworkExperiencePreference";
 import ArtworkLinkFeedback from "./ArtworkLinkFeedback";
 
 import {
@@ -1209,6 +1210,7 @@ export default function ArtworkLightbox({
                             >
                                 <Link
                                     href={detailsHref}
+                                    onNavigate={embedded ? () => setArtworkExperiencePreference("standard") : undefined}
                                     onPointerDown={(event) =>
                                         event.stopPropagation()
                                     }
@@ -1254,6 +1256,7 @@ export default function ArtworkLightbox({
 
                                         <Link
                                             href="/artworks"
+                                            onNavigate={embedded ? () => setArtworkExperiencePreference("standard") : undefined}
                                             onPointerDown={(event) =>
                                                 event.stopPropagation()
                                             }

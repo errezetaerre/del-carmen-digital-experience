@@ -7,6 +7,7 @@ import { useRouter } from "@/i18n/navigation";
 import type { SiteLocale } from "@/i18n/config";
 import { homeBookCopy } from "@/i18n/homeBookCopy";
 import type { Artwork } from "@/domains/artworks";
+import { artworkExperienceHref } from "@/domains/artworks/presentation/artworkExperience";
 import { createPortraitArtbookMotion, type PortraitArtbookController } from "@/domains/artworks/components/portrait-artbook/portraitArtbookMotion";
 import { createPortraitPageCache } from "@/domains/artworks/components/portrait-artbook/portraitPageCache";
 import portraitStyles from "@/domains/artworks/components/portrait-artbook/ArtworkPortraitArtbook.module.css";
@@ -42,7 +43,7 @@ export default function HomeGlassArtbook({ onExit, catalogue }: { onExit(): void
         return slug ? content.journal.find(entry => entry.slug === slug)?.title ?? copy.chapter.journal : copy.chapter[key as keyof typeof copy.chapter];
     };
     const root = useRef<HTMLElement>(null), frame = useRef<HTMLDivElement>(null), track = useRef<HTMLDivElement>(null), overlay = useRef<HTMLDivElement>(null);
-    const controller = useRef<PortraitArtbookController | null>(null), navigationFrame = useRef(0), openingRef = useRef(false), presented = useRef(false);
+    const controller = useRef<PortraitArtbookController | null>(null), openingRef = useRef(false), presented = useRef(false);
     const [cache] = useState(createPortraitPageCache), [material] = useState(createSeriesGlassReflection);
     const [load, setLoad] = useState<GlassArtbookLoadState>({ status: "loading", artworkId: current, kind: "entrance" });
     const [opening, setOpening] = useState(false);
@@ -52,15 +53,13 @@ export default function HomeGlassArtbook({ onExit, catalogue }: { onExit(): void
     useEffect(() => {
         const before = document.body.style.overflow;
         document.body.style.overflow = "hidden";
-        return () => { document.body.style.overflow = before; cancelAnimationFrame(navigationFrame.current); material.dispose(); };
+        return () => { document.body.style.overflow = before; material.dispose(); };
     }, [material]);
     const openArtwork = useCallback((work: Artwork) => {
         if (openingRef.current) return;
         openingRef.current = true;
         flushSync(() => setOpening(true));
-        navigationFrame.current = requestAnimationFrame(() => { navigationFrame.current = requestAnimationFrame(() => {
-            router.push(`/artworks/${work.slug}?experience=glass`);
-        }); });
+        router.push(artworkExperienceHref(work.slug, "", "glass"));
     }, [router]);
     useLayoutEffect(() => {
         const element = root.current, viewport = frame.current, surfaces = track.current, moving = overlay.current;
@@ -107,7 +106,9 @@ export default function HomeGlassArtbook({ onExit, catalogue }: { onExit(): void
     const label = copy.position.replace("{index}", String(index + 1)).replace("{total}", String(pages.length));
     return createPortal(<div className={styles.root}>
         <section ref={root} className="experience" role="dialog" aria-modal="true" aria-label={copy.title} data-home-artbook data-portrait-learned={learned || undefined} data-lenis-prevent>
-            <ArtworkExperienceToolbar className="home-toolbar" backLabel={copy.back} onBack={() => onExit()} onExit={() => onExit()} />
+            <ArtworkExperienceToolbar className="home-toolbar" onExit={onExit}
+                {...(current === "cover" ? { backHref: "/artbook", backLabel: a("backToGallery") } :
+                    { onBack: () => selectHomeBookChapter("cover"), backLabel: copy.back })} />
             <div className="workspace">
                 <div ref={frame} className="frame" aria-busy={opening || load.status === "loading"}>
                     <div className="slots" ref={track}>

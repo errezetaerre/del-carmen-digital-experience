@@ -21,7 +21,8 @@ import { homeVisualAssets } from "../curation/homeVisualAssets";
 import type { HomeBookChapter, HomeBookContent } from "./homeBookContent";
 import { journalPageSlug, type HomeBookPageId } from "./homeBookChapters";
 import HomeBookGallery from "./HomeBookGallery";
-import HomeBookMaterial from "./HomeBookMaterial";
+import { selectArtworkInViewer } from "@/shared/ui/artwork/artworkViewerLocation";
+import GlassBookMaterial from "@/domains/artworks/components/glass-artbook/GlassBookMaterial";
 import HomeBookImage from "./HomeBookImage";
 
 function BookImage({ image, className, sizes = "(orientation:portrait) 90vw, 50vw", active = false }: {
@@ -129,7 +130,7 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
     }
     if (chapter === "artworks") body = <><div className="section-header"><p className="eyebrow">{h("selectedEyebrow")}</p>
         <h2>{h("selectedTitleFirst")} <em>{h("selectedTitleSecond")}</em></h2><p className="body-copy">{h("selectedDescription")}</p></div>
-        <HomeBookGallery artworks={content.selected} onOpen={onOpen} /><div className="gallery-all"><Cta href="/artworks">{h("selectedAll")}</Cta></div></>;
+        <HomeBookGallery artworks={content.selected} onOpen={work => selectArtworkInViewer(work, "glass", true)} /><div className="gallery-all"><Cta href="/artbook">{h("selectedAll")}</Cta></div></>;
     if (chapter === "journal") body = wide ? <div className="spread-sheet journal-title-sheet">
         <header className="journal-title-heading"><p className="eyebrow">{h("journalEyebrow")}</p><h2>{h("journalTitleFirst")}<br /><em>{h("journalTitleSecond")}</em></h2>
             <Cta href="/journal">{h("journalRead")}</Cta></header>
@@ -177,6 +178,6 @@ export default function HomeBookPage({ chapter, content, layout, active, materia
     return <div className="page" data-portrait-page={chapter} data-home-composition={wide ? "spread" : "approved"}>
         <div className="reading" tabIndex={active ? 0 : -1} role="region" aria-label={chapterLabel}>
             <div className={`editorial ${pageClass}`}>{body}</div>
-        </div><HomeBookMaterial material={material} />
+        </div><GlassBookMaterial material={material} />
     </div>;
 }

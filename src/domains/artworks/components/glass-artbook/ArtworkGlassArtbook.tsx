@@ -1,5 +1,6 @@
 "use client";
 
+import ArtworkBookDock from "../archive-book/ArtworkBookDock";
 import { useLocale, useTranslations } from "next-intl";
 import { localizeHref } from "@/i18n/config";
 import { localizeArtwork } from "@/i18n/artworkCopy";
@@ -207,6 +208,7 @@ export default function ArtworkGlassArtbook({
     const content = (
         <main ref={captureExperience} className={`${styles.experience} ${embedded ? styles.embedded : ""} bg-surface-deep text-white`} data-lenis-prevent aria-label={t("immersive")}>
             {!embedded && <ArtworkExperienceToolbar backHref={backHref} backLabel={backLabel} onExit={exit} className={styles.toolbar} />}
+            {!embedded && <ArtworkBookDock works={artworks} selected={artworks.indexOf(selectedArtwork)} query={navigationQuery} />}
             <h1 className="sr-only">{selectedArtwork.title}</h1>
             <div className={styles.bookViewport} data-lenis-prevent aria-busy={loadState.status === "loading"}>
                 <div ref={hostRef} className={`${styles.root} font-sans`} inert={loadState.status !== "ready" && !(loadState.status === "loading" && loadState.kind === "turn")} aria-label={t("viewer")} />

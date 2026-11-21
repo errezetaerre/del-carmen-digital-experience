@@ -12,12 +12,24 @@ import { brand } from "@/config/brand";
 import {
   NAVIGATION_ITEMS,
 } from "../constants";
+import useArtworkExperience from "@/shared/ui/artwork/useArtworkExperience";
+import { isNativeArtbookRoute } from "@/domains/artworks/presentation/artworkExperience";
 import MobileMenu from "./MobileMenu";
 import { isNavigationItemActive } from "../utils/isNavigationItemActive";
 
 export default function Navigation() {
-  const t = useTranslations("Navigation");
   const pathname = usePathname();
+  const mode = useArtworkExperience();
+  if (pathname === "/artbook") return null;
+  if (isNativeArtbookRoute(pathname)) {
+    if (mode === "glass") return null;
+    if (mode === null) return <noscript><SiteNavigation pathname={pathname} /></noscript>;
+  }
+  return <SiteNavigation pathname={pathname} />;
+}
+
+function SiteNavigation({ pathname }: { pathname: string }) {
+  const t = useTranslations("Navigation");
   const isScrolled = useNavigationScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

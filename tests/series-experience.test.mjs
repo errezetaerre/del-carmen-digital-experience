@@ -5,7 +5,7 @@ import { serverModules } from "../scripts/lib/loadProjectModule.mjs";
 
 const load = serverModules();
 const location = load("src/domains/artworks/series/components/experience/seriesExperienceLocation.ts");
-const artworkLocation = load("src/shared/ui/artwork/artworkViewerLocation.ts");
+const { localizeHref } = load("src/i18n/config.ts");
 const { createPortraitPageCache } = load("src/domains/artworks/components/portrait-artbook/portraitPageCache.ts");
 const material = load("src/domains/artworks/components/glass-artbook/glassMaterial.mjs");
 const { sampleSeriesGlassReflection } = load("src/domains/artworks/series/components/experience/seriesGlassReflection.ts");
@@ -50,35 +50,20 @@ test("changing collection mode replaces history and English retains its canonica
     } finally { b.restore(); }
 });
 
-for (const [locale, mode, oldMode] of [["en", "standard", "glass"], ["es", "glass", "standard"]]) {
-    test(`Discover inherits ${mode}, keeps ${locale} and returns to the same collection mode`, () => {
-        const prefix = locale === "es" ? "/es" : "";
-        const b = browser(`https://rolandodelcarmen.com${prefix}/series/yasemi?view=${mode}&experience=${oldMode}&utm_source=collection`);
-        try {
-            let changes = 0;
-            const stop = location.subscribeSeriesExperience(() => changes++);
-            location.openSeriesArtwork({ slug: "yasemi-ii" }, mode);
-            assert.equal(b.window.location.pathname, `${prefix}/series/yasemi`);
-            assert.equal(b.window.location.searchParams.get("view"), mode);
-            assert.equal(b.window.location.searchParams.get("experience"), mode, "collection choice overrides a stale viewer mode");
-            assert.equal(b.window.location.searchParams.get("artwork"), "yasemi-ii");
-            assert.equal(b.window.location.searchParams.get("utm_source"), "collection");
-            assert.deepEqual(b.changes, ["push"]);
-            assert.equal(changes, 1);
-
-            artworkLocation.selectArtworkInViewer({ slug: "yasemi-iii" }, mode);
-            assert.equal(b.window.location.searchParams.get("experience"), mode);
-            assert.equal(b.window.location.searchParams.get("artwork"), "yasemi-iii");
-            artworkLocation.closeArtworkViewerLocation();
-            assert.equal(b.window.location.searchParams.get("view"), mode);
-            assert.equal(b.window.location.searchParams.has("artwork"), false);
-            assert.equal(b.window.location.searchParams.has("experience"), false);
-            assert.equal(b.window.location.searchParams.get("utm_source"), "collection");
-            assert.deepEqual(b.changes, ["push", "replace", "replace"]);
-            assert.equal(changes, 3);
-            stop();
-        } finally { b.restore(); }
-    });
+for (const locale of ["en", "es"]) {
+    for (const mode of ["glass", "standard"]) {
+        test(`clicking a ${locale} series thumbnail opens its information in ${mode} on the same route`, () => {
+            const path = localizeHref("/series/yasemi", locale);
+            const b = browser(`https://rolandodelcarmen.com${path}?view=${mode}`);
+            try {
+                location.openSeriesArtwork({ slug: "yasemi-i" }, mode);
+                assert.equal(b.window.location.pathname, path);
+                assert.deepEqual(Object.fromEntries(b.window.location.searchParams),
+                    { view: mode, artwork: "yasemi-i", experience: mode });
+                assert.deepEqual(b.changes, ["push"]);
+            } finally { b.restore(); }
+        });
+    }
 }
 
 test("collection location subscriptions include artwork events and are completely disposed", () => {

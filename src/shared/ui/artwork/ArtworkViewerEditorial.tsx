@@ -3,6 +3,7 @@
 import { useId, useRef, useState, type ReactNode, type RefObject } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "@/i18n/navigation";
+import { setArtworkExperiencePreference } from "./artworkExperiencePreference";
 import { artworkTextLocale, formatArtworkTechnique } from "@/i18n/artworkCopy";
 import type { Artwork } from "@/domains/artworks/model/artwork";
 import { getArtworkPresentation } from "@/domains/artworks/presentation/getArtworkPresentation";
@@ -30,6 +31,7 @@ export default function ArtworkViewerEditorial({ artwork, portalTarget, detailsQ
     const readButton = useRef<HTMLButtonElement>(null), previewSlot = useRef<HTMLDivElement>(null);
     const imageGestureRoot = useRef<HTMLDivElement>(null);
     const id = `gallery${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
+    function followInCurrentMode() { setArtworkExperiencePreference(standard ? "standard" : "glass"); }
     const query = new URLSearchParams(detailsQuery);
     query.set("experience", standard ? "standard" : "glass");
     const hasHighlights = getArtworkPresentation(artwork, locale).badges.some(badge => badge.kind !== "planned" && badge.kind !== "in-progress");
@@ -71,8 +73,8 @@ export default function ArtworkViewerEditorial({ artwork, portalTarget, detailsQ
                     onClick={() => setExpanded(!expanded)}>{t(expanded ? "readLess" : "readMore")}</button>
             </div>
             <div className={`${styles.actions} font-sans text-[9px] uppercase tracking-[0.16em] text-white/55 md:text-[10px] md:tracking-[0.22em]`}>
-                {showDetails && <Link href={`/artworks/${artwork.slug}?${query.toString()}`}>{detailsLabel} →<ArtworkLinkFeedback /></Link>}
-                {showAllWorks && <><span aria-hidden="true" className="h-3 w-px bg-white/15" /><Link href="/artworks">{t("viewAll")} →</Link></>}
+                {showDetails && <Link href={`/artworks/${artwork.slug}?${query.toString()}`} onNavigate={followInCurrentMode}>{detailsLabel} →<ArtworkLinkFeedback /></Link>}
+                {showAllWorks && <><span aria-hidden="true" className="h-3 w-px bg-white/15" /><Link href="/artworks" onNavigate={followInCurrentMode}>{t("viewAll")} →</Link></>}
             </div>
         </div>
         <ArtworkMovingDescription id={`${id}-description`} title={artwork.title} description={artwork.description}

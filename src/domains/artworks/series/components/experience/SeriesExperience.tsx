@@ -243,6 +243,6 @@ export default function SeriesExperience({ entries, initialSeriesSlug, initialAr
             </Link> : <div />}
         </nav>
         {selectedIndex !== null && <ArtworkExperienceViewer artworks={current.artworks} initialIndex={selectedIndex} onClose={viewer.close}
-            backLabel={artworkT("backToSeries", { title: current.series.title })} showDetailsCta showAllWorksCta={false} detailsCtaLabel={artworkT("exploreDetail")} detailsQuery={`series=${current.series.slug}`} />}
+            backLabel={artworkT("backToSeries", { title: current.series.title })} showDetailsCta showAllWorksCta={false} detailsQuery={`series=${current.series.slug}`} />}
     </main>;
 }

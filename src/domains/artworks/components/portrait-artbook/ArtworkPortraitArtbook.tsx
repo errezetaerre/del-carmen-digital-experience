@@ -1,5 +1,6 @@
 "use client";
 
+import ArtworkBookDock from "../archive-book/ArtworkBookDock";
 import { useId, useLayoutEffect, useRef, useState, type MouseEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import gsap from "gsap";
@@ -183,6 +184,7 @@ export default function ArtworkPortraitArtbook({ artworks, initialArtworkId, nav
     return <main ref={rootRef} className={`${styles.experience} ${host ? styles.embedded : ""}`} data-portrait-artbook data-portrait-current={currentArtwork.id}
         data-portrait-learned={learnedAtMount || undefined} data-lenis-prevent aria-label={glass("viewer")}>
         {!host && <ArtworkExperienceToolbar backHref={backHref} backLabel={backLabel} onExit={exit} />}
+        {!host && <ArtworkBookDock works={artworks} selected={index} query={navigationQuery} />}
         <div ref={frameRef} className={styles.frame} data-portrait-frame aria-busy={loadState.status === "loading"}>
             {artworks.slice(Math.max(0, index - 1), index + 2).map(artwork => {
                 const active = artwork.id === currentArtwork.id;

@@ -26,7 +26,6 @@ export default function SeriesGallery({
     initialArtworkSlug,
 }: SeriesGalleryProps) {
     const t = useTranslations("Series");
-    const artworkT = useTranslations("Artwork");
     const viewer = useArtworkViewerSelection(artworks, initialArtworkSlug);
     const { selectedIndex } = viewer;
 
@@ -169,7 +168,6 @@ export default function SeriesGallery({
                 onClose={viewer.close}
                 showDetailsCta
                 showAllWorksCta={false}
-                detailsCtaLabel={artworkT("exploreDetail")}
                 detailsQuery={`series=${seriesSlug}`}
             />}
         </>

@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import useArtworkExperience from "@/shared/ui/artwork/useArtworkExperience";
 import { setArtworkExperiencePreference } from "@/shared/ui/artwork/artworkExperiencePreference";
+import useArtworkViewerSelection from "@/shared/ui/artwork/useArtworkViewerSelection";
 import ArtworkLoading from "@/shared/ui/artwork/ArtworkLoading";
 import { clearHomeBookLocation, homeBookChapter, selectHomeBookChapter } from "./homeBookLocation";
 import type { HomeBookPageId } from "./homeBookChapters";
@@ -25,6 +26,7 @@ function PreparingHome() {
         <div><ArtworkLoading label={t("preparing")} /><button type="button" onClick={() => { clearHomeBookLocation(); setArtworkExperiencePreference("standard"); }}>{t("standard")}</button></div>
     </div>, document.body);
 }
+const ArtworkExperienceViewer = dynamic(() => import("@/shared/ui/artwork/ArtworkExperienceViewer"), { ssr: false, loading: PreparingHome });
 const HomeGlassArtbook = dynamic(() => import("./HomeGlassArtbook"), { ssr: false, loading: PreparingHome });
 
 function FailedHome() {
@@ -45,6 +47,11 @@ export default function HomeExperience({ children, catalogue }: { children: Reac
     const preference = useArtworkExperience(), t = useTranslations("Artwork"), glass = useTranslations("Glass");
     const includeBootstrap = useSyncExternalStore(subscribeBootstrap, clientBootstrapSnapshot, serverBootstrapSnapshot);
     const active = preference === "glass";
+    const viewer = useArtworkViewerSelection(catalogue.selected);
+    const showingWork = viewer.selectedIndex !== null;
+    useLayoutEffect(() => {
+        if (active && showingWork && homeBookChapter() !== "artworks") selectHomeBookChapter("artworks");
+    }, [active, showingWork]);
     const shell = useRef<HTMLDivElement>(null);
     const savedScroll = useRef<number | null>(null), paintFrame = useRef(0);
     const lastChapter = useRef<HomeBookPageId>("cover");
@@ -74,7 +81,8 @@ export default function HomeExperience({ children, catalogue }: { children: Reac
         {includeBootstrap && <script data-home-bootstrap dangerouslySetInnerHTML={{ __html: HOME_BOOK_BOOTSTRAP }} />}
         <div className={`${styles.preparing} ${styles.bootstrap}`} role="status"><ArtworkLoading label={glass("preparing")} /></div>
         {active ? <div className={styles.placeholder} aria-hidden="true" /> : <div className={styles.standard} data-home-standard>{children}</div>}
-        {active ? <BookBoundary fallback={<FailedHome />}><HomeGlassArtbook catalogue={catalogue} onExit={exit} /></BookBoundary> :
+        {viewer.selectedIndex !== null ? <ArtworkExperienceViewer artworks={catalogue.selected} initialIndex={viewer.selectedIndex}
+            onClose={viewer.close} showDetailsCta /> : active ? <BookBoundary fallback={<FailedHome />}><HomeGlassArtbook catalogue={catalogue} onExit={exit} /></BookBoundary> :
             <button ref={openButton} type="button" className={styles.open} onClick={open}>{t("openArtbook")}</button>}
     </div>;
 }

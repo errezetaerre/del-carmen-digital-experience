@@ -1,0 +1,10 @@
+/* The Standard and Glass presentations share the same push-in and release.
+   GSAP controls object-position independently when the frame crops the work. */
+.image { transition: scale 1000ms var(--ease-out, cubic-bezier(0, 0, .2, 1)); }
+@media (hover: hover) and (pointer: fine) {
+    .card:hover .image { scale: 1.035; }
+}
+.card:focus-visible .image, .card:has(:focus-visible) .image { scale: 1.035; }
+@media (prefers-reduced-motion: reduce) {
+    .card .image, .card:hover .image, .card:focus-visible .image, .card:has(:focus-visible) .image { transition: none; scale: none; }
+}

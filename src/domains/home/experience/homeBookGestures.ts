@@ -1,7 +1,7 @@
 /** Form controls keep their native interaction; editorial links can turn the leaf. */
 export function homeBookAllowsDrag(target: Element | null): boolean {
     if (target?.closest("input, textarea, select, summary, form, [contenteditable='true'], [data-home-no-drag]")) return false;
-    return !target?.closest("button") || Boolean(target.closest("[data-home-book-card]"));
+    return !target?.closest("button") || Boolean(target.closest("[data-home-book-card], [data-artbook-card]"));
 }
 
 /** Stop native link/image dragging and the click generated after a horizontal page drag. */

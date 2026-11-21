@@ -23,7 +23,7 @@ test("Standard is the default across locale and orientation-independent routes",
 });
 
 test("a first explicit Glass deep link is accepted in a fresh browser", () => {
-    for (const path of ["/series/yasemi?view=glass", "/es/artworks/yasemi-ii?experience=glass"]) {
+    for (const path of ["/artbook", "/es/artbook?year=2017", "/series/yasemi?view=glass", "/es/artworks/yasemi-ii?experience=glass"]) {
         const b = browser(`https://rolandodelcarmen.com${path}`);
         try { assert.equal(b.fresh().artworkExperiencePreference(), "glass"); } finally { b.restore(); }
     }
@@ -102,4 +102,13 @@ test("synchronizing a collection preference keeps its open artwork, locale, filt
         location.synchronizeSeriesView("standard");
         assert.equal(b.window.location.searchParams.get("artwork"), "yasemi-ii", "Exit changes presentation without closing the viewer");
     } finally { b.restore(); }
+});
+
+test("opening the reader address opts in, but returning through history after Exit keeps Standard", () => {
+    for (const type of ["navigate", "back_forward", "reload"]) {
+        const b = browser("https://rolandodelcarmen.com/es/artbook", "standard");
+        b.window.performance = { getEntriesByType: () => [{ type, name: b.window.location.href }] };
+        try { assert.equal(b.fresh().artworkExperiencePreference(), type === "navigate" ? "glass" : "standard"); }
+        finally { b.restore(); }
+    }
 });

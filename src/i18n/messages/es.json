@@ -117,6 +117,23 @@
     "viewAll": "Ver todas las obras",
     "previewDescription": "{title} — {label}. Prevista para {year}. Colores preliminares tras el vidrio empañado."
   },
+  "ArchiveBook": {
+    "enter": "ABRIR ARTBOOK",
+    "showResults": "Ver en el libro",
+    "indexSpread": "Pliego {page}",
+    "indexPage": "Página {page}",
+    "index": "Índice de obras",
+    "works": "Obras",
+    "close": "Cerrar índice",
+    "cover": "Portada",
+    "open": "Abrir el libro",
+    "folio": "Folio",
+    "position": "Pliego {current} de {total}",
+    "pagePosition": "Página {current} de {total}",
+    "navigation": "Navegación del libro",
+    "density": "Obras por página",
+    "plus": "Ver ficha de {title}"
+  },
   "Archive": {
     "metadataTitle": "Obras",
     "metadataDescription": "Explora las obras originales, copias de maestros y estudios de Rolando Del Carmen, con sus fichas, series y obras previstas.",
