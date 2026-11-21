@@ -31,7 +31,7 @@ const LandscapeBook = dynamic(() => import("@/domains/artworks/components/glass-
 function checkingViewport(): "checking" { return "checking"; }
 
 export default function ArtworkExperienceViewer({ artworks: sourceArtworks, initialIndex, onClose, showDetailsCta = false,
-    showAllWorksCta = true, detailsCtaLabel, detailsQuery, backLabel }: Omit<ArtworkLightboxProps, "isOpen" | "presentation" | "embedded" | "onIndexChange"> & { backLabel?: string }) {
+    showAllWorksCta = true, detailsCtaLabel, detailsQuery, backLabel, standardOnly = false }: Omit<ArtworkLightboxProps, "isOpen" | "presentation" | "embedded" | "onIndexChange"> & { backLabel?: string; standardOnly?: boolean }) {
     const locale = useLocale();
     const t = useTranslations("Artwork");
     const artworks = useMemo(() => sourceArtworks.map(artwork => localizeArtwork(artwork, locale)), [sourceArtworks, locale]);
@@ -40,7 +40,7 @@ export default function ArtworkExperienceViewer({ artworks: sourceArtworks, init
     const location = useSyncExternalStore(subscribeArtworkViewerLocation, artworkViewerLocation, () => "");
     const preference = useArtworkExperience();
     const requested = new URL(location || "/", "https://viewer.invalid").searchParams.get("experience");
-    const mode = viewport === "unsupported" ? "standard" : preference ?? "standard";
+    const mode = standardOnly || viewport === "unsupported" ? "standard" : preference ?? "standard";
     const root = useRef<HTMLDivElement>(null);
     useArtworkGestureBoundary(root);
     const closeButton = useRef<HTMLButtonElement>(null);
@@ -105,8 +105,8 @@ export default function ArtworkExperienceViewer({ artworks: sourceArtworks, init
         data-lenis-prevent data-gallery-layout={viewport} data-artwork-experience={mode} data-gallery-artwork={artwork.id}>
         {mode === "glass" ? <ArtworkExperienceToolbar backLabel={backLabel ?? t("backToGallery")} onBack={onClose}
             onExit={() => switchMode("standard")} className={styles.glassToolbar} /> : <div className={`${styles.toolbar} font-sans`}>
-            <button type="button" className={styles.mode} onClick={() => switchMode("glass")} aria-busy={Boolean(switching)}
-                disabled={Boolean(switching) || viewport === "checking" || viewport === "unsupported"}>{t("openArtbook")}</button>
+            {!standardOnly && <button type="button" className={styles.mode} onClick={() => switchMode("glass")} aria-busy={Boolean(switching)}
+                disabled={Boolean(switching) || viewport === "checking" || viewport === "unsupported"}>{t("openArtbook")}</button>}
             <button ref={closeButton} type="button" className={styles.close} onClick={onClose} aria-label={t("closeViewer")}>×</button>
         </div>}
         {viewport === "checking" || !preference ? <Preparing /> : mode === "standard" ? <StandardViewer artworks={artworks} initialIndex={initialIndex} isOpen onClose={onClose}

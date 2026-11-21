@@ -6,6 +6,10 @@ import { KineticCarousel } from "@/shared/ui/kinetic-carousel";
 import CollectionPreviewArtwork from "./CollectionPreviewArtwork";
 import styles from "./CollectionPreviewWorks.module.css";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
+import useArtworkViewerSelection from "@/shared/ui/artwork/useArtworkViewerSelection";
+
+const ArtworkExperienceViewer = dynamic(() => import("@/shared/ui/artwork/ArtworkExperienceViewer"), { ssr: false });
 
 interface CollectionPreviewWorksProps {
     artworks: Artwork[];
@@ -14,10 +18,16 @@ interface CollectionPreviewWorksProps {
 
 const VISIBLE_ARTWORKS = 4;
 
-export default function CollectionPreviewWorks({
-    artworks,
-    seriesSlug,
-}: CollectionPreviewWorksProps) {
+export default function CollectionPreviewWorks({ artworks, seriesSlug }: CollectionPreviewWorksProps) {
+    const viewer = useArtworkViewerSelection(artworks);
+    return <>
+        <CollectionPreviewStrip artworks={artworks} />
+        {viewer.selectedIndex !== null && <ArtworkExperienceViewer standardOnly artworks={artworks} initialIndex={viewer.selectedIndex}
+            onClose={viewer.close} showDetailsCta detailsQuery={new URLSearchParams({ series: seriesSlug }).toString()} />}
+    </>;
+}
+
+function CollectionPreviewStrip({ artworks }: { artworks: Artwork[] }) {
     const t = useTranslations("Series");
     if (artworks.length === 0) {
         return null;
@@ -84,7 +94,6 @@ export default function CollectionPreviewWorks({
                             <CollectionPreviewArtwork
                                 key={artwork.id}
                                 artwork={artwork}
-                                seriesSlug={seriesSlug}
                             />
                         ))}
                     </div>
@@ -177,7 +186,6 @@ export default function CollectionPreviewWorks({
                         >
                             <CollectionPreviewArtwork
                                 artwork={artwork}
-                                seriesSlug={seriesSlug}
                             />
                         </div>
                     ))}

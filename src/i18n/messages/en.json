@@ -117,6 +117,23 @@
     "viewAll": "View all works",
     "previewDescription": "{title} — {label}. Planned for {year}. Preview colours behind frosted glass."
   },
+  "ArchiveBook": {
+    "enter": "OPEN ARTBOOK",
+    "showResults": "View in the book",
+    "indexSpread": "Spread {page}",
+    "indexPage": "Page {page}",
+    "index": "Artwork index",
+    "works": "Artworks",
+    "close": "Close index",
+    "cover": "Cover",
+    "open": "Open the book",
+    "folio": "Folio",
+    "position": "Spread {current} of {total}",
+    "pagePosition": "Page {current} of {total}",
+    "navigation": "Book navigation",
+    "density": "Works per page",
+    "plus": "View details for {title}"
+  },
   "Archive": {
     "metadataTitle": "Artworks",
     "metadataDescription": "Explore original artworks, master copies and studies by Rolando Del Carmen, with artwork details, series and planned works.",

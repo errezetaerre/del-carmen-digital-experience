@@ -1,3 +1,4 @@
+import ArchiveModeRoute from "@/domains/artworks/components/archive-book/ArchiveModeRoute";
 import { Suspense } from "react";
 import { activateLocale } from "@/i18n/server";
 import { getSiteMessages } from "@/i18n/messages";
@@ -21,7 +22,7 @@ async function ArchiveCatalogue() {
 export default async function ArtworksPage({ params }: { params: Promise<{ locale: string }> }) {
     const locale = await activateLocale(params);
     const copy = getSiteMessages(locale).Archive;
-    return <>
+    return <ArchiveModeRoute mode="standard">
         <main className={styles.page}>
             <a className={styles.skipLink} href="#archive-gallery">{copy.skip}</a>
             <Container size="full" className={styles.shell}>
@@ -35,5 +36,5 @@ export default async function ArtworksPage({ params }: { params: Promise<{ local
             </Container>
         </main>
         <Footer />
-    </>;
+    </ArchiveModeRoute>;
 }

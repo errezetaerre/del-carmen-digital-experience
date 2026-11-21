@@ -4,7 +4,7 @@ import { useId, useLayoutEffect, useRef } from "react";
 import { glassRimMarkup } from "@/shared/ui/artwork/glassAccents";
 import type { SeriesGlassReflection } from "@/domains/artworks/series/components/experience/seriesGlassReflection";
 
-export default function HomeBookMaterial({ material }: { material: SeriesGlassReflection }) {
+export default function GlassBookMaterial({ material }: { material: SeriesGlassReflection }) {
     const ref = useRef<HTMLDivElement>(null), id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
     useLayoutEffect(() => {
         const rim = ref.current, page = rim?.parentElement;
@@ -14,7 +14,7 @@ export default function HomeBookMaterial({ material }: { material: SeriesGlassRe
             const { width, height } = page.getBoundingClientRect(), signature = `${width}/${height}`;
             if (!width || !height || previous === signature) return;
             previous = signature;
-            rim.innerHTML = glassRimMarkup(`home-${id}-left`, width, height, -1) + glassRimMarkup(`home-${id}-right`, width, height, 1);
+            rim.innerHTML = glassRimMarkup(`book-${id}-left`, width, height, -1) + glassRimMarkup(`book-${id}-right`, width, height, 1);
             material.render(page);
         };
         const observer = new ResizeObserver(measure); observer.observe(page); measure();

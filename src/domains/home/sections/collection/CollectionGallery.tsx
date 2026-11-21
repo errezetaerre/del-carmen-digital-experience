@@ -9,13 +9,12 @@ import {
 
 import { useRouter } from "@/i18n/navigation";
 
+import { artworkExperienceHref } from "@/domains/artworks/presentation/artworkExperience";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import type { Artwork } from "@/domains/artworks";
-import dynamic from "next/dynamic";
-import useArtworkViewerSelection from "@/shared/ui/artwork/useArtworkViewerSelection";
-const ArtworkExperienceViewer = dynamic(() => import("@/shared/ui/artwork/ArtworkExperienceViewer"), { ssr: false });
+import { selectArtworkInViewer } from "@/shared/ui/artwork/artworkViewerLocation";
 
 import CollectionArtwork from "./CollectionArtwork";
 
@@ -53,8 +52,6 @@ export default function CollectionGallery({
     const galleryRef =
         useRef<HTMLDivElement | null>(null);
 
-    const viewer = useArtworkViewerSelection(artworks);
-    const { selectedIndex } = viewer;
     const [isPending, startTransition] = useTransition();
     const [pendingArtworkId, setPendingArtworkId] = useState<string | null>(null);
     const pendingArtworkRef = useRef<string | null>(null);
@@ -148,21 +145,15 @@ export default function CollectionGallery({
             if (pendingArtworkRef.current === artwork.id) return;
             pendingArtworkRef.current = artwork.id;
             setPendingArtworkId(artwork.id);
-            const query =
-                detailQuery
-                    ? `?${detailQuery}`
-                    : "";
-
-            startTransition(() => router.push(`/artworks/${artwork.slug}${query}`));
+            startTransition(() => router.push(artworkExperienceHref(artwork.slug, detailQuery ?? "", "standard")));
 
             return;
         }
 
-        viewer.open(artwork);
+        selectArtworkInViewer(artwork, "standard", true);
     };
 
     return (
-        <>
             <div
                 ref={galleryRef}
                 className={className ?? `
@@ -205,15 +196,5 @@ export default function CollectionGallery({
                     ),
                 )}
             </div>
-
-            {interaction === "lightbox" && selectedIndex !== null && (
-                <ArtworkExperienceViewer
-                    artworks={artworks}
-                    initialIndex={selectedIndex}
-                    onClose={viewer.close}
-                    showDetailsCta
-                />
-            )}
-        </>
     );
 }

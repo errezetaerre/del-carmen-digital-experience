@@ -180,12 +180,14 @@ test("Returning to the previous page uses the same release and link guard", () =
     assert.deepEqual(changes, [-1]); motor.dispose();
 });
 
-test("Both stationary reflections are painted with visible dimensions and persist throughout either turn", () => {
+test("The idle hint keeps real controls clickable and both stationary reflections persist during a turn", () => {
     // Hidden DOM has zero layout dimensions, just as the browser's overlay does.
     // Run the real non-reduced-motion controller, only controlling its GSAP clock.
     for (const direction of [1, -1]) {
+        let nextHint;
         const view = {
-            ...eventHub(), performance, setTimeout, clearTimeout,
+            ...eventHub(), performance,
+            setTimeout(callback) { nextHint = callback; return 1; }, clearTimeout() { nextHint = undefined; },
             matchMedia: () => ({ ...eventHub(), matches: false })
         };
         let doc;
@@ -212,7 +214,7 @@ test("Both stationary reflections are painted with visible dimensions and persis
             querySelector(selector) { return this.querySelectorAll(selector)[0] ?? null; }
             closest(selector) { return selector === "[data-portrait-half]" && this.dataset.portraitHalf ? this : this.parentElement?.closest(selector) ?? null; }
             setAttribute(name, value) { this.attributes = this.attributes.filter(item => item.name !== name); this.attributes.push({ name, value }); }
-            hasAttribute(name) { return name === "data-portrait-learned" || this.attributes.some(item => item.name === name); }
+            hasAttribute(name) { return this.attributes.some(item => item.name === name); }
             cloneNode(deep) {
                 const copy = new Surface(this.tagName); copy.dataset = { ...this.dataset }; copy.attributes = this.attributes.map(item => ({ ...item }));
                 if (deep) for (const child of this.children) copy.append(child.cloneNode(true));
@@ -221,7 +223,7 @@ test("Both stationary reflections are painted with visible dimensions and persis
         }
         doc = {
             ...eventHub(), defaultView: view, hidden: false, fonts: { status: "loaded" }, querySelectorAll: () => [],
-            getSelection: () => ({ removeAllRanges() { } }), createElement: tag => new Surface(tag)
+            getSelection: () => ({ toString: () => "", removeAllRanges() { } }), createElement: tag => new Surface(tag)
         };
         const frame = new Surface(), root = new Surface(), overlay = new Surface(); overlay.hidden = true; frame.append(overlay);
         const page = id => { const element = new Surface(); element.dataset.portraitPage = id; element.append(new Surface("canvas")); return element; };
@@ -229,6 +231,7 @@ test("Both stationary reflections are painted with visible dimensions and persis
         const clock = {
             __esModule: true, default: {
                 killTweensOf() { }, utils: { clamp: (min, max, value) => Math.max(min, Math.min(max, value)) },
+                timeline() { return { to() { return this; }, kill() { } }; },
                 to(target, settings) { tweens.push({ target, settings }); return { kill() { } }; }
             }
         };
@@ -245,7 +248,18 @@ test("Both stationary reflections are painted with visible dimensions and persis
                 if (width) surface.dataset.paintedReflection = "visible";
             },
         });
+        nextHint();
+        assert.equal(overlay.hidden, false);
+        assert.equal(current.style.opacity, "0");
+        assert.notEqual(current.style.visibility, "hidden");
+        assert.equal(current.inert, false);
+        frame.emit("pointerover", { target: { closest: () => ({ tagName: "BUTTON" }) } });
+        assert.equal(overlay.hidden, true);
+        assert.deepEqual(landed, []);
+        root.setAttribute("data-portrait-learned", "");
+        paints.length = 0;
         controller.navigate(direction);
+        assert.equal(current.inert, true);
         const stationary = paints.filter(paint => paint.stationary);
         assert.equal(stationary.length, 2);
         assert.deepEqual(stationary.map(paint => paint.half), ["left", "right"]);
@@ -365,4 +379,12 @@ test("Startup preparation respects the saved mode and never writes storage", () 
         });
         assert.equal(pending, expected, `Saved=${saved}, query=${query}, blocked=${blocked}`);
     }
+});
+
+test("only implemented routes use the Glass navigation when a reader has selected it", () => {
+    const { isNativeArtbookRoute } = projectLoader()("src/domains/artworks/presentation/artworkExperience.ts");
+    for (const path of ["/", "/artworks", "/artworks/yasemi-i", "/artbook", "/series/yasemi"])
+        assert.equal(isNativeArtbookRoute(path), true, path);
+    for (const path of ["/collections", "/about", "/artist", "/journal", "/journal/a-story", "/contact", "/privacy", "/terms", "/series"])
+        assert.equal(isNativeArtbookRoute(path), false, path);
 });

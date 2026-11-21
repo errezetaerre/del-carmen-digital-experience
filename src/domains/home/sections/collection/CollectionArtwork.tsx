@@ -18,6 +18,7 @@ import useArtworkThumbnailPan from "@/shared/ui/artwork/useArtworkThumbnailPan";
 
 import CollectionArtworkFrame from "./CollectionArtworkFrame";
 import styles from "./CollectionArtwork.module.css";
+import motion from "@/shared/ui/artwork/ArtworkThumbnailMotion.module.css";
 
 type CollectionImageVariant =
   | "collection"
@@ -211,7 +212,7 @@ export default function CollectionArtwork({
       ref={cardRef}
       data-active={cardActive || undefined}
       data-creation-status={artwork.creationStatus}
-      className={`group relative w-full ${presentation === "series"
+      className={`${motion.card} group relative w-full ${presentation === "series"
         ? "max-w-[260px]"
         : presentation === "archive" ? styles.archive : "max-w-[200px]"
         }`}
@@ -242,15 +243,7 @@ export default function CollectionArtwork({
               quality={75}
               loading="lazy"
               decoding="async"
-              className="
-                h-full
-                w-full
-                object-cover
-                transition-transform
-                duration-1000
-                ease-out
-                group-hover:scale-[1.035]
-              "
+              className={`h-full w-full object-cover ${motion.image}`}
             />}
 
             {artwork.creationStatus === "completed" && <div

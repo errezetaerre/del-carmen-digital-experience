@@ -233,6 +233,7 @@ function pageModule(getArtworks) {
         "@/server/catalogue/archiveSource": { getArtworkArchiveArtworks: getArtworks },
         "@/shared/layout": { Container: () => null },
         "@/shared/layout/footer": { __esModule: true, default: () => null },
+        "@/domains/artworks/components/archive-book/ArchiveModeRoute": { __esModule: true, default: ({ children }) => children },
         "./ArtworkArchive": { __esModule: true, default: archive },
         "./ArtworkArchive.module.css": { __esModule: true, default: new Proxy({}, { get: (_target, key) => String(key) }) },
     };
@@ -263,6 +264,7 @@ test("actual EN/ES page passes the async data-source result through the existing
         let reads = 0;
         const { page, archive } = pageModule(async () => { reads++; return rows; });
         const tree = await page({ params: Promise.resolve({ locale }) });
+        assert.equal(tree.props.mode, "standard");
         const suspense = locate(tree, node => node.type === React.Suspense);
         assert.ok(suspense);
         assert.equal(reads, 0);

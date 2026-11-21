@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "@/i18n/navigation";
+import { selectArtworkInViewer } from "@/shared/ui/artwork/artworkViewerLocation";
 import ArtworkBadges from "@/shared/ui/artwork/ArtworkBadges";
 import ArtworkComingSoon from "@/shared/ui/artwork/ArtworkComingSoon";
 import ArtworkLinkFeedback from "@/shared/ui/artwork/ArtworkLinkFeedback";
@@ -15,12 +16,10 @@ import type { Artwork } from "@/domains/artworks";
 
 interface CollectionPreviewArtworkProps {
     artwork: Artwork;
-    seriesSlug: string;
 }
 
 export default function CollectionPreviewArtwork({
     artwork: sourceArtwork,
-    seriesSlug,
 }: CollectionPreviewArtworkProps) {
     const locale = useLocale();
     const artwork = localizeArtwork(sourceArtwork, locale);
@@ -34,9 +33,8 @@ export default function CollectionPreviewArtwork({
     return (
         <Link
             ref={cardRef}
-            href={`/series/${seriesSlug}?artwork=${encodeURIComponent(
-                artwork.slug,
-            )}`}
+            href={`/collections?artwork=${encodeURIComponent(artwork.slug)}`}
+            onNavigate={event => { event.preventDefault(); selectArtworkInViewer(sourceArtwork, "standard", true); }}
             className="
                 group/artwork
                 relative

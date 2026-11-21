@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import Link from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import type { Artwork } from "@/domains/artworks";
@@ -40,6 +41,7 @@ const creationStatusCopy = { completed: "completed", "in-progress": "inProgress"
 export default function ArtworkArchive({ artworks }: { artworks: Artwork[] }) {
     const locale = useLocale();
     const t = useTranslations("Archive");
+    const book = useTranslations("ArchiveBook");
     const searchParams = useSearchParams();
     const id = useId();
     const filters = useMemo(() => readArtworkArchiveFilters(artworks, searchParams), [artworks, searchParams]);
@@ -160,6 +162,7 @@ export default function ArtworkArchive({ artworks }: { artworks: Artwork[] }) {
                     <button type="button" className={styles.tab} aria-pressed={filters.featured} onClick={() => updateFilters({ featured: true })}><Icon name="star" />{t("featured")}</button>
                 </div>
                 <div className={styles.toolbarRight}>
+                    <Link href={`/artbook?${query ? query + "&" : ""}experience=glass`} className={styles.bookLink}>{book("enter")} <span aria-hidden="true">↗</span></Link>
                     <button type="button" className={styles.mobileFilter} aria-haspopup="dialog" aria-controls={`${id}-filters`} aria-expanded={filtersOpen} onClick={() => setFiltersOpen(true)}>
                         <Icon name="filters" /><span>{t("filters")}</span>{chips.length > 0 && <span className={styles.filterCount}>{chips.length}</span>}
                     </button>

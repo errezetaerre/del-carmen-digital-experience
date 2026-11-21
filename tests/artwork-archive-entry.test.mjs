@@ -11,6 +11,7 @@ import { serverModules } from "../scripts/lib/loadProjectModule.mjs";
 
 const require = createRequire(import.meta.url);
 const load = serverModules();
+const experience = load("src/domains/artworks/presentation/artworkExperience.ts");
 const archive = load("src/domains/artworks/presentation/artworkArchive.ts");
 const services = load("src/domains/artworks/services/index.ts");
 const seriesServices = load("src/domains/artworks/series/services.ts");
@@ -51,6 +52,7 @@ for (const locale of ["en", "es"]) {
                     useLocale: () => locale,
                     useTranslations: namespace => createTranslator({ locale, messages: messages[locale], namespace }),
                 },
+                "@/i18n/navigation": defaultExport("a"),
                 "@/i18n/artworkCopy": load("src/i18n/artworkCopy.ts"),
                 "@/domains/artworks/presentation/artworkArchive": archive,
                 "@/domains/home/sections/collection/CollectionGallery": defaultExport(props => {
@@ -60,6 +62,10 @@ for (const locale of ["en", "es"]) {
                 "./ArtworkArchive.module.css": defaultExport(new Proxy({}, { get: (_target, key) => String(key) })),
             });
             const html = renderToStaticMarkup(React.createElement(ArtworkArchive, { artworks }));
+            assert.match(html, /href="\/artbook(?:\?[^"]*)?"/);
+            assert.ok(html.includes("experience=glass"));
+            assert.ok(html.includes(messages[locale].ArchiveBook.enter));
+            assert.ok(!html.includes("data-gallery-book"));
             const label = messages[locale].Archive.creationStatus;
             const groups = [...html.matchAll(new RegExp('role="group" aria-label="' + label + '">([\\s\\S]*?)</div>', "g"))];
             assert.equal(groups.length, 2, "same control in desktop sidebar and touch drawer");
@@ -82,6 +88,47 @@ for (const locale of ["en", "es"]) {
             }
         });
     }
+}
+
+for (const locale of ["en", "es"]) {
+    test(locale + ": the book index lists the full filtered selection and numbers pages at the chosen density", () => {
+        const filters = archive.readArtworkArchiveFilters(artworks, new URLSearchParams("sort=title"));
+        const nextIntl = {
+            useLocale: () => locale,
+            useTranslations: namespace => createTranslator({ locale, messages: messages[locale], namespace }),
+        };
+        const BookFilterIndex = component("src/domains/artworks/components/archive-book/BookFilterIndex.tsx", {
+            "next-intl": nextIntl,
+            "@/i18n/artworkCopy": load("src/i18n/artworkCopy.ts"),
+            "../../model/artworkDate": load("src/domains/artworks/model/artworkDate.ts"),
+            "../../presentation/artworkArchive": archive,
+            "@/i18n/navigation": defaultExport(props => React.createElement("a", { href: props.href }, props.children)),
+            "../../presentation/artworkExperience": experience,
+            "./BookFilterIndex.module.css": defaultExport({}),
+        });
+        const works = archive.selectArtworkArchive(artworks, filters, locale);
+        for (const spread of [true, false]) {
+            const html = renderToStaticMarkup(React.createElement(BookFilterIndex, {
+                id: "index", artworks, filters, density: 2, spread, onClose() {}, onApply() {},
+            }));
+            const rows = [...html.matchAll(/<li><a href="([^"]+)"[^>]*><strong>([^<]+)<\/strong><small>([^<]+)/g)];
+            assert.equal(rows.length, works.length);
+            for (const index of [0, 3, works.length - 1]) {
+                assert.equal(rows[index][2], works[index].title);
+                const href = new URL(rows[index][1].replaceAll("&amp;", "&"), "https://example.invalid");
+                assert.equal(href.pathname, "/artworks/" + works[index].slug);
+                assert.equal(href.searchParams.get("sort"), "title");
+                assert.equal(href.searchParams.get("experience"), "glass");
+                const page = Math.floor(index / (spread ? 4 : 2)) + 1;
+                assert.match(rows[index][3], new RegExp(messages[locale].ArchiveBook[spread ? "indexSpread" : "indexPage"].replace("{page}", page) + " · "));
+            }
+        }
+        const empty = renderToStaticMarkup(React.createElement(BookFilterIndex, {
+            id: "index", artworks, filters: { ...filters, search: "zzzz-absent" }, density: 2, spread: false, onClose() {}, onApply() {},
+        }));
+        assert.ok(empty.includes(messages[locale].Archive.empty));
+        assert.match(empty, /type="submit"[^>]*disabled/);
+    });
 }
 
 const pageDependencies = {
@@ -192,4 +239,49 @@ test("direct planned detail stays accessible and repeated status query values us
     });
     assert.ok(repeated.props.book.artworks.every(work => work.creationStatus === "completed"));
     assert.equal(new URLSearchParams(repeated.props.book.navigationQuery).has("creationStatus"), false);
+});
+
+test("return to the gallery keeps filters and the active bookmark; Exit restores the same grid selection", () => {
+    const state = "year=2017&sort=title&perPage=1&experience=glass";
+    const book = experience.artworkArchiveHref("glass", state, "hugh-jackman");
+    assert.equal(book, "/artbook?year=2017&sort=title&perPage=1&artwork=hugh-jackman");
+    assert.equal(experience.artworkArchiveHref("standard", book.split("?")[1]), "/artworks?year=2017&sort=title");
+});
+
+test("cover, page links and the final imprint in either orientation use the same archive and brand", () => {
+    const deps = {
+        "next/image": defaultExport(() => null),
+        "@/i18n/navigation": defaultExport(props => React.createElement("a", { href: props.href }, props.children)),
+        "../../presentation/artworkExperience": experience,
+        "@/config/brand": load("src/config/brand.ts"),
+        "@/shared/ui/artwork/ArtworkThumbnailMotion.module.css": defaultExport({}),
+        "../../model/artworkDate": load("src/domains/artworks/model/artworkDate.ts"),
+        "../../presentation/getArtworkPresentation": load("src/domains/artworks/presentation/getArtworkPresentation.ts"),
+        "@/i18n/artworkCopy": load("src/i18n/artworkCopy.ts"),
+        "@/shared/ui/artwork/ArtworkComingSoon": defaultExport(() => null),
+        "@/shared/ui/artwork/useArtworkThumbnailPan": defaultExport(() => {}),
+        "../glass-artbook/GlassBookMaterial": defaultExport(() => null),
+        "./BookThumbnail": defaultExport(() => null),
+        "./GalleryBook.module.css": defaultExport({}),
+    };
+    for (const locale of ["en", "es"]) {
+        const Page = component("src/domains/artworks/components/archive-book/GalleryBookPage.tsx", {
+            ...deps, "next-intl": { useLocale: () => locale, useTranslations: namespace => createTranslator({ locale, messages: messages[locale], namespace }) },
+        });
+        const render = (index, works, perLeaf, spread) => renderToStaticMarkup(React.createElement(Page, {
+            index, artworks: works, perLeaf, spread, material: {}, query: "year=2017", onFollow() {}, onStart() {},
+        })).replaceAll("<!-- -->", "");
+        const copy = messages[locale].Archive;
+        const cover = render(0, artworks, 2, true);
+        for (const value of [copy.eyebrow, copy.titleFirst, copy.titleSecond, copy.description]) assert.ok(cover.includes(value));
+        for (const count of [1, 2, 3, 4, 5, 8]) for (const spread of [false, true]) for (const density of [1, 2]) {
+            const works = artworks.slice(0, count);
+            const last = Math.ceil(count / (density * (spread ? 2 : 1)));
+            const final = render(last, works, density, spread);
+            assert.equal((final.match(/by Rõ Visual/g) ?? []).length, 1);
+            assert.ok(!final.includes(copy.gallery));
+            assert.ok(final.includes("/artworks/" + works.at(-1).slug + "?year=2017&amp;experience=glass"));
+            if (last > 1) assert.ok(!render(last - 1, works, density, spread).includes("by Rõ Visual"));
+        }
+    }
 });

@@ -127,3 +127,5 @@
 @media (min-width: 768px) {
     .experience:not(.embedded) .page :global([data-artwork-detail-photo]) { width: min(100%, calc(64svh * var(--artwork-photo-aspect, 1))); max-height: 64svh !important; }
 }
+
+.experience:not(.embedded) { padding-inline-start: max(3.4vw, calc(var(--artbook-dock-icon, clamp(44px, 4.4vw, 60px)) + 22px + env(safe-area-inset-left))); }

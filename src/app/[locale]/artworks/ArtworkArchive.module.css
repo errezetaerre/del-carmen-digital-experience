@@ -76,3 +76,9 @@
 @media(max-width:360px){.shell{padding-inline:16px}.grid{gap:15px 12px}.toolbarRight{gap:7px}.resultCount{font-size:8px}.sort select{max-width:82px;font-size:8px}}
 @media(prefers-reduced-motion:reduce){.layout *,.dialog *{transition:none!important;animation:none!important}}
 @media(forced-colors:active){.section::after{display:none}.filtersHeading::before,.toolbar::before,.search::before,.section::before{background:CanvasText;opacity:1}.tab[aria-pressed="true"]{text-decoration:underline}.apply{border:1px solid ButtonText}}
+
+.bookLink { composes: openArtbook from "../../../shared/ui/artwork/ArtworkExperienceToolbar.module.css"; white-space: nowrap; }
+@media(max-width:600px) {
+    .toolbarRight { height: auto; min-height: 50px; flex-wrap: wrap; }
+    .bookLink { font-size: 9px; padding-inline: 12px; }
+}

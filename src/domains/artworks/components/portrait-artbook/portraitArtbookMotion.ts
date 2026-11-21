@@ -17,7 +17,11 @@ interface Options {
     onActivity(): void;
     onInteraction(): void;
     onLand(direction: Direction): void;
-    onExit(): void;
+    onExit?(): void;
+    onCancel?(): void;
+    /** Inline readers arbitrate keyboard scope and retain repeated commands across landings. */
+    acceptsKeyboard?(target: EventTarget | null): boolean;
+    requestStep?(direction: Direction): boolean;
     onArrival(): void;
     /** A gallery can prepare its visible thumbnails; artwork callers keep the full-page default. */
     imagesForPage?(page: HTMLElement): HTMLImageElement[];
@@ -28,7 +32,7 @@ interface Options {
     renderSurface?(page: HTMLElement, angle: number, moving?: boolean): void;
 }
 export interface PortraitArtbookController {
-    navigate(direction: Direction): void;
+    navigate(direction: Direction): boolean;
     retry(): void;
     dispose(): void;
 }
@@ -189,7 +193,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
             demonstrationTimer = undefined;
             if (disposed || root.hasAttribute("data-portrait-learned")) return;
             const selection = doc.getSelection();
-            if (doc.hidden || blocked() || grip || turn || settling || current.querySelector("[data-artwork-reading-open]") || root.dataset.portraitLoading === "true" ||
+            if (doc.hidden || blocked() || grip || turn || settling || current.querySelector("[data-artwork-reading-open], a:hover, button:hover, a:focus-visible, button:focus-visible") || root.dataset.portraitLoading === "true" ||
                 (selection?.toString() && current.contains(selection.anchorNode))) {
                 scheduleDemonstration(); return;
             }
@@ -205,6 +209,9 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
             // another artwork. All four faces belong to the current page.
             const preview = build(direction, current);
             if (!preview) { clearDemonstration(); scheduleDemonstration(); return; }
+            // The hint paints inert copies over an invisible, interactive page.
+            // Keep its real links and buttons available to the very first press.
+            current.style.removeProperty("visibility");
             current.inert = false;
             root.dataset.portraitDemonstrating = "";
             const update = () => {
@@ -337,6 +344,7 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         }
     }
     function cancel() {
+        options.onCancel?.();
         clearDemonstration();
         ++request; grip = null; clearWheel();
         if (turn) settle(false);
@@ -407,34 +415,44 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
         if (event.button === 0 && ready && !blocked()) activity();
         if (event.pointerType !== "touch") start(pointerInput(event));
     }
+    function pointerOver(event: PointerEvent) {
+        if (demonstration && (event.target as Element | null)?.closest("a, button")) activity();
+    }
     function pointerMove(event: PointerEvent) { if (event.pointerType !== "touch") move(pointerInput(event)); }
     function pointerEnd(event: PointerEvent) {
         if (event.pointerType !== "touch" && grip?.id === event.pointerId) finishGrip(event.type === "pointercancel");
     }
     frame.addEventListener("pointerdown", pointerDown);
+    frame.addEventListener("pointerover", pointerOver);
     view.addEventListener("pointermove", pointerMove, { passive: false });
     view.addEventListener("pointerup", pointerEnd);
     view.addEventListener("pointercancel", pointerEnd);
     view.addEventListener("blur", cancel);
     root.addEventListener("artwork-image-zoom", cancel);
     cleanup.push(() => {
-        frame.removeEventListener("pointerdown", pointerDown); view.removeEventListener("pointermove", pointerMove);
+        frame.removeEventListener("pointerdown", pointerDown); frame.removeEventListener("pointerover", pointerOver);
+        view.removeEventListener("pointermove", pointerMove);
         view.removeEventListener("pointerup", pointerEnd); view.removeEventListener("pointercancel", pointerEnd);
         view.removeEventListener("blur", cancel);
         root.removeEventListener("artwork-image-zoom", cancel);
     });
     function navigate(direction: Direction) {
-        if (!ready || settling || grip || blocked()) return;
+        if (!ready || settling || grip || blocked() || !neighbour(direction)) return false;
         activity();
-        if (turn) return;
+        if (turn) return false;
         clearWheel(); void begin(direction, true);
+        return true;
     }
     function keyDown(event: KeyboardEvent) {
         if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || blocked()) return;
-        if (event.key === "Escape") { event.preventDefault(); cancel(); options.onExit(); return; }
+        if (options.acceptsKeyboard && !options.acceptsKeyboard(event.target)) return;
+        if (event.key === "Escape" && options.onExit) { event.preventDefault(); cancel(); options.onExit(); return; }
         if ((event.target as Element)?.closest("input, textarea, select, [contenteditable='true'], [data-lightbox-native-scroll]")) return;
         const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : null;
-        if (direction && neighbour(direction)) { event.preventDefault(); navigate(direction); }
+        if (direction && (options.requestStep ? options.requestStep(direction) : neighbour(direction))) {
+            event.preventDefault();
+            if (!options.requestStep) navigate(direction);
+        }
     }
     view.addEventListener("keydown", keyDown);
     cleanup.push(() => view.removeEventListener("keydown", keyDown));
@@ -475,7 +493,14 @@ export function createPortraitArtbookMotion(options: Options): PortraitArtbookCo
     });
     const observer = new ResizeObserver(() => {
         const width = frame.getBoundingClientRect().width;
-        if (Math.abs(width - frameWidth) > .5) { frameWidth = width; ++request; grip = null; clearTurn(); if (ready) load("ready"); scheduleDemonstration(); }
+        if (Math.abs(width - frameWidth) <= .5) return;
+        frameWidth = width;
+        ++request;
+        grip = null;
+        options.onCancel?.();
+        clearTurn();
+        if (ready) load("ready");
+        scheduleDemonstration();
     });
     observer.observe(frame); cleanup.push(() => observer.disconnect());
 
